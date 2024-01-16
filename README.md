@@ -1,2 +1,4 @@
-# CS63-SDGP-Implementation
-The code for the implementation of the CS63 Software Development Group Project, ALiyah.
+# ALiyah Learning
+A code implementation for the Software Development Group Project by the team members of CS63.
+
+### Getting Started
