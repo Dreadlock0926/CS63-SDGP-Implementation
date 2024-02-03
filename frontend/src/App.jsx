@@ -1,7 +1,6 @@
 import { useState, createContext } from "react";
 import { BrowserRouter, Routes, Route } from "react-router-dom";
-import "./App.css";
-import Home from "./components/graphs/Home";
+import Home from "./pages/home";
 import UnknownPage from "./components/Unknown";
 
 const UserContext = createContext();
