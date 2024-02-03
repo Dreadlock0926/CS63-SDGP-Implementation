@@ -19,11 +19,10 @@ router.route("/").post(async (req, res) => {
       return res.status(401).json({ Alert: "Unauthorized" });
     } else {
       req.session.user = { username, maxAge: 60000 };
-      return res
-        .status(200)
-        .json({
-          Alert: `${username} logged in! ${JSON.stringify(req.session.user)}`,
-        });
+      return res.status(200).json({
+        Alert: `${username} logged in!`,
+        username: req.session.user.username,
+      });
     }
   }
 });

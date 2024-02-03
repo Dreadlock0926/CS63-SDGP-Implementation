@@ -20,6 +20,7 @@ app.get("/", (req, res) => {
 
 app.set("trust proxy", 1); // trust first proxy
 app.use(
+  //adding sessions to test!
   session({
     secret: "keyboard cat",
     resave: false,
