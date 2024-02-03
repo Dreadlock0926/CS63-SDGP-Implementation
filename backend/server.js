@@ -2,10 +2,13 @@ const express = require("express");
 const app = express();
 const cors = require("cors");
 const home = require("./routes/home");
+const login = require("./routes/login");
+const register = require("./routes/register");
 require("dotenv").config();
 const mongoose = require("mongoose");
 const port = process.env.PORT;
 const cluster = process.env.CLUSTER;
+const session = require("express-session");
 const { join } = require("path");
 
 app.use(express.json());
@@ -15,7 +18,19 @@ app.get("/", (req, res) => {
   res.status(200).send("<h1>Hey docker!</h1>");
 });
 
+app.set("trust proxy", 1); // trust first proxy
+app.use(
+  session({
+    secret: "keyboard cat",
+    resave: false,
+    saveUninitialized: false,
+    cookie: { secure: true },
+  })
+);
+
 app.use("/home", home);
+app.use("/register", register);
+app.use("/login", login);
 
 app.use("*", (req, res) => {
   //leave this below all the other routes cuz this is the LAST RESORT JUST INCASE THE requested url is neither of the existing routes
