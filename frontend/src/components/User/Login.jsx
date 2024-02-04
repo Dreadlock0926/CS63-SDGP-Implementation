@@ -40,6 +40,9 @@ const Login = () => {
           // setTimeout(() => {
           //   navigator("/");
           // }, 2000);
+        } else if (loginUser.status === 401) {
+          //small issue here!
+          alert("Unauthorized!");
         }
       } catch (err) {
         console.error(err);

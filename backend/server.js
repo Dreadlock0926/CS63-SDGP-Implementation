@@ -4,15 +4,32 @@ const cors = require("cors");
 const home = require("./routes/home");
 const login = require("./routes/login");
 const register = require("./routes/register");
+const gemini = require("./routes/gemini");
 require("dotenv").config();
 const mongoose = require("mongoose");
 const port = process.env.PORT;
 const cluster = process.env.CLUSTER;
 const session = require("express-session");
+const helmet = require("helmet");
 const { join } = require("path");
 
+async function authenticated(req, res, next) {
+  if (req?.session?.user) {
+    const user = req.session.user;
+    const foundUser = await userModel.findOne({ username: user.username });
+    if (!foundUser) {
+      return res.status(400).json({ Alert: "invalid user!" });
+    }
+    return res.status(200).json(foundUser);
+  } else {
+    return res.status(401).json({ Alert: "Not logged in!" });
+  }
+}
+
+app.use(cors({ origin: "*" }));
+app.use(express.urlencoded()); //allow access from anywhere for now!
+app.use(helmet());
 app.use(express.json());
-app.use(cors({ origin: "*" })); //allow access from anywhere for now!
 
 app.get("/", (req, res) => {
   res.status(200).send("<h1>Hey docker!</h1>");
@@ -29,9 +46,11 @@ app.use(
   })
 );
 
-app.use("/home", home);
 app.use("/register", register);
 app.use("/login", login);
+// app.use(authenticated); //uncomment during final authentication tests 🔓
+app.use("/home", home);
+app.use("/gemini", gemini);
 
 app.use("*", (req, res) => {
   //leave this below all the other routes cuz this is the LAST RESORT JUST INCASE THE requested url is neither of the existing routes

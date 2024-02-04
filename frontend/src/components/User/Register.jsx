@@ -15,7 +15,7 @@ const Register = () => {
   async function Register(e) {
     e.preventDefault();
     try {
-      setLoading(true);
+      //   setLoading(true);
       const loginUser = await Axios.post(
         "http://localhost:8000/register",
         newUser
@@ -38,7 +38,7 @@ const Register = () => {
     } catch (err) {
       console.error(err);
     } finally {
-      setLoading(false);
+      //   setLoading(false);
     }
   }
 
