@@ -5,6 +5,6 @@ const userController = require("../controllers/userController")
 
 router.route("/").get(userController.GetUsers).post(userController.CreateQuestions)
 
-router.route("/answer").post(userController.AnsweringQuestions)
+router.route("/:id").post(userController.AnsweringQuestions)
 
 module.exports = router;
