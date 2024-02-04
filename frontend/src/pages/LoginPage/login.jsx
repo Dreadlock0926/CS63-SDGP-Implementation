@@ -1,5 +1,5 @@
-import NavBar from "../components/navBar.jsx";
-import "../styles/main.css";
+import NavBar from "../../components/NavigationBar/navBar.jsx";
+import "../main.css";
 
 
 function Login() {

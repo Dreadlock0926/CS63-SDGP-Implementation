@@ -1,6 +1,6 @@
-import NavBar from "../components/navBar.jsx";
-import "../styles/home.css";
-import "../styles/main.css"
+import NavBar from "../../components/NavigationBar/navBar.jsx";
+import "./home.css";
+import "../main.css"
 
 
 function Home() {
