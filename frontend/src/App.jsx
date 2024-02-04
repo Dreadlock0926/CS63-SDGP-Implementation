@@ -9,6 +9,11 @@ import ForgotPass from "./components/User/Forgot";
 import Gemini from "./components/Gemini/Gemini";
 import Forum from "./components/Forum/Forum";
 import CreateForum from "./components/Forum/CreateForum";
+import ExamPage from "./components/Exam/exam";
+import ExamFinalized from "./components/Exam/ExamFinalized";
+import Dashboard from "./components/Dashboard/Dashboard";
+import Learn from "./components/LearningResources/Learn";
+import AddStudy from "./components/LearningResources/AddStudy";
 
 export const UserContext = createContext();
 
@@ -45,9 +50,14 @@ function App() {
             <Route path="/" element={<Home />} />
             <Route path="/login" element={<Login />} />
             <Route path="/register" element={<Register />} />
+            <Route path="/forgot" element={<ForgotPass />} />
+            <Route path="/dash" element={<Dashboard/>}></Route>
             <Route path="/forum" element={<Forum />} />
             <Route path="/addforum" element={<CreateForum />} />
-            <Route path="/forgot" element={<ForgotPass />} />
+            <Route path="/exam" element={<ExamPage/>}></Route>
+            <Route path="/examfinal" element={<ExamFinalized/>}></Route>
+            <Route path="/addresources" element={<AddStudy/>}></Route>
+            <Route path="/resources" element={<Learn/>}></Route>
             <Route path="*" element={<UnknownPage />} />
           </Routes>
         </UserContext.Provider>

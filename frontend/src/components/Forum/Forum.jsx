@@ -6,7 +6,7 @@ import { Link } from "react-router-dom";
 import {UserContext} from "../../App"
 const Forum = () => {
 
-  const {loading,setLoading} = useContext(UserContext)
+  const {loading,setLoading,status} = useContext(UserContext)
   const [data, setData] = useState([]);
 
   const EndPoint = "http://localhost:8000/forum";
@@ -48,6 +48,8 @@ const Forum = () => {
       setLoading(false);
     }
   };
+
+
 
   
   useEffect(() => {

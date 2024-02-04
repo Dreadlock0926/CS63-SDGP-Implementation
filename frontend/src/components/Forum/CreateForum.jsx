@@ -30,8 +30,6 @@ const CreateForum = () => {
       } else {
         setStatus("Error while adding question!");
       }
-
-    
     } catch (err) {
       setStatus("Error Occured, please try again");
       console.error(err);

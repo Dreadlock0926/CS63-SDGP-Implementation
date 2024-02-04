@@ -7,8 +7,10 @@ import { Link ,useNavigate } from "react-router-dom";
 
 const Login = () => {
 
+ const BASE =  "http://localhost:8000/login"
+
    const navigator = useNavigate();
-  const { loading, setLoading,setLog,log,setUser} =
+  const { loading, setLoading,setLog,log,setUser,setStatus,status} =
     useContext(UserContext);
   const [newUser, setnewUser] = useState({ username: "", password: "" });
   const [state, setState] = useState("");
@@ -26,17 +28,13 @@ const Login = () => {
       try {
           setLoading(true);
         const loginUser = await Axios.post(
-          "http://localhost:8000/login",
+          BASE,
           newUser
         );
         if (loginUser.status === 200) {
           setState(loginUser.data.username);
-
-    
           setLog(true);
           setUser(loginUser.data);
-         
-
           console.log(loginUser.data);
 
           setTimeout(()=>{
@@ -51,6 +49,19 @@ const Login = () => {
       } finally {
           setLoading(false);
       }
+    }
+  }
+
+  async function logOut(){
+    try{
+      const logOut = await Axios.post(BASE)
+      if(logOut.status===200){
+        setStatus("Logged out!")
+      }else{
+        setState("No user was logged in!")
+      }
+    }catch(err){
+      console.error(err);
     }
   }
 
@@ -74,10 +85,11 @@ const Login = () => {
         ></input>
         <button type="submit">Login!</button>
       </form>
+      <button onClick={logOut}>Logout!</button>
       <h1>{state ? `${state} Logged in!` : ""}</h1>
-      <Link to="/">Go back home?</Link>
-      <br></br>
       <Link to="/register">Register!</Link>
+      <br></br>
+      <Link to="/">Go back home?</Link>
     </div>
   );
 };

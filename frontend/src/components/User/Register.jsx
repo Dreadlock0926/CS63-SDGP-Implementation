@@ -65,6 +65,8 @@ const Register = () => {
       </form>
       <h1>{state ? `${state} Registered!` : ""}</h1>
       <Link to="/login">Login!</Link>
+      <br></br>
+      <Link to="/">Go back home?</Link>
     </div>
   );
 };
