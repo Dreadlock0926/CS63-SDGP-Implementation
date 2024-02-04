@@ -1,10 +1,5 @@
 import { useState, createContext } from "react";
 import { BrowserRouter, Routes, Route } from "react-router-dom";
-<<<<<<< Updated upstream
-import Home from "./pages/HomePage/home";
-import Login from "./pages/LoginPage/login";
-import UnknownPage from "./components/Error404/Unknown";
-=======
 import "./App.css";
 import Home from "./components/graphs/Home";
 import UnknownPage from "./components/Unknown";
@@ -14,7 +9,6 @@ import ForgotPass from "./components/User/Forgot";
 import Gemini from "./components/Gemini/Gemini";
 import Forum from "./components/Forum/Forum";
 import CreateForum from "./components/Forum/CreateForum";
->>>>>>> Stashed changes
 
 export const UserContext = createContext();
 
@@ -26,14 +20,6 @@ function App() {
 
   return (
     <>
-<<<<<<< Updated upstream
-      <UserContext.Provider value={(loading, setLoading)}>
-        <BrowserRouter p>
-          <Routes>
-            <Route path="/" element={<Home />} />
-
-            <Route path="login" element={<Login />} />
-=======
      
         <Gemini />{" "}
         {/**Needs to generally exist on the side with a popup type scenario! */}
@@ -50,7 +36,6 @@ function App() {
             <Route path="/addforum" element={<CreateForum/>}></Route>
             <Route path="/register" element={<Register />}></Route>
             <Route path="/forgot" element={<ForgotPass />}></Route>
->>>>>>> Stashed changes
             <Route path="*" element={<UnknownPage />} />
           </Routes>
           </UserContext.Provider>

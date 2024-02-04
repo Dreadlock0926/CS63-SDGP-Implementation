@@ -19,19 +19,43 @@ router.route("/").post(async (req, res) => {
       return res.status(401).json({ Alert: "Unauthorized" });
     } else {
       req.session.user = { username, maxAge: 60000 };
-<<<<<<< Updated upstream
-      return res
-        .status(200)
-        .json({
-          Alert: `${username} logged in! ${JSON.stringify(req.session.user)}`,
-        });
-=======
       return res.status(200).json({
         Alert: `${username} logged in!`,
         username: req.session.user.username,
       });
->>>>>>> Stashed changes
     }
+  }
+});
+
+router.route("/status").post(async (req, res) => {
+  const user = req?.session?.user;
+
+  if (!user && !user.username) {
+    return res.status(401).json({ Alert: "Unauthorized!" });
+  } else {
+    return res
+      .status(200)
+      .json({ username: user.username, password: user.password });
+  }
+});
+
+router.route("/logout").post(async (req, res) => {
+  const user = req.session.user;
+  try {
+    if (!user) {
+      return res.status(403).json({ Alert: "No user logged in!" });
+    } else {
+      await req.session.user.destroy((err) => {
+        if (err) {
+          throw err;
+        } else {
+          return res.status(200).json({ Alert: "User Logged Out!" });
+        }
+      });
+    }
+  } catch (err) {
+    console.error(err);
+    return res.status(500).json({ Alert: "No user was logged in!" });
   }
 });
 module.exports = router;
