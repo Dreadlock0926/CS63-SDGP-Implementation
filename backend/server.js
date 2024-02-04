@@ -10,12 +10,13 @@ const port = process.env.PORT;
 const cluster = process.env.CLUSTER;
 const session = require("express-session");
 const { join } = require("path");
+const forum = require("./routes/forum")
 
 app.use(express.json());
 app.use(cors({ origin: "*" })); //allow access from anywhere for now!
 
 app.get("/", (req, res) => {
-  res.status(200).send("<h1>Hey docker!</h1>");
+  res.status(200).send("<h1>Hey docker! 🐳</h1>");
 });
 
 app.set("trust proxy", 1); // trust first proxy
@@ -31,6 +32,15 @@ app.use(
 app.use("/home", home);
 app.use("/register", register);
 app.use("/login", login);
+<<<<<<< Updated upstream
+=======
+// app.use(authenticated); //uncomment during final authentication tests 🔓
+app.use("/home", home);
+app.use("/gemini", gemini);
+app.use("/forum",forum)
+
+
+>>>>>>> Stashed changes
 
 app.use("*", (req, res) => {
   //leave this below all the other routes cuz this is the LAST RESORT JUST INCASE THE requested url is neither of the existing routes
