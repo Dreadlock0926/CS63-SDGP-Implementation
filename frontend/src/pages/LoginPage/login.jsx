@@ -12,10 +12,12 @@ function Login() {
             <div className="loginContainer">
                 <img alt="avatar" className="avItem2" src="./images/avatar.png"></img> 
                 <p className="loginTitle">Login</p>
-                <p className="loginText">Dont have an account?<a href="/">Sign up</a></p>
+                <p className="loginText">Dont have an account?&nbsp;<a href="/">Sign up</a></p>
                 <form className="loginForm">
-                    <input type="email" placeholder="Email" />
-                    <input type="password" placeholder="Password" />
+                <label htmlFor="email">Email</label>
+                    <input type="email" id="email" />
+                <label htmlFor="password">Password</label>
+                    <input type="password" id="password" />
                 </form>
             </div>
         </div>

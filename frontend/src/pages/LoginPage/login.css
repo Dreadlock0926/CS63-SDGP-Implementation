@@ -1,21 +1,3 @@
-.avItem2 {
-  width: 80px;
-  height: 80px;
-  border-radius: 50%;
-  display: block;
-  margin-left: auto;
-  margin-right: auto;
-  margin-top: 50px;
-}
-
-.loginTitle {
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  font-size: 32px;
-  font-weight: 500;
-}
-
 .loginContainer {
   position: absolute;
   top: 40%;
@@ -29,4 +11,28 @@
 
 .loginForm {
     padding: 50px;
+}
+
+.avItem2 {
+  width: 80px;
+  height: 80px;
+  border-radius: 50%;
+  display: block;
+  margin-top: 50px;
+  margin-left: auto;
+  margin-right: auto;
+}
+
+.loginTitle {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  font-size: 32px;
+  font-weight: 500;
+}
+
+.loginText {
+  display: flex;
+  justify-content: center;
+  align-items: center;
 }
