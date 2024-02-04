@@ -2,6 +2,7 @@
 import Axios from "axios";
 import { UserContext } from "../../App";
 import { useContext, useState } from "react";
+import { Link } from "react-router-dom";
 
 const Register = () => {
   const { loading, setLoading, setLog, setUser } = useContext(UserContext);
@@ -63,6 +64,7 @@ const Register = () => {
         <button type="submit">Register...</button>
       </form>
       <h1>{state ? `${state} Registered!` : ""}</h1>
+      <Link to="/login">Login!</Link>
     </div>
   );
 };

@@ -1,14 +1,13 @@
 /* eslint-disable no-unused-vars */
-import { useEffect, useState } from "react";
+import { useContext, useEffect, useState } from "react";
 import Axios from "axios";
-import { BallTriangle, FidgetSpinner } from "react-loader-spinner";
+import {  FidgetSpinner } from "react-loader-spinner";
 import { Link } from "react-router-dom";
-
+import {UserContext} from "../../App"
 const Forum = () => {
+
+  const {loading,setLoading} = useContext(UserContext)
   const [data, setData] = useState([]);
-  const [loading, setLoading] = useState(false);
-  const [response, setResponse] = useState("");
-  const [status, setStatus] = useState("");
 
   const EndPoint = "http://localhost:8000/forum";
 

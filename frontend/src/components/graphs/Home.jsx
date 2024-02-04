@@ -2,18 +2,18 @@
 /* eslint-disable react/prop-types */
 import { useContext, useEffect, useState } from "react";
 import { Link } from "react-router-dom";
-import Axios from "axios";
+import Axios from 'axios';
 import { UserContext } from "../../App";
-import MathLive from "../Math";
+
 
 const HomePage = () => {
-  const { user, isLogged } = useContext(UserContext);
+  const { user,log,test } = useContext(UserContext);
   const [time, setTime] = useState("day");
   const [userx, setUser] = useState([]);
 
   // async function GetProgress() {
   //   try {
-  //     const r = await Axios.get("http://localhost:8000/users");
+  //     const r = await Axios.get("http://localhost:8000/users"); //route not made yet!(backend)
   //     setUser(r.data); //let's use the context api rather than passing it down like props!
   //   } catch (err) {
   //     console.error(err);
@@ -37,24 +37,23 @@ const HomePage = () => {
   //   GetProgress();
   // }, []);
 
-  return isLogged ? (
+  return log ? (
     <div>
-      <MathLive />
       <h1>
-        Good {time} , Welcome Back {user}!
+        Good {time} , Welcome Back {user.username}!
       </h1>
       <h1>Resume where you left off</h1>
-      <h1>PureMath</h1>
+      <h1>Pure Math</h1>
       <Link to="/puremath">
-        <button>PureMath</button>
+        <button>Pure Math</button>  
       </Link>
       <div className="math">
         <div>
           <p>
             Progress
             {userx && userx.length
-              ? userx.map((x) => <div key={x.id}></div>)
-              : "No results found!"}
+              ? userx.map((x) => <div key={x.id}><p>{x.marks}</p></div>)
+              : " No results found!"}
           </p>
         </div>
 
