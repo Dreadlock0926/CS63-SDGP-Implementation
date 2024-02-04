@@ -13,6 +13,7 @@ const session = require("express-session");
 const helmet = require("helmet");
 const { join } = require("path");
 const forum = require("./routes/forum")
+const learningResources = require("./routes/learn")
 
 async function authenticated(req, res, next) {
   if (req?.session?.user) {
@@ -53,6 +54,7 @@ app.use("/login", login);
 app.use("/home", home);
 app.use("/gemini", gemini);
 app.use("/forum",forum)
+app.use("/resources",learningResources)
 
 
 

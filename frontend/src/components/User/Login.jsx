@@ -3,13 +3,18 @@ import { useContext, useState } from "react";
 
 import Axios from "axios";
 import { UserContext } from "../../App";
+import { Link ,useNavigate } from "react-router-dom";
 
 const Login = () => {
-  const { loading, setLoading, setUser, status, setStatus } =
+
+ const BASE =  "http://localhost:8000/login"
+
+   const navigator = useNavigate();
+  const { loading, setLoading,setLog,log,setUser,setStatus,status} =
     useContext(UserContext);
   const [newUser, setnewUser] = useState({ username: "", password: "" });
   const [state, setState] = useState("");
-  const [log, setLog] = useState(false);
+
 
   const handleChange = (e) => {
     setnewUser({ ...newUser, [e.target.name]: e.target.value });
@@ -21,34 +26,42 @@ const Login = () => {
       alert(`${newUser.username} already logged in!`);
     } else {
       try {
-        //   setLoading(true);
+          setLoading(true);
         const loginUser = await Axios.post(
-          "http://localhost:8000/login",
+          BASE,
           newUser
         );
         if (loginUser.status === 200) {
           setState(loginUser.data.username);
-
-          //There's an context issue here!
           setLog(true);
-          // setUser(loginUser.data);
-          // setStatus(`${newUser.username} Logged in!`);
-
+          setUser(loginUser.data);
           console.log(loginUser.data);
 
-          alert(`${newUser.username} logged in`);
-          // setTimeout(() => {
-          //   navigator("/");
-          // }, 2000);
-        } else if (loginUser.status === 401) {
-          //small issue here!
+          setTimeout(()=>{
+            navigator('/')
+          },2000)
+          
+        } else {
           alert("Unauthorized!");
         }
       } catch (err) {
         console.error(err);
       } finally {
-        //   setLoading(false);
+          setLoading(false);
       }
+    }
+  }
+
+  async function logOut(){
+    try{
+      const logOut = await Axios.post(BASE)
+      if(logOut.status===200){
+        setStatus("Logged out!")
+      }else{
+        setState("No user was logged in!")
+      }
+    }catch(err){
+      console.error(err);
     }
   }
 
@@ -72,7 +85,11 @@ const Login = () => {
         ></input>
         <button type="submit">Login!</button>
       </form>
+      <button onClick={logOut}>Logout!</button>
       <h1>{state ? `${state} Logged in!` : ""}</h1>
+      <Link to="/register">Register!</Link>
+      <br></br>
+      <Link to="/">Go back home?</Link>
     </div>
   );
 };

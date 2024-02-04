@@ -22,15 +22,14 @@ const CreateForum = () => {
 
       if (r.status === 200) {
         setStatus("Question Added");
+        setTimeout(()=>{
+          navigator("/forum")
+        },2000)
       } else if (r.status === 409) {
         setStatus("Question already exists!");
       } else {
         setStatus("Error while adding question!");
       }
-
-      setTimeout(()=>{
-        navigator("/forum")
-      },2000)
     } catch (err) {
       setStatus("Error Occured, please try again");
       console.error(err);
@@ -114,8 +113,6 @@ const CreateForum = () => {
             ></input>
           </form>
                 </div>
-                
-                
               ))
             ) : (
               <h1>No questions available</h1>
