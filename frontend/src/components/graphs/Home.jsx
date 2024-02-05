@@ -64,7 +64,7 @@ const HomePage = () => {
           </Link>
         </div>
       </div>
-      <h2></h2>
+      <Link to="/dash">Dashboard</Link>
     </div>
   ) : (
     <div>

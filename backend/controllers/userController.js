@@ -45,7 +45,7 @@ async function CreateQuestions(req, res) {
   return res.status(201).json({ Alert: "Question Added" });
 }
 
-async function AnsweringQuestions(req,res){
+async function AnsweringQuestions(req,res){ //depending on ID we update answer!
     const {answer} = req?.body;
     const id = req?.params?.id;
 if(!answer || !id) return res.status(400).json({Alert:"NO Answer/ID!"})

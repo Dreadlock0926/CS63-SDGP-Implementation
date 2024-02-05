@@ -1,8 +1,10 @@
-import { useEffect, useState } from "react";
+import { useContext, useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 import Axios from "axios";
+import { UserContext } from "../../App";
 
 const CreateForum = () => {
+  const {log} = useContext(UserContext)
   const [question, setQuestion] = useState("");
   const [answer, setAnswer] = useState("");
   const [loading, setLoading] = useState(false);
@@ -77,53 +79,51 @@ const CreateForum = () => {
     GetQuestions();
   });
 
-  return (
-    <div className="container-fluid">
-      {loading ? (
-        "Loading..."
-      ) : (
-        <div>
-          <form onSubmit={AddQuestion}>
-            <input
-              onChange={(e) => {
-                setQuestion(e.target.value);
-              }}
-              placeholder="Enter your question"
-              type="text"
-            ></input>
-            <button type="submit" disabled={loading}>
-              {loading ? "Loading..." : "Add Question"}
-            </button>
-            {status}
-          </form>
-          <div>
-            {data && data.length ? (
-              data.map((x, index) => (
-                <div key={x._id || index}>
-                  <h1>{x.question}</h1>
-                  <br></br>
-                  <form style={{margin:'5%'}} onSubmit={(e)=>{
-                    e.preventDefault();
-            AnsweringQuestions(x._id)
-          }}>
-            <input
-              onChange={(e) => {
-                setAnswer(e.target.value);
-              }}
-            ></input>
-          </form>
-                </div>
-              ))
-            ) : (
-              <h1>No questions available</h1>
-            )}
-          </div>
+  return log? <div className="container-fluid">
+  {loading ? (
+    "Loading..."
+  ) : (
+    <div>
+      <form onSubmit={AddQuestion}>
+        <input
+          onChange={(e) => {
+            setQuestion(e.target.value);
+          }}
+          placeholder="Enter your question"
+          type="text"
+        ></input>
+        <button type="submit" disabled={loading}>
+          {loading ? "Loading..." : "Add Question"}
+        </button>
+        {status}
+      </form>
+      <div>
+        {data && data.length ? (
+          data.map((x, index) => (
+            <div key={x._id || index}>
+              <h1>{x.question}</h1>
+              <br></br>
+              <form style={{margin:'5%'}} onSubmit={(e)=>{
+                e.preventDefault();
+        AnsweringQuestions(x._id)
+      }}>
+        <input
+          onChange={(e) => {
+            setAnswer(e.target.value);
+          }}
+        ></input>
+      </form>
+            </div>
+          ))
+        ) : (
+          <h1>No questions available</h1>
+        )}
+      </div>
 
-          <Link to="/forum">Forum Page</Link>
-        </div>
-      )}
+      <Link to="/forum">Forum Page</Link>
     </div>
-  );
+  )}
+</div>:<h1>Please login to continue!</h1>
 };
 
 export default CreateForum;
