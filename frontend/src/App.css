@@ -1,4 +1,12 @@
 /* Global Styles */
+*{
+  background-color: black;
+  color:wheat;
+  font-family: 'Poppins', Courier, monospace;
+  font-size: 32;
+  font-size: x-large;
+}
+
 #root {
   max-width: 1280px;
   margin: 0 auto;

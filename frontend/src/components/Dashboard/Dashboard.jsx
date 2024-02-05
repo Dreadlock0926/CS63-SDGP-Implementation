@@ -5,8 +5,31 @@ import { UserContext } from "../../App";
 import { Link } from "react-router-dom";
 import { LineChart, Line, XAxis, YAxis, Tooltip, Legend } from "recharts";
 
+
 const Dashboard = () => {
-const {log,setLog,user} = useContext(UserContext)
+const {log,setLog,user,setLoading,loading,setStatus} = useContext(UserContext)
+const [data,setData] = useState([])
+
+const BASE = "http://localhost:8000/forum"
+
+  async function FetchProgress(){
+    try{
+      setLoading(true);
+      const data = await Axios.get(BASE);
+      if(data.status===200){
+        setStatus("Fetched")
+        setData(data.data)
+      }else{
+        setStatus("Error while fetching!")
+      }
+    }catch(err){
+      console.error(err);
+    }
+  }
+
+  useEffect(()=>{
+    FetchProgress();
+  },[])
 
   const [progress, setProg] = useState({
     statistics: 75,
@@ -32,10 +55,9 @@ const {log,setLog,user} = useContext(UserContext)
   const { statistics, puremaths } = progress;
 
   const chartData = [
-    // Replace this with your actual data for the chart
-    {  value: 30 },
-    {  value: 60 },
-    {  value: 90 },
+    {  value: data.rating },
+    {  value: data.rating },
+    {  value: data.rating },
   ];
 
   return log?<div>
@@ -64,21 +86,21 @@ const {log,setLog,user} = useContext(UserContext)
         }}
       >
         <h1>Statistics</h1>
-        <p>{statistics}% complete</p>
+        <p>{progress.statistics}% complete</p>
         <button>
           <Link to="/stat">Continue</Link>
         </button>
       </div>
       <div className="pureProg">
         <h1>Pure Maths 1</h1>
-        <p>{puremaths}% complete</p>
+        <p>{progress.puremaths}% complete</p>
         <button>
           <Link to="/puremath">Continue</Link>
         </button>
       </div>
     </label>
   </div>
-</div>:<div><h1>Nothing here!</h1></div>;
+</div>:<div><h1>Please login to continue!</h1></div>;
 };
 
 export default Dashboard;

@@ -38,7 +38,7 @@ const Login = () => {
 
           setTimeout(()=>{
             navigator('/')
-          },2000)
+          },1000)
           
         } else {
           alert("Unauthorized!");
