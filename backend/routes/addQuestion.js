@@ -4,7 +4,8 @@ const questionModel = require("../models/question");
 
 router.route("/").post(async (req, res) => {
 
-  const { questionID, questionText, questionFigure, answerText } = req?.body;
+  const { questionID,
+          questionsGrid, questionsFiguresGrid, answersGrid, questionSource } = req?.body;
   
   if (!questionID) {
 
@@ -16,7 +17,10 @@ router.route("/").post(async (req, res) => {
 
   if (!doesQuestionExist) {
 
-    await questionModel.create({ questionID, questionText, questionFigure, answerText });
+    await questionModel.create({ 
+      questionID, questionsGrid,
+      questionsFiguresGrid, answersGrid, questionSource 
+    });
 
     return res.status(200).json({ Alert: `${questionID} Registered!` });
 

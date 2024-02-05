@@ -2,6 +2,7 @@ import { useState, createContext } from "react";
 import { BrowserRouter, Routes, Route } from "react-router-dom";
 import Home from "./pages/HomePage/home";
 import Login from "./pages/LoginPage/login";
+import AddQuestionsPage from "./pages/addQuestionsPage/addQuestions";
 import UnknownPage from "./components/Error404/Unknown";
 
 const UserContext = createContext();
@@ -15,7 +16,7 @@ function App() {
         <BrowserRouter p>
           <Routes>
             <Route path="/" element={<Home />} />
-
+            <Route path="add-questions" element={<AddQuestionsPage />}/>
             <Route path="login" element={<Login />} />
             <Route path="*" element={<UnknownPage />} />
           </Routes>

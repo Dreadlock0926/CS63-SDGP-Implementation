@@ -2,9 +2,10 @@ const mongoose = require("mongoose");
 const questionSchema = new mongoose.Schema({
 
   questionID: { type: String, required: true, unique: true},
-  questionText: { type: String, required: true },
-  questionFigure: { type: String, required: true },
-  answerText: {type: String, required: true },
+  questionsGrid: {type: Array, required: false },
+  questionsFiguresGrid: {type: Array, required: false},
+  answersGrid: {type: Array, required: false },
+  questionSource: {type: String, required: false }
   
 });
 
