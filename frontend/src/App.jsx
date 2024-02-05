@@ -3,6 +3,12 @@ import { BrowserRouter, Routes, Route } from "react-router-dom";
 import Home from "./pages/HomePage/home";
 import Login from "./pages/LoginPage/login";
 import UnknownPage from "./components/Error404/Unknown";
+<<<<<<< Updated upstream
+=======
+import Gemini from "./components/Gemini/Gemini";
+import ForgotPass from "./pages/Forgot";
+import Progressionmark from "./components/graphs/Progressionmark";
+>>>>>>> Stashed changes
 
 const UserContext = createContext();
 
@@ -17,6 +23,11 @@ function App() {
             <Route path="/" element={<Home />} />
 
             <Route path="login" element={<Login />} />
+<<<<<<< Updated upstream
+=======
+            <Route path="/forgot" element={<ForgotPass />}></Route>
+            <Route path="/progression" element={<Progressionmark/>}></Route>
+>>>>>>> Stashed changes
             <Route path="*" element={<UnknownPage />} />
           </Routes>
         </BrowserRouter>

@@ -10,6 +10,7 @@ const port = process.env.PORT;
 const cluster = process.env.CLUSTER;
 const session = require("express-session");
 const { join } = require("path");
+const progression = require("./routes/progression");
 
 app.use(express.json());
 app.use(cors({ origin: "*" })); //allow access from anywhere for now!
@@ -31,6 +32,14 @@ app.use(
 app.use("/home", home);
 app.use("/register", register);
 app.use("/login", login);
+<<<<<<< Updated upstream
+=======
+// app.use(authenticated); //uncomment during final authentication tests 🔓
+app.use("/home", home);
+app.use("/gemini", gemini);
+app.use("/progression",progression);
+
+>>>>>>> Stashed changes
 
 app.use("*", (req, res) => {
   //leave this below all the other routes cuz this is the LAST RESORT JUST INCASE THE requested url is neither of the existing routes
