@@ -55,12 +55,17 @@ const BASE = "http://localhost:8000/forum"
   const { statistics, puremaths } = progress;
 
   const chartData = [
-    {  value: data.rating },
-    {  value: data.rating },
-    {  value: data.rating },
+    {  value: 40 },
+    {  value: 20 },
+    {  value: 70 },
+    {  value: 60 },
+    {  value: 80 },
+    {  value: 35 },
+    {  value: 23 },
   ];
 
   return log?<div>
+      <h1>{`${time}, ${user.username}`}</h1>
   <h1>Dashboard</h1>
   <LineChart
     width={500}
@@ -74,7 +79,7 @@ const BASE = "http://localhost:8000/forum"
     <Legend />
     <Line type="monotone" dataKey="value" stroke="#8884d8" />
   </LineChart>
-  <h2>{`${time}, ${user.username}`}</h2>
+
   <div className="progress">
     <label>
       <div
@@ -100,7 +105,7 @@ const BASE = "http://localhost:8000/forum"
       </div>
     </label>
   </div>
-</div>:<div><h1>Please login to continue!</h1></div>;
+</div>:<div><h1>Please <Link to="/login">login</Link> to continue!</h1></div>;
 };
 
 export default Dashboard;

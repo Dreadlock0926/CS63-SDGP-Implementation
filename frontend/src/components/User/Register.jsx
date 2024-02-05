@@ -64,7 +64,7 @@ const Register = () => {
         <button type="submit">Register...</button>
       </form>
       <h1>{state ? `${state} Registered!` : ""}</h1>
-      <Link to="/login">Login!</Link>
+      <p>Click <Link to="/login">here</Link> to Login!</p>
       <br></br>
       <Link to="/">Go back home?</Link>
     </div>

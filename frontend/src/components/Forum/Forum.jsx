@@ -6,7 +6,7 @@ import { Link } from "react-router-dom";
 import {UserContext} from "../../App"
 const Forum = () => {
 
-  const {loading,setLoading,status,setStatus} = useContext(UserContext)
+  const {loading,setLoading,status,setStatus,log,user} = useContext(UserContext)
   const [data, setData] = useState([]);
 
   let meanVotes = 0;
@@ -66,29 +66,28 @@ const Forum = () => {
     forumData();
   }, []);
 
-  return (
-    <div>
-      <h1>Forum!</h1>
-      {loading ? (
-        <FidgetSpinner />
-      ) : data && data.length ? (
-        data.map((x) => (
-          <div key={x._id}>
-            <button onClick={()=>{meanVotes+=parseInt(x._id); alert(meanVotes)}}>Voting!</button>
-            <h1>{x.question}</h1>
-            <h2>{x?.answer ? x.answer : "Be the first to Answer! 🥳"}</h2>
-            <p>{`Upvoted by ${x.rating}`}</p>
-            <button onClick={(e)=>{
-              e.preventDefault();
-              increaseVotes(x._id)}}>Upvote!</button>
-          </div>
-        ))
-      ) : (
-        <h1>No forum questions added yet!</h1>
-      )}
-      <Link to="/addforum">Add question to forum? 🤔</Link>
-    </div>
-  );
+  return log? <div>
+    <h1>Welcome back {user.username}!</h1>
+  <h1>Forum!</h1>
+  {loading ? (
+    <FidgetSpinner />
+  ) : data && data.length ? (
+    data.map((x) => (
+      <div key={x._id}>
+        <button onClick={()=>{meanVotes+=parseInt(x._id); alert(meanVotes)}}>Voting!</button>
+        <h1>{x.question}</h1>
+        <h2>{x?.answer ? x.answer : "Be the first to Answer! 🥳"}</h2>
+        <p>{`Upvoted by ${x.rating}`}</p>
+        <button onClick={(e)=>{
+          e.preventDefault();
+          increaseVotes(x._id)}}>Upvote!</button>
+      </div>
+    ))
+  ) : (
+    <h1>No forum questions added yet!</h1>
+  )}
+  <Link to="/addforum">Add question to forum? 🤔</Link>
+</div>:<div><h1>Please <Link to="/login">login</Link> to continue to the forum </h1></div>
 };
 
 export default Forum;
