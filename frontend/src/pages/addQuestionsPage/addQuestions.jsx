@@ -1,10 +1,12 @@
 import NavBar from "../../components/NavigationBar/navBar.jsx";
 import "../main.css"
 import "../addQuestionsPage/addQuestions.css"
+import {useRef, useState} from 'react';
 
 function QuestionSourcePanel() {
 
     return (
+
         <>
         <div className="panel-container">
             <div className="question-source-container">
@@ -56,12 +58,72 @@ function QuestionSourcePanel() {
 
 }
 
+function QuestionGridUnit( {index} ) {
+
+    const [questionText, setQuestionText] = useState('');
+    const [answerText, setAnswerText] = useState('');
+    const [answerType, setAnswerType] = useState('');
+    const [figureText, setFigureText] = useState('');
+
+    return (
+
+        <>
+            <div className="qgu-unit">
+                <p className="qgu-index">{index}.</p>
+                <div className="input-grid">
+                    <input placeholder="Question" value={questionText} onChange={e => setQuestionText(e.target.value)}
+                    type="text" className="qgu-ques-input" />
+                    <div className="qgu-answer">
+                        <input placeholder="Answer" value={answerText} onChange={e => setAnswerText(e.target.value)}
+                         type="text" className="qgu-answer-input" />
+                        <input placeholder="Answer Type" value={answerType} onChange={e => setAnswerType(e.target.value)}
+                         type="text" className="qgu-answer-type" />
+                    </div>
+                    <input placeholder="Figure" value={figureText} onChange={e => setFigureText(e.target.value)}
+                     type="text" className="qgu-figure-input" />
+                </div>
+            </div>
+        </>
+
+    );
+
+}
+
+function QuestionAndCorrespondingAnswerPanel() {
+
+    const [gridUnitList, setGridUnitList] = useState([<QuestionGridUnit key={0} index={1} />]);
+    const [keyCounter, setKeyCounter] = useState(1);
+    
+    const addSubQuestion = () => {
+      setGridUnitList((prevList) => [
+        ...prevList,
+        <QuestionGridUnit key={keyCounter} index={prevList.length + 1} />,
+      ]);
+      setKeyCounter((prevCounter) => prevCounter + 1);
+    };
+
+    return (
+
+        <>
+            <p className="qa-main-text">Add Questions and Corresponding Answers</p>
+            <div className="qa-framework">
+                {gridUnitList}
+            </div>
+            <button onClick={addSubQuestion} className="add-sub-question-btn">+ Add Sub Question</button>
+        </>
+
+    );
+
+}
+
 function QuestionFinalPanel() {
 
     return (
     <div className="question-final-panel">
         <h2>Add Question</h2>
         <QuestionSourcePanel />
+        <QuestionAndCorrespondingAnswerPanel />
+        <button className="final-add-btn">Add</button>
     </div>
     );
 
