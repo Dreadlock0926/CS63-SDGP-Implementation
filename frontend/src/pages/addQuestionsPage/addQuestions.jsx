@@ -2,8 +2,36 @@ import NavBar from "../../components/NavigationBar/navBar.jsx";
 import "../main.css"
 import "../addQuestionsPage/addQuestions.css"
 import {useRef, useState} from 'react';
+import { useEffect } from "react";
 
 function QuestionSourcePanel() {
+
+    const [toggleCambridgeQuestion, setToggleCambridgeQuestion] = useState(false);
+
+    const qpSwitch = useRef();
+    const toggledForm = useRef();
+
+    const toggleQuestionFromCambridge = () => {
+
+        setToggleCambridgeQuestion(!toggleCambridgeQuestion);
+        
+    };
+
+    useEffect(() => {
+
+        if (toggleCambridgeQuestion) {
+
+            qpSwitch.current.style.justifyContent = "flex-end";
+            toggledForm.current.style.visibility = "visible";
+
+        } else {
+
+            qpSwitch.current.style.justifyContent = "flex-start";
+            toggledForm.current.style.visibility = "hidden";
+
+        }
+
+    }, [toggleCambridgeQuestion])
 
     return (
 
@@ -24,11 +52,11 @@ function QuestionSourcePanel() {
                     <p className="qs-pa">Is this question from a
                     Cambridge International AS and A Level Past 
                     Paper? </p>
-                    <div className="qp-switch">
+                    <div ref={qpSwitch} onClick={toggleQuestionFromCambridge} className="qp-switch">
                         <div className="qp-sphere"></div>
                     </div>
                 </div>
-                <form>
+                <form ref={toggledForm}>
                     <label>
                         <p>Question Number</p>
                         <input className="qn-input" type="text" name="ques-num" />
@@ -58,12 +86,21 @@ function QuestionSourcePanel() {
 
 }
 
-function QuestionGridUnit( {index} ) {
+function QuestionGridUnit( {index, onInputChange} ) {
 
     const [questionText, setQuestionText] = useState('');
     const [answerText, setAnswerText] = useState('');
     const [answerType, setAnswerType] = useState('');
     const [figureText, setFigureText] = useState('');
+
+    useEffect(() => {
+        onInputChange(index, {
+          questionText,
+          answerText,
+          answerType,
+          figureText,
+        });
+      }, [index, questionText, answerText, answerType, figureText, onInputChange]);
 
     return (
 
@@ -76,8 +113,13 @@ function QuestionGridUnit( {index} ) {
                     <div className="qgu-answer">
                         <input placeholder="Answer" value={answerText} onChange={e => setAnswerText(e.target.value)}
                          type="text" className="qgu-answer-input" />
-                        <input placeholder="Answer Type" value={answerType} onChange={e => setAnswerType(e.target.value)}
+                        <input list="answer-type-qgu" placeholder="Answer Type" value={answerType} onChange={e => setAnswerType(e.target.value)}
                          type="text" className="qgu-answer-type" />
+                        <datalist id="answer-type-qgu">
+                            <option value="Histogram" />
+                            <option value="Expression" />
+                            <option value="Box and Whisker" />
+                        </datalist>
                     </div>
                     <input placeholder="Figure" value={figureText} onChange={e => setFigureText(e.target.value)}
                      type="text" className="qgu-figure-input" />
@@ -90,31 +132,61 @@ function QuestionGridUnit( {index} ) {
 }
 
 function QuestionAndCorrespondingAnswerPanel() {
-
-    const [gridUnitList, setGridUnitList] = useState([<QuestionGridUnit key={0} index={1} />]);
+    const [gridUnitList, setGridUnitList] = useState([]);
     const [keyCounter, setKeyCounter] = useState(1);
-    
+    const [inputValues, setInputValues] = useState({});
+  
     const addSubQuestion = () => {
       setGridUnitList((prevList) => [
         ...prevList,
-        <QuestionGridUnit key={keyCounter} index={prevList.length + 1} />,
+        <QuestionGridUnit
+          key={keyCounter}
+          index={prevList.length + 1}
+          onInputChange={handleInputChange}
+        />,
       ]);
       setKeyCounter((prevCounter) => prevCounter + 1);
     };
-
+  
+    const handleInputChange = (index, values) => {
+        setInputValues((prevValues) => ({
+          ...prevValues,
+          [index]: values,
+        }));
+      };
+  
+      const logInputValues = () => {
+            const questionTexts = [];
+            const answerTexts = [];
+            const answerTypes = [];
+            const figureTexts = [];
+        
+            Object.values(inputValues).forEach((values) => {
+            questionTexts.push(values.questionText || '');
+            answerTexts.push(values.answerText || '');
+            answerTypes.push(values.answerType || '');
+            figureTexts.push(values.figureText || '');
+            });
+        
+            console.log('Question Texts:', questionTexts);
+            console.log('Answer Texts:', answerTexts);
+            console.log('Answer Types:', answerTypes);
+            console.log('Figure Texts:', figureTexts);
+      };
+  
     return (
-
-        <>
-            <p className="qa-main-text">Add Questions and Corresponding Answers</p>
-            <div className="qa-framework">
-                {gridUnitList}
-            </div>
-            <button onClick={addSubQuestion} className="add-sub-question-btn">+ Add Sub Question</button>
-        </>
-
+      <>
+        <p className="qa-main-text">Add Questions and Corresponding Answers</p>
+        <div className="qa-framework">{gridUnitList}</div>
+        <button onClick={addSubQuestion} className="add-sub-question-btn">
+          + Add Sub Question
+        </button>
+        <button onClick={logInputValues} className="final-add-btn">
+            Log Input Values
+        </button>
+      </>
     );
-
-}
+  }
 
 function QuestionFinalPanel() {
 
@@ -123,7 +195,6 @@ function QuestionFinalPanel() {
         <h2>Add Question</h2>
         <QuestionSourcePanel />
         <QuestionAndCorrespondingAnswerPanel />
-        <button className="final-add-btn">Add</button>
     </div>
     );
 
