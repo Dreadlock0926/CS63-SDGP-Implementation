@@ -14,6 +14,7 @@ import ExamFinalized from "./components/Exam/ExamFinalized";
 import Dashboard from "./components/Dashboard/Dashboard";
 import Learn from "./components/LearningResources/Learn";
 import AddStudy from "./components/LearningResources/AddStudy";
+import General from "./components/General";
 
 export const UserContext = createContext();
 
@@ -46,18 +47,19 @@ function App() {
            response,setResponse
           }}
         >
+          <General/>
           <Routes>
             <Route path="/" element={<Home />} />
             <Route path="/login" element={<Login />} />
             <Route path="/register" element={<Register />} />
-            <Route path="/forgot" element={<ForgotPass />} />
-            <Route path="/dash" element={<Dashboard/>}></Route>
+            <Route path="/forgot" element={<ForgotPass />} /> {/**Optional */}
+            <Route path="/dash" element={<Dashboard/>}/>
             <Route path="/forum" element={<Forum />} />
             <Route path="/addforum" element={<CreateForum />} />
-            <Route path="/exam" element={<ExamPage/>}></Route>
-            <Route path="/examfinal" element={<ExamFinalized/>}></Route>
-            <Route path="/addresources" element={<AddStudy/>}></Route>
-            <Route path="/resources" element={<Learn/>}></Route>
+            <Route path="/exam" element={<ExamPage/>}/>
+            <Route path="/examfinal" element={<ExamFinalized/>}/>
+            <Route path="/resources" element={<Learn/>}/>
+            <Route path="/addresources" element={<AddStudy/>}/>
             <Route path="*" element={<UnknownPage />} />
           </Routes>
         </UserContext.Provider>

@@ -25,6 +25,10 @@ const ExamPage = () => {
 
   const stopExamTimer = () => { 
     clearInterval(intervalRef.current);
+    setTimeout(() => {
+      // Redirect to "/examfinal" after 2 seconds
+     navigator("/examfinal") 
+    }, 2000);
   };
 
   const sendExamData = async (id) => {
@@ -34,13 +38,14 @@ const ExamPage = () => {
     //might have to set the exam marks in local storage to get in the finalized page!
     const sendAnswers = await Axios.post("") //route of question!
     if(sendAnswers.status===200){
-      setTimeout(() => {
-        // Redirect to "/examfinal" after 2 seconds
-       navigator("/examfinal") 
-      }, 2000);
+      // setTimeout(() => {
+      //   // Redirect to "/examfinal" after 2 seconds
+      //  navigator("/examfinal") 
+      // }, 2000);
     }else{
       setStatus("Error while sending answers!")
     }
+   
 
   
   };

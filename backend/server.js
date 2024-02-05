@@ -54,8 +54,8 @@ app.use("/login", login);
 // app.use(authenticated); //uncomment during final authentication tests 🔓
 // app.use('/users',user)
 app.use("/home", home);
-app.use("/gemini", gemini);
 app.use("/forum",forum)
+app.use("/gemini", gemini);
 app.use("/resources",learningResources)
 
 

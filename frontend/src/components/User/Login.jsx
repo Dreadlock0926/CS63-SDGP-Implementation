@@ -12,7 +12,7 @@ const Login = () => {
   const { loading, setLoading,setLog,log,setUser,setStatus,status} =
     useContext(UserContext);
   const [newUser, setnewUser] = useState({ username: "", password: "" });
-  const [state, setState] = useState("");
+
 
 
   const handleChange = (e) => {
@@ -31,7 +31,7 @@ const Login = () => {
           newUser
         );
         if (loginUser.status === 200) {
-          setState(loginUser.data.username);
+          setStatus(loginUser.data.username);
           setLog(true);
           setUser(loginUser.data);
           console.log(loginUser.data);
@@ -40,8 +40,10 @@ const Login = () => {
             navigator('/')
           },1000)
           
-        } else {
+        } else if(loginUser.status===401) {
           alert("Unauthorized!");
+        }else{
+          alert("Technical issue , kindly refresh and try again! 🥹")
         }
       } catch (err) {
         console.error(err);
@@ -55,9 +57,10 @@ const Login = () => {
     try{
       const logOut = await Axios.post(BASE)
       if(logOut.status===200){
+        
         setStatus("Logged out!")
       }else{
-        setState("No user was logged in!")
+        setStatus("No user was logged in!")
       }
     }catch(err){
       console.error(err);
@@ -84,9 +87,10 @@ const Login = () => {
         ></input>
         <button type="submit">Login!</button>
       </form>
-      <button onClick={logOut}>Logout!</button>
-      <h1>{state ? `${state} Logged in!` : ""}</h1>
-      <Link to="/register">Register!</Link>
+      {/* <button onClick={logOut}>Logout!</button> */} {/**Luxury feature */}
+      <h1>{status ? `${status} Logged in!` : ""}</h1>
+      <p>Click <Link to="/register">here</Link> to Register!</p>
+    
       <br></br>
       <Link to="/">Go back home?</Link>
     </div>
