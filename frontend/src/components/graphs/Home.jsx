@@ -47,13 +47,17 @@ const HomePage = () => {
       <Link to="/puremath">
         <button>Pure Math</button>  
       </Link>
+      <br/><br/>
+      <h1>Statistics</h1>
+      <Link to="/puremath">
+        <button>Statistics</button>  
+      </Link>
       <div className="math">
         <div>
           <p>
-            Progress
             {userx && userx.length
-              ? userx.map((x) => <div key={x.id}><p>{x.marks}</p></div>)
-              : " No results found!"}
+              ? userx.map((x) => <div key={x.id}><p>{`Progress ${x.marks}`}</p></div>)
+              : ""}
           </p>
         </div>
 
@@ -64,7 +68,7 @@ const HomePage = () => {
           </Link>
         </div>
       </div>
-      <h2></h2>
+      <Link to="/dash">Dashboard</Link>
     </div>
   ) : (
     <div>

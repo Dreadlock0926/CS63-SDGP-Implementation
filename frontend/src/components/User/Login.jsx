@@ -1,6 +1,5 @@
 /* eslint-disable no-unused-vars */
 import { useContext, useState } from "react";
-
 import Axios from "axios";
 import { UserContext } from "../../App";
 import { Link ,useNavigate } from "react-router-dom";
@@ -39,7 +38,7 @@ const Login = () => {
 
           setTimeout(()=>{
             navigator('/')
-          },2000)
+          },1000)
           
         } else {
           alert("Unauthorized!");

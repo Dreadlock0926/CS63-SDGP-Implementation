@@ -1,30 +1,41 @@
 /* eslint-disable no-unused-vars */
-import { useEffect, useState, useContext } from "react";
+import React, { useEffect, useState, useContext } from "react";
 import Axios from "axios";
 import { UserContext } from "../../App";
 import { Link } from "react-router-dom";
+import { LineChart, Line, XAxis, YAxis, Tooltip, Legend } from "recharts";
+
 
 const Dashboard = () => {
-  const datax = useContext(UserContext);
-  const { user, rank, loading, setLoading } = datax;
+const {log,setLog,user,setLoading,loading,setStatus} = useContext(UserContext)
+const [data,setData] = useState([])
+
+const BASE = "http://localhost:8000/forum"
+
+  async function FetchProgress(){
+    try{
+      setLoading(true);
+      const data = await Axios.get(BASE);
+      if(data.status===200){
+        setStatus("Fetched")
+        setData(data.data)
+      }else{
+        setStatus("Error while fetching!")
+      }
+    }catch(err){
+      console.error(err);
+    }
+  }
+
+  useEffect(()=>{
+    FetchProgress();
+  },[])
 
   const [progress, setProg] = useState({
-    //how we're going to predict this is something we still need to think about
     statistics: 75,
     puremaths: 50,
   });
   const [time, setTime] = useState("");
-
-//   async function userProgress() {
-//     try {
-//       setLoading(true);
-//       const userData = await Axios.get("http://localhost:8000/users"); //backend route not created!
-//     } catch (err) {
-//       console.error(err);
-//     } finally {
-//       setLoading(false);
-//     }
-//   }
 
   const today = new Date();
   const hours = today.getHours();
@@ -43,37 +54,53 @@ const Dashboard = () => {
 
   const { statistics, puremaths } = progress;
 
-  return (
-    <div>
-      <h1>Dashboard</h1>
-      <h2>{`${time},${user}`} </h2>
-      <div className="progress">
-        <label>
-          <div
-            className="stateProg"
-            style={{
-              width: "100px",
-              height: "100px",
-              padding: "2%",
-            }}
-          >
-            <h1>Statistics</h1>
-            <p>{statistics}% complete</p>
-            <button>
-              <Link to="/stat">Continue</Link>
-            </button>
-          </div>
-          <div className="pureProg">
-            <h1>Pure Maths 1</h1>
-            <p>{puremaths}% complete</p>
-            <button>
-              <Link to="/puremath">Continue</Link>
-            </button>
-          </div>
-        </label>
+  const chartData = [
+    {  value: data.rating },
+    {  value: data.rating },
+    {  value: data.rating },
+  ];
+
+  return log?<div>
+  <h1>Dashboard</h1>
+  <LineChart
+    width={500}
+    height={300}
+    data={chartData}
+    margin={{ top: 5, right: 30, left: 20, bottom: 5 }}
+  >
+    <XAxis dataKey="name" />
+    <YAxis />
+    <Tooltip />
+    <Legend />
+    <Line type="monotone" dataKey="value" stroke="#8884d8" />
+  </LineChart>
+  <h2>{`${time}, ${user.username}`}</h2>
+  <div className="progress">
+    <label>
+      <div
+        className="stateProg"
+        style={{
+          width: "100px",
+          height: "100px",
+          padding: "2%",
+        }}
+      >
+        <h1>Statistics</h1>
+        <p>{progress.statistics}% complete</p>
+        <button>
+          <Link to="/stat">Continue</Link>
+        </button>
       </div>
-    </div>
-  );
+      <div className="pureProg">
+        <h1>Pure Maths 1</h1>
+        <p>{progress.puremaths}% complete</p>
+        <button>
+          <Link to="/puremath">Continue</Link>
+        </button>
+      </div>
+    </label>
+  </div>
+</div>:<div><h1>Please login to continue!</h1></div>;
 };
 
 export default Dashboard;

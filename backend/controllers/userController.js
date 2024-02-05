@@ -31,21 +31,28 @@ async function GetUsers(req,res){
 }
 
 async function CreateQuestions(req, res) {
-  const { question, answer, topic } = req?.body;
+  const { question, answer, topic,rating } = req?.body;
 
   if (!question || !topic)
     return res.status(400).json({ Alert: "No questions or topic provided" });
+  try{
+    await forumModel.create({
+      question,
+      answer,
+      topic,
+      rating
+    });
+  
+    return res.status(201).json({ Alert: "Question Added" });
+  }catch(err){
+    console.error(err);
+    return res.status(500).json({Alert:err})
+  }
 
-  await forumModel.create({
-    question,
-    answer,
-    topic,
-  });
 
-  return res.status(201).json({ Alert: "Question Added" });
 }
 
-async function AnsweringQuestions(req,res){
+async function AnsweringQuestions(req,res){ //depending on ID we update answer!
     const {answer} = req?.body;
     const id = req?.params?.id;
 if(!answer || !id) return res.status(400).json({Alert:"NO Answer/ID!"})
