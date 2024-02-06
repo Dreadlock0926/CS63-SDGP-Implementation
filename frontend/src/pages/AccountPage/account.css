@@ -2,11 +2,12 @@
   position: absolute;
   top: 40%;
   left: 50%;
-  height: 650px;
+  height: 580px;
   width: 500px;
   border-radius: 24px;
   transform: translate(-50%, -30%);
   background-color: white;
+  box-shadow: rgba(149, 157, 165, 0.2) 0px 8px 24px;
 }
 
 .avItem2 {
@@ -14,31 +15,28 @@
   height: 80px;
   border-radius: 50%;
   display: block;
-  margin-top: 50px;
-  margin-left: auto;
-  margin-right: auto;
+  margin: 30px auto 0;
 }
 
 .forms {
   padding: 30px;
 }
 
-.containerTitle {
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  font-size: 32px;
-  font-weight: 500;
-}
-
+.containerTitle,
 .containerText {
   display: flex;
   justify-content: center;
   align-items: center;
+  margin-bottom: 0;
+}
+
+.containerTitle {
+  font-size: 24px;
+  font-weight: bold;
 }
 
 .inputLabelGrp {
-  padding-top: 10px;
+  padding-bottom: 10px;
 }
 
 label {
@@ -47,9 +45,12 @@ label {
 }
 
 input[type="email"],
-input[type="password"], input[type="text"] {
+input[type="password"],
+input[type="text"] {
   width: 100%;
-  padding: 12px 20px;
+  padding: 14px 8px;
+  margin-top: 4px;
+  margin-bottom: 8px;
   font-size: 16px;
   border: 1px solid #ccc;
   border-radius: 4px;
@@ -58,32 +59,21 @@ input[type="password"], input[type="text"] {
 }
 
 .button {
-  top: 20px;
-  margin-left: auto;
-  margin-right: auto;
+  margin: 10px auto;
   display: block;
-  align-items: center;
-  appearance: none;
   background-color: #fff;
   border-radius: 24px;
-  border-style: none;
+  border: none;
   box-shadow: rgba(0, 0, 0, 0.2) 0 3px 5px -1px,
     rgba(0, 0, 0, 0.14) 0 6px 10px 0, rgba(0, 0, 0, 0.12) 0 1px 18px 0;
-  box-sizing: border-box;
   color: #3c4043;
   cursor: pointer;
-  fill: currentcolor;
   font-family: "Google Sans", Roboto, Arial, sans-serif;
   font-size: 14px;
   font-weight: 500;
   height: 48px;
-  justify-content: center;
-  letter-spacing: 0.25px;
   line-height: normal;
-  max-width: 100%;
-  overflow: visible;
   padding: 2px 44px;
-  position: relative;
   text-align: center;
   text-transform: none;
   transition: box-shadow 280ms cubic-bezier(0.4, 0, 0.2, 1),
@@ -91,25 +81,11 @@ input[type="password"], input[type="text"] {
   user-select: none;
   -webkit-user-select: none;
   touch-action: manipulation;
-  width: auto;
-  will-change: transform, opacity;
-  z-index: 0;
 }
 
 .button:hover {
   background: #f6f9fe;
   color: #174ea6;
-}
-
-.button:active {
-  box-shadow: 0 4px 4px 0 rgb(60 64 67 / 30%),
-    0 8px 12px 6px rgb(60 64 67 / 15%);
-  outline: none;
-}
-
-.button:focus {
-  outline: none;
-  border: 2px solid #4285f4;
 }
 
 .button:not(:disabled) {
