@@ -4,7 +4,7 @@ import "../addQuestionsPage/addQuestions.css"
 import {useRef, useState} from 'react';
 import { useEffect } from "react";
 
-function QuestionSourcePanel( {setQuestionSource, setQuestionNumber, setQuestionYear, setQuestionVariant} ) {
+function QuestionSourcePanel( {setQuestionSource, setQuestionTopic, setQuestionNumber, setQuestionYear, setQuestionVariant} ) {
 
     const [toggleCambridgeQuestion, setToggleCambridgeQuestion] = useState(false);
 
@@ -45,6 +45,16 @@ function QuestionSourcePanel( {setQuestionSource, setQuestionNumber, setQuestion
                         <datalist id="data">
                             <option value="Statistics I" />
                             <option value="Pure Mathematics I" />
+                        </datalist>
+                    </label>
+                </form>
+                <form>
+                    <label className="qs-input">
+                        <p>Question Topic</p>
+                        <input className="qs-input" type="text" list="topic-data" onChange={e => setQuestionTopic(e.target.value)} />
+                        <datalist id="topic-data">
+                            <option value="Integration" />
+                            <option value="Differentiation" />
                         </datalist>
                     </label>
                 </form>
@@ -178,6 +188,7 @@ function QuestionAndCorrespondingAnswerPanel( {logQuestionSource, setQuestionObj
 function QuestionFinalPanel() {
 
     const [questionSource, setQuestionSource] = useState("");
+    const [questionTopic, setQuestionTopic] = useState("");
     const [questionNumber, setQuestionNumber] = useState(0);
     const [questionYear, setQuestionYear] = useState("");
     const [questionVariant, setQuestionVariant] = useState(0);
@@ -186,6 +197,7 @@ function QuestionFinalPanel() {
     const logQuestionSource = () => {
 
         console.log(questionSource);
+        console.log(questionTopic);
         console.log(questionNumber);
         console.log(questionYear);
         console.log(questionVariant);
@@ -197,7 +209,8 @@ function QuestionFinalPanel() {
     <div className="question-final-panel">
         <h2>Add Question</h2>
         <QuestionSourcePanel 
-        setQuestionSource={setQuestionSource} setQuestionNumber={setQuestionNumber} 
+        setQuestionSource={setQuestionSource}  setQuestionTopic={setQuestionTopic}
+        setQuestionNumber={setQuestionNumber} 
         setQuestionYear={setQuestionYear} setQuestionVariant={setQuestionVariant} />
         <QuestionAndCorrespondingAnswerPanel logQuestionSource={logQuestionSource} setQuestionObject={setQuestionObject} />
     </div>
