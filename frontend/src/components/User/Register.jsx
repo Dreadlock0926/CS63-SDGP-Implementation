@@ -22,7 +22,7 @@ const Register = () => {
         newUser
       );
       if (loginUser.status === 200) {
-        setState(loginUser.data.username);
+        navigator("/login")
 
         //There's an context issue here!
         // setLog(true);

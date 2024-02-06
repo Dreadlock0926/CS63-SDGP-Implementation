@@ -8,6 +8,7 @@ const Forum = () => {
 
   const {loading,setLoading,status,setStatus,log,user} = useContext(UserContext)
   const [data, setData] = useState([]);
+  const [answer,setAnswer] = useState("")
 
   let meanVotes = 0;
 
@@ -59,6 +60,25 @@ const Forum = () => {
     }
   };
 
+  async function AnsweringQuestions(id) {
+   
+    try {
+      setLoading(true);
+      const r = await Axios.post(`${EndPoint}/${id}`, answer);
+      if (r.data.status === 200) {
+        setStatus("Answer Posted!");
+      }
+
+      setTimeout(() => {
+        navigator("/forum");
+      }, 2000);
+    } catch (err) {
+      console.error(err);
+    } finally {
+      setLoading(false);
+    }
+  }
+
 
 
   
@@ -74,13 +94,17 @@ const Forum = () => {
   ) : data && data.length ? (
     data.map((x) => (
       <div key={x._id}>
-        <button onClick={()=>{meanVotes+=parseInt(x._id); alert(meanVotes)}}>Voting!</button>
-        <h1>{x.question}</h1>
-        <h2>{x?.answer ? x.answer : "Be the first to Answer! 🥳"}</h2>
-        <p>{`Upvoted by ${x.rating}`}</p>
+        <br></br>
+        <br></br>
+        <h1>Question {x.question}</h1>
+        <h1>Answer {x?.answer ? x.answer : "Be the first to Answer! 🥳"}</h1>
+        <p>Rating {x.rating?`Upvoted by ${x.rating}`:<h1>Rated by none!</h1>}</p>
         <button onClick={(e)=>{
           e.preventDefault();
           increaseVotes(x._id)}}>Upvote!</button>
+          <form onSubmit={(e)=>{e.preventDefault();AnsweringQuestions(x._id)}}><input onChange={(e)=>{setAnswer(e.target.value)}} placeholder="Answer..." type="text"></input><button>Answer!</button></form>
+          <br></br>
+        <br></br>
       </div>
     ))
   ) : (
