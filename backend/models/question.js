@@ -2,6 +2,7 @@ const mongoose = require("mongoose");
 const questionSchema = new mongoose.Schema({
 
   questionID: { type: String, required: true, unique: true},
+  questionTopic: {type: String, required: true},
   questionsGrid: {type: Array, required: true },
   questionsFiguresGrid: {type: Array, required: false},
   answersGrid: {type: Array, required: true },
