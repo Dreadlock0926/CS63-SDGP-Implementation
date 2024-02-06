@@ -4,7 +4,7 @@ import "../addQuestionsPage/addQuestions.css"
 import {useRef, useState} from 'react';
 import { useEffect } from "react";
 
-function QuestionSourcePanel() {
+function QuestionSourcePanel( {setQuestionSource, setQuestionNumber, setQuestionYear, setQuestionVariant} ) {
 
     const [toggleCambridgeQuestion, setToggleCambridgeQuestion] = useState(false);
 
@@ -41,7 +41,7 @@ function QuestionSourcePanel() {
                 <form>
                     <label className="qs-input">
                         <p>Question Source</p>
-                        <input className="qs-input" type="text" list="data" />
+                        <input className="qs-input" type="text" list="data" onChange={e => setQuestionSource(e.target.value)} />
                         <datalist id="data">
                             <option value="Statistics I" />
                             <option value="Pure Mathematics I" />
@@ -59,11 +59,11 @@ function QuestionSourcePanel() {
                 <form ref={toggledForm}>
                     <label>
                         <p>Question Number</p>
-                        <input className="qn-input" type="text" name="ques-num" />
+                        <input className="qn-input" type="text" name="ques-num" onChange={e => setQuestionNumber(e.target.value)}/>
                     </label>
                     <label>
                         <p>Year</p>
-                        <input className="qy-input" type="text" list="ques-year" />
+                        <input className="qy-input" type="text" list="ques-year" onChange={e => setQuestionYear(e.target.value)}/>
                         <datalist id="ques-year">
                             <option value="May 2000" />
                             <option value="Oct 2000" />
@@ -71,7 +71,7 @@ function QuestionSourcePanel() {
                     </label>
                     <label>
                         <p>Variant</p>
-                        <input className="qv-input" type="text" list="ques-var" />
+                        <input className="qv-input" type="text" list="ques-var" onChange={e => setQuestionVariant(e.target.value)}/>
                         <datalist id="ques-var">
                             <option value="1" />
                             <option value="2" />
@@ -131,7 +131,7 @@ function QuestionGridUnit( {index, onInputChange} ) {
 
 }
 
-function QuestionAndCorrespondingAnswerPanel() {
+function QuestionAndCorrespondingAnswerPanel( {logQuestionSource, setQuestionObject} ) {
     const [gridUnitList, setGridUnitList] = useState([]);
     const [keyCounter, setKeyCounter] = useState(1);
     const [inputValues, setInputValues] = useState({});
@@ -154,25 +154,12 @@ function QuestionAndCorrespondingAnswerPanel() {
           [index]: values,
         }));
       };
-  
-      const logInputValues = () => {
-            const questionTexts = [];
-            const answerTexts = [];
-            const answerTypes = [];
-            const figureTexts = [];
-        
-            Object.values(inputValues).forEach((values) => {
-            questionTexts.push(values.questionText || '');
-            answerTexts.push(values.answerText || '');
-            answerTypes.push(values.answerType || '');
-            figureTexts.push(values.figureText || '');
-            });
-        
-            console.log('Question Texts:', questionTexts);
-            console.log('Answer Texts:', answerTexts);
-            console.log('Answer Types:', answerTypes);
-            console.log('Figure Texts:', figureTexts);
-      };
+
+      useEffect(() => {
+
+        setQuestionObject(inputValues);
+
+    }, [inputValues])
   
     return (
       <>
@@ -181,7 +168,7 @@ function QuestionAndCorrespondingAnswerPanel() {
         <button onClick={addSubQuestion} className="add-sub-question-btn">
           + Add Sub Question
         </button>
-        <button onClick={logInputValues} className="final-add-btn">
+        <button onClick={logQuestionSource} className="final-add-btn">
             Log Input Values
         </button>
       </>
@@ -190,11 +177,29 @@ function QuestionAndCorrespondingAnswerPanel() {
 
 function QuestionFinalPanel() {
 
+    const [questionSource, setQuestionSource] = useState("");
+    const [questionNumber, setQuestionNumber] = useState(0);
+    const [questionYear, setQuestionYear] = useState("");
+    const [questionVariant, setQuestionVariant] = useState(0);
+    const [questionObject, setQuestionObject] = useState({});
+
+    const logQuestionSource = () => {
+
+        console.log(questionSource);
+        console.log(questionNumber);
+        console.log(questionYear);
+        console.log(questionVariant);
+        console.log(questionObject);
+
+    }
+
     return (
     <div className="question-final-panel">
         <h2>Add Question</h2>
-        <QuestionSourcePanel />
-        <QuestionAndCorrespondingAnswerPanel />
+        <QuestionSourcePanel 
+        setQuestionSource={setQuestionSource} setQuestionNumber={setQuestionNumber} 
+        setQuestionYear={setQuestionYear} setQuestionVariant={setQuestionVariant} />
+        <QuestionAndCorrespondingAnswerPanel logQuestionSource={logQuestionSource} setQuestionObject={setQuestionObject} />
     </div>
     );
 
