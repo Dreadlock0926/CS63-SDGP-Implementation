@@ -58,7 +58,7 @@
 }
 
 /* Signup button */
-.signupBtn {
+.registerBtn {
   padding: 12px;
   text-decoration: none;
   background-color: black;
@@ -68,7 +68,7 @@
 }
 
 /* Signup button hover effects */
-.signupBtn:hover {
+.registerBtn:hover {
   background-color: white;
   color: black;
   transition: 0.5s;
