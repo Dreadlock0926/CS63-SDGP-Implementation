@@ -15,7 +15,7 @@ const NavBar = () => {
                 </nav>
                 <div className="logContainer">
                     <a className="loginBtn" href="login">Login</a>
-                    <a className="signupBtn" href="signup">Sign up</a>
+                    <a className="signupBtn" href="register">Sign up</a>
                 </div>
             </div>
         </>
