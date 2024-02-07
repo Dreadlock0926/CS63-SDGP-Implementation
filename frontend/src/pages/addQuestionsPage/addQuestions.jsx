@@ -3,6 +3,7 @@ import "../main.css"
 import "../addQuestionsPage/addQuestions.css"
 import {useRef, useState} from 'react';
 import { useEffect } from "react";
+import axios from 'axios';
 
 function QuestionSourcePanel( {setQuestionSource, setQuestionTopic, setQuestionNumber, setQuestionYear, setQuestionVariant} ) {
 
@@ -196,13 +197,24 @@ function QuestionFinalPanel() {
 
     const logQuestionSource = () => {
 
-        console.log(questionSource);
-        console.log(questionTopic);
-        console.log(questionNumber);
-        console.log(questionYear);
-        console.log(questionVariant);
-        console.log(questionObject);
+        axios.get('http://localhost:8000/addQuestion', {
+                params: {
+                    "source":"Pure Mathematics I"
+                }
+        })
+        .then(res => console.log(res.data.Alert))
+        .catch(err => console.log(err))
 
+        axios.post('http://localhost:8000/addQuestion', {
+            "questionID":"s1", 
+            "questionTopic":"Probability",
+            "questionsGrid":["Find the probability that a randomly chosen student is at Canton college and prefers hockey.", "Find the probability that a randomly chosen student is at Devar college given that he prefers soccer", "One of the students is chosen at random. Determine whether the events ‘the student prefers hockey’ and ‘the student is at Amos college or Benn college’ are independent, justifying your answer."],
+            "questionsFiguresGrid":"", 
+            "answersGrid":[0.112, 3.7, "Not independent."],
+            "questionSource":"Statistics"
+          })
+          .then(res => console.log(res.data.Alert))
+          .catch(err => console.log(err))
     }
 
     return (
