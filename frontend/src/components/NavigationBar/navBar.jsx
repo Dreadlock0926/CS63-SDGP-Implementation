@@ -10,8 +10,6 @@ const NavBar = () => {
                     <a className="navItem" href="/">Home</a>
                     <a className="navItem" href="#">About</a>
                     <a className="navItem" href="#">Courses</a>
-                    <a className="navItem" href="#">Support</a>
-                    <a className="navItem" href="questions">Test</a>
                 </nav>
                 <div className="logContainer">
                     <a className="loginBtn" href="login">Login</a>

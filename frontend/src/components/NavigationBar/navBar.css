@@ -1,72 +1,76 @@
 /* Navigation Bar */
 .navBar {
-    display: flex;
-    align-items: center;
-    background-color: white;
-    color: black;
-    padding: 18px;
-  }
-  
-  /* Navigation bar Item */
-  .navItem {
-    text-decoration: none;
-    color: #666666;
-    font-size: 16px;
-    padding: 20px;
-    transition: 0.5s;
-  }
-  
-  /* Hover effects for the navigation item */
-  .navItem:hover {
-    color: black;
-    transition: 0.5s;
-  }
-  
-  /* Avatar item next to navigation bar */
-  .avItem {
-    height: 38px;
-    border-radius: 50%;
-    box-shadow: rgba(0, 0, 0, 0.35) 0px 5px 15px;
-  }
-  
-  /* Login & Signup button container */
-  .logContainer {
-    margin-left: auto;
-  }
-  
-  /* Login button */
-  .loginBtn {
-    margin-right: 10px;
-    padding: 10px;
-    text-decoration: none;
-    color: black;
-    border: 2px solid black;
-    border-radius: 10px;
-    transition: 0.5s;
-  }
+  display: flex;
+  align-items: center;
+  background-color: white;
+  color: black;
+  padding: 18px;
+}
 
-  /* Login button hover effects */
-  .loginBtn:hover {
-    color: white;
-    background: black;
-    transition: 0.5s;
-  }
-  
-  /* Signup button */
-  .signupBtn {
-    padding: 12px;
-    text-decoration: none;
-    background-color: black;
-    border-radius: 10px;
-    color: white;
-    transition: 0.5s;
-  }
-  
-  /* Signup button hover effects */
-  .signupBtn:hover {
-    background-color: white;
-    color: black;
-    transition: 0.5s;
-    border: 2px solid black;
-  }
-  
+/* Navigation bar Item */
+.navItem {
+  text-decoration: none;
+  color: #666666;
+  font-size: 16px;
+  padding: 20px;
+  transition: 0.5s;
+}
+
+/* Collection of navigation bar items */
+.navContainer {
+  margin-left: 10px;
+}
+
+/* Hover effects for the navigation item */
+.navItem:hover {
+  color: black;
+  transition: 0.5s;
+}
+
+/* Avatar item next to navigation bar */
+.avItem {
+  height: 38px;
+  border-radius: 50%;
+  box-shadow: rgba(0, 0, 0, 0.35) 0px 5px 15px;
+}
+
+/* Login & Signup button container */
+.logContainer {
+  margin-left: auto;
+}
+
+/* Login button */
+.loginBtn {
+  margin-right: 10px;
+  padding: 10px;
+  text-decoration: none;
+  color: black;
+  border: 2px solid black;
+  border-radius: 10px;
+  transition: 0.5s;
+}
+
+/* Login button hover effects */
+.loginBtn:hover {
+  color: white;
+  background: black;
+  transition: 0.5s;
+}
+
+/* Signup button */
+.signupBtn {
+  padding: 12px;
+  text-decoration: none;
+  background-color: black;
+  border-radius: 10px;
+  color: white;
+  transition: 0.5s;
+}
+
+/* Signup button hover effects */
+.signupBtn:hover {
+  background-color: white;
+  color: black;
+  transition: 0.5s;
+  border: 2px solid black;
+}
