@@ -81,12 +81,12 @@ const Login = () => {
           </p>
           <form onSubmit={Login} className="forms">
             <div className="inputLabelGrp">
-              <label htmlFor="email">Your email</label>
+              <label htmlFor="username">Your username</label>
               <input
                 onChange={handleChange}
-                type="email"
-                id="email"
-                placeholder="Enter your email here..."
+                type="text"
+                id="username"
+                placeholder="Enter your username here..."
               />
             </div>
             <div className="inputLabelGrp">
