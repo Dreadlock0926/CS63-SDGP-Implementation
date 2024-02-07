@@ -5,7 +5,7 @@ import Login from "./pages/AccountPage/login";
 import Register from "./pages/AccountPage/register";
 import UnknownPage from "./components/Error404/Unknown";
 
-const UserContext = createContext();
+export const UserContext = createContext();
 
 function App() {
   const [loading, setLoading] = useState(false);
