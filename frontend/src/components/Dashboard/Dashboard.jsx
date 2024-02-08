@@ -82,6 +82,7 @@ const Dashboard = () => {
               <Link to="/stat">Continue</Link>
             </button>
           </div>
+          <br></br>
           <div className="pureProg">
             <h1>Pure Maths 1</h1>
             <p>{`${puremaths}% complete`}</p>

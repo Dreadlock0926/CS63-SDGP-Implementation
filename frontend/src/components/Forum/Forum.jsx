@@ -14,37 +14,37 @@ const Forum = () => {
 
   const EndPoint = "http://localhost:8000/forum";
 
-  // const increaseVotes = async (id) => {
-  //   try {
-  //     setLoading(true);
-  //     const updatedData = data.map((item) =>
-  //       item._id === id ? { ...item, upvotes: item.upvotes + 1 } : item
-  //     );
-  //     setData(updatedData);
-  //     const upvote = await Axios.put(`${EndPoint}/x/${id}`, {
-  //       upvotes: updatedData,
-  //     });
+  const increaseVotes = async (id) => {
+    try {
+      setLoading(true);
+      const updatedData = data.map((item) =>
+        item._id === id ? { ...item, upvotes: item.upvotes + 1 } : item
+      );
+      setData(updatedData);
+      const upvote = await Axios.put(`${EndPoint}/x/${id}`, {
+        answer: updatedData,
+      });
 
-  //     if (upvote.data.response.status === 200) {
-  //       setStatus("Upvoted!");
-  //     } else {
-  //       setStatus("Error while upvoting!");
-  //     }
-  //     setInterval(() => {
-  //       navigator("/forum");
-  //     }, 2000);
-  //   } catch (err) {
-  //     console.error(err);
-  //   } finally {
-  //     setLoading(false);
-  //   }
-  // }; //route not made
+      if (upvote.data.response.status === 200) {
+        setStatus("Upvoted!");
+      } else {
+        setStatus("Error while upvoting!");
+      }
+      setInterval(() => {
+        navigator("/forum");
+      }, 2000);
+    } catch (err) {
+      console.error(err);
+    } finally {
+      setLoading(false);
+    }
+  }; //route not made
 
-  function increaseVotes(id){
+  // function increaseVotes(id){
    
-    alert(`Request came from ${id}`);
+  //   alert(`Request came from ${id}`);
    
-  }
+  // }
 
 
 
@@ -61,7 +61,6 @@ const Forum = () => {
   };
 
   async function AnsweringQuestions(id) {
-   
     try {
       setLoading(true);
       const r = await Axios.post(`${EndPoint}/${id}`, answer);
@@ -101,12 +100,12 @@ const Forum = () => {
         <p>Rating {x.rating?`Upvoted by ${x.rating}`:<h1>Rated by none!</h1>}</p>
         <button onClick={(e)=>{
           e.preventDefault();
-          increaseVotes(x._id)}}>Upvote!</button>
-          <form onSubmit={(e)=>{e.preventDefault();AnsweringQuestions(x._id)}}><input onChange={(e)=>{setAnswer(e.target.value)}} placeholder="Answer..." type="text"></input><button>Answer!</button></form>
+          increaseVotes(x._id)}}>Upvote!</button> {/**Once clicked needs to increase number of votes by 1 */}
           <br></br>
+          <form onSubmit={(e)=>{e.preventDefault();AnsweringQuestions(x._id)}}><input onChange={(e)=>{setAnswer(e.target.value)}} placeholder="Answer..." type="text"></input><button>Answer!</button></form>
         <br></br>
       </div>
-    ))
+    ))  
   ) : (
     <h1>No forum questions added yet!</h1>
   )}

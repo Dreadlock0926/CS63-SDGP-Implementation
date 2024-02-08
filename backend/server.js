@@ -29,8 +29,8 @@ async function authenticated(req, res, next) {
   }
 }
 
-app.use(cors({ origin: "*" }));
-app.use(express.urlencoded()); //allow access from anywhere for now!
+app.use(cors({ origin: "*" }));  //allow access from anywhere for now!
+app.use(express.urlencoded());
 app.use(helmet());
 app.use(express.json());
 

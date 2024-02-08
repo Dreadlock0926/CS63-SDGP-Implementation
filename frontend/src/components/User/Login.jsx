@@ -23,10 +23,13 @@ const Login = () => {
     e.preventDefault();
     if (log === true) {
       alert(`${newUser.username} already logged in!`);
+      setTimeout(()=>{
+        navigator("/")
+      },2000)
     } else {
       try {
           setLoading(true);
-        const loginUser = await Axios.post(
+        const loginUser = await Axios.post( //connected
           BASE,
           newUser
         );

@@ -49,8 +49,13 @@ const HomePage = () => {
       </Link>
       <br/><br/>
       <h1>Statistics</h1>
-      <Link to="/puremath">
+      <Link to="/stat">
         <button>Statistics</button>  
+      </Link>
+      <br></br>
+      <br></br>
+      <Link to="/resources">
+        <button>Browse Learning Resources!</button>  
       </Link>
       <div className="math">
         <div>

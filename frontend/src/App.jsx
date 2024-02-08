@@ -15,6 +15,10 @@ import Dashboard from "./components/Dashboard/Dashboard";
 import Learn from "./components/LearningResources/Learn";
 import AddStudy from "./components/LearningResources/AddStudy";
 import General from "./components/General";
+import StatPage from "./components/Math/Stat/StatPage" 
+import PureMath from "./components/Math/PureMath/PureMath"
+import AddStat from "./components/Math/Stat/AddStat"
+import AddPure from "./components/Math/PureMath/AddPure";
 
 export const UserContext = createContext();
 
@@ -50,6 +54,10 @@ function App() {
           <General/>
           <Routes>
             <Route path="/" element={<Home />} />
+            <Route path="/addstat" element={<AddStat/>}></Route>
+            <Route path="/stat" element={<StatPage/>}></Route>
+            <Route path="/puremath" element={<PureMath/>}></Route>
+            <Route path="/addpure" element={<AddPure/>}></Route>
             <Route path="/login" element={<Login />} />
             <Route path="/register" element={<Register />} />
             <Route path="/forgot" element={<ForgotPass />} /> {/**Optional */}

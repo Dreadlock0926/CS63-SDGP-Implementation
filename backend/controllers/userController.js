@@ -7,7 +7,7 @@ const forumModel = require("../models/forum");
 //       const forumData = await forumModel.find();
 //       return res.status(200).json(forumData);
 //     }
-//     const topicRelated = await forumModel.find({ topic });
+//     const topicRelated = await forumModel.find({$match:{ topic} });
 //     return res.status(200).json(topicRelated);
 //   } catch (err) {
 //     console.error(err);
@@ -18,12 +18,11 @@ const forumModel = require("../models/forum");
 async function GetUsers(req,res){
     try{
         const forumData = await forumModel.find();
-        // if(!forumData) {
-        //     return res.status(200).json({Alert:"No forum data posted yet!"})
-        // }
-
-        res.status(200).json(forumData)
- 
+        if(!forumData) {
+            return res.status(200).json({Alert:"No forum data posted yet!"})
+        }else{
+          return res.status(200).json(forumData)
+        }
     }catch(err){
         console.error(err);
         res.status(500).json({Alert:"Server issue!"})

@@ -16,11 +16,18 @@ const ExamPage = () => {
   const [value, setValue] = useState("");
 
   const navigator = useNavigate();
+  let started = 0;
 
   const startExamTimer = () => {
-    intervalRef.current = setInterval(() => {
+    if(started===0){  
+      started++;  
+      intervalRef.current = setInterval(() => {
       setTime((prev) => prev + 1);
-    }, 1000);
+    }, 1000);}
+    else{
+      alert("Timer has already started!")
+    }
+
   };
 
   const stopExamTimer = () => { 
@@ -66,6 +73,7 @@ const ExamPage = () => {
       <MathLive />
       <div>
         <h2>{`${time} seconds <- Time Elapsed`}</h2>
+        <select><option value="one">First</option><option value="two">Two</option><option value="three">Three</option></select>
         <LineChart
           xAxis={[{ data: [0, 2, 3, 5, 8, 10] }]} //possibly an mapping to the cordinates?
           series={[

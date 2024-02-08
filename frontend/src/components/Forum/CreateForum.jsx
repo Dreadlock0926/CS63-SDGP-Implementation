@@ -1,3 +1,4 @@
+/* eslint-disable no-unused-vars */
 import { useContext, useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 import Axios from "axios";
@@ -41,7 +42,6 @@ const CreateForum = () => {
   }
 
   async function AnsweringQuestions(id) {
-   
     try {
       setLoading(true);
       const r = await Axios.post(`${EndPoint}/${id}`, answer);
@@ -59,25 +59,25 @@ const CreateForum = () => {
     }
   }
 
-  async function GetQuestions() {
-    if (status !== "") {
-      setStatus("");
-    }
-    try {
-      setLoading(true);
-      const r = await Axios.get(EndPoint);
-      setData(r.data);
-    } catch (err) {
-      setStatus("Error Occured while fetching data!");
-      console.error(err);
-    } finally {
-      setLoading(false);
-    }
-  }
+  // async function GetQuestions() {
+  //   if (status !== "") {
+  //     setStatus("");
+  //   }
+  //   try {
+  //     setLoading(true);
+  //     const r = await Axios.get(EndPoint);
+  //     setData(r.data);
+  //   } catch (err) {
+  //     setStatus("Error Occured while fetching data!");
+  //     console.error(err);
+  //   } finally {
+  //     setLoading(false);
+  //   }
+  // }
 
-  useEffect(() => {
-    GetQuestions();
-  });
+  // useEffect(() => {
+  //   GetQuestions(); //small issue getting questions back!
+  // });
 
   return log? <div className="container-fluid">
   {loading ? (
@@ -123,7 +123,7 @@ const CreateForum = () => {
       <Link to="/forum">Forum Page</Link>
     </div>
   )}
-</div>:<h1>Please login to continue!</h1>
+</div>:<h1>Please <Link to="/login">Login</Link> to continue!</h1>
 };
 
 export default CreateForum;

@@ -22,9 +22,13 @@ const forumSchema = mongoose.Schema(
         type:mongoose.Schema.ObjectId,
         ref:"users"
     }
+    
   },
+ 
   { timestamps: true }
 );
 
 const forumModel = mongoose.model("forums", forumSchema);
 module.exports = forumModel;
+
+
