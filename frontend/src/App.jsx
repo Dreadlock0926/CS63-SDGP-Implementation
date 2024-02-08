@@ -1,11 +1,5 @@
 import  { useState, createContext } from "react";
 import { BrowserRouter, Routes, Route } from "react-router-dom";
-<<<<<<< HEAD
-import Home from "./pages/HomePage/home";
-import Login from "./pages/AccountPage/login";
-import Register from "./pages/AccountPage/register";
-import UnknownPage from "./components/Error404/Unknown";
-=======
 import "./App.css";
 import Home from "./components/graphs/Home";
 import UnknownPage from "./components/Unknown";
@@ -25,7 +19,6 @@ import StatPage from "./components/Math/Stat/StatPage"
 import PureMath from "./components/Math/PureMath/PureMath"
 import AddStat from "./components/Math/Stat/AddStat"
 import AddPure from "./components/Math/PureMath/AddPure";
->>>>>>> origin/Forum
 
 export const UserContext = createContext();
 
@@ -36,9 +29,6 @@ function App() {
   const [status, setStatus] = useState("");
 
   const [response, setResponse] = useState("");
-
-
-
 
   return (
     <>
@@ -61,11 +51,9 @@ function App() {
           <General/>
           <Routes>
             <Route path="/" element={<Home />} />
-<<<<<<< HEAD
 
             <Route path="login" element={<Login />} />
             <Route path="register" element={<Register />} />
-=======
             <Route path="/addstat" element={<AddStat/>}></Route>
             <Route path="/stat" element={<StatPage/>}></Route>
             <Route path="/puremath" element={<PureMath/>}></Route>
@@ -80,7 +68,6 @@ function App() {
             <Route path="/examfinal" element={<ExamFinalized/>}/>
             <Route path="/resources" element={<Learn/>}/>
             <Route path="/addresources" element={<AddStudy/>}/>
->>>>>>> origin/Forum
             <Route path="*" element={<UnknownPage />} />
           </Routes>
         </UserContext.Provider>
