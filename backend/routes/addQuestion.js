@@ -4,25 +4,7 @@ const questionModel = require("../models/question");
 const topicsModel = require("../models/topics");
 
 
-router.route("/").get(async (req, res) => {
-
-  const { source } = req?.body;
-
-  if (!source) return res.status(400).json({Alert: "The source is missing!"});
-
-  const sourceData = await topicsModel.findOne({source});
-
-  if (!sourceData) {
-
-    res.status(400).json({Alert: "The source data is not matching records."});
-
-  } else {
-
-    res.status(200).json(sourceData);
-
-  }
-
-}).post(async (req, res) => {
+router.route("/").post(async (req, res) => {
 
   const { questionID, questionTopic,
           questionsGrid, questionsFiguresGrid, answersGrid, questionSource } = req?.body;
@@ -41,7 +23,7 @@ router.route("/").get(async (req, res) => {
       questionID, questionTopic, questionsGrid,
       questionsFiguresGrid, answersGrid, questionSource 
     });
-
+    
     return res.status(200).json({ Alert: `${questionID} Registered!` });
 
   } else {
@@ -51,5 +33,40 @@ router.route("/").get(async (req, res) => {
   }
 
 });
+
+router.route("/getQuestionInfo").post(async (req, res) => {
+
+  const { source } = req?.body;
+  if (!source) return res.status(400).json({Alert: "The source is missing!"});
+  const sourceData = await topicsModel.findOne({source});
+
+  if (!sourceData) {
+
+    res.status(400).json({Alert: "The source data is not matching records."});
+
+  } else {
+
+    res.status(200).json(sourceData);
+
+  }
+
+})
+
+router.route("/getModules").get(async (req, res) => {
+
+  try {
+
+    const result = await topicsModel.find({}, 'source');
+    const sourcesArray = result.map(topic => topic.source);
+    res.json(sourcesArray);
+
+  } catch (error) {
+
+    console.error('Error:', error);
+    res.status(500).json({ error: 'Internal Server Error' });
+
+  }
+
+})
 
 module.exports = router;

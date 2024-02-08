@@ -29,7 +29,7 @@ label {
     flex-direction: column;
 }
 
-input {
+input, select {
     height: 25px;
 }
 

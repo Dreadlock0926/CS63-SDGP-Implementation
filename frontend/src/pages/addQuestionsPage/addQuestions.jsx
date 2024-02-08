@@ -5,9 +5,64 @@ import {useRef, useState} from 'react';
 import { useEffect } from "react";
 import axios from 'axios';
 
-function QuestionSourcePanel( {setQuestionSource, setQuestionTopic, setQuestionNumber, setQuestionYear, setQuestionVariant} ) {
+function QuestionSourcePanel( {setQuestionSource, setQuestionTopic, setQuestionNumber, setQuestionYear, setQuestionVariant, currentQuestionSource} ) {
 
     const [toggleCambridgeQuestion, setToggleCambridgeQuestion] = useState(false);
+
+    const [topicInputBoxes, setTopicInputBoxes] = useState([]);
+    const [moduleInputBoxes, setModuleInputBoxes] = useState([]);
+
+    // Retrieving the topics
+
+        useEffect(() => {
+
+            const retrieveData = async () => {
+                try {
+                  await retrieveModules();
+                  await retrieveTopics();
+                } catch (error) {
+                  console.error(error);
+                }
+              };
+
+            const retrieveModules = async () => {
+                try {
+                  const response = await axios.get('http://localhost:8000/addQuestion/getModules');
+                  const newOptions = response.data.map((topic, i) => (
+                    <option key={i} value={topic}>{topic}</option>
+                  ));
+                  setModuleInputBoxes(newOptions);
+                } catch (error) {
+                  console.error(error);
+                }
+              };
+
+            const retrieveTopics = async () => {
+
+            setTopicInputBoxes([]);
+
+            await axios.post('http://localhost:8000/addQuestion/getQuestionInfo', {
+                "source":currentQuestionSource 
+              })
+              .then(res => {
+    
+                setTopicInputBoxes(prevState => {
+                    const newOptions = res.data.topics.map((topic, i) => (
+                        <option key={i} value={topic}>{topic}</option>
+                    ));
+                    return [...prevState, ...newOptions];
+                });
+    
+              })
+              .catch(err => console.log(err))
+
+            }
+
+            retrieveData();
+
+        }, [currentQuestionSource])
+
+    // End of retrieving topics
 
     const qpSwitch = useRef();
     const toggledForm = useRef();
@@ -42,21 +97,17 @@ function QuestionSourcePanel( {setQuestionSource, setQuestionTopic, setQuestionN
                 <form>
                     <label className="qs-input">
                         <p>Question Source</p>
-                        <input className="qs-input" type="text" list="data" onChange={e => setQuestionSource(e.target.value)} />
-                        <datalist id="data">
-                            <option value="Statistics I" />
-                            <option value="Pure Mathematics I" />
-                        </datalist>
+                        <select className="qs-input" onChange={e => setQuestionSource(e.target.value)}>
+                            {moduleInputBoxes}
+                        </select>
                     </label>
                 </form>
                 <form>
                     <label className="qs-input">
                         <p>Question Topic</p>
-                        <input className="qs-input" type="text" list="topic-data" onChange={e => setQuestionTopic(e.target.value)} />
-                        <datalist id="topic-data">
-                            <option value="Integration" />
-                            <option value="Differentiation" />
-                        </datalist>
+                        <select className="qs-input" onChange={e => setQuestionTopic(e.target.value)}>
+                                {topicInputBoxes}
+                        </select>
                     </label>
                 </form>
                 <div className="question-specifier">
@@ -76,8 +127,8 @@ function QuestionSourcePanel( {setQuestionSource, setQuestionTopic, setQuestionN
                         <p>Year</p>
                         <input className="qy-input" type="text" list="ques-year" onChange={e => setQuestionYear(e.target.value)}/>
                         <datalist id="ques-year">
-                            <option value="May 2000" />
-                            <option value="Oct 2000" />
+                            <option value="Jun 2000" />
+                            <option value="Nov 2000" />
                         </datalist>
                     </label>
                     <label>
@@ -195,25 +246,47 @@ function QuestionFinalPanel() {
     const [questionVariant, setQuestionVariant] = useState(0);
     const [questionObject, setQuestionObject] = useState({});
 
-    const logQuestionSource = () => {
+    const logQuestionSource = async () => {
 
-        axios.get('http://localhost:8000/addQuestion', {
-                params: {
-                    "source":"Pure Mathematics I"
-                }
-        })
-        .then(res => console.log(res.data.Alert))
-        .catch(err => console.log(err))
+        let questionIDSource = "";
+        let questionIDTopic = "";
+        let questionIDYear = questionYear.replace(/ /g,'');
 
-        axios.post('http://localhost:8000/addQuestion', {
-            "questionID":"s1", 
-            "questionTopic":"Probability",
-            "questionsGrid":["Find the probability that a randomly chosen student is at Canton college and prefers hockey.", "Find the probability that a randomly chosen student is at Devar college given that he prefers soccer", "One of the students is chosen at random. Determine whether the events ‘the student prefers hockey’ and ‘the student is at Amos college or Benn college’ are independent, justifying your answer."],
-            "questionsFiguresGrid":"", 
-            "answersGrid":[0.112, 3.7, "Not independent."],
-            "questionSource":"Statistics"
+        if (questionIDYear.slice(0,3).toLowerCase() === "jun") {
+
+            questionIDYear = "s" + "_" + questionIDYear.slice(3,7);
+
+        } else {
+
+            questionIDYear = "w" + "_" + questionIDYear.slice(3,7);
+
+        }
+
+        let questionIDNumYearVariant = "_" + questionNumber + "_" + questionIDYear + "_" + questionVariant;
+
+        let questionIDFinal = "";
+
+        await axios.post('http://localhost:8000/addQuestion/getQuestionInfo', {
+            "source":questionSource 
           })
-          .then(res => console.log(res.data.Alert))
+          .then(res => {
+
+                questionIDSource = res.data.sourceKey;
+                
+                for (let i = 0; i < res.data.topics.length; i++) {
+
+                    if (questionTopic === res.data.topics[i]) {
+
+                        questionIDTopic = res.data.topicKeys[i];
+
+                    }
+                    
+                }
+
+                questionIDFinal = questionIDSource + "_" + questionIDTopic + questionIDNumYearVariant;
+                console.log(questionIDFinal);
+
+          })
           .catch(err => console.log(err))
     }
 
@@ -223,7 +296,8 @@ function QuestionFinalPanel() {
         <QuestionSourcePanel 
         setQuestionSource={setQuestionSource}  setQuestionTopic={setQuestionTopic}
         setQuestionNumber={setQuestionNumber} 
-        setQuestionYear={setQuestionYear} setQuestionVariant={setQuestionVariant} />
+        setQuestionYear={setQuestionYear} setQuestionVariant={setQuestionVariant}
+        currentQuestionSource={questionSource} />
         <QuestionAndCorrespondingAnswerPanel logQuestionSource={logQuestionSource} setQuestionObject={setQuestionObject} />
     </div>
     );
