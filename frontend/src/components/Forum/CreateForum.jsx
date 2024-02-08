@@ -6,7 +6,9 @@ import { UserContext } from "../../App";
 
 const CreateForum = () => {
   const {log} = useContext(UserContext)
-  const [question, setQuestion] = useState("");
+  const [user,setUser] = useState({question:"",topic:""})
+
+
   const [answer, setAnswer] = useState("");
   const [loading, setLoading] = useState(false);
   const [status, setStatus] = useState("");
@@ -21,7 +23,7 @@ const CreateForum = () => {
         setStatus("");
       }
       setLoading(true);
-      const r = await Axios.post(EndPoint, question);
+      const r = await Axios.post(EndPoint, user);
 
       if (r.status === 200) {
         setStatus("Question Added");
@@ -79,6 +81,10 @@ const CreateForum = () => {
   //   GetQuestions(); //small issue getting questions back!
   // });
 
+  const handleChange = (e)=>{
+    setUser({...user,[e.target.name]:e.target.value})
+  }
+
   return log? <div className="container-fluid">
   {loading ? (
     "Loading..."
@@ -86,10 +92,15 @@ const CreateForum = () => {
     <div>
       <form onSubmit={AddQuestion}>
         <input
-          onChange={(e) => {
-            setQuestion(e.target.value);
-          }}
+          onChange={handleChange}
+          name="question"
           placeholder="Enter your question"
+          type="text"
+        ></input>
+          <input
+          onChange={handleChange}
+          name="topic"
+          placeholder="Enter your topic"
           type="text"
         ></input>
         <button type="submit" disabled={loading}>

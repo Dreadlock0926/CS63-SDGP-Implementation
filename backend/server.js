@@ -14,6 +14,7 @@ const helmet = require("helmet");
 const { join } = require("path");
 const forum = require("./routes/forum")
 const learningResources = require("./routes/learn")
+const progress = require('./routes/progress')
 const user = require("./routes/users")
 
 async function authenticated(req, res, next) {
@@ -57,6 +58,7 @@ app.use("/home", home);
 app.use("/forum",forum)
 app.use("/gemini", gemini);
 app.use("/resources",learningResources)
+app.use("/progress",progress)
 
 
 

@@ -6,6 +6,7 @@ import {useNavigate} from "react-router-dom"
 import MathLive from "../Math";
 import Axios from "axios";
 import { UserContext } from "../../App";
+import Scope from "./Scope";
 
 const ExamPage = () => {
   const {status,setStatus} = useContext(UserContext)
@@ -73,7 +74,7 @@ const ExamPage = () => {
       <MathLive />
       <div>
         <h2>{`${time} seconds <- Time Elapsed`}</h2>
-        <select><option value="one">First</option><option value="two">Two</option><option value="three">Three</option></select>
+      <Scope/>
         <LineChart
           xAxis={[{ data: [0, 2, 3, 5, 8, 10] }]} //possibly an mapping to the cordinates?
           series={[
