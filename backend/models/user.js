@@ -24,6 +24,10 @@ const userSchema = new mongoose.Schema({
     pure:{
       type:Number,
       default:0,
+    },
+    nerdpoints:{
+      type:Number,
+      default:0,
     }
   }
 });

@@ -28,7 +28,6 @@ const ExamPage = () => {
     else{
       alert("Timer has already started!")
     }
-
   };
 
   const stopExamTimer = () => { 
