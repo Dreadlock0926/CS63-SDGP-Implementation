@@ -14,7 +14,7 @@ const ExamPage = () => {
   const startButtonRef = useRef();
   const stopButtonRef = useRef();
   const intervalRef = useRef();
-  const [value, setValue] = useState("");
+  // const [value, setValue] = useState("");
 
   const navigator = useNavigate();
   let started = 0;
@@ -64,9 +64,14 @@ const ExamPage = () => {
     };
   }, []);
 
+  const selectTopics = ()=>{
+      //logic needs to implemented!
+  }
+
   return (
     <div>
       <h1>Exam Page</h1>
+      <button onClick={selectTopics}>Select Topics!</button>
       <button onClick={startExamTimer} ref={startButtonRef}>
         Start Exam!
       </button>

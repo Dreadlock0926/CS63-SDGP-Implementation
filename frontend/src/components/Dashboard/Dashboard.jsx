@@ -77,7 +77,8 @@ const Dashboard = () => {
         <label>
           <div className="stateProg">
             <h1>Statistics</h1>
-            <p>{`${statistics}% complete`}</p>
+            {/* <p>{`${statistics}% complete`}</p> */}
+            <p>25% complete!</p>
             <button>
               <Link to="/stat">Continue</Link>
             </button>
@@ -85,7 +86,8 @@ const Dashboard = () => {
           <br></br>
           <div className="pureProg">
             <h1>Pure Maths 1</h1>
-            <p>{`${puremaths}% complete`}</p>
+            {/* <p>{`${puremaths}% complete`}</p> */}
+            <p>42% complete!</p>
             <button>
               <Link to="/puremath">Continue</Link>
             </button>

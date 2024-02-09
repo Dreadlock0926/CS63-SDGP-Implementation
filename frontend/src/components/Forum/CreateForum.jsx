@@ -6,7 +6,7 @@ import { UserContext } from "../../App";
 
 const CreateForum = () => {
   const {log} = useContext(UserContext)
-  const [user,setUser] = useState({question:"",topic:""})
+  const [user,setUser] = useState({question:"",topic:"",subtopic:""})
 
 
   const [answer, setAnswer] = useState("");
@@ -96,12 +96,21 @@ const CreateForum = () => {
           name="question"
           placeholder="Enter your question"
           type="text"
+          required
         ></input>
           <input
           onChange={handleChange}
           name="topic"
           placeholder="Enter your topic"
           type="text"
+          required
+        ></input>
+          <input
+          onChange={handleChange}
+          name="subtopic"
+          placeholder="Enter your subtopic"
+          type="text"
+          required
         ></input>
         <button type="submit" disabled={loading}>
           {loading ? "Loading..." : "Add Question"}
@@ -116,7 +125,7 @@ const CreateForum = () => {
               <br></br>
               <form style={{margin:'5%'}} onSubmit={(e)=>{
                 e.preventDefault();
-        AnsweringQuestions(x._id)
+        AnsweringQuestions(x._id) //to answer questions!
       }}>
         <input
           onChange={(e) => {

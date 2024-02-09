@@ -63,4 +63,24 @@ if(!answer || !id) return res.status(400).json({Alert:"NO Answer/ID!"})
     updated ? res.status(200).json({Alert:"Answer Posted!"}) : res.status(400).json({Alert:"Error while posting answer!"})
 }
 
-module.exports = { GetUsers, CreateQuestions, AnsweringQuestions };
+const Upvote = async (req,res)=>{
+  const answer = req?.body.answer;
+  const id = req?.params.id;
+  if(!answer || !id) return res.status(400).json({Alert:"Answer OR ID Missing!"})
+
+
+  const validID = await forumModel.findOne({_id:String(id)})
+  if(!validID){
+    return res.status(401).json({Alert:"Invalid ID"})
+  }else{
+      const updateState = await forumModel.updateOne(validID.answer)
+      if(!updateState){
+        return res.status(400).json({Alert:"Couldn't update!"})
+      }else{
+        return res.status(200).json({Alert:"Updated!"})
+      }
+  }
+
+}
+
+module.exports = { GetUsers, CreateQuestions, AnsweringQuestions,Upvote };

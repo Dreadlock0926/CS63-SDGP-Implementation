@@ -17,13 +17,14 @@ const Forum = () => {
   const increaseVotes = async (id) => {
     try {
       setLoading(true);
+      const upvote = await Axios.put(`${EndPoint}/upvotes/${id}`, {
+        answer: updatedData,
+      });
       const updatedData = data.map((item) =>
         item._id === id ? { ...item, upvotes: item.upvotes + 1 } : item
       );
       setData(updatedData);
-      const upvote = await Axios.put(`${EndPoint}/x/${id}`, {
-        answer: updatedData,
-      });
+     
 
       if (upvote.data.response.status === 200) {
         setStatus("Upvoted!");

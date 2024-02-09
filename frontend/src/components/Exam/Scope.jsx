@@ -1,36 +1,92 @@
 /* eslint-disable no-unused-vars */
-import { useContext, useState } from "react";
-import {UserContext} from "../../App"
+import { useContext, useEffect, useState } from "react";
+import { UserContext } from "../../App";
 import Axios from "axios";
+import Loading from "../Loading";
 
 const Scope = () => {
+  const { loading, setLoading } = useContext(UserContext);
+  const [topics, setTopics] = useState({
+    topic1: false,
+    topic2: false,
+    topic3: false,
+    // Add more topics as needed
+  });
 
-    const {loading,setLoading} = useContext(UserContext)
-    const [topic,setTopic] = useState({})
+  const handleTopicChange = (topic) => {
+    setTopics((prevState) => ({
+      ...prevState,
+      [topic]: !prevState[topic],
+    }));
+  };
 
 
-    async function SelectScope(e) {
-        e.preventDefault();
-        try{
-            setLoading(true);
-            const data = await Axios.post("",topic);
-            if(data.status===200){
-                alert("Success!")
-            }else{
-                alert("Error while getting data back!")
-            }
-        }catch(err){
-            console.error(err);
-        }finally{
-            setLoading(false);
-        }
+  const selectScope = async (e) => {
+    e.preventDefault();
+    try {
+      setLoading(true);
+      const selectedTopics = Object.keys(topics).filter((key) => topics[key]);
+      const data = await Axios.post("", { topics: selectedTopics });
+      if (data.status === 200) {
+        alert("Success!");
+      } else {
+        alert("Error while getting data back!");
+      }
+    } catch (err) {
+      console.error(err);
+      alert("Error occurred!");
+    } finally {
+      setLoading(false);
     }
+  };
 
-
+  useEffect(() => {
+    console.log(`Selected topics: ${JSON.stringify(topics)}`);
+  }, [topics]);
 
   return (
-    <div><form onSubmit={SelectScope}><select><option value="all">All</option><option value="one">First</option><option value="two">Two</option><option value="three">Three</option></select><button type="submit">Select!</button></form></div>
-  )
-}
+    <div style={{margin:"5%",padding:"5%"}}>
+      {loading ? (
+        <Loading />
+      ) : (
+        <form onSubmit={selectScope}>
+          <span>
+            <h1>Topic 1</h1>
+            <input
+              type="checkbox"
+              name="topic1"
+              checked={topics.topic1}
+              onChange={() => handleTopicChange("topic1")}
+            />
+          </span>
 
-export default Scope
+          <span>
+            <h1>Topic 2</h1>
+            <input
+              type="checkbox"
+              name="topic2"
+              checked={topics.topic2}
+              onChange={() => handleTopicChange("topic2")}
+            />
+          </span>
+
+          <span>
+            <h1>Topic 3</h1>
+            <input
+              type="checkbox"
+              name="topic3"
+              checked={topics.topic3}
+              onChange={() => handleTopicChange("topic3")}
+            />
+          </span>
+
+          {/* Add more topics similarly */}
+        <br></br>
+          <button type="submit">Submit</button>
+        </form>
+      )}
+    </div>
+  );
+};
+
+export default Scope;
