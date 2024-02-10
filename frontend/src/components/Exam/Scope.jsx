@@ -26,7 +26,7 @@ const Scope = () => {
     try {
       setLoading(true);
       const selectedTopics = Object.keys(topics).filter((key) => topics[key]);
-      const data = await Axios.post("", { topics: selectedTopics });
+      const data = await Axios.post("http://localhost:8000/exam", { topics: selectedTopics }); //this path is not made yet!
       if (data.status === 200) {
         alert("Success!");
       } else {

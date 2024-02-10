@@ -16,6 +16,7 @@ const forum = require("./routes/forum")
 const learningResources = require("./routes/learn")
 const progress = require('./routes/progress')
 const user = require("./routes/users")
+const examResources = require("./routes/exams");
 
 async function authenticated(req, res, next) {
   if (req?.session?.user) {
@@ -59,6 +60,7 @@ app.use("/forum",forum)
 app.use("/gemini", gemini);
 app.use("/resources",learningResources)
 app.use("/progress",progress)
+app.use("/exam",examResources)
 
 
 

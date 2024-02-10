@@ -38,6 +38,7 @@ const AddStudy = () => {
   //   };
 
   return (
+    loading?"Loading..." :
     <div className="addQues">
       <form onSubmit={addMaterial}>
         <input

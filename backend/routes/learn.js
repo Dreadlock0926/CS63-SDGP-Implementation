@@ -6,12 +6,28 @@ const learningModel = require("../models/learningResources");
 router
   .route("/")
   .get(async (req, res) => {
-    try {
-      const resources = await learningModel.find();
-      return res.status(200).json(resources);
-    } catch (err) {
-      console.error(err);
+
+    const {topics} = req.body;
+    if(!topics){
+      try {
+        const resources = await learningModel.find();
+        return res.status(200).json(resources);
+      } catch (err) {
+        console.error(err);
+      }
+    }else{
+      try{
+        const resources = await learningModel.find({$match:{topics}});
+        if(!resources){
+          return res.status(203).json({Alert:"No topics found!"})
+        }else{
+          return res.status(200).json(resources)
+        }
+      }catch(err){
+        console.error(err);
+      }
     }
+   
   })
   .post(async (req, res) => {
     const { topic, title, about, subtopic } = req?.body;

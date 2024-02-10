@@ -9,12 +9,6 @@ import Materials from "./Materials";
 const Learn = () => {
   const { loading, setLoading, logged } = useContext(UserContext); // Removed unnecessary properties from destructuring
   const [data,setData] = useState([])
-  const [user, setUser] = useState({
-    topic: "",
-    title: "",
-    about: "",
-    subtopic: "",
-  });
 
   const fetchMaterial = async () => {
     try {

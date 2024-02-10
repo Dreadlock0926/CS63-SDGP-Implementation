@@ -20,7 +20,7 @@ const forumSchema = mongoose.Schema(
     },
     by:{
         type:mongoose.Schema.ObjectId,
-        ref:"users"
+        ref:"users" //referencing to the users collection to make a connection!
     }
     
   },
