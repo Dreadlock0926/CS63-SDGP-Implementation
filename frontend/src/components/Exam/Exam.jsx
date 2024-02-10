@@ -3,6 +3,7 @@
 import { useContext, useEffect, useRef, useState } from "react";
 import { LineChart } from "@mui/x-charts/LineChart";
 import {useNavigate} from "react-router-dom"
+// import MathJax from "better-react-mathjax"
 import MathLive from "../Math";
 import Axios from "axios";
 import { UserContext } from "../../App";
@@ -75,6 +76,7 @@ const ExamPage = () => {
       <button onClick={startExamTimer} ref={startButtonRef}>
         Start Exam!
       </button>
+
       <MathLive />
       <div>
         <h2>{`${time} seconds <- Time Elapsed`}</h2>

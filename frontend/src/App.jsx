@@ -14,7 +14,6 @@ import ExamFinalized from "./components/Exam/ExamFinalized";
 import Dashboard from "./components/Dashboard/Dashboard";
 import Learn from "./components/LearningResources/Learn";
 import AddStudy from "./components/LearningResources/AddStudy";
-import General from "./components/General";
 import StatPage from "./components/Math/Stat/StatPage" 
 import PureMath from "./components/Math/PureMath/PureMath"
 import AddStat from "./components/Math/Stat/AddStat"
@@ -51,7 +50,6 @@ function App() {
            response,setResponse
           }}
         >
-          <General/>
           <Routes>
             <Route path="/" element={<Home />} />
             <Route path="/addstat" element={<AddStat/>}></Route>
