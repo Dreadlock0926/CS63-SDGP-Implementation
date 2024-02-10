@@ -16,9 +16,9 @@ function App() {
     <>
       <UserContext.Provider value={(loading, setLoading)}>
         <BrowserRouter p>
+          <Gemini />
           <Routes>
             <Route path="/" element={<Home />} />
-
             <Route path="login" element={<Login />} />
             <Route path="/forgot" element={<ForgotPass />}></Route>
             <Route path="/progression" element={<Progressionmark/>}></Route>
