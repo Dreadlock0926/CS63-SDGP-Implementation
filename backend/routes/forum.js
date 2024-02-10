@@ -7,7 +7,6 @@ router.route("/").get(userController.GetUsers).post(userController.CreateQuestio
 
 router.route("/upvotes/:id").put(userController.Upvote)
 
-
 router.route("/:id").put(userController.AnsweringQuestions)
 
 module.exports = router;

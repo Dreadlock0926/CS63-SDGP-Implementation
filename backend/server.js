@@ -1,7 +1,6 @@
 const express = require("express");
 const app = express();
 const cors = require("cors");
-const home = require("./routes/home");
 const login = require("./routes/login");
 const register = require("./routes/register");
 const gemini = require("./routes/gemini");
@@ -13,10 +12,8 @@ const session = require("express-session");
 const helmet = require("helmet");
 const { join } = require("path");
 const forum = require("./routes/forum")
-const learningResources = require("./routes/learn")
-const progress = require('./routes/progress')
-const user = require("./routes/users")
-const examResources = require("./routes/exams");
+
+
 
 async function authenticated(req, res, next) {
   if (req?.session?.user) {
@@ -54,13 +51,8 @@ app.use(
 app.use("/register", register);
 app.use("/login", login);
 // app.use(authenticated); //uncomment during final authentication tests 🔓
-// app.use('/users',user)
-app.use("/home", home);
 app.use("/forum",forum)
 app.use("/gemini", gemini);
-app.use("/resources",learningResources)
-app.use("/progress",progress)
-app.use("/exam",examResources)
 
 
 
