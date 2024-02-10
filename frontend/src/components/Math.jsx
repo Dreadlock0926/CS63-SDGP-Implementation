@@ -9,7 +9,7 @@ function MathLive() {
 
   async function answerStore(){
     //could implement some logic to store the value of the answer 
-    alert("How are ya?")
+
   }
 
   return (
@@ -17,7 +17,6 @@ function MathLive() {
       <math-field onInput={(evt) => setValue(evt.target.value)}>
   
       </math-field>
-      <button onClick={answerStore}>Next!</button>
       <p>Value: {value} Latex</p>
     </div>
   );
