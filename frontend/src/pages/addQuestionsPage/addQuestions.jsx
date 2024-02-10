@@ -21,7 +21,6 @@ function QuestionSourcePanel( {setQuestionSource, setQuestionTopic, setQuestionN
                     <option key={i} value={topic}>{topic}</option>
                 ));
                 setModuleInputBoxes(newOptions);
-
             } catch (error) {
                 console.error(error);
             }
@@ -43,6 +42,9 @@ function QuestionSourcePanel( {setQuestionSource, setQuestionTopic, setQuestionN
                     ));
                     return [...prevState, ...newOptions];
                 });
+
+                setQuestionTopic(response.data.topics[0]);
+
             } catch (err) {
                 console.log(err);
             }
