@@ -5,89 +5,54 @@ import {useRef, useState} from 'react';
 import { useEffect } from "react";
 import axios from 'axios';
 
-function QuestionSourcePanel( {setQuestionSource, setQuestionTopic, setQuestionNumber, setQuestionYear, setQuestionVariant, currentQuestionSource} ) {
-
-    const [toggleCambridgeQuestion, setToggleCambridgeQuestion] = useState(false);
+function QuestionSourcePanel( {setQuestionSource, setQuestionTopic, setQuestionNumber, setQuestionYear, setQuestionVariant, currentQuestionSource, currentTopic} ) {
 
     const [topicInputBoxes, setTopicInputBoxes] = useState([]);
     const [moduleInputBoxes, setModuleInputBoxes] = useState([]);
 
     // Retrieving the topics
 
-        useEffect(() => {
+    useEffect(() => {
 
-            const retrieveData = async () => {
-                try {
-                  await retrieveModules();
-                  await retrieveTopics();
-                } catch (error) {
-                  console.error(error);
-                }
-              };
-
-            const retrieveModules = async () => {
-                try {
-                  const response = await axios.get('http://localhost:8000/addQuestion/getModules');
-                  const newOptions = response.data.map((topic, i) => (
+        const retrieveModules = async () => {
+            try {
+                const response = await axios.get('http://localhost:8000/addQuestion/getModules')
+                const newOptions = response.data.map((topic, i) => (
                     <option key={i} value={topic}>{topic}</option>
-                  ));
-                  setModuleInputBoxes(newOptions);
-                } catch (error) {
-                  console.error(error);
-                }
-              };
+                ));
+                setModuleInputBoxes(newOptions);
 
-            const retrieveTopics = async () => {
+            } catch (error) {
+                console.error(error);
+            }
+        };
+    
+        retrieveModules();
 
+        const retrieveTopics = async () => {
             setTopicInputBoxes([]);
-
-            await axios.post('http://localhost:8000/addQuestion/getQuestionInfo', {
-                "source":currentQuestionSource 
-              })
-              .then(res => {
+    
+            try {
+                const response = await axios.post('http://localhost:8000/addQuestion/getQuestionInfo', {
+                    "source": currentQuestionSource
+                });
     
                 setTopicInputBoxes(prevState => {
-                    const newOptions = res.data.topics.map((topic, i) => (
+                    const newOptions = response.data.topics.map((topic, i) => (
                         <option key={i} value={topic}>{topic}</option>
                     ));
                     return [...prevState, ...newOptions];
                 });
-    
-              })
-              .catch(err => console.log(err))
-
+            } catch (err) {
+                console.log(err);
             }
+        };
 
-            retrieveData();
-
-        }, [currentQuestionSource])
+        retrieveTopics();
+    
+    }, [currentQuestionSource]);
 
     // End of retrieving topics
-
-    const qpSwitch = useRef();
-    const toggledForm = useRef();
-
-    const toggleQuestionFromCambridge = () => {
-
-        setToggleCambridgeQuestion(!toggleCambridgeQuestion);
-        
-    };
-
-    useEffect(() => {
-
-        if (toggleCambridgeQuestion) {
-
-            qpSwitch.current.style.justifyContent = "flex-end";
-            toggledForm.current.style.visibility = "visible";
-
-        } else {
-
-            qpSwitch.current.style.justifyContent = "flex-start";
-            toggledForm.current.style.visibility = "hidden";
-
-        }
-
-    }, [toggleCambridgeQuestion])
 
     return (
 
@@ -98,6 +63,7 @@ function QuestionSourcePanel( {setQuestionSource, setQuestionTopic, setQuestionN
                     <label className="qs-input">
                         <p>Question Source</p>
                         <select className="qs-input" onChange={e => setQuestionSource(e.target.value)}>
+                            <option value={"default"}>Default</option>
                             {moduleInputBoxes}
                         </select>
                     </label>
@@ -110,40 +76,67 @@ function QuestionSourcePanel( {setQuestionSource, setQuestionTopic, setQuestionN
                         </select>
                     </label>
                 </form>
-                <div className="question-specifier">
-                    <p className="qs-pa">Is this question from a
-                    Cambridge International AS and A Level Past 
-                    Paper? </p>
-                    <div ref={qpSwitch} onClick={toggleQuestionFromCambridge} className="qp-switch">
-                        <div className="qp-sphere"></div>
-                    </div>
-                </div>
-                <form ref={toggledForm}>
-                    <label>
-                        <p>Question Number</p>
-                        <input className="qn-input" type="text" name="ques-num" onChange={e => setQuestionNumber(e.target.value)}/>
-                    </label>
-                    <label>
-                        <p>Year</p>
-                        <input className="qy-input" type="text" list="ques-year" onChange={e => setQuestionYear(e.target.value)}/>
-                        <datalist id="ques-year">
-                            <option value="Jun 2000" />
-                            <option value="Nov 2000" />
-                        </datalist>
-                    </label>
-                    <label>
-                        <p>Variant</p>
-                        <input className="qv-input" type="text" list="ques-var" onChange={e => setQuestionVariant(e.target.value)}/>
-                        <datalist id="ques-var">
-                            <option value="1" />
-                            <option value="2" />
-                            <option value="3" />
-                        </datalist>
-                    </label>
-                </form>
+                <FromCambridgePanel setQuestionNumber={setQuestionNumber} setQuestionVariant={setQuestionVariant} setQuestionYear={setQuestionYear} />
             </div>
         </div>
         </>
+    );
+
+}
+
+function FromCambridgePanel( {setQuestionNumber, setQuestionYear, setQuestionVariant} ) {
+
+    const [toggleCambridgeQuestion, setToggleCambridgeQuestion] = useState(false);
+
+    const handleToggle = () => {
+      setToggleCambridgeQuestion(!toggleCambridgeQuestion);
+
+      if (!toggleCambridgeQuestion) {
+
+        setQuestionNumber(0);
+        setQuestionYear("Jun 2000");
+        setQuestionVariant(0);
+
+      }
+    };
+
+
+    return (
+
+        <>
+            <div className="question-specifier">
+            <p className="qs-pa">Is this question from a
+            Cambridge International AS and A Level Past
+            Paper? </p>
+            <div className="qp-switch" onClick={handleToggle}>
+                <div className="qp-sphere"></div>
+            </div>
+            </div>
+            {toggleCambridgeQuestion && <form>
+                <label>
+                    <p>Question Number</p>
+                    <input className="qn-input" type="text" name="ques-num" onChange={e => setQuestionNumber(e.target.value)}/>
+                </label>
+                <label>
+                    <p>Year</p>
+                    <input className="qy-input" type="text" list="ques-year" onChange={e => setQuestionYear(e.target.value)}/>
+                    <datalist id="ques-year">
+                        <option value="Jun 2000" />
+                        <option value="Nov 2000" />
+                    </datalist>
+                </label>
+                <label>
+                    <p>Variant</p>
+                    <input className="qv-input" type="text" list="ques-var" onChange={e => setQuestionVariant(e.target.value)}/>
+                    <datalist id="ques-var">
+                        <option value="1" />
+                        <option value="2" />
+                        <option value="3" />
+                    </datalist>
+                </label>
+            </form>}
+        </>
+
     );
 
 }
@@ -239,10 +232,10 @@ function QuestionAndCorrespondingAnswerPanel( {logQuestionSource, setQuestionObj
 
 function QuestionFinalPanel() {
 
-    const [questionSource, setQuestionSource] = useState("");
+    const [questionSource, setQuestionSource] = useState("Default");
     const [questionTopic, setQuestionTopic] = useState("");
     const [questionNumber, setQuestionNumber] = useState(0);
-    const [questionYear, setQuestionYear] = useState("");
+    const [questionYear, setQuestionYear] = useState("000 0000");
     const [questionVariant, setQuestionVariant] = useState(0);
     const [questionObject, setQuestionObject] = useState({});
 
@@ -255,6 +248,10 @@ function QuestionFinalPanel() {
         if (questionIDYear.slice(0,3).toLowerCase() === "jun") {
 
             questionIDYear = "s" + "_" + questionIDYear.slice(3,7);
+
+        } else if (questionIDYear.slice(0,3).toLowerCase() === "000") {
+
+            questionIDYear = "0" + "_" + questionIDYear.slice(3,7);
 
         } else {
 
@@ -285,6 +282,15 @@ function QuestionFinalPanel() {
 
                 questionIDFinal = questionIDSource + "_" + questionIDTopic + questionIDNumYearVariant;
                 console.log(questionIDFinal);
+                console.log(questionObject);
+                axios.post('http://localhost:8000/addQuestion', {
+                    "questionID":questionIDFinal,
+                    "questionTopic":questionTopic,
+                    "questionsGrid":Object.values(questionObject).map(question => question.questionText),
+                    "questionsFiguresGrid":Object.values(questionObject).map(question => question.figureText),
+                    "answersGrid":Object.values(questionObject).map(question => question.answerText),
+                    "questionSource":questionSource
+                })
 
           })
           .catch(err => console.log(err))
@@ -297,7 +303,7 @@ function QuestionFinalPanel() {
         setQuestionSource={setQuestionSource}  setQuestionTopic={setQuestionTopic}
         setQuestionNumber={setQuestionNumber} 
         setQuestionYear={setQuestionYear} setQuestionVariant={setQuestionVariant}
-        currentQuestionSource={questionSource} />
+        currentQuestionSource={questionSource} currentTopic={questionTopic} />
         <QuestionAndCorrespondingAnswerPanel logQuestionSource={logQuestionSource} setQuestionObject={setQuestionObject} />
     </div>
     );
