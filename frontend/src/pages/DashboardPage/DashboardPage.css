@@ -1,0 +1,50 @@
+html,body {
+    overflow: visible;
+}
+
+.dashboard-header, .profile-corner {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+}
+
+.profile-corner {
+    width: 8%;
+}
+
+.notification-tab {
+    width: 35px;
+    height: 35px;
+    border-radius: 50px;
+    background-color: green;
+}
+
+.profile-icon {
+    width: 35px;
+    height: 35px;
+    border-radius: 50px;
+    background-color: rgb(1, 157, 1);
+}
+
+.graph {
+    background-color: black;
+    height: 400px;
+}
+
+.statistics-tab {
+    display: grid;
+    grid-template-columns: auto auto;
+}
+
+.dashboard-main {
+    width: 100%;
+    display: grid;
+    grid-template-columns: auto auto;
+    column-gap: 150px;
+    row-gap: 50px;
+}
+
+.courses-tab {
+    display: grid;
+    grid-template-columns: auto auto;
+}

@@ -6,6 +6,7 @@ import UnknownPage from "./components/Error404/Unknown";
 import Gemini from "./components/Gemini/Gemini";
 import ForgotPass from "./pages/Forgot";
 import Progressionmark from "./components/graphs/Progressionmark";
+import DashboardPage from "./pages/DashboardPage/DashboardPage"
 
 const UserContext = createContext();
 
@@ -22,6 +23,7 @@ function App() {
             <Route path="login" element={<Login />} />
             <Route path="/forgot" element={<ForgotPass />}></Route>
             <Route path="/progression" element={<Progressionmark/>}></Route>
+            <Route path="/dashboard" element={<DashboardPage />}></Route>
             <Route path="*" element={<UnknownPage />} />
           </Routes>
         </BrowserRouter>
