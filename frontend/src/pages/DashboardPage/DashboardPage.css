@@ -52,7 +52,8 @@ html,body {
 
 .courses-tab {
     display: grid;
-    grid-template-columns: auto auto;
+    grid-template-columns: 1fr 1fr;
+    justify-items: center;
 }
 
 .activity-graph {
@@ -76,7 +77,7 @@ html,body {
     background-color: white;
 }
 
-.dashboard-complete-container {
+.dashboard-complete-container { 
     padding: 25px;
 }
 
@@ -101,3 +102,59 @@ html,body {
     border-left: 3px solid rgb(6, 140, 31);
     border-radius: 3px;
 }
+
+.dashboard-courses, .dashboard-activity {
+    background-color: white;
+    border-radius: 15px;
+    padding: 20px;
+    display: flex;
+    flex-direction: column;
+}
+
+.course-card {
+    background-color: #f4f3f3;
+    border-radius: 15px;
+    padding: 15px;
+    padding-block: 35px;
+    width: 400px;
+}
+
+.course-title {
+    font-size: 1.25rem;
+    font-weight: bold;
+}
+
+.course-lessons {
+    font-size: 0.9rem;
+}
+
+.course-progress-tab {
+    display: flex;
+    justify-content: space-around;
+    margin-top: 20px;
+}
+
+.prog-bar {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.prog-bar-text {
+    font-size: 0.8rem;
+}
+
+.course-learn-progress, .course-test-progress {
+    padding: 15px;
+    padding-block: 20px;
+    border-radius: 50px;
+}
+
+.course-learn-progress {
+    border: 3px solid rgb(6, 140, 31);
+}
+
+.course-test-progress {
+    border: 3px solid rgb(6, 91, 140);
+}
+

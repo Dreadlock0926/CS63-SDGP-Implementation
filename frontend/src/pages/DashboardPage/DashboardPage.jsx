@@ -78,16 +78,28 @@ function DashboardCourses() {
                         <div className="course-title">Pure Mathematics I</div>
                         <div className="course-lessons">12 lessons</div>
                         <div className="course-progress-tab">
-                            <div className="course-learn-progress">35%</div>
-                            <div className="course-test-progress">55%</div>
+                            <div className="prog-bar">
+                                <p className=" course-learn-progress">35%</p>
+                                <p className="prog-bar-text">Learned Progress</p>
+                            </div>
+                            <div className="prog-bar">
+                                <p className="course-test-progress">55%</p>
+                                <p className="prog-bar-text">Tested Progress</p>
+                            </div>
                         </div>
                     </div>
                     <div className="course-card">
                         <div className="course-title">Probability and Statistics I</div>
                         <div className="course-lessons">5 lessons</div>
                         <div className="course-progress-tab">
-                            <div className="course-learn-progress">25%</div>
-                            <div className="course-test-progress">75%</div>
+                            <div className="prog-bar">
+                                    <p className="course-learn-progress">25%</p>
+                                    <p className="prog-bar-text">Learned Progress</p>
+                            </div>
+                            <div className="prog-bar">
+                                    <p className="course-test-progress">85%</p>
+                                    <p className="prog-bar-text">Tested Progress</p>
+                            </div>
                         </div>
                     </div>
                 </div>
