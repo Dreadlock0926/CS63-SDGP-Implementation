@@ -1,0 +1,62 @@
+/* CSS for the Forum Component */
+
+/* Container */
+div {
+  font-family: 'Poppins', Courier, monospace;
+    margin: 20px;
+    padding: 20px;
+    background-color: #f0f0f0;
+    border-radius: 10px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+  }
+  
+  /* Headings */
+  h1 {
+    font-size: 24px;
+    margin-bottom: 10px;
+  }
+  
+  /* Fidget Spinner */
+  .spinner {
+    margin: 20px auto;
+  }
+  
+  /* Forum Questions */
+  .question {
+    margin-bottom: 30px;
+  }
+  
+  /* Answer Form */
+  form {
+    margin-top: 10px;
+  }
+  
+  input[type="text"] {
+    width: 70%;
+    padding: 10px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+  }
+  
+  button {
+    padding: 10px 20px;
+    background-color: #007bff;
+    color: #fff;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+  }
+  
+  button:hover {
+    background-color: #0056b3;
+  }
+  
+  /* Link */
+  a {
+    color: #007bff;
+    text-decoration: none;
+  }
+  
+  a:hover {
+    text-decoration: underline;
+  }
