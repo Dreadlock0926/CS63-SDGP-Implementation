@@ -13,6 +13,7 @@ const helmet = require("helmet");
 const { join } = require("path");
 const forum = require("./routes/forum")
 const examResources = require("./routes/exams")
+const learningMaterial = require("./routes/learn");
 const morgan = require("morgan");
 
 
@@ -57,6 +58,7 @@ app.use("/login", login);
 app.use("/forum",forum)
 app.use("/gemini", gemini);
 app.use("/exam",examResources)
+app.use("/resources",learningMaterial);
 
 
 app.use("*", (req, res) => {

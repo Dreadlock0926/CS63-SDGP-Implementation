@@ -1,71 +1,53 @@
 /* eslint-disable react-hooks/exhaustive-deps */
-import { useContext, useEffect, useState } from "react";
-import {UserContext} from "../../App"
+/* eslint-disable no-unused-vars */
+import { useContext, useEffect, useState,useCallback } from "react";
+import { UserContext } from "../../App";
+import {  FetchMaterial } from "../Api/Api";
+import { Link } from "react-router-dom";
+import Materials from "./Materials";
 import Axios from "axios";
-import NotLogged from "../NotLogged"
-
 
 const Learn = () => {
+  const { loading, setLoading, logged } = useContext(UserContext); // Removed unnecessary properties from destructuring
+  const [data,setData] = useState([])
+  const [resources,setResources] = useState("")
 
-
-    const {setLoading,loading,log } = useContext(UserContext)
-    const [resources,setResources] = useState([])
-
-    async function fetchResources(){
-        try{
-            setLoading(true);
-            await Axios.get("").then((response)=>{if(response.status===200){setResources(response.data)}}) //path not given yet!
-
-        }catch(err){
-            console.error(err);
-        }finally{
-            setLoading(false);
-        }
+  const fetchMaterial = async () => {
+    try {
+      setLoading(true);
+      const resources = await FetchMaterial(); 
+      console.log(resources); //fine upto this point!
+      setData(resources) //not saving!
+      console.log(`The data in ${JSON.stringify(data)}`)
+    } catch (err) {
+      console.error(err);
+    } finally {
+      setLoading(false);
     }
+  };
 
-    useEffect(()=>{
-        fetchResources();
-    },[])
+  useEffect(() => {
+    fetchMaterial();
+  }, []);
 
-
-    async function scopedSelection(e){
-        e.preventDefault();
-        try{
-            setLoading(true);
-            await Axios.get("").then((response)=>{if(response.status===200){setResources(response.data)}}) //path not given yet!
-
-        }catch(err){
-            console.error(err);
-        }finally{
-            setLoading(false);
-        }
-    }
+  
 
 
 
-
-
-
-
-
-
-    return loading ? (
+  return logged ? (
+    <div>
+      {loading ? (
         "Loading..."
-      ) : log ? (
-        <div>
-          <h1>Learn</h1>
-          <p>{JSON.stringify(resources)}</p>
-          <form onSubmit={scopedSelection}>
-            <span>
-              <label>Topic</label>
-              <input name="topicname" type="checkbox"></input>
-            </span>
-          </form>
-        </div>
+      ) : data && data.length ? (
+        data.map((x) => <Materials key={x._id} data={x}  />)
       ) : (
-        <NotLogged />
-      );
-      
-}
+        <div><h1>No materials added yet!</h1></div>
+      )}
+      <Link to="/addresources">Add Learning Resources 🤓</Link>
+    </div>
+  ) : (
+    <div><h1>No results found!</h1></div>
+  );
+};
 
-export default Learn
+export default Learn;
