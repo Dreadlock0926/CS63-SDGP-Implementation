@@ -1,0 +1,35 @@
+/* Style for the container div */
+.container {
+    font-family: 'Poppins', Courier, monospace;
+    margin: 20px;
+    padding: 20px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+  }
+  
+  /* Style for the loading message */
+  .loading-message {
+    font-size: 18px;
+    color: #555;
+  }
+  
+  /* Style for the no materials message */
+  .no-materials-message {
+    font-size: 24px;
+    color: #f00;
+  }
+  
+  /* Style for the link */
+  .link {
+    display: block;
+    margin-top: 20px;
+    font-size: 18px;
+    text-decoration: none;
+    color: #007bff;
+  }
+  
+  /* Style for the link hover effect */
+  .link:hover {
+    text-decoration: underline;
+  }
+  

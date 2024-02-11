@@ -5,7 +5,7 @@ import { UserContext } from "../../App";
 import {  FetchMaterial } from "../Api/Api";
 import { Link } from "react-router-dom";
 import Materials from "./Materials";
-import Axios from "axios";
+import "./Learn.css";
 
 const Learn = () => {
   const { loading, setLoading, logged } = useContext(UserContext); // Removed unnecessary properties from destructuring
@@ -35,18 +35,18 @@ const Learn = () => {
 
 
   return logged ? (
-    <div>
+    <div className="container">
       {loading ? (
-        "Loading..."
+        <p className="loading-message">Loading...</p>
       ) : data && data.length ? (
-        data.map((x) => <Materials key={x._id} data={x}  />)
+        data.map((x) => <Materials key={x._id} data={x} />)
       ) : (
-        <div><h1>No materials added yet!</h1></div>
+        <div className="no-materials-message"><h1>No materials added yet!</h1></div>
       )}
-      <Link to="/addresources">Add Learning Resources 🤓</Link>
+      <Link to="/addresources" className="link">Add Learning Resources 🤓</Link>
     </div>
   ) : (
-    <div><h1>No results found!</h1></div>
+    <div className="container"><h1>No results found!</h1></div>
   );
 };
 

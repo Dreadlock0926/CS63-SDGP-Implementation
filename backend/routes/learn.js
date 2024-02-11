@@ -2,6 +2,7 @@ const express = require("express");
 const router = express.Router();
 const learningModel = require("../models/learningResources");
 //needs to be put in a controller
+//logic here must be changed
 
 router
   .route("/")
@@ -28,25 +29,14 @@ router
     try {
       const existingLearningResource = await learningModel.findOne({ topic });
 
-      if (!existingLearningResource) {
+    
         await learningModel.create({ topic, title, about, subtopic });
         return res
           .status(201)
           .json({ Alert: "Added Learning Resource to Learn" });
-      } else {
-        const updatedLearningResource = await learningModel.updateOne(
-          { topic },
-          { $set: { title, about, subtopic } }
-        );
+      
 
-        if (!updatedLearningResource) {
-          return res.status(400).json({ Alert: "Error while updating!" });
-        } else {
-          return res
-            .status(201)
-            .json({ Alert: "Updated Learning Resource in Learn" });
-        }
-      }
+       
     } catch (error) {
       console.error(error);
       return res.status(500).json({ Alert: "Internal Server Error" });

@@ -1,6 +1,5 @@
 import  { useState, createContext } from "react";
 import { BrowserRouter, Routes, Route } from "react-router-dom";
-import "./App.css";
 import Home from "./components/graphs/Home";
 import UnknownPage from "./components/Unknown";
 import Login from "./components/User/Login";
