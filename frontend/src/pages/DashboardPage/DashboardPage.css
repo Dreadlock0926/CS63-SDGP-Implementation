@@ -1,5 +1,6 @@
 html,body {
     overflow: visible;
+    background-color: #f4f3f3;
 }
 
 .dashboard-header, .profile-corner {
@@ -27,8 +28,9 @@ html,body {
 }
 
 .graph {
-    background-color: black;
     height: 400px;
+    margin-top: auto;
+    margin-bottom: auto;
 }
 
 .statistics-tab {
@@ -36,14 +38,16 @@ html,body {
     grid-template-columns: auto auto;
     margin-top: auto;
     margin-bottom: auto;
+    column-gap: 30px;
+    row-gap: 55px;
 }
 
 .dashboard-main {
     width: 100%;
     display: grid;
     grid-template-columns: auto auto;
-    column-gap: 150px;
-    row-gap: 50px;
+    column-gap: 25px;
+    row-gap: 25px;
 }
 
 .courses-tab {
@@ -59,5 +63,41 @@ html,body {
 .dashboard-statistics-container {
     display: flex;
     flex-direction: column;
-    position: relative;
+    border-radius: 15px;
+    padding: 25px;
+    background-color: white;
+}
+
+.dashboard-graph-container {
+    display: flex;
+    flex-direction: column;
+    border-radius: 15px;
+    padding: 20px;
+    background-color: white;
+}
+
+.dashboard-complete-container {
+    padding: 25px;
+}
+
+.graph-title {
+    font-size: 2rem;
+}
+
+.points-tab {
+    background-color: #f4f3f3;
+    border-radius: 15px;
+    padding-block: 20px;
+    padding-inline: 20px;
+}
+
+.tab-header {
+    margin-bottom: 35px;
+}
+
+.st-num {
+    font-size: 1.5rem;
+    text-align: end;
+    border-left: 3px solid rgb(6, 140, 31);
+    border-radius: 3px;
 }

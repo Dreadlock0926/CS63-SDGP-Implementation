@@ -1,5 +1,6 @@
 import "../main.css"
 import "./DashboardPage.css"
+import ProgressGraph from "../../components/graphs/Progressionmark"
 
 // Dashboard Header Tab
 function DashboardHeader() {
@@ -25,7 +26,9 @@ function DashboardGraph() {
         <>
             <div className="dashboard-graph-container">
                 <h2 className="graph-title">Progress</h2>
-                <div className="graph"></div>
+                <div className="graph">
+                    <ProgressGraph />
+                </div>
             </div>
         </>
     );
@@ -42,19 +45,19 @@ function DashboardStatistics() {
                 <div className="statistics-tab">
                     <div className="points-tab">
                         <h3 className="tab-header">VoXel Points Earned</h3>
-                        <p className="vox-num">150</p>
+                        <p className="st-num vox-num">150</p>
                     </div>
                     <div className="points-tab">
                         <h3 className="tab-header">Hours Learned</h3>
-                        <p className="hour-num">150</p>
+                        <p className="st-num hour-num">23</p>
                     </div>
                     <div className="points-tab">
                         <h3 className="tab-header">Ongoing Courses</h3>
-                        <p className="ongcourses-num">150</p>
+                        <p className="st-num ongcourses-num">1</p>
                     </div>
                     <div className="points-tab">
                         <h3 className="tab-header">Completed Courses</h3>
-                        <p className="comcourses-num">150</p>
+                        <p className="st-num comcourses-num">2</p>
                     </div>
                 </div>
             </div>
@@ -113,12 +116,14 @@ function DashboardPage() {
 
     return (
         <>
-        <DashboardHeader/>
-        <div className="dashboard-main">
-            <DashboardGraph/>
-            <DashboardStatistics/>
-            <DashboardCourses/>
-            <DashboardActivity/>
+        <div className="dashboard-complete-container">
+            <DashboardHeader/>
+            <div className="dashboard-main">
+                <DashboardGraph/>
+                <DashboardStatistics/>
+                <DashboardCourses/>
+                <DashboardActivity/>
+            </div>
         </div>
         </>
     );

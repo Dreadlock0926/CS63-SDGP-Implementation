@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from "react";
 import axios from "axios";
 import { LineChart, Line, CartesianGrid, XAxis, YAxis } from "recharts";
+import "./Progressionmark.css"
 
 function Progressionmark() {
   const [value, setValue] = useState([]);
@@ -38,8 +39,8 @@ function Progressionmark() {
 
   const renderLineChart = (
     <LineChart
-      width={600}
-      height={300}
+      width={500}
+      height={350}
       data={value}
       margin={{ top: 5, right: 20, bottom: 5, left: 0 }}
     >
@@ -51,12 +52,14 @@ function Progressionmark() {
   );
 
   return (
-    <div>
-      <h1>Student progression tracker</h1>
-      <p>Total Marks: {totalMark}</p>
-      <p>The average Mark is : {average}</p>
+    <div className="progress-container">
+      {/* <h1>Student progression tracker</h1> */}
+      {/* <p>Total Marks: {totalMark}</p> */}
+      <div className="avg-mark-container">
+        <p>Average Mark</p>
+        <h2>{average}</h2>
+      </div>
       <div>{renderLineChart}</div>
-
     </div>
   );
 }
