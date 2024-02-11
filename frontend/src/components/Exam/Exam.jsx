@@ -8,6 +8,7 @@ import MathLive from "../Math";
 import Axios from "axios";
 import { UserContext } from "../../App";
 import Scope from "./Scope";
+import "./Exam.css";
 
 const ExamPage = () => {
   const {status,setStatus} = useContext(UserContext)
@@ -78,9 +79,9 @@ const ExamPage = () => {
   }
 
   return (
-    <div>
+    <div className="container">
       <h1>Exam Page</h1>
-      <button onClick={selectTopics}>Select Topics!</button>
+      <button onClick={selectTopics} className="action-button">Select Topics!</button>
       {/* <button onClick={startExamTimer} ref={startButtonRef}>
         Start Exam!
       </button> */}

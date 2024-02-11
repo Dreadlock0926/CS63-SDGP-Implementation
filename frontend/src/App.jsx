@@ -7,8 +7,6 @@ import Login from "./components/User/Login";
 import Register from "./components/User/Register";
 import ForgotPass from "./components/User/Forgot";
 import Gemini from "./components/Gemini/Gemini";
-import Forum from "./components/Forum/Forum";
-import CreateForum from "./components/Forum/CreateForum";
 import ExamPage from "./components/Exam/Exam"
 import ExamFinal from "./components/Exam/ExamFinalized"
 
@@ -49,8 +47,6 @@ function App() {
             <Route path="/login" element={<Login />} />
             <Route path="/register" element={<Register />} />
             <Route path="/forgot" element={<ForgotPass />} /> {/**Optional */}  
-            <Route path="/forum" element={<Forum />} />
-            <Route path="/addforum" element={<CreateForum />} />
             <Route path="/exam" element={<ExamPage/>}></Route>
             <Route path="/examfinal" element={<ExamFinal/>}></Route>
             <Route path="*" element={<UnknownPage />} />
