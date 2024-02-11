@@ -101,6 +101,7 @@ function DashboardActivity() {
         <>
             <div className="dashboard-activity">
                 <h2 className="activity-title">Activity</h2>
+                <div className="activity-graph"></div>
             </div>
         </>
     );
@@ -117,6 +118,7 @@ function DashboardPage() {
             <DashboardGraph/>
             <DashboardStatistics/>
             <DashboardCourses/>
+            <DashboardActivity/>
         </div>
         </>
     );

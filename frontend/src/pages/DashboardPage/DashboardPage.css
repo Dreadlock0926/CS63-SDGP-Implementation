@@ -34,6 +34,8 @@ html,body {
 .statistics-tab {
     display: grid;
     grid-template-columns: auto auto;
+    margin-top: auto;
+    margin-bottom: auto;
 }
 
 .dashboard-main {
@@ -47,4 +49,15 @@ html,body {
 .courses-tab {
     display: grid;
     grid-template-columns: auto auto;
+}
+
+.activity-graph {
+    background-color: black;
+    height: 300px;
+}
+
+.dashboard-statistics-container {
+    display: flex;
+    flex-direction: column;
+    position: relative;
 }
