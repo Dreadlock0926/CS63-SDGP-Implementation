@@ -86,6 +86,7 @@ const ExamPage = () => {
       </button> */}
 
       <MathLive />
+      <Scope/>
       <div>
         <h2>{`${time} seconds <- Time Elapsed`}</h2>
    

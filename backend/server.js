@@ -13,6 +13,7 @@ const helmet = require("helmet");
 const { join } = require("path");
 const forum = require("./routes/forum")
 const examResources = require("./routes/exams")
+const morgan = require("morgan");
 
 
 
@@ -30,6 +31,7 @@ async function authenticated(req, res, next) {
 }
 
 app.use(cors({ origin: "*" }));  //allow access from anywhere for now!
+app.use(morgan("combined"));
 app.use(express.urlencoded());
 app.use(helmet());
 app.use(express.json());

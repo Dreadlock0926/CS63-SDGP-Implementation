@@ -58,20 +58,14 @@ const Scope = () => {
               checked={topics.topic1}
               onChange={() => handleTopicChange("topic1")}
             />
-          </span>
-
-          <span>
-            <h1>Topic 2</h1>
+              <h1>Topic 2</h1>
             <input
               type="checkbox"
               name="topic2"
               checked={topics.topic2}
               onChange={() => handleTopicChange("topic2")}
             />
-          </span>
-
-          <span>
-            <h1>Topic 3</h1>
+             <h1>Topic 3</h1>
             <input
               type="checkbox"
               name="topic3"
@@ -79,6 +73,7 @@ const Scope = () => {
               onChange={() => handleTopicChange("topic3")}
             />
           </span>
+
 
           {/* Add more topics similarly */}
         <br></br>

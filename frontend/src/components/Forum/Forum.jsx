@@ -15,6 +15,7 @@ const Forum = () => {
   const EndPoint = "http://localhost:8000/forum";
 
   const increaseVotes = async (id) => {
+    alert(`Request from ${id}`)
     try {
       setLoading(true);
       const upvote = await Axios.put(`${EndPoint}/upvotes/${id}`, {
@@ -41,11 +42,6 @@ const Forum = () => {
     }
   }; //route not made
 
-  // function increaseVotes(id){
-   
-  //   alert(`Request came from ${id}`);
-   
-  // }
 
 
 
