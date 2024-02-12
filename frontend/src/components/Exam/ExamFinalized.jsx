@@ -17,7 +17,7 @@ const ExamFinalized = () => {
     <div>
       <h1>Your Exam is Over!</h1>
       <p>Marks {marks}</p>
-      <Link to="/dash">Go Back?</Link>
+      <Link to="/">Go Back?</Link>
     </div>
   );
 };

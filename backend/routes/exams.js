@@ -1,9 +1,11 @@
 const express = require("express");
 const router = express.Router();
+const examModel= require("../models/exam")
 
 
-router.route("/").get((req,res)=>{
-    res.status(200).json({Alert:"Testing JSON!"})
+router.route("/").get(async (req,res)=>{
+    const data = await examModel.find();
+    res.status(200).json(data)
 }).post((req,res)=>{
     const {answers} = req.body;
     if(!answers) return res.status(200).json({Alert:"NO answers!"});
@@ -11,12 +13,18 @@ router.route("/").get((req,res)=>{
     //rest of the logic
 })
 
-router.route("/scope").get((req,res)=>{
+router.route("/scope").get(async (req,res)=>{
     const {topics} = req.body;
     if(!topics){
-        res.status(200).json({Send:"Everything!"})
+        const data = await examModel.find();
+        res.status(200).json(data)
     }else{
-        //aggregate {$match:{topics}} + length && length>0 -> res.status(200).json(data);
+      const matches = await examModel.aggregate({$match:{topics}})
+      if(matches && matches.length>0){
+        res.status(200).json(matches)
+      }else{
+        res.status(203).json({Alert:"NO Questions matching the topics!"})
+      }
     }
 })
 

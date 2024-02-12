@@ -8,17 +8,11 @@ import Loading from "../Loading";
 const Scope = () => {
   // const navigation = useNavigation(); //bugged out
   const { loading, setLoading } = useContext(UserContext);
+  const [data,setData] = useState([])
   const [topics, setTopics] = useState({
-    pureMaths: {
-      topic1: false,
-      topic2: false,
-      topic3: false,
-    },
-    stat: {
-      topic1: false,
-      topic2: false,
-      topic3: false,
-    },
+      topic1:false,
+      topic2:false,
+      topic3:false
   });
   const [toggle,setToggle] = useState(false);
 
@@ -36,10 +30,9 @@ const Scope = () => {
       setLoading(true);
   
           const selectedTopics = Object.keys(topics).filter((key) => topics[key]);
-          const data = await Axios.get("http://localhost:8000/exam/scope", { topics: selectedTopics }); //this path is not made yet!
-          if (data.status === 200) {
-            alert("Success!");
-            // navigation("/examination")
+          const exam = await Axios.get("http://localhost:8000/exam/scope", { topics: selectedTopics }); //this path is not made yet!
+          if (exam.status === 200) {
+          setData(exam.data);
           } else {
             alert("Error while getting data back!");
           }
@@ -54,12 +47,12 @@ const Scope = () => {
 
 
   const selectAllTopics = async ()=>{
-    const nopayload = await Axios.get("http://localhost:8000/exam/scope" ); //this path is not made yet!
-    if (nopayload.status === 200) {
-      alert("Success!");
-    } else {
-      alert("Error while getting data back!");
-    }
+    const exam = await Axios.get("http://localhost:8000/exam/scope" ); //this path is not made yet!
+    if (exam.status === 200) {
+      setData(exam.data);
+      } else {
+        alert("Error while getting data back!");
+      }
   }
 
   useEffect(() => {
@@ -82,17 +75,19 @@ const Scope = () => {
 
   return (
     <div style={{margin:"5%",padding:"5%"}}>
+                
       {loading ? (
         <Loading />
       ) : (      
-        <div >      
+        <div >   
            <select className="selection"><option value={"pure"}>Pure Maths</option><option value={"stat"}>Statistics</option></select>
            <br></br>
           <button onClick={selectTopics} className="action-button">{toggle?"Close Selector":`Select Specific Topics!`}</button>
           <br></br>
           <button onClick={selectAllTopics} disabled={toggle}>Select From All</button> 
+          <p>{data&&data.length? JSON.stringify(data) : "No results found"}</p>   
           {toggle?           
-          <form onSubmit={selectScope}>
+          <form onSubmit={selectScope}>  
         <span>
           <h1>Topic 1</h1>
           <input
@@ -118,7 +113,9 @@ const Scope = () => {
         </span>
         {/* Add more topics similarly */}
       <br></br>
+    
         <button type="submit" disabled={loading}>Select Topics</button>
+     
       </form>:<div><h1></h1></div>}
 </div>
         

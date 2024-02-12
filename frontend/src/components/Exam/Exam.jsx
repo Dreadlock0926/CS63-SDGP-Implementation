@@ -96,7 +96,7 @@ console.log(part); //frontend*/
   useEffect(() => {
     
     return () => {
-      fetchExam();
+      
       // Cleanup the interval on component unmount
       clearInterval(intervalRef.current);
     };
@@ -112,7 +112,6 @@ console.log(part); //frontend*/
       <button onClick={startExamTimer} ref={startButtonRef}>
         Start Exam!
       </button>
-      <p>{JSON.stringify(questions)}</p>
       <MathLive />
       <div>
         <h2>{`${time} seconds <- Time Elapsed`}</h2>
