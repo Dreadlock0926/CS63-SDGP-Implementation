@@ -18,7 +18,7 @@ router.route("/").post(async (req, res) => {
     if (!passwordMatch) {
       return res.status(401).json({ Alert: "Unauthorized" });
     } else {
-      req.session.user = { username, maxAge: 60000 };
+      req.session.user = { username, maxAge: 60000 , _id:validityUser._id};
       return res.status(200).json({
         Alert: `${username} logged in!`,
         username: req.session.user.username,

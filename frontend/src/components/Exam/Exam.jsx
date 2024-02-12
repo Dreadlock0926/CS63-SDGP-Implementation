@@ -10,19 +10,6 @@ import { UserContext } from "../../App";
 import Scope from "./Scope";
 import "./Exam.css";
 
-  // const startExamTimer = () => {
-  //   if(started===0){  
-  //     started++;  
-   
-  //     intervalRef.current = setInterval(() => {
-  //       do{
-  //         setTime((prev) => prev + 1);
-  //       }while(time<60000) 
-  //   }, 1000);}
-  //   else{
-  //     alert("Time's up!")
-  //   }
-  // };
 
 
 const ExamPage = () => {
@@ -32,6 +19,22 @@ const ExamPage = () => {
   const stopButtonRef = useRef();
   const intervalRef = useRef();
   const [questions,setQuestions] = useState([])
+  
+
+    const startExamTimer = () => {
+    if(started===0){  
+      started++;  
+   
+      intervalRef.current = setInterval(() => {
+      
+          setTime((prev) => prev + 1);
+       
+    }, 1000);}
+    else{
+      alert("Time's up!")
+    }
+  };
+
 
 
   const navigator = useNavigate();
@@ -106,12 +109,11 @@ console.log(part); //frontend*/
   return (
     <div className="container">
       <h1>Exam Page</h1>
-      {/* <button onClick={startExamTimer} ref={startButtonRef}>
+      <button onClick={startExamTimer} ref={startButtonRef}>
         Start Exam!
-      </button> */}
+      </button>
       <p>{JSON.stringify(questions)}</p>
       <MathLive />
-      <Scope/> {/**Scope component */}
       <div>
         <h2>{`${time} seconds <- Time Elapsed`}</h2>
    

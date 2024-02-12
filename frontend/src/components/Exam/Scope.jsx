@@ -1,16 +1,24 @@
 /* eslint-disable no-unused-vars */
 import { useContext, useEffect, useState } from "react";
 import { UserContext } from "../../App";
+import {useNavigation} from 'react-router-dom'
 import Axios from "axios";
 import Loading from "../Loading";
 
 const Scope = () => {
+  // const navigation = useNavigation(); //bugged out
   const { loading, setLoading } = useContext(UserContext);
   const [topics, setTopics] = useState({
-    topic1: false,
-    topic2: false,
-    topic3: false,
-    // Add more topics as needed
+    pureMaths: {
+      topic1: false,
+      topic2: false,
+      topic3: false,
+    },
+    stat: {
+      topic1: false,
+      topic2: false,
+      topic3: false,
+    },
   });
   const [toggle,setToggle] = useState(false);
 
@@ -26,21 +34,16 @@ const Scope = () => {
     e.preventDefault();
     try {
       setLoading(true);
-   
-       
-       
-        
+  
           const selectedTopics = Object.keys(topics).filter((key) => topics[key]);
           const data = await Axios.get("http://localhost:8000/exam/scope", { topics: selectedTopics }); //this path is not made yet!
           if (data.status === 200) {
             alert("Success!");
+            // navigation("/examination")
           } else {
             alert("Error while getting data back!");
           }
-       
-        
-    
-
+      
     } catch (err) {
       console.error(err);
       alert("Error occurred!");
@@ -67,14 +70,24 @@ const Scope = () => {
     setToggle(!toggle)
   }
 
+  // const selectionVal = document.querySelector(".selection");
+  // if(selectionVal.innerHTML==="pure"){
+  //   //show pure maths related topics
+  // }else if(selectionVal.innerHTML==="stat"){
+  //   //show stat related topics
+  // }else{
+  //   alert("Invalid option!") //no way this happens
+  // }
   
 
   return (
     <div style={{margin:"5%",padding:"5%"}}>
       {loading ? (
         <Loading />
-      ) : (
+      ) : (      
         <div >      
+           <select className="selection"><option value={"pure"}>Pure Maths</option><option value={"stat"}>Statistics</option></select>
+           <br></br>
           <button onClick={selectTopics} className="action-button">{toggle?"Close Selector":`Select Specific Topics!`}</button>
           <br></br>
           <button onClick={selectAllTopics} disabled={toggle}>Select From All</button> 

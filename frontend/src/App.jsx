@@ -10,6 +10,7 @@ import Gemini from "./components/Gemini/Gemini";
 // import ExamPage from "./components/Exam/Exam"
 import ExamFinal from "./components/Exam/ExamFinalized"
 import Generate from "./components/Exam/Generate";
+import ExamPage from "./components/Exam/Exam";
 
 
 export const UserContext = createContext();
@@ -50,7 +51,9 @@ function App() {
             <Route path="/forgot" element={<ForgotPass />} /> {/**Optional */}  
             <Route path="/exam" element={<Generate/>}></Route>
             <Route path="/examfinal" element={<ExamFinal/>}></Route>
+            <Route path="/examination" element={<ExamPage/>}></Route>
             <Route path="*" element={<UnknownPage />} />
+
           </Routes>
         </UserContext.Provider>
       </BrowserRouter>
