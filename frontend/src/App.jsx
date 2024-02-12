@@ -7,8 +7,9 @@ import Login from "./components/User/Login";
 import Register from "./components/User/Register";
 import ForgotPass from "./components/User/Forgot";
 import Gemini from "./components/Gemini/Gemini";
-import ExamPage from "./components/Exam/Exam"
+// import ExamPage from "./components/Exam/Exam"
 import ExamFinal from "./components/Exam/ExamFinalized"
+import Generate from "./components/Exam/Generate";
 
 
 export const UserContext = createContext();
@@ -47,7 +48,7 @@ function App() {
             <Route path="/login" element={<Login />} />
             <Route path="/register" element={<Register />} />
             <Route path="/forgot" element={<ForgotPass />} /> {/**Optional */}  
-            <Route path="/exam" element={<ExamPage/>}></Route>
+            <Route path="/exam" element={<Generate/>}></Route>
             <Route path="/examfinal" element={<ExamFinal/>}></Route>
             <Route path="*" element={<UnknownPage />} />
           </Routes>

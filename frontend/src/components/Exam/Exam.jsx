@@ -10,17 +10,6 @@ import { UserContext } from "../../App";
 import Scope from "./Scope";
 import "./Exam.css";
 
-const ExamPage = () => {
-  const {status,setStatus} = useContext(UserContext)
-  const [time, setTime] = useState(0);
-  const startButtonRef = useRef();
-  const stopButtonRef = useRef();
-  const intervalRef = useRef();
-  // const [value, setValue] = useState("");
-
-  const navigator = useNavigate();
-  let started = 0;
-
   // const startExamTimer = () => {
   //   if(started===0){  
   //     started++;  
@@ -35,10 +24,24 @@ const ExamPage = () => {
   //   }
   // };
 
+
+const ExamPage = () => {
+  const {status,setStatus,setLoading} = useContext(UserContext)
+  const [time, setTime] = useState(0);
+  const startButtonRef = useRef();
+  const stopButtonRef = useRef();
+  const intervalRef = useRef();
+  const [questions,setQuestions] = useState([])
+
+
+  const navigator = useNavigate();
+  let started = 0;
+
+
   const stopExamTimer = () => { 
     clearInterval(intervalRef.current);
     setTimeout(() => {
-      // Redirect to "/examfinal" after 2 seconds
+   
      navigator("/examfinal") 
     }, 2000);
   };
@@ -49,7 +52,7 @@ const ExamPage = () => {
       localStorage.setItem("time", time);
   
       //might have to set the exam marks in local storage to get in the finalized page!
-      const sendAnswers = await Axios.post("") //route of question!
+      const sendAnswers = await Axios.post("http://localhost:8000/exam") //route of question!
       if(sendAnswers.status===200){
         // setTimeout(() => {
         //   // Redirect to "/examfinal" after 2 seconds
@@ -62,32 +65,53 @@ const ExamPage = () => {
       alert("Way too early to submit!")
     }
 
-   
+    
+
 
   
   };
 
+  async function fetchExam(){
+    try{
+      setLoading(true);
+      const exam = await Axios.get("http://localhost:8000/exam");
+      setQuestions(exam.data);
+    }catch(err){
+      console.error(err);
+    }finally{
+      setLoading(false);
+    }
+  }
+  
+
+  //exam depending on questionID
+  /*let text = "s1_p_3_s2018_2"
+let part = text.split("_");
+console.log(part); //frontend*/ 
+  
+
   useEffect(() => {
+    
     return () => {
+      fetchExam();
       // Cleanup the interval on component unmount
       clearInterval(intervalRef.current);
     };
   }, []);
 
-  const selectTopics = ()=>{ 
-     return (Scope)
-  }
+  
+
+  
 
   return (
     <div className="container">
       <h1>Exam Page</h1>
-      <button onClick={selectTopics} className="action-button">Select Topics!</button>
       {/* <button onClick={startExamTimer} ref={startButtonRef}>
         Start Exam!
       </button> */}
-
+      <p>{JSON.stringify(questions)}</p>
       <MathLive />
-      <Scope/>
+      <Scope/> {/**Scope component */}
       <div>
         <h2>{`${time} seconds <- Time Elapsed`}</h2>
    
