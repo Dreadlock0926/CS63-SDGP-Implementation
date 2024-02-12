@@ -96,7 +96,7 @@ function FromCambridgePanel( {setQuestionNumber, setQuestionYear, setQuestionVar
       if (!toggleCambridgeQuestion) {
 
         setQuestionNumber(0);
-        setQuestionYear("Jun 2000");
+        setQuestionYear("000 0000");
         setQuestionVariant(0);
 
       }
