@@ -147,7 +147,7 @@ function QuestionGridUnit( {index, onInputChange} ) {
 
     const [questionText, setQuestionText] = useState('');
     const [answerText, setAnswerText] = useState('');
-    const [answerType, setAnswerType] = useState('');
+    const [answerType, setAnswerType] = useState('Expression');
     const [figureText, setFigureText] = useState('');
 
     useEffect(() => {
@@ -290,6 +290,7 @@ function QuestionFinalPanel() {
                     "questionTopic":questionTopic,
                     "questionsGrid":Object.values(questionObject).map(question => question.questionText),
                     "questionsFiguresGrid":Object.values(questionObject).map(question => question.figureText),
+                    "answersTypeGrid":Object.values(questionObject).map(question => question.answerType),
                     "answersGrid":Object.values(questionObject).map(question => question.answerText),
                     "questionSource":questionSource
                 })
