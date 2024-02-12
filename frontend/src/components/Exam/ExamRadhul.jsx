@@ -1,42 +1,45 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useRef } from "react";
 import "./ExamRadhul.css";
+import ReactDOM from "react-dom/client";
+import Countdown from "react-countdown";
+import { zeroPad } from "react-countdown";
 
-function ExamTimer() {
-  const [isTimerRunning, setIsTimerRunning] = useState(true);
-  const [timeLeft, setTimeLeft] = useState(10); // Initial time in seconds
+const ExamBody = () => {
+  return <div className="examBody">asdasd</div>;
+};
 
-  useEffect(() => {
-    if (isTimerRunning) {
-      let intervalId;
-      intervalId = setInterval(() => {
-        if (timeLeft == 0) {
-          clearInterval(intervalId);
-          setIsTimerRunning(false);
-        }
-        setTimeLeft((timeLeft) => timeLeft - 1);
-      }, 1000);
-      return () => clearInterval(intervalId);
-    }
-  }, [isTimerRunning]);
-
-  const minutes = Math.floor(timeLeft / 60);
-  const seconds = timeLeft % 60;
-  const display = `${minutes.toString().padStart(2, "0")}:${seconds
-    .toString()
-    .padStart(2, "0")}`;
-
-  return (
-    <div>
-      <div id="timerDisplay">{display}</div>
-    </div>
-  );
-}
+const renderer = ({ hours, minutes, seconds, completed }) => {
+  if (completed) {
+    return <span>00:00:00</span>;
+  } else {
+    // Render a countdown
+    return (
+      <span>
+        {zeroPad(hours)}:{zeroPad(minutes)}:{zeroPad(seconds)}
+      </span>
+    );
+  }
+};
 
 const Radhul = () => {
+  const root = useRef(null); // Create a ref to store the root
+
+  useEffect(() => {
+    if (root.current === null) {
+      root.current = ReactDOM.createRoot(document.getElementById("exam-timer"));
+      root.current.render(
+        <Countdown date={Date.now() + 100000} renderer={renderer} />
+      );
+    }
+  }, []);
+
   return (
-    <div className="examHeader">
-      <h1 className="examTitle">Dasd</h1>
-      <ExamTimer />
+    <div className="examContainer">
+      <div className="examHeader">
+        <h1 id="examTitle">Exam Title</h1>
+        <div id="exam-timer"></div>
+      </div>
+      <ExamBody />
     </div>
   );
 };
