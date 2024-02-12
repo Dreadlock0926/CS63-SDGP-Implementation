@@ -11,6 +11,7 @@ import CreateForum from "./components/Forum/CreateForum";
 import ExamPage from "./components/Exam/Exam"
 import ExamFinal from "./components/Exam/ExamFinalized"
 import Learn from "./components/Learn/Learn";
+import AddStudy from "./components/Learn/AddStudy"
 
 
 export const UserContext = createContext();
@@ -54,6 +55,7 @@ function App() {
             <Route path="/exam" element={<ExamPage/>}></Route>
             <Route path="/examfinal" element={<ExamFinal/>}></Route>
             <Route path="/resources" element={<Learn/>}></Route>
+            <Route path="/addresources" element={<AddStudy/>}></Route>
             <Route path="*" element={<UnknownPage />} />
           </Routes>
         </UserContext.Provider>

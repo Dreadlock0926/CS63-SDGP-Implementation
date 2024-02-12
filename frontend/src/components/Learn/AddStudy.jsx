@@ -2,6 +2,7 @@
 import { useContext, useState } from "react";
 import { AddMaterial } from "../Api/Api";
 import { UserContext } from "../../App";
+import "./Add.css";
 
 const AddStudy = () => {
   const { loading, setLoading, status, setStatus } = useContext(UserContext);
@@ -12,13 +13,14 @@ const AddStudy = () => {
     subtopic: "",
   });
 
+
   const addMaterial = async (e) => {
     e.preventDefault();
     try {
       setLoading(true);
       const resources = await AddMaterial(data);
       if (resources.status === 201) {
-        setStatus("Added Resource!");
+        setStatus("Added new Material!")
       } else {
         setStatus("Error while adding resource!");
       }
@@ -76,6 +78,7 @@ const AddStudy = () => {
         ></input>
         <button>Add Resource</button>
       </form>
+      <p>{status}</p>
     </div>
   );
 };
