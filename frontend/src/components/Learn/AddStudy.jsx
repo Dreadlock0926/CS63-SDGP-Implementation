@@ -4,7 +4,7 @@ import { AddMaterial } from "../Api/Api";
 import { UserContext } from "../../App";
 import "./Add.css";
 
-const AddStudy = () => {
+const AddStudy = () => { //add learning resources
   const { loading, setLoading, status, setStatus } = useContext(UserContext);
   const [data, setData] = useState({
     topic: "",
@@ -19,11 +19,7 @@ const AddStudy = () => {
     try {
       setLoading(true);
       const resources = await AddMaterial(data);
-      if (resources.status === 201) {
-        setStatus("Added new Material!")
-      } else {
-        setStatus("Error while adding resource!");
-      }
+      setStatus("Added Resource!")
     } catch (err) {
       console.error(err);
     } finally {

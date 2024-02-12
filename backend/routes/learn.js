@@ -7,13 +7,15 @@ const learningModel = require("../models/learningResources");
 router
   .route("/")
   .get(async (req, res) => {
-
     try{  
-      const data = learningModel.find().sort("createdAt");
-      data.length > 0  ? res.status(200).json(data) : res.status(203).json({Alert:"No learning resources found!"});
+      const data = await learningModel.find();
+     
+        res.status(200).json(data.data)
+      
     }catch(err){
       console.error(err);
     }
+    
   })
   .post(async (req, res) => {
     const { topic, title, about, subtopic } = req?.body;
