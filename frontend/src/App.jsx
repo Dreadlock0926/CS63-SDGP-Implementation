@@ -15,7 +15,6 @@ function App() {
         <BrowserRouter p>
           <Routes>
             <Route path="/" element={<Home />} />
-
             <Route path="login" element={<Login />} />
             <Route path="*" element={<UnknownPage />} />
           </Routes>

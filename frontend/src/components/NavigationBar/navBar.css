@@ -18,7 +18,7 @@
   
   /* Hover effects for the navigation item */
   .navItem:hover {
-    color: black;
+    color: #068C1F;
     transition: 0.5s;
   }
   
