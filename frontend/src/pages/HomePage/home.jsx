@@ -8,9 +8,11 @@ function Home() {
         <>
         <NavBar />
         <div className="backgroundContainer">
-            <img alt="background" className="bgImg" src="./images/background.png"></img>
-            <div className="webTitle">ALiyah</div>
-            <div className="webSub">Your partner for learning Advanced Level Mathematics!</div>
+            <img alt="background" className="bgImg" src="./images/background.png" />
+            <div className="itemsContainer">
+                <p className="webText"><b>ALiyah</b> <br />Your partner for learning <br />Advanced Level Mathematics!</p>
+                <a className="coursesBtn" href="#">GO TO COURSES</a>
+            </div>
         </div>
         </>
     );   

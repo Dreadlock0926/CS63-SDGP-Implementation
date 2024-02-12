@@ -7,24 +7,35 @@
 /* Background image of the website */
 .bgImg {
   opacity: 0.5;
+  background-image: url("/images/background.png");
 }
 
-.webTitle {
-  font-weight: bold;  
+.itemsContainer {
   position: absolute;
-  top: 30%;
+  top: 40%;
   left: 50%;
-  transform: translate(-50%, -30%);
-  font-size: 64px;
-  color: white;
-}
-
-.webSub {
-  position: absolute;
+  transform: translate(-50%, -40%);
   text-align: center;
-  top: 45%;
-  left: 50%;
-  transform: translate(-50%, -45%);
-  font-size: 64px;
-  color: white;
 }
+
+.webText {
+  color: white;
+  font-size: 64px;
+}
+
+  /* Login button */
+  .coursesBtn {
+    padding: 12px;
+    text-decoration: none;
+    color: white;
+    border: 2px solid white;
+    border-radius: 6px;
+    transition: 0.5s;
+  }
+
+  /* Login button hover effects */
+  .coursesBtn:hover {
+    color: black;
+    background: white;
+    transition: 0.5s;
+  }
