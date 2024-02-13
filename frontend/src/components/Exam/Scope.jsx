@@ -29,7 +29,7 @@ const Scope = () => {
     try {
       setLoading(true);
   
-          const selectedTopics = Object.keys(topics).filter((key) => topics[key]);
+          const selectedTopics = topics.forEach((x)=>x===true)
           const exam = await Axios.get("http://localhost:8000/exam/scope", { topics: selectedTopics }); //this path is not made yet!
           if (exam.status === 200) {
           setData(exam.data);

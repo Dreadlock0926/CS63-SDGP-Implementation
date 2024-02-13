@@ -54,9 +54,10 @@ app.use(
 app.use("/register", register);
 app.use("/login", login);
 // app.use(authenticated); //uncomment during final authentication tests 🔓
+app.use("/exam",examResources)
 app.use("/forum",forum)
 app.use("/gemini", gemini);
-app.use("/exam",examResources)
+
 
 
 app.use("*", (req, res) => {
