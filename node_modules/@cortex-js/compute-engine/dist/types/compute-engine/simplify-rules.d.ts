@@ -1,0 +1,17 @@
+/* 0.22.0 */import { Rule } from './public';
+/**
+ * A set of simplification rules.
+ *
+ * The rules are expressed as
+ *
+ *    `[lhs, rhs, condition]`
+ *
+ * where `lhs` is rewritten as `rhs` if `condition` is true.
+ *
+ * `lhs` and `rhs` can be either an Expression or a LaTeX string.
+ *
+ * If using an Expression, the expression is *not* canonicalized before being
+ * used. Therefore in some cases using Expression, while more verbose,
+ * may be necessary as the expression could be simplified by the canonicalization.
+ */
+export declare const SIMPLIFY_RULES: Rule[];

@@ -1,5 +1,6 @@
 {
   "dependencies": {
+    "mathlive": "^0.98.6",
     "react-countdown": "^2.3.5"
   }
 }

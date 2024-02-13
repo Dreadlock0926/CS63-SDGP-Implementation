@@ -1,0 +1,8 @@
+/* 0.22.0 */import { Expression } from '../../math-json/math-json-format';
+export declare function getApplyFunctionStyle(_expr: Expression, _level: number): 'paren' | 'leftright' | 'big' | 'none';
+export declare function getGroupStyle(_expr: Expression, _level: number): 'paren' | 'leftright' | 'big' | 'none';
+export declare function getRootStyle(_expr: Expression | null, level: number): 'radical' | 'quotient' | 'solidus';
+export declare function getFractionStyle(expr: Expression, level: number): 'quotient' | 'block-quotient' | 'inline-quotient' | 'inline-solidus' | 'nice-solidus' | 'reciprocal' | 'factor';
+export declare function getLogicStyle(_expr: Expression, _level: number): 'word' | 'boolean' | 'uppercase-word' | 'punctuation';
+export declare function getPowerStyle(_expr: Expression, _level: number): 'root' | 'solidus' | 'quotient';
+export declare function getNumericSetStyle(_expr: Expression, _level: number): 'compact' | 'regular' | 'interval' | 'set-builder';

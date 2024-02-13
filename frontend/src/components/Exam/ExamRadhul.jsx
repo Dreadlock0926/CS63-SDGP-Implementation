@@ -3,9 +3,35 @@ import "./ExamRadhul.css";
 import ReactDOM from "react-dom/client";
 import Countdown from "react-countdown";
 import { zeroPad } from "react-countdown";
+import "mathlive";
+
+// const [questions, setQuestions] = useState("");
+// const [questionCount, setQuestionCount] = useState("working-0");
+
+const WorkingArea = () => {
+  return (
+    <div className="working-area">
+      <label htmlFor="working-area-field">Working Area</label>
+      <math-field
+        type="text"
+        className="working-area-field"
+        name="working-area-field"
+      ></math-field>
+    </div>
+  );
+};
+
+// const retrieveQuestions = () => {};type="text" name="working-area-field"
 
 const ExamBody = () => {
-  return <div className="examBody">asdasd</div>;
+  return (
+    <div className="examBody">
+      <p id="questionText">questionText</p>
+      <WorkingArea />
+      <label htmlFor="answerForQuestion">Answer Area</label>
+      <input type="text" name="answerForQuestion" />
+    </div>
+  );
 };
 
 const renderer = ({ hours, minutes, seconds, completed }) => {
