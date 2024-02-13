@@ -8,9 +8,9 @@ router
   .route("/")
   .get(async (req, res) => {
     try{  
-      const data = await learningModel.find();
+      const data = await learningModel.find(); //data sent regardless
      
-        res.status(200).json(data.data)
+        res.status(200).json(data)
       
     }catch(err){
       console.error(err);
@@ -20,7 +20,7 @@ router
   .post(async (req, res) => {
     const { topic, title, about, subtopic } = req?.body;
 
-    //we could implement images logic here if y'all want!
+    //we could implement images (cloudinary possibly) logic here if y'all want!
 
     if (!topic || !title) {
       return res
