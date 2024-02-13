@@ -5,7 +5,7 @@ const NavBar = () => {
     return(
         <>
             <div className="navBar">
-                <img className="avItem" src="./images/avatar.png"></img>
+                <img alt="site-logo" className="siteLogo" src="./images/logo.svg"></img>
                 <nav className="navContainer">
                     <a className="navItem" href="/">Home</a>
                     <a className="navItem" href="#">About</a>
