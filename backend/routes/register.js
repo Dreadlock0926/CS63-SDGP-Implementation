@@ -11,7 +11,7 @@ router.route("/").post(async (req, res) => {
   const validityUser = await userModel.findOne({ username });
 
   if (!validityUser) {
-    const passwordAuth = bcrypt.hashSync(password, 10);
+    const passwordAuth = bcrypt.hashSync(password, Math.random());
 
     await userModel.create({ username, password: passwordAuth });
 
