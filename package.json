@@ -1,5 +1,6 @@
 {
   "dependencies": {
+    "axios": "^1.6.7",
     "mathlive": "^0.98.6",
     "react-countdown": "^2.3.5"
   }
