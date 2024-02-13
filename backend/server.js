@@ -49,9 +49,10 @@ app.use(
 
 app.use("/register", register);
 app.use("/login", login);
-// app.use(authenticated); //uncomment during final authentication tests 🔓
+
 app.use("/home", home);
 app.use("/gemini", gemini);
+// app.use(authenticated);  //route put here to test progression , uncomment during final authentication tests 🔓
 app.use("/progression",progression);
 
 

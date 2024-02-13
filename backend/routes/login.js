@@ -18,7 +18,7 @@ router.route("/").post(async (req, res) => {
     if (!passwordMatch) {
       return res.status(401).json({ Alert: "Unauthorized" });
     } else {
-      req.session.user = { username, maxAge: 60000 };
+      req.session.user = { username, _id:validityUser._id, maxAge: 60000 }; //session is not being created properly
       return res.status(200).json({
         Alert: `${username} logged in! ${JSON.stringify(req.session.user)}`,
       });
@@ -27,14 +27,12 @@ router.route("/").post(async (req, res) => {
 });
 
 router.route("/status").post(async (req, res) => {
-  const user = req?.session?.user;
-
-  if (!user && !user.username) {
+  if (!req.session.user) {
     return res.status(401).json({ Alert: "Unauthorized!" });
   } else {
     return res
       .status(200)
-      .json({ username: user.username, password: user.password });
+      .json({Alert:`${req.session.user.username} Logged in!`});
   }
 });
 

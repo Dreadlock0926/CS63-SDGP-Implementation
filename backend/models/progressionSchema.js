@@ -22,7 +22,11 @@ const progressionSchema = new mongoose.Schema(
   testnumber:{
     type:Number,
     default:0,
-  } 
+  },
+  by:{
+    type:mongoose.Schema.Types.ObjectId,
+    ref:"users"
+  }
 },
   { 
     timestamps: true 

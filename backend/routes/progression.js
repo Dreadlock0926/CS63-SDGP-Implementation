@@ -10,7 +10,7 @@ router.route("/post").post(async (req, res) => {
   }
 
   try {
-    const progressionData = await progressionModel.create({ marks, testHistory, testnumber });
+    const progressionData = (await progressionModel.create({ marks, testHistory, testnumber })).populate("users"); //check this
 
     if (!progressionData) {
       return res.status(400).json({ Alert: "It has not been stored in the database!" });
@@ -24,12 +24,26 @@ router.route("/post").post(async (req, res) => {
 });
 
 router.route("/get").get(async (req, res) => {
-  try {
-    const getData = await progressionModel.find();
-    return res.status(200).json(getData);
-  } catch (err) {
-    return res.status(401).json({ Alert: `You are encountering an ${err}` });
-  }
+
+
+  const userData = await progressionModel.find({_id:req?.session?.user?._id}).populate("users");
+  console.log(JSON.stringify(req.session.user)); //the session is not being created
+    if(userData&& userData.length>0){
+      return res.status(200).json(userData);
+    }else{
+      return res.status(203).json({Alert:"No resources found!"})
+    }
+   
+
+
+  // try {
+  //   if(req?.session?.user){
+    
+  
+ 
+  // } catch (err) {
+  //   return res.status(401).json({ Alert: `You are encountering an ${err}` });
+  // }
 });
 
 module.exports = router;
