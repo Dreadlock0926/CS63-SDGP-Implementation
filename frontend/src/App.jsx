@@ -2,6 +2,8 @@ import { useState, createContext } from "react";
 import { BrowserRouter, Routes, Route } from "react-router-dom";
 import Home from "./pages/HomePage/home";
 import Login from "./pages/LoginPage/login";
+import AddQuestionsPage from "./pages/addQuestionsPage/addQuestions";
+import UnknownPage from "./components/Error404/Unknown";
 import ErrorPage from "./components/Error404/ErrorPage";
 
 const UserContext = createContext();
@@ -17,6 +19,7 @@ function App() {
             <Route path="/" element={<Home />} />
             <Route path="login" element={<Login />} />
             <Route path="*" element={<ErrorPage />} />
+            <Route path="add-questions" element={<AddQuestionsPage />}/>
           </Routes>
         </BrowserRouter>
       </UserContext.Provider>
