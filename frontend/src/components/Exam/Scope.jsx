@@ -29,12 +29,12 @@ const Scope = () => {
     try {
       setLoading(true);
   
-          const selectedTopics = topics.forEach((x)=>x===true)
+          const selectedTopics = topics.filter((x)=>x===true) //filtering anything that's selected to be sent
           const exam = await Axios.get("http://localhost:8000/exam/scope", { topics: selectedTopics }); //this path is not made yet!
           if (exam.status === 200) {
           setData(exam.data);
           } else {
-            alert("Error while getting data back!");
+            alert("Something went wrong!")
           }
       
     } catch (err) {
@@ -47,12 +47,16 @@ const Scope = () => {
 
 
   const selectAllTopics = async ()=>{
-    const exam = await Axios.get("http://localhost:8000/exam/scope" ); //this path is not made yet!
-    if (exam.status === 200) {
-      setData(exam.data);
-      } else {
-        alert("Error while getting data back!");
-      }
+    const checker = topics.forEach((x)=>x===false);  //verify this logic
+    if(checker){
+      const exam = await Axios.get("http://localhost:8000/exam/scope" ); //this path is not made yet!
+      if (exam.status === 200) {
+        setData(exam.data);
+        } else {
+          alert("Error while getting data back!");
+        }
+    }
+  
   }
 
   useEffect(() => {
