@@ -11,7 +11,6 @@ const cluster = process.env.CLUSTER;
 const session = require("express-session");
 const helmet = require("helmet");
 const { join } = require("path");
-const forum = require("./routes/forum")
 const examResources = require("./routes/exams")
 const morgan = require("morgan");
 
@@ -55,7 +54,6 @@ app.use("/register", register);
 app.use("/login", login);
 // app.use(authenticated); //uncomment during final authentication tests 🔓
 app.use("/exam",examResources)
-app.use("/forum",forum)
 app.use("/gemini", gemini);
 
 

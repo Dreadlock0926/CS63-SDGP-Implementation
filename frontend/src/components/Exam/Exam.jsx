@@ -77,14 +77,18 @@ const ExamPage = () => {
   async function fetchExam(){
     try{
       setLoading(true);
-      const exam = await Axios.get("http://localhost:8000/exam");
-      setQuestions(exam.data);
+      const exam = localStorage.getItem("exams");
+      setQuestions(exam);
     }catch(err){
       console.error(err);
     }finally{
       setLoading(false);
     }
   }
+
+  useEffect(()=>{
+    fetchExam();
+  },[])
   
 
   //exam depending on questionID
@@ -112,6 +116,7 @@ console.log(part); //frontend*/
       <button onClick={startExamTimer} ref={startButtonRef}>
         Start Exam!
       </button>
+     
       <MathLive />
       <div>
         <h2>{`${time} seconds <- Time Elapsed`}</h2>

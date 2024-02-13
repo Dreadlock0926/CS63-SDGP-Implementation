@@ -47,15 +47,17 @@ const Scope = () => {
 
 
   const selectAllTopics = async ()=>{
-    const checker = topics.forEach((x)=>x===false);  //verify this logic
-    if(checker){
+    // const checker = topics.forEach((x)=>x===false);  //verify this logic
+    
       const exam = await Axios.get("http://localhost:8000/exam/scope" ); //this path is not made yet!
       if (exam.status === 200) {
         setData(exam.data);
+        localStorage.setItem("exams",data);
+        // navigator("/examination") //we must use this it's bugged out!
         } else {
           alert("Error while getting data back!");
         }
-    }
+    
   
   }
 
@@ -86,10 +88,11 @@ const Scope = () => {
         <div >   
            <select className="selection"><option value={"pure"}>Pure Maths</option><option value={"stat"}>Statistics</option></select>
            <br></br>
+           <button onClick={selectAllTopics} disabled={toggle}>Select From All</button> 
+          <p>{data&&data.length? JSON.stringify(data) : "No results found"}</p>   
+          <br></br>
           <button onClick={selectTopics} className="action-button">{toggle?"Close Selector":`Select Specific Topics!`}</button>
           <br></br>
-          <button onClick={selectAllTopics} disabled={toggle}>Select From All</button> 
-          <p>{data&&data.length? JSON.stringify(data) : "No results found"}</p>   
           {toggle?           
           <form onSubmit={selectScope}>  
         <span>

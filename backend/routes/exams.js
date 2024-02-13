@@ -37,7 +37,7 @@ router.route("/scope").get(async (req,res)=>{
 
     }else{
       const matches = await examModel.aggregate([
-        { $match: { topics:topics} } //works
+        { $match: { questionTopic:topics} } //works
     ]);
       if(matches && matches.length>0){
 
