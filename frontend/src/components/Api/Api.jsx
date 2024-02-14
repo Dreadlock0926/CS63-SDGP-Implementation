@@ -22,14 +22,14 @@ export async function NewUser(data) {
   }
 }
 
-export async function GPTSearch(search) {
-  try {
-    const response = await Axios.post(`${BASE}/gpts`, search);
-    return response.data;
-  } catch (err) {
-    console.error(err);
-  }
-}
+// export async function GPTSearch(search) {
+//   try {
+//     const response = await Axios.post(`${BASE}/gpts`, search);
+//     return response.data;
+//   } catch (err) {
+//     console.error(err);
+//   }
+// }
 
 export async function FetchMaterial() {
   try {

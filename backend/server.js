@@ -11,12 +11,8 @@ const cluster = process.env.CLUSTER;
 const session = require("express-session");
 const helmet = require("helmet");
 const { join } = require("path");
-const forum = require("./routes/forum")
-const examResources = require("./routes/exams")
 const learningMaterial = require("./routes/learn");
 const morgan = require("morgan");
-
-
 
 async function authenticated(req, res, next) {
   if (req?.session?.user) {

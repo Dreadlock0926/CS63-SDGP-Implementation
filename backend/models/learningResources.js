@@ -7,6 +7,10 @@ const learningResources = mongoose.Schema({
     type: String,
     unique: true,
   },
+  addedBy:{
+    type:String,
+    ref:"users"
+  }
 });
 
 const learningModel = mongoose.model("resources", learningResources);
