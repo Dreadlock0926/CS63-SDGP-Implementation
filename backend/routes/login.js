@@ -16,7 +16,7 @@ router.route("/").post(async (req, res) => {
   } else {
     const passwordMatch = bcrypt.compareSync(password, validityUser.password);
     if (!passwordMatch) {
-      return res.status(401).json({ Alert: "Unauthorized" });
+      return res.status(401).json({ Alert: "Incorrect Password!" });
     } else {
       req.session.user = { username, maxAge: 60000 };
       return res

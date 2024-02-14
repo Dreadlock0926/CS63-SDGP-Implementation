@@ -36,8 +36,14 @@ const Login = () => {
           setTimeout(() => {
             navigator("/");
           }, 1000);
+        } else if (loginUser.status === 404) {
+          alert("Username does not exist!")
+          setnewUser({username: "", password: ""});
         } else if (loginUser.status === 401) {
-          alert("Unauthorized!");
+          alert("Incorrect Password!");
+          setnewUser({...newUser, password: ""});
+        } else if (loginUser.status === 400) {
+          alert("Username and Password are missing!");
         } else {
           alert("Technical issue , kindly refresh and try again! 🥹");
         }
@@ -97,7 +103,7 @@ const Login = () => {
                 placeholder="Enter your password here..."
               />
             </div>
-            <button type="button" className="button">
+            <button type="submit" className="button">
               Login
             </button>
           </form>
