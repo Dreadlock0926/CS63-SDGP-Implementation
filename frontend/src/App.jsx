@@ -4,6 +4,7 @@ import Home from "./pages/HomePage/home";
 import Login from "./pages/LoginPage/login";
 import AddQuestionsPage from "./pages/addQuestionsPage/addQuestions";
 import ErrorPage from "./components/Error404/ErrorPage";
+import ExamQuestionTest from "./pages/TestPages/ExamQuestionTest";
 
 const UserContext = createContext();
 
@@ -19,6 +20,7 @@ function App() {
             <Route path="login" element={<Login />} />
             <Route path="*" element={<ErrorPage />} />
             <Route path="add-questions" element={<AddQuestionsPage />}/>
+            <Route path="exam-test-page" element={<ExamQuestionTest />}/>
           </Routes>
         </BrowserRouter>
       </UserContext.Provider>
