@@ -2,6 +2,7 @@
 import { useContext, useState } from "react";
 import { AddMaterial } from "../Api/Api";
 import { UserContext } from "../../App";
+import {RingLoader} from "react-loader-spinner"
 import "./Add.css";
 
 const AddStudy = () => { //add learning resources
@@ -36,7 +37,7 @@ const AddStudy = () => { //add learning resources
   //   };
 
   return (
-    loading?"Loading..." :
+    loading?<RingLoader/> :
     <div className="addQues">
       <form onSubmit={addMaterial}>
         <input
