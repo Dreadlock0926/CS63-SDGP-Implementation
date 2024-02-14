@@ -1,9 +1,6 @@
 const express = require("express");
 const app = express();
 const cors = require("cors");
-const login = require("./routes/login");
-const register = require("./routes/register");
-const gemini = require("./routes/gemini");
 require("dotenv").config();
 const mongoose = require("mongoose");
 const port = process.env.PORT;
@@ -14,18 +11,6 @@ const { join } = require("path");
 const learningMaterial = require("./routes/learn");
 const morgan = require("morgan");
 
-async function authenticated(req, res, next) {
-  if (req?.session?.user) {
-    const user = req.session.user;
-    const foundUser = await userModel.findOne({ username: user.username });
-    if (!foundUser) {
-      return res.status(400).json({ Alert: "invalid user!" });
-    }
-    return res.status(200).json(foundUser);
-  } else {
-    return res.status(401).json({ Alert: "Not logged in!" });
-  }
-}
 
 app.use(cors({ origin: "*" }));  //allow access from anywhere for now!
 app.use(morgan("combined"));
@@ -48,10 +33,7 @@ app.use(
   })
 );
 
-app.use("/register", register);
-app.use("/login", login);
-// app.use(authenticated); //uncomment during final authentication tests 🔓
-app.use("/gemini", gemini);
+
 app.use("/resources",learningMaterial);
 
 

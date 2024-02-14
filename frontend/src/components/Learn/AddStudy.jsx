@@ -2,7 +2,7 @@
 import { useContext, useState } from "react";
 import { AddMaterial } from "../Api/Api";
 import { UserContext } from "../../App";
-import {RingLoader} from "react-loader-spinner"
+import {RingLoader} from "react-spinners/RingLoader"
 import "./Add.css";
 
 const AddStudy = () => { //add learning resources
