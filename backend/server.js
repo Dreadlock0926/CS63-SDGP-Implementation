@@ -10,6 +10,7 @@ const mongoose = require("mongoose");
 const port = process.env.PORT;
 const cluster = process.env.CLUSTER;
 const session = require("express-session");
+const examResources = require("./routes/exams")
 const { join } = require("path");
 
 app.use(express.json());
@@ -33,6 +34,7 @@ app.use("/home", home);
 app.use("/register", register);
 app.use("/login", login);
 app.use("/addQuestion", addQuestion);
+app.use("/exam",examResources)
 
 app.use("*", (req, res) => {
   //leave this below all the other routes cuz this is the LAST RESORT JUST INCASE THE requested url is neither of the existing routes

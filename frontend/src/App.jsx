@@ -5,8 +5,10 @@ import Login from "./pages/LoginPage/login";
 import AddQuestionsPage from "./pages/addQuestionsPage/addQuestions";
 import ErrorPage from "./components/Error404/ErrorPage";
 import ExamQuestionTest from "./pages/TestPages/ExamQuestionTest";
+import Scope from "./pages/TestPages/Scope";
+import ExamFinalized from "./pages/TestPages/ExamFinal";
 
-const UserContext = createContext();
+export const UserContext = createContext();
 
 function App() {
   const [loading, setLoading] = useState(false);
@@ -18,9 +20,11 @@ function App() {
           <Routes>
             <Route path="/" element={<Home />} />
             <Route path="login" element={<Login />} />
-            <Route path="*" element={<ErrorPage />} />
             <Route path="add-questions" element={<AddQuestionsPage />}/>
             <Route path="exam-test-page" element={<ExamQuestionTest />}/>
+            <Route path="/examfinal" element={<ExamFinalized/>}></Route> {/**Incomplete */}
+            <Route path="/scope" element={<Scope/>}></Route> {/**Radhul is working on this */}
+            <Route path="*" element={<ErrorPage />} />
           </Routes>
         </BrowserRouter>
       </UserContext.Provider>
