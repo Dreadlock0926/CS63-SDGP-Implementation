@@ -11,6 +11,7 @@ const cluster = process.env.CLUSTER;
 const session = require("express-session");
 const { join } = require("path");
 const morgan = require("morgan");
+const gemini = require("./routes/gemini")
 
 function testingLog(req,res,next){ //remove in a while
   if(req.session.user){ //user is logged in
@@ -44,6 +45,7 @@ app.use(testingLog);
 app.use("/home", home);
 app.use("/login", login);
 app.use("/register", register);
+app.use("/gemini",gemini)
 
 
 app.use("*", (req, res) => {
