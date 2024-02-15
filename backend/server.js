@@ -1,9 +1,6 @@
 const express = require("express");
 const app = express();
 const cors = require("cors");
-const login = require("./routes/login");
-const register = require("./routes/register");
-const gemini = require("./routes/gemini");
 require("dotenv").config();
 const mongoose = require("mongoose");
 const port = process.env.PORT;
@@ -48,11 +45,9 @@ app.use(
   })
 );
 
-app.use("/register", register);
-app.use("/login", login);
+
 // app.use(authenticated); //uncomment during final authentication tests 🔓
 app.use("/forum",forum)
-app.use("/gemini", gemini);
 
 
 
