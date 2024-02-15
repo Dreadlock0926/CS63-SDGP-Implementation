@@ -35,7 +35,7 @@ app.use("/login", login);
 app.use("/addQuestion", addQuestion);
 
 // app.use(authenticated); //uncomment during final authentication tests 🔓
-app.use("/forum", forum);
+// app.use("/forum", forum);
 
 app.use("*", (req, res) => {
   //leave this below all the other routes cuz this is the LAST RESORT JUST INCASE THE requested url is neither of the existing routes
