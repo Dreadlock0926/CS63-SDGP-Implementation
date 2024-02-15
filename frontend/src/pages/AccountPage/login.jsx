@@ -12,7 +12,7 @@ const Login = () => {
 
   const navigator = useNavigate();
   const { loading, setLoading, setLog, log, setUser, setStatus, status } =
-    useContext(UserContext);
+    useContext(UserContext); //there's a problem here (context)
   const [newUser, setnewUser] = useState({ username: "", password: "" });
 
   const handleChange = (e) => {
@@ -21,7 +21,7 @@ const Login = () => {
 
   async function Login(e) {
     e.preventDefault();
-    if (log === true) {
+    if (log === true) { //context issue so this won't work , which is why it doesn't move past this
       alert(`${newUser.username} already logged in!`);
     } else {
       try {
@@ -37,12 +37,10 @@ const Login = () => {
             navigator("/");
           }, 1000);
         } else if (loginUser.status === 404) {
-          alert("Username does not exist!")
-          setnewUser({username: "", password: ""});
+          alert("Username does not exist!") 
         } else if (loginUser.status === 401) {
           alert("Incorrect Password!");
-          setnewUser({...newUser, password: ""});
-        } else if (loginUser.status === 400) {
+        } else if (loginUser.status === 400) { //handle status codes from top to bottom refer to login.js backend file
           alert("Username and Password are missing!");
         } else {
           alert("Technical issue , kindly refresh and try again! 🥹");
@@ -51,22 +49,12 @@ const Login = () => {
         console.error(err);
       } finally {
         setLoading(false);
+        setnewUser({username: "", password: ""});
       }
     }
   }
 
-  async function logOut() {
-    try {
-      const logOut = await Axios.post(BASE);
-      if (logOut.status === 200) {
-        setStatus("Logged out!");
-      } else {
-        setStatus("No user was logged in!");
-      }
-    } catch (err) {
-      console.error(err);
-    }
-  }
+
 
   return loading ? (
     "Loading..."

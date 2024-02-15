@@ -10,6 +10,18 @@ const port = process.env.PORT;
 const cluster = process.env.CLUSTER;
 const session = require("express-session");
 const { join } = require("path");
+const morgan = require("morgan");
+
+function testingLog(req,res,next){ //remove in a while
+  if(req.session.user){
+    console.log("Session Exists!")
+  
+  }else{
+    console.log("User Not Logged in!") //session is not being created properly!
+  
+  }
+  next();
+}
 
 app.use(express.json());
 app.use(cors({ origin: "*" })); //allow access from anywhere for now!
@@ -21,16 +33,18 @@ app.get("/", (req, res) => {
 app.set("trust proxy", 1); // trust first proxy
 app.use(
   session({
-    secret: "keyboard cat",
-    resave: false,
+    secret: "somerandomasskey123",
+    resave: true,
     saveUninitialized: false,
-    cookie: { secure: true },
+    cookie: { secure: true,httpOnly:true },
   })
 );
-
+app.use(morgan("dev"));
+app.use(testingLog);
 app.use("/home", home);
-app.use("/register", register);
 app.use("/login", login);
+app.use("/register", register);
+
 
 app.use("*", (req, res) => {
   //leave this below all the other routes cuz this is the LAST RESORT JUST INCASE THE requested url is neither of the existing routes

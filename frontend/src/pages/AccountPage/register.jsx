@@ -7,9 +7,9 @@ import "../main.css";
 import "./account.css";
 
 const Register = () => {
-  const { loading, setLoading, setLog, setUser } = useContext(UserContext);
+  const { loading, setLoading, setLog, setUser,status,setStatus } = useContext(UserContext);
   const [newUser, setNewUser] = useState({ username: "", password: "" });
-  const [state, setState] = useState("");
+  const [state, setState] = useState(""); //this is teh temporary 
 
   const handleChange = (e) => {~
     setNewUser({ ...newUser, [e.target.id]: e.target.value });
@@ -23,7 +23,7 @@ const Register = () => {
         "http://localhost:8000/register",
         newUser
       );
-      if (loginUser.status === 200) {
+      if (loginUser.status === 201) {
         navigator("/login")
 
         //There's an context issue here!
@@ -42,6 +42,7 @@ const Register = () => {
       console.error(err);
     } finally {
       //   setLoading(false);
+      setNewUser({username: "", password: ""});
     }
   }
 

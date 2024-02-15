@@ -5,15 +5,15 @@ import Login from "./pages/AccountPage/login";
 import Register from "./pages/AccountPage/register";
 import ErrorPage from "./components/Error404/ErrorPage";
 
-const UserContext = createContext();
-export { UserContext };
+export const UserContext = createContext();
 
 function App() {
   const [loading, setLoading] = useState(false);
-
+  const [logged,setLogged] = useState(false); //let's pass this over but context doesn't work atm so once that's figured lets't use this instead (Homepage)
+  const [status,setStatus] = useState("")
   return (
     <>
-      <UserContext.Provider value={(loading, setLoading)}>
+      <UserContext.Provider value={(loading, setLoading,logged,setLogged,status,setStatus)}>
         <BrowserRouter p>
           <Routes>
             <Route path="/" element={<Home />} />
