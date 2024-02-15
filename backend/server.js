@@ -5,6 +5,7 @@ const home = require("./routes/home");
 const login = require("./routes/login");
 const register = require("./routes/register");
 const addQuestion = require("./routes/addQuestion");
+const getQuestion = require("./routes/getQuestion")
 require("dotenv").config();
 const mongoose = require("mongoose");
 const port = process.env.PORT;
@@ -34,6 +35,7 @@ app.use("/home", home);
 app.use("/register", register);
 app.use("/login", login);
 app.use("/addQuestion", addQuestion);
+app.use("/getQuestion", getQuestion)
 app.use("/exam",examResources)
 
 app.use("*", (req, res) => {

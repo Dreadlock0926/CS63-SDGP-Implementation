@@ -3,7 +3,7 @@ import "../main.css"
 import "../addQuestionsPage/addQuestions.css"
 import {useRef, useState} from 'react';
 import { useEffect } from "react";
-import axios from 'axios';
+import Axios from 'axios';
 
 function QuestionSourcePanel( {setQuestionSource, setQuestionTopic, setQuestionNumber, setQuestionYear, setQuestionVariant, currentQuestionSource, currentTopic} ) {
 
@@ -16,7 +16,7 @@ function QuestionSourcePanel( {setQuestionSource, setQuestionTopic, setQuestionN
 
         const retrieveModules = async () => {
             try {
-                const response = await axios.get('http://localhost:8000/addQuestion/getModules')
+                const response = await Axios.get('http://localhost:8000/addQuestion/getModules')
                 const newOptions = response.data.map((topic, i) => (
                     <option key={i} value={topic}>{topic}</option>
                 ));
@@ -32,7 +32,7 @@ function QuestionSourcePanel( {setQuestionSource, setQuestionTopic, setQuestionN
             setTopicInputBoxes([]);
     
             try {
-                const response = await axios.post('http://localhost:8000/addQuestion/getQuestionInfo', {
+                const response = await Axios.post('http://localhost:8000/addQuestion/getQuestionInfo', {
                     "source": currentQuestionSource
                 });
     
@@ -265,7 +265,7 @@ function QuestionFinalPanel() {
 
         let questionIDFinal = "";
 
-        await axios.post('http://localhost:8000/addQuestion/getQuestionInfo', {
+        await Axios.post('http://localhost:8000/addQuestion/getQuestionInfo', {
             "source":questionSource 
           })
           .then(res => {
@@ -285,7 +285,7 @@ function QuestionFinalPanel() {
                 questionIDFinal = questionIDSource + "_" + questionIDTopic + questionIDNumYearVariant;
                 console.log(questionIDFinal);
                 console.log(questionObject);
-                axios.post('http://localhost:8000/addQuestion', {
+                Axios.post('http://localhost:8000/addQuestion', {
                     "questionID":questionIDFinal,
                     "questionTopic":questionTopic,
                     "questionsGrid":Object.values(questionObject).map(question => question.questionText),
