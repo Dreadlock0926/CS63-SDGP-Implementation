@@ -14,7 +14,7 @@ function App() {
   return (
     <>
       <UserContext.Provider value={(loading, setLoading,logged,setLogged,status,setStatus)}>
-        <BrowserRouter p>
+        <BrowserRouter >
           <Routes>
             <Route path="/" element={<Home />} />
             <Route path="login" element={<Login />} />

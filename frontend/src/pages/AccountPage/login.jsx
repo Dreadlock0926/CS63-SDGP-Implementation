@@ -2,7 +2,7 @@
 import { useContext, useState } from "react";
 import Axios from "axios";
 import { UserContext } from "../../App";
-import { useNavigate } from "react-router-dom";
+import { useNavigate,Link } from "react-router-dom";
 import NavBar from "../../components/NavigationBar/navBar.jsx";
 import "../main.css";
 import "./account.css";
@@ -28,14 +28,14 @@ const Login = () => {
         setLoading(true);
         const loginUser = await Axios.post(BASE, newUser);
         if (loginUser.status === 200) {
-          setStatus(loginUser.data.username);
+          console.log(loginUser.data);
+          setStatus(loginUser.data.username); //double check the payload
           setLog(true);
           setUser(loginUser.data);
-          console.log(loginUser.data);
 
           setTimeout(() => {
             navigator("/");
-          }, 1000);
+          }, 1500);
         } else if (loginUser.status === 404) {
           alert("Username does not exist!") 
         } else if (loginUser.status === 401) {
@@ -70,7 +70,7 @@ const Login = () => {
           <img alt="avatar" className="avItem2" src="./images/avatar.png" />
           <p className="containerTitle">Login</p>
           <p className="containerText">
-            Dont have an account?&nbsp;<a href="register">Register</a>
+            Dont have an account?&nbsp;<Link to="/register">Register</Link>
           </p>
           <form onSubmit={Login} className="forms">
             <div className="inputLabelGrp">
@@ -79,6 +79,7 @@ const Login = () => {
                 onChange={handleChange}
                 type="text"
                 id="username"
+                name="username" //added name here cuz the we're targeting target value by referring to the name
                 placeholder="Enter your username here..."
               />
             </div>
@@ -88,10 +89,11 @@ const Login = () => {
                 onChange={handleChange}
                 type="password"
                 id="password"
+                name="password"
                 placeholder="Enter your password here..."
               />
             </div>
-            <button type="submit" className="button">
+            <button type="submit" className="button" disabled={loading}>
               Login
             </button>
           </form>

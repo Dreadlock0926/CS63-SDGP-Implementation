@@ -13,10 +13,10 @@ const { join } = require("path");
 const morgan = require("morgan");
 
 function testingLog(req,res,next){ //remove in a while
-  if(req.session.user){
-    console.log("Session Exists!")
+  if(req.session.user){ //user is logged in
+    console.log(`Session Exists! ${req?.session?.user}`)
   
-  }else{
+  }else{ 
     console.log("User Not Logged in!") //session is not being created properly!
   
   }

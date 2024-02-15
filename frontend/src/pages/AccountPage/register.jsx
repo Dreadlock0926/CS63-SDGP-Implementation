@@ -80,7 +80,7 @@ const Register = () => {
                 placeholder="Enter your password here..."
               />
             </div>
-            <button type="submit" className="button">
+            <button type="submit" className="button" disabled={loading} >
               Register
             </button>
           </form>
