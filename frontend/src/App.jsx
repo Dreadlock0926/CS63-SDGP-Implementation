@@ -1,23 +1,14 @@
-import  { useState, createContext } from "react";
+import { useState, createContext } from "react";
 import { BrowserRouter, Routes, Route } from "react-router-dom";
-import Home from "./components/graphs/Home";
-import UnknownPage from "./components/Unknown";
-import Forum from "./components/Forum/Forum";
-import CreateForum from "./components/Forum/CreateForum";
+import Home from "./pages/HomePage/home";
+import Login from "./pages/LoginPage/login";
+import AddQuestionsPage from "./pages/addQuestionsPage/addQuestions";
+import ErrorPage from "./components/Error404/ErrorPage";
 
-
-export const UserContext = createContext();
+const UserContext = createContext();
 
 function App() {
   const [loading, setLoading] = useState(false);
-  const [log, setLog] = useState(false);
-  const [user, setUser] = useState("");
-  const [status, setStatus] = useState("");
-
-  const [response, setResponse] = useState("");
-
-
-
 
   return (
     <>
@@ -39,12 +30,15 @@ function App() {
         >
           <Routes>
             <Route path="/" element={<Home />} />
+            <Route path="login" element={<Login />} />
+            <Route path="*" element={<ErrorPage />} />
+            <Route path="add-questions" element={<AddQuestionsPage />}/>
             <Route path="/forum" element={<Forum />} />
             <Route path="/addforum" element={<CreateForum />} />
             <Route path="*" element={<UnknownPage />} />
           </Routes>
-        </UserContext.Provider>
-      </BrowserRouter>
+        </BrowserRouter>
+      </UserContext.Provider>
     </>
   );
 }

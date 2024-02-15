@@ -10,25 +10,21 @@ const forumSchema = mongoose.Schema(
       type: String,
       default: "",
     },
-    topic:{
+    topic: {
       type: String,
-      default: "", 
+      default: "",
     },
     rating: {
       type: Number,
       default: 0,
     },
-    by:{
-        type:mongoose.Schema.ObjectId,
-        ref:"users" //referencing to the users collection to make a connection!
-    }
-    
+    by: {
+      type: mongoose.Schema.ObjectId,
+      ref: "users", //referencing to the users collection to make a connection!
+    },
   },
- 
+
   { timestamps: true }
 );
-
 const forumModel = mongoose.model("forums", forumSchema);
 module.exports = forumModel;
-
-
