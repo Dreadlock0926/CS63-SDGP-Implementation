@@ -73,7 +73,7 @@ function ExamQuestionTest() {
     }
 
     return (
-        <QuestionComponent question={contextQuestion} mqNum={1}/>
+        <QuestionComponent question={noContextTestQuestion} mqNum={1}/>
     )
 }
 

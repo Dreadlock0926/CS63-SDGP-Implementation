@@ -24,6 +24,9 @@ function QuestionComponent( {question, mqNum} ) {
     const [hasContext, setHasContext] = useState(false);
     const [subQuestions, setSubQuestions] = useState([]);
 
+    // Alphabet values for sub questions
+    const subQuestionAlphabet = 'abcdefghijklmnopqrstuvwxyz';
+
     useEffect(() => {
         // If there is only one answer, set this to true
         if (question.questionsGrid.length === 1) {
@@ -44,7 +47,13 @@ function QuestionComponent( {question, mqNum} ) {
         if (hasContext) {
             let newArray = [];
             for (let i = 1; i < question.questionsGrid.length; i++) {
-                newArray.push(<SubQuestion key={i} sqNum={i} sqText={question.questionsGrid[i]} />);
+                newArray.push(<SubQuestion key={i} sqNum={subQuestionAlphabet[i-1]} sqText={question.questionsGrid[i]} />);
+            }
+            setSubQuestions(newArray);
+        } else {
+            let newArray = [];
+            for (let i = 0; i < question.questionsGrid.length; i++) {
+                newArray.push(<SubQuestion key={i} sqNum={subQuestionAlphabet[i]} sqText={question.questionsGrid[i]} />);
             }
             setSubQuestions(newArray);
         }
@@ -62,14 +71,21 @@ function QuestionComponent( {question, mqNum} ) {
             <div className="main-question-container">
                 <div className="main-text-container">
                     <div className="mq-num" onClick={log}>{mqNum}</div>
-                    <div className="main-text">{question.questionsGrid[0]}</div>
+                    {(hasContext || isOneAnswerQuestion) &&
+                        <div className="main-text">{question.questionsGrid[0]}</div>
+                    }
                 </div>
-                {isOneAnswerQuestion && <input className="answer-input" placeholder="Answer..."></input>}
+                {isOneAnswerQuestion &&
+                <div className="mq-answer-container">
+                <input className="answer-input" placeholder="Answer..."></input>
+                <div className="mark-for-mq">(2 marks)</div>
+                </div> 
+                }
             </div>
             {/* If it is a one answer question, do not display subquestions */}
             {!isOneAnswerQuestion &&            
             <div className="sub-question-container">
-                {subQuestions};
+                {subQuestions}
             </div>}
         </div>
         </>

@@ -33,6 +33,7 @@ body {
 .sub-question-text-container {
     display: flex;
     align-items: center;
+    width: 100%;
 }
 
 .sq-num {
@@ -64,4 +65,18 @@ input {
 
 .sub-question {
     margin-bottom: 25px;
+    width: 100%;
+}
+
+.sub-question-container {
+    width: 100%;
+}
+
+.mq-answer-container {
+    display: flex;
+    justify-content: space-between;
+}
+
+.mark-for-mq {
+    align-self: flex-end;
 }
