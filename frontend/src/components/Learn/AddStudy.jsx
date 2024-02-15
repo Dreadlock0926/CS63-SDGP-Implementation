@@ -19,8 +19,11 @@ const AddStudy = () => { //add learning resources
     e.preventDefault();
     try {
       setLoading(true);
-      const resources = await AddMaterial(data);
-      setStatus("Added Resource!")
+      const resources = await AddMaterial(data); 
+      if(resources.status===201){
+        setStatus("Added Resource!")
+      }
+     
     } catch (err) {
       console.error(err);
     } finally {
@@ -39,6 +42,7 @@ const AddStudy = () => { //add learning resources
   return (
     loading?<RingLoader/> :
     <div className="addQues">
+      <h1>Adding Learning Resources 📚🐳</h1>
       <form onSubmit={addMaterial}>
         <input
           onChange={handleChange}

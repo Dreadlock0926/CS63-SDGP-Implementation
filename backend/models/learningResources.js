@@ -7,6 +7,11 @@ const learningResources = mongoose.Schema({
     type: String,
     unique: true,
   },
+  photo:{
+    type:String,
+    unique:true,
+    trim:true,
+  },
   addedBy:{
     type:String,
     ref:"users"

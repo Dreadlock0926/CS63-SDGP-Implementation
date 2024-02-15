@@ -3,6 +3,7 @@ const router = express.Router();
 const learningModel = require("../models/learningResources");
 //needs to be put in a controller
 //logic here must be changed
+//we need multer if photo uploads are needed
 
 router
   .route("/")
@@ -19,6 +20,7 @@ router
   })
   .post(async (req, res) => {
     const { topic, title, about, subtopic } = req?.body;
+    const {file:image} = req; 
 
     //we could implement images (cloudinary possibly) logic here if y'all want!
 
@@ -30,14 +32,14 @@ router
 
     try {
       const existingLearningResource = await learningModel.findOne({ topic });
-
-    
-        await learningModel.create({ topic, title, about, subtopic });
+      if(existingLearningResource){
+        await learningModel.create({ topic, title, about,photo:image, subtopic }); //let's replace this with cloudinary logic
         return res
           .status(201)
           .json({ Alert: "Added Learning Resource to Learn" });
-      
-
+      }else{
+        res.status(400).json({Alert:"Invalid Topic!"})
+      }
        
     } catch (error) {
       console.error(error);
