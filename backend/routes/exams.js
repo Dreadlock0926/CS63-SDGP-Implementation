@@ -1,6 +1,9 @@
 const express = require("express");
 const router = express.Router();
-// const examModel= require("../models/question") modify this to the model handling exams
+const examModel= require("../models/question") 
+
+
+
 
 
 router.route("/").post((req,res)=>{

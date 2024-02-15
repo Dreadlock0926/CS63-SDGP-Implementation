@@ -4,6 +4,8 @@ import Axios from 'axios';
 
 function ExamQuestionTest() {
 
+    const [questions, setQuestions] = useState([]);
+
     const noContextTestQuestion = {
         questionID: "s1_pac_7_w_2022_2",
         questionTopic: "Permutations and combinations",
@@ -30,9 +32,36 @@ function ExamQuestionTest() {
         questionSource: "Probability and Statistics I"
     }
 
+    const getQuestion = async () => {
+
+        const questionArray = [];
+        const questionsList = ["s1_p_1_w_2022_2", "s1_tnd_2_w_2022_2", "s1_p_3_w_2022_2", "s1_p_5_w_2022_2", "s1_pac_7_w_2022_2"];
+
+        for (let i = 0; i < questionsList.length; i++) {
+
+            try {
+                const response = await Axios.post('http://localhost:8000/getQuestion', {
+                    "questionID": questionsList[i]
+                });
+        
+                const questionData = response.data;
+                questionArray.push(<QuestionComponent key={questionsList[i]} question={questionData} mqNum={i+1}/>);
+        
+            } catch (err) {
+                console.log(err);
+            }
+
+        }
+
+        setQuestions(questionArray);
+
+    }
+
     return (
         <>
-        <QuestionComponent question={noContextTestQuestion} mqNum={1}/>
+        <button onClick={getQuestion}>Click to display questions</button>
+        {/* <QuestionComponent question={noContextTestQuestion} mqNum={1}/> */}
+        {questions}
         </>
     )
 
