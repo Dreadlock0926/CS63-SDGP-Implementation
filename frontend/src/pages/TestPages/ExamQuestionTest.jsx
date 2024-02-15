@@ -26,7 +26,7 @@ function ExamQuestionTest() {
         questionsGrid: [
             "Eric has three coins. One of the coins is fair. The other two coins are each biased so that the probability of obtaining a head on any throw is 1/4, independently of all other throws. Eric throws all three coins at the same time. Events A and B are defined as follows. A: all three coins show the same result B: at least one of the biased coins shows a head",
             "Find P(B).",
-            " Find P(A|B)."
+            "Find P(A|B)."
         ],
         questionsFiguresGrid: [
             "",
@@ -73,7 +73,7 @@ function ExamQuestionTest() {
     }
 
     return (
-        <QuestionComponent question={noContextTestQuestion} />
+        <QuestionComponent question={contextQuestion} mqNum={1}/>
     )
 }
 
