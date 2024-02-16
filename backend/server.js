@@ -1,10 +1,6 @@
 const express = require("express");
 const app = express();
 const cors = require("cors");
-const home = require("./routes/home");
-const login = require("./routes/login");
-const register = require("./routes/register");
-const gemini = require("./routes/gemini");
 require("dotenv").config();
 const mongoose = require("mongoose");
 const port = process.env.PORT;

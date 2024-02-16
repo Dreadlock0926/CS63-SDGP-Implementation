@@ -1,10 +1,12 @@
-import React, { useEffect, useState } from "react";
+/* eslint-disable react-hooks/exhaustive-deps */
+import  { useContext, useEffect, useState } from "react";
 import axios from "axios";
 import { LineChart, Line, CartesianGrid, XAxis, YAxis } from "recharts";
+import {UserContext} from "../../App"
 import "./Progressionmark.css"
 
 function Progressionmark() {
-  const [value, setValue] = useState([]);
+    const {value,setValue} = useContext(UserContext)
   const [totalMark, setTotalMark] = useState(0); // Use a state variable to store the total marks
   const [average,setAverage] = useState(0);
   const apiUrl = "http://localhost:8000/progression/get";
@@ -12,15 +14,21 @@ function Progressionmark() {
   function calculation() {
     // Use reduce to sum up the marks in the value array
     const total = value.reduce((acc, e) => {
-      return acc + e.marks;
+      return acc + e.marks; //PLEASE COMMENT WHEN U DO SOME NEW SHIT 
      
     }, 0);
 
     setTotalMark(total); // Update the total marks state
-    setAverage(totalMark/value.length);
+    setAverage(totalMark/value.length); //this logic is wrong
 
     console.log("The total marks are " + total);
   }
+
+
+
+ 
+
+
 
   useEffect(() => {
     const fetchData = async () => {
@@ -28,6 +36,9 @@ function Progressionmark() {
         const response = await axios.get(apiUrl);
         console.log(response.data);
         setValue(response.data);
+    
+        console.log(`Value contains ${JSON.stringify(value)}`);
+    
         calculation(); // Call the calculation function after updating the value state
       } catch (error) {
         console.error("Error fetching data:", error);
