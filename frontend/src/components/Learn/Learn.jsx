@@ -9,15 +9,15 @@ import "./Learn.css";
 
 const Learn = () => {
   const { loading, setLoading, logged } = useContext(UserContext); // Removed unnecessary properties from destructuring
-  const [data, setData] = useState([]);
+  const [resources,setResources] = useState([])
 
   const fetchMaterial = async () => {
     try {
       setLoading(true);
       const resources = await FetchMaterial();
       console.log(resources); // fine up to this point!
-      setData(resources);
-      console.log(`The data in ${JSON.stringify(resources)}`);
+      setResources(resources);
+      console.log(`The data in resources ${JSON.stringify(resources)}`);
     } catch (err) {
       console.error(err);
     } finally {
@@ -36,8 +36,8 @@ const Learn = () => {
         <div className="container">
           {loading ? (
             <p className="loading-message">Loading...</p>
-          ) : data && data.length ? (
-            data.map((x) => <Materials key={x._id} data={x} />)
+          ) : resources && resources.length ? (
+            resources.map((x) => <Materials key={x._id} data={x} thekey={x._id} />)
           ) : (
             <div className="no-materials-message">
               <h1>No materials added yet!</h1>
@@ -45,9 +45,7 @@ const Learn = () => {
           )}
         </div>
       ) : (
-        <div className="container">
-          <h1>No results found!</h1>
-        </div>
+        <div>Please <Link to="login">Login</Link> to Access Learning Resources!</div>
       )}
       <Link to="/addresources" className="link">
             Add Learning Resources 🤓
