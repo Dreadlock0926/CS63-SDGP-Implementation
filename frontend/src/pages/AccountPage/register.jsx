@@ -2,14 +2,16 @@
 import Axios from "axios";
 import { UserContext } from "../../App";
 import { useContext, useState } from "react";
+import {useNavigate} from "react-router-dom"
 import NavBar from "../../components/NavigationBar/navBar.jsx";
 import "../main.css";
 import "./account.css";
 
 const Register = () => {
-  const { loading, setLoading, setLog, setUser,status,setStatus } = useContext(UserContext);
+  const navigator = useNavigate();
+  const { loading, setLoading, setLogged, setUser,status,setStatus } = useContext(UserContext);
   const [newUser, setNewUser] = useState({ username: "", password: "" });
-  const [state, setState] = useState(""); //this is teh temporary 
+
 
   const handleChange = (e) => {~
     setNewUser({ ...newUser, [e.target.id]: e.target.value });
@@ -23,20 +25,16 @@ const Register = () => {
         "http://localhost:8000/register",
         newUser
       );
+
+      
+      alert("You're registered,  Please login to Continue!")
       if (loginUser.status === 201) {
         navigator("/login")
 
-        //There's an context issue here!
-        // setLog(true);
-        // setUser(loginUser.data);
-        // setStatus(`${newUser.username} Logged in!`);
-
-        console.log(loginUser.data);
-
-        alert(`${newUser.username} Registered!`);
-        // setTimeout(() => {
-        //   navigator("/");
-        // }, 2000);
+        
+       
+      }else if(loginUser.response.status===409){
+        alert(`${newUser.username} Already Taken!`)
       }
     } catch (err) {
       console.error(err);

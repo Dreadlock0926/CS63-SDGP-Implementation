@@ -1,8 +1,12 @@
 import "./navBar.css";
 import "../../pages/main.css";
+import { useContext } from "react";
+import {UserContext} from "../../App"
 
 const NavBar = () => {
-    return(
+
+    const {logged} = useContext(UserContext);
+    return !logged? (
         <>
             <div className="navBar">
                 <img alt="site-logo" className="siteLogo" src="./images/logo.svg"></img>
@@ -19,7 +23,16 @@ const NavBar = () => {
                 </div>
             </div>
         </>
-    );
+    ):( <div className="navBar">
+    <img alt="site-logo" className="siteLogo" src="./images/logo.svg"></img>
+    <nav className="navContainer">
+        <a className="navItem" href="/">Home</a>
+        <a className="navItem" href="#">About</a>
+        <a className="navItem" href="#">Courses</a>
+        <a className="navItem" href="#">Support</a>
+        <a className="navItem" href="questions">Test</a>
+    </nav>
+</div>);
 };
 
 export default NavBar;

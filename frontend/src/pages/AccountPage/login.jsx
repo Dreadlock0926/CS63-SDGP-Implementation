@@ -11,7 +11,7 @@ const Login = () => {
   const BASE = "http://localhost:8000/login";
 
   const navigator = useNavigate();
-  const { loading, setLoading, setLog, log, setUser, setStatus, status } =
+  const {user,  loading, setLoading, setLogged, logged, setUser, setStatus, status } =
     useContext(UserContext); //there's a problem here (context)
   const [newUser, setnewUser] = useState({ username: "", password: "" });
 
@@ -21,7 +21,7 @@ const Login = () => {
 
   async function Login(e) {
     e.preventDefault();
-    if (log === true) { //context issue so this won't work , which is why it doesn't move past this
+    if (logged === true) { //context issue so this won't work , which is why it doesn't move past this
       alert(`${newUser.username} already logged in!`);
     } else {
       try {
@@ -29,10 +29,10 @@ const Login = () => {
         const loginUser = await Axios.post(BASE, newUser);
         if (loginUser.status === 200) {
           console.log(loginUser.data);
-          setStatus(loginUser.data.username); //double check the payload
-          setLog(true);
+          setStatus(loginUser.data.Session.username); //double check the payload
           setUser(loginUser.data);
-
+          console.log(user);
+          setLogged(true);
           setTimeout(() => {
             navigator("/");
           }, 1500);
@@ -56,9 +56,16 @@ const Login = () => {
 
 
 
-  return loading ? (
-    "Loading..."
-  ) : (
+  return logged?       <div className="backgroundContainer">
+  <img
+    alt="background"
+    className="bgImg2"
+    src="./images/background2.png"/>
+  <div className="container">
+    <img alt="avatar" className="avItem2" src="./images/avatar.png" />
+    <h1 style={{textAlign:"center"}}>Hi {status} your logged in!</h1>
+  </div>
+</div>:(
     <>
       <NavBar />
       <div className="backgroundContainer">
