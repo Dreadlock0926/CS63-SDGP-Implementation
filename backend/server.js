@@ -1,10 +1,6 @@
 const express = require("express");
 const app = express();
 const cors = require("cors");
-const home = require("./routes/home");
-const login = require("./routes/login");
-const register = require("./routes/register");
-const addQuestion = require("./routes/addQuestion");
 require("dotenv").config();
 const mongoose = require("mongoose");
 const port = process.env.PORT;
@@ -49,10 +45,7 @@ app.use(
 
 
 app.use("/progression",progression);
-app.use("/home", home);
-app.use("/register", register);
-app.use("/login", login);
-app.use("/addQuestion", addQuestion);
+
 
 app.use("*", (req, res) => {
   //leave this below all the other routes cuz this is the LAST RESORT JUST INCASE THE requested url is neither of the existing routes

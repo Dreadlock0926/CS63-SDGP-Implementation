@@ -5,13 +5,6 @@ const userSchema = new mongoose.Schema({
     required: true,
   },
   password: { type: String, required: true },
-  examHistory: {
-    type: Object,
-    quesArr: { type: Array },
-    ansArr: { type: Array },
-    incorrectAnsIndex: { type: Array },
-    userExamID: { type: String },
-  },
 });
 
 const userModel = mongoose.model("users", userSchema);

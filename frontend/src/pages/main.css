@@ -1,22 +1,13 @@
 /* Importing Rubik font */
 @import url("https://fonts.googleapis.com/css2?family=Rubik:ital,wght@0,300..900;1,300..900&display=swap");
 
-/* Fade in animation */
-@keyframes fadeIn {
-  0% {
-    opacity: 0;
-  }
-  100% {
-    opacity: 1;
-  }
-}
-
 /* Basic styles for sitewide */
+html,
 body {
-  animation: fadeIn 0.5s;
   font-family: "Rubik", sans-serif;
   padding: 0;
   margin: 0;
   background-color: white;
   color: black;
+  overflow: hidden;
 }
