@@ -7,7 +7,7 @@ const LearningStatistics = () => {
 
   async function StatRelated(){
     try{
-      const response = await Axios.get("http://localhost:8000/resources/stat");
+      const response = await Axios.get("http://localhost:8000/resources/stat"); //might have to change these routes
       setResources(response.data)
     }catch(err){
       console.error(err);

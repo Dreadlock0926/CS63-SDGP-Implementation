@@ -2,13 +2,15 @@
 import Axios from "axios";
 import { useEffect, useState } from "react";
 
-const LearningPureMaths = () => {
+const LearningPureMaths = () => { 
+
+ 
 
   const [resource,setResources] = useState([])
 
   async function PureMathsRelated(){
     try{
-      const response = await Axios.get("http://localhost:8000/resources/pure");
+      const response = await Axios.get("http://localhost:8000/resources/pure"); //might have to change these routes
       setResources(response.data)
       console.log(resource)
     }catch(err){
