@@ -190,7 +190,7 @@ const StatForum = () => {
           DeleteComment(x._id)}}>Delete</button> {/**Once clicked needs to increase number of votes by 1 */}
           <br></br>
           <form onSubmit={(e)=>{e.preventDefault();AnsweringQuestions(x._id)}}><input onChange={(e)=>{setAnswer(e.target.value)}} placeholder="Answer..." type="text"></input><button>Answer!</button></form></div>
-        :<h1>Not a stat question</h1>}
+        :<h1></h1>}
       </div>
     ))  
   ) : (

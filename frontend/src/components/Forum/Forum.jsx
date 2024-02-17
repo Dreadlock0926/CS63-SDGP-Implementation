@@ -152,6 +152,7 @@ const Forum = () => {
       const deleteRequest = await Axios.delete(`${EndPoint}/${id}`)
       if(deleteRequest.status===200){
         alert("Deleted Question!")
+        navigator("/forum")
       }else{
         alert("Couldn't delete question!")
       }
