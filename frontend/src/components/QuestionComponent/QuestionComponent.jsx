@@ -1,5 +1,6 @@
 /* eslint-disable react/prop-types */
 import "./QuestionComponent.css"
+import "../../pages/main.css";
 import { useContext, useEffect, useState } from "react";
 import Axios from "axios";
 import { UserContext } from "../../App";
@@ -102,8 +103,8 @@ function QuestionComponent( {question, mqNum} ) {
                 <div className="mq-answer-container">
                 <form onSubmit={(e)=>{e.preventDefault();compareAnswer(question._id)}} >   
                     <input className="answer-input" placeholder="Answer..." onChange={(e)=>{
-                    setAnswer(e.target.value)
-                }}></input><button type="submit">Next</button></form>
+                        setAnswer(e.target.value)
+                    }}></input><button type="submit" className="nextBtn">Next</button></form>
                 <div className="mark-for-mq">{question.mark}(2 marks)</div>
                 </div> 
                 }
