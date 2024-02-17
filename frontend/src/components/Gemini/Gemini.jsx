@@ -1,8 +1,10 @@
-import { useState } from "react";
+import { useContext, useState } from "react";
 import { TailSpin } from "react-loader-spinner";
 import Axios from "axios";
+import { UserContext } from "../../App";
 
 function Gemini() {
+  const {logged} = useContext(UserContext)
   const [loading, setLoading] = useState(false);
   const [data, setData] = useState([]);
   const [search, setSearch] = useState("");
@@ -29,7 +31,7 @@ function Gemini() {
     }
   }
 
-  return (
+  return logged? (
     <>
       <div style={{ float: "right", margin: "5%" }}>
         <button
@@ -65,7 +67,7 @@ function Gemini() {
         )}
       </div>
     </>
-  );
+  ) : " ";
 }
 
 export default Gemini;
