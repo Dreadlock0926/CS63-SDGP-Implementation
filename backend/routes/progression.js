@@ -3,14 +3,27 @@ const router = express.Router();
 const progressionModel = require("../models/progressionSchema");
 
 router.route("/post").post(async (req, res) => {
-  const { marks, testHistory, testnumber } = req?.body;
+  const { marks, testHistory, testnumber,voxalPoints,hoursLearned,ongoingCourses,completeCourse,PureMathematics,Statistics } = req?.body;
 
-  if (!marks || !testHistory || !testnumber) {
+  if (!marks || !testHistory || !testnumber||!testnumber||!voxalPoints||!hoursLearned||!ongoingCourses||!completeCourse||!PureMathematics||!Statistics) {
     return res.status(400).json({ Alert: "Please provide correct data!" });
+
   }
+  console.log(req.body);
 
   try {
-    const progressionData = (await progressionModel.create({ marks, testHistory, testnumber })).populate("users"); //check this
+    const progressionData = (await progressionModel.create({ 
+      marks, 
+      testHistory, 
+      testnumber,
+      voxalPoints,
+      hoursLearned,
+      ongoingCourses,
+      completeCourse,
+      PureMathematics,
+      Statistics,
+
+    })); //check this
 
     if (!progressionData) {
       return res.status(400).json({ Alert: "It has not been stored in the database!" });

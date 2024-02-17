@@ -23,10 +23,39 @@ const progressionSchema = new mongoose.Schema(
     type:Number,
     default:0,
   },
-  by:{
-    type:mongoose.Schema.Types.ObjectId,
-    ref:"users"
+  voxalPoints :{
+    type:Number,
+    default:0
+  },
+  hoursLearned:{
+    type:Number,
+    defalut:0
+  },
+  ongoingCourses:{
+    type:Number,
+    default:0
+  },
+  completeCourse:{
+    type:Number,
+    default:0
+
+  },
+  PureMathematics:{
+    type:Object,default:{
+      learnedProgress:Number,
+      lesson:Number,
+      default:0
+    }
+  },
+  Statistics:{
+      type:Object,default:{
+      learnedProgress:Number,
+      lesson:Number,
+      default:0
+    }
   }
+  ,
+  
 },
   { 
     timestamps: true 
