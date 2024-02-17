@@ -5,11 +5,9 @@ const learningResources = mongoose.Schema({
   about: { type: String },
   subtopic: {
     type: String,
-    unique: true,
   },
   photo:{
     type:String,
-    unique:true,
     trim:true,
   },
   addedBy:{

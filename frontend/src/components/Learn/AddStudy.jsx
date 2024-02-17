@@ -22,8 +22,7 @@ const AddStudy = () => { //add learning resources
       const resources = await AddMaterial(data); 
       if(resources.status===201){
         setStatus("Added Resource!")
-      }
-     
+      }  
     } catch (err) {
       console.error(err);
     } finally {

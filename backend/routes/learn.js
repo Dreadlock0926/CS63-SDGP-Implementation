@@ -32,20 +32,45 @@ router
 
     try {
       const existingLearningResource = await learningModel.findOne({ topic });
-      if(existingLearningResource){
+    
         await learningModel.create({ topic, title, about,photo:image, subtopic }); //let's replace this with cloudinary logic
         return res
           .status(201)
           .json({ Alert: "Added Learning Resource to Learn" });
-      }else{
-        res.status(400).json({Alert:"Invalid Topic!"})
-      }
+      
        
     } catch (error) {
       console.error(error);
       return res.status(500).json({ Alert: "Internal Server Error" });
     }
   });
+
+  router.route("/pure").get(async (req,res)=>{
+    try{
+      const pureMath = await learningModel.find({topics:"Pure Mathematics I"})
+      if(pureMath && pureMath.length > 0){
+        res.status(200).json(pureMath)
+      }else{
+        res.status(203).json({Alert:"No results found!"})
+      }
+    }catch(err){
+      console.error(err);
+    }
+  })
+
+  router.route("/stat").get(async (req,res)=>{
+    try{
+      const stat = await learningModel.find({topics:"Probability And Statistics"})
+      if(stat && stat.length > 0){
+        res.status(200).json(stat)
+      }else{
+        res.status(203).json({Alert:"No results found!"})
+      }
+    }catch(err){
+      console.error(err);
+    }
+  })
+
 
 router
   .route("/:id")
