@@ -175,7 +175,7 @@ const StatForum = () => {
   ) : data && data.length ? (
     data.map((x) => (
       <div key={x._id}>
-        {x.topic==="stat"?    //change this
+        {x.topic==="Probability And Statistics"?    //change this
         <div> <br></br>
         <br></br>
         <h1> {x.question}</h1>

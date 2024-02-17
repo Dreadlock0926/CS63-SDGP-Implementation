@@ -14,9 +14,11 @@ export const UserContext = createContext();
 function App() {
   const [loading, setLoading] = useState(false);
   const [logged, setLogged] = useState(true);
-  const [user,setUser] = useState("")
+  const [user,setUser] = useState("");
+  const [status,setStatus] = useState("")
   const userData = {
     loading:loading,
+    status,setStatus,
     setLoading:setLoading,
     logged:logged,
     setLogged:setLogged,

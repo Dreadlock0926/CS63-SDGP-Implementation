@@ -14,6 +14,7 @@ const { join } = require("path");
 const forum = require("./routes/forum");
 
 app.use(express.json());
+
 app.use(cors({ origin: "*" })); //allow access from anywhere for now!
 
 app.get("/", (req, res) => {

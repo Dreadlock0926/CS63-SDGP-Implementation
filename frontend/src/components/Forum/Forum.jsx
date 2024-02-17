@@ -1,6 +1,7 @@
 /* eslint-disable react-hooks/exhaustive-deps */
 /* eslint-disable no-unused-vars */
 import { useContext, useEffect, useState } from "react";
+import { useNavigate } from "react-router-dom";
 import Axios from "axios";
 import {  FidgetSpinner } from "react-loader-spinner";
 import { Link } from "react-router-dom";
@@ -81,26 +82,32 @@ const Forum = () => {
   
   const {loading,setLoading,status,setStatus,logged,user} = useContext(UserContext)
   const [data, setData] = useState([]);
-  const [answer,setAnswer] = useState("")
+  const [answer,setAnswer] = useState("");
+  const [votes,setVotes] = useState(0)
 
-  let meanVotes = 0;
+  const navigator = useNavigate();
 
+  let totalVotes = 0;
   const EndPoint = "http://localhost:8000/forum";
 
   const increaseVotes = async (id) => {
-    alert(`Request from ${id}`)
     try {
       setLoading(true);
+
+      
+      const updatedData = data.map((x)=>{
+        totalVotes+=x.rating
+        totalVotes++; 
+      })
+
       const upvote = await Axios.put(`${EndPoint}/upvotes/${id}`, {
-        answer: updatedData,
+        votes:totalVotes
       });
-      const updatedData = data.map((item) =>
-        item._id === id ? { ...item, upvotes: item.upvotes + 1 } : item
-      );
-      setData(updatedData);
+   
      
 
-      if (upvote.data.response.status === 200) {
+      if (upvote.status === 200) {
+        setVotes(updatedData)
         setStatus("Upvoted!");
       } else {
         setStatus("Error while upvoting!");
@@ -130,7 +137,7 @@ const Forum = () => {
     }
   };
 
-  async function AnsweringQuestions(id) {
+  async function AnsweringQuestions(id,answer) {
     try {
       setLoading(true);
       const r = await Axios.put(`${EndPoint}/${id}`, answer);
@@ -194,7 +201,7 @@ const Forum = () => {
           e.preventDefault();
           DeleteComment(x._id)}}>Delete</button> {/**Once clicked needs to increase number of votes by 1 */}
           <br></br>
-          <form onSubmit={(e)=>{e.preventDefault();AnsweringQuestions(x._id)}}><input onChange={(e)=>{setAnswer(e.target.value)}} placeholder="Answer..." type="text"></input><button>Answer!</button></form>
+    {/**There's an NO ANSWER ERROR COMING FROM HERE */}      <form onSubmit={(e)=>{e.preventDefault();AnsweringQuestions(x._id,answer)}}><input onChange={(e)=>{setAnswer(e.target.value)}} placeholder="Answer..." type="text"></input><button>Answer!</button></form>
         <br></br>
       </div>
     ))  

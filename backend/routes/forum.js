@@ -55,7 +55,7 @@ router.route("/").get(async (req,res)=>{
 
 router.route("/:id").put(async (req, res) => {
     const answer = req?.body.answer;
-    const id = req.params.id;
+    const id = req?.params?.id;
 
     if (!answer || !id) {
         return res.status(400).json({ Alert: "NO Answer!" });
@@ -65,7 +65,7 @@ router.route("/:id").put(async (req, res) => {
     if (!exists) {
         return res.status(404).json({ Alert: "ID doesn't exist!" });
     } else {
-        await forumModel.updateOne({ _id: String(id) }, { answer }); // Update the document
+        await exists.updateOne({answer}); // Update the document
         return res.status(200).json({ Alert: `Updated ${id}` });
     }
 }).delete(async(req,res)=>{
@@ -78,6 +78,22 @@ router.route("/:id").put(async (req, res) => {
     } else{
         await exists.deleteOne({_id:String(id)});
         res.status(200).json({Alert:`Deleted ${id}`})
+    }
+
+})
+
+router.route("/upvotes/:id").put(async (req,res)=>{
+    const id = req?.params?.id
+    const votes = req.body.votes;
+
+    if(!id || !votes) res.status(400).json({Alert:"No ID/Votes Sent!"})
+
+    const verify = await forumModel.findOne({_id:String(id)})
+    if(!verify){
+        res.status(404).json({Alert:`${id} brings an invalid question!`})
+    }else{
+        await verify.updateOne({votes})
+        res.status(200).json({Votes:`Upvoted!`});
     }
 
 })

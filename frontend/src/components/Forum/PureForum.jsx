@@ -175,7 +175,7 @@ const PureForum = () => {
   ) : data && data.length ? (
     data.map((x) => (
       <div key={x._id}>
-        {x.topic==="pure"?    //change this
+        {x.topic==="Pure Mathematics I"?    //change this
         <div> <br></br>
         <br></br>
         <h1> {x.question}</h1>
