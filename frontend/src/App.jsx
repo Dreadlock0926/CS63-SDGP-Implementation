@@ -1,9 +1,11 @@
 import  { useState, createContext } from "react";
 import { BrowserRouter, Routes, Route } from "react-router-dom";
 import Home from "./pages/HomePage/home";
-import UnknownPage from "./components/Error404/Unknown";
 import Progressionmark from "./components/graphs/Progressionmark";
 import DashboardPage from "./pages/DashboardPage/DashboardPage";
+import Login from "./pages/LoginPage/login";
+import AddQuestionsPage from "./pages/addQuestionsPage/addQuestions";
+import ErrorPage from "./components/Error404/ErrorPage";
 
 export const UserContext = createContext();
 
@@ -20,16 +22,20 @@ function App() {
   };
 
   return (
-    <UserContext.Provider value={contextValue}>
-      <BrowserRouter>
-        <Routes>
-          <Route path="/" element={<Home />} />
-          <Route path="/progression" element={<Progressionmark />} />
-          <Route path="/dashboard" element={<DashboardPage />} />
-          <Route path="*" element={<UnknownPage />} />
-        </Routes>
-      </BrowserRouter>
-    </UserContext.Provider>
+    <>
+      <UserContext.Provider value={(loading, setLoading)}>
+        <BrowserRouter p>
+          <Routes>
+            <Route path="/" element={<Home />} />
+            <Route path="login" element={<Login />} />
+            <Route path="*" element={<ErrorPage />} />
+            <Route path="/progression" element={<Progressionmark />} />
+            <Route path="/dashboard" element={<DashboardPage />} />
+            <Route path="add-questions" element={<AddQuestionsPage />}/>
+          </Routes>
+        </BrowserRouter>
+      </UserContext.Provider>
+    </>
   );
 }
 
