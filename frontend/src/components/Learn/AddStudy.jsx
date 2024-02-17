@@ -64,11 +64,11 @@ const AddStudy = () => { //add learning resources
         ></input>
         <select>
           {/**Preferably use drop for topics! */}
-          <option value="test" onChange={handleChange}>
-            Test!
+          <option value="Pure Mathematics I" onChange={handleChange}>
+            Pure Math 1 
           </option>
-          <option value="second" onChange={handleChange}>
-            Second!
+          <option value="Probability And Statistics" onChange={handleChange}>
+           Statistics
           </option>
         </select>
         <input
@@ -77,7 +77,7 @@ const AddStudy = () => { //add learning resources
           placeholder="Enter subtopic"
           type="text"
         ></input>
-        <button>Add Resource</button>
+        <button type="submit">Add Resource</button>
       </form>
       <p>{status}</p>
     </div>

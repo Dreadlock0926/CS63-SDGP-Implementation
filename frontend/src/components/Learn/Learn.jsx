@@ -37,7 +37,7 @@ const Learn = () => {
           {loading ? (
             <p className="loading-message">Loading...</p>
           ) : resources && resources.length ? (
-            resources.map((x) => <Materials key={x._id} data={x} thekey={x._id} />)
+            resources.map((x) => <div key={x._id}><Materials key={x._id} data={x} thekey={x._id} /></div>)
           ) : (
             <div className="no-materials-message">
               <h1>No materials added yet!</h1>
@@ -47,6 +47,7 @@ const Learn = () => {
       ) : (
         <div>Please <Link to="login">Login</Link> to Access Learning Resources!</div>
       )}
+      <Link to="/learning-pure">Pure Mathematics 1</Link><br/><Link to="/learning-stat">Statistics</Link>
       <Link to="/addresources" className="link">
             Add Learning Resources 🤓
           </Link>

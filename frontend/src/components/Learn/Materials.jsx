@@ -10,7 +10,7 @@ import { Link } from "react-router-dom";
 const Materials = ({data,thekey}) => {
 
     
-
+  
     
   
     return (  <div key={thekey} style={{margin:"5%"}}>
