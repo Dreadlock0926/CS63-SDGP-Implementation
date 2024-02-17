@@ -1,3 +1,4 @@
+/* eslint-disable react-hooks/exhaustive-deps */
 /* eslint-disable no-unused-vars */
 import "../main.css";
 import "./DashboardPage.css";
@@ -9,28 +10,33 @@ import axios from "axios";
 
 // Dashboard Header Tab
 function DashboardHeader() {
-  const [data, setData] = useState(null);
-  const [voxalPoints, setVoxalpoints] = useState(0);
+
+  const{ data,setData,voxalPoints,setVoxalpoints,setHours} = useContext(UserContext)
+  const fetchData = async () => {
+    try {
+      // Replace 'your-api-url' with the actual API URL
+      const response = await axios.get("http://localhost:8000/progression/get");
+      setData(response.data); // Assuming you want to set the response data
+      console.log(response.data); // Logging the response data
+      let counter = 0;
+      let hoursLearned = 0;
+      // Extracting voxalPoints using map
+      await response.data.map(item => {
+        counter+=(item.voxalPoints)
+      });
+      await response.data.map((x)=>{hoursLearned+=x.hoursLearned})
+      setVoxalpoints((counter));
+      setHours(hoursLearned);
+      console.log("the points are ", voxalPoints); // Logging the voxalPoints
+  
+    } catch (error) {
+      console.error("Error fetching data: ", error);
+      // Handle error here, e.g., set an error state
+    }
+  };
   
 
   useEffect(() => {
-    const fetchData = async () => {
-      try {
-        // Replace 'your-api-url' with the actual API URL
-        const response = await axios.get(
-          "http://localhost:8000/progression/get"
-        );
-        setData(response);
-        console.log(data);
-        const points = data.reduce((acc, item) => acc + item.voxalPoints, 0);
-        setVoxalpoints(points);
-        console.log("the points are "+voxalPoints);
-      } catch (error) {
-        console.error("Error fetching data: ", error);
-        // Handle error here, e.g., set an error state
-      }
-    };
-
     fetchData();
   }, []);
 
@@ -63,6 +69,8 @@ function DashboardGraph() {
 
 // Dashboard Statistics Tab
 function DashboardStatistics() {
+
+    const {voxalPoints,hours,data,setData} = useContext(UserContext)
   return (
     <>
       <div className="dashboard-statistics-container">
@@ -70,11 +78,11 @@ function DashboardStatistics() {
         <div className="statistics-tab">
           <div className="points-tab">
             <h3 className="tab-header">VoXel Points Earned</h3>
-            <p className="st-num vox-num">150</p>
+            <p className="st-num vox-num">{voxalPoints}</p>
           </div>
           <div className="points-tab">
             <h3 className="tab-header">Hours Learned</h3>
-            <p className="st-num hour-num">23</p>
+            <p className="st-num hour-num">{hours}</p>
           </div>
           <div className="points-tab">
             <h3 className="tab-header">Ongoing Courses</h3>
@@ -92,44 +100,84 @@ function DashboardStatistics() {
 
 // Dashboard Courses Tab
 function DashboardCourses() {
-  return (
-    <>
-      <div className="dashboard-courses">
-        <h2 className="courses-header">My Courses</h2>
-        <div className="courses-tab">
-          <div className="course-card">
-            <div className="course-title">Pure Mathematics I</div>
-            <div className="course-lessons">12 lessons</div>
-            <div className="course-progress-tab">
-              <div className="prog-bar">
-                <p className=" course-learn-progress">35%</p>
-                <p className="prog-bar-text">Learned Progress</p>
-              </div>
-              <div className="prog-bar">
-                <p className="course-test-progress">55%</p>
-                <p className="prog-bar-text">Tested Progress</p>
+    const { data,setData,setVoxalpoints,setHours,voxalPoints,setProgress,progress } = useContext(UserContext);
+
+    let PurelearnedProgress=0;
+    let PuretestedProgress=0;
+    let StatlearnedProgress=0;
+    let StattestedProgress=0;
+    
+
+    const fetchData = async () => {
+        try {
+          // Replace 'your-api-url' with the actual API URL
+          const response = await axios.get("http://localhost:8000/progression/get");
+          setData(response.data); // Assuming you want to set the response data
+          console.log(response.data); // Logging the response data
+     
+          // Extracting voxalPoints using map
+
+
+          data.map((x)=>PurelearnedProgress+=x.PureMathematics)
+            setProgress(PurelearnedProgress)
+
+          console.log("the points are ", voxalPoints); // Logging the voxalPoints
+      
+        } catch (error) {
+          console.error("Error fetching data: ", error);
+          // Handle error here, e.g., set an error state
+        }
+      };
+      
+    
+      useEffect(() => {
+        fetchData();
+      }, [])
+  
+    return (
+      <>
+        {/* {data && data.length ? data.map((course) => (
+          
+        )) : <h1>No results found!</h1>} */}
+        <div >
+            <div className="dashboard-courses">
+              <h2 className="courses-header">My Courses</h2>
+              <div className="courses-tab">
+                <div className="course-card">
+                  <div className="course-title">Pure Mathematics I</div>
+                  <div className="course-lessons">{12} lessons</div>
+                  <div className="course-progress-tab">
+                    <div className="prog-bar">
+                      <p className="course-learn-progress">{progress}</p>
+                      <p className="prog-bar-text">Learned Progress</p>
+                    </div>
+                    <div className="prog-bar">
+                      <p className="course-test-progress">{PuretestedProgress}</p>
+                      <p className="prog-bar-text">Tested Progress</p>
+                    </div>
+                  </div>
+                </div>
+                <div className="course-card">
+                  <div className="course-title">Statistics</div>
+                  <div className="course-lessons">{5} lessons</div>
+                  <div className="course-progress-tab">
+                    <div className="prog-bar">
+                      <p className="course-learn-progress">{StatlearnedProgress}</p>
+                      <p className="prog-bar-text">Learned Progress</p>
+                    </div>
+                    <div className="prog-bar">
+                      <p className="course-test-progress">{StattestedProgress}</p>
+                      <p className="prog-bar-text">Tested Progress</p>
+                    </div>
+                  </div>
+                </div>
               </div>
             </div>
           </div>
-          <div className="course-card">
-            <div className="course-title">Probability and Statistics I</div>
-            <div className="course-lessons">5 lessons</div>
-            <div className="course-progress-tab">
-              <div className="prog-bar">
-                <p className="course-learn-progress">25%</p>
-                <p className="prog-bar-text">Learned Progress</p>
-              </div>
-              <div className="prog-bar">
-                <p className="course-test-progress">85%</p>
-                <p className="prog-bar-text">Tested Progress</p>
-              </div>
-            </div>
-          </div>
-        </div>
-      </div>
-    </>
-  );
-}
+      </>
+    );
+  }
+  
 
 // Dashboard Activity Tab
 function DashboardActivity() {

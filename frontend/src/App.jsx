@@ -10,13 +10,17 @@ export const UserContext = createContext();
 function App() {
   const [loading, setLoading] = useState(false);
   const [value, setValue] = useState([]);
+  const [data, setData] = useState(null);
+  const [voxalPoints, setVoxalpoints] = useState(0);
+  const [hours,setHours] = useState(0);
+  const [progress,setProgress] = useState([])
 
   // Structuring the context value explicitly
   const contextValue = {
     loading: loading,
     setLoading: setLoading,
     value: value,
-    setValue: setValue
+    setValue: setValue,data,setData,voxalPoints,setVoxalpoints,hours,setHours,progress,setProgress
   };
 
   return (
@@ -24,7 +28,7 @@ function App() {
       <BrowserRouter>
         <Routes>
           <Route path="/" element={<Home />} />
-          <Route path="/progression" element={<Progressionmark />} />
+          <Route path="/progression" element={<Progressionmark  />} />
           <Route path="/dashboard" element={<DashboardPage />} />
           <Route path="*" element={<UnknownPage />} />
         </Routes>
