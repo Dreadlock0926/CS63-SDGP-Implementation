@@ -8,7 +8,7 @@ import "./Forum.css";
 
 
 
-const Forum = () => {
+const PureForum = () => {
 
 
   const forumStyle = {
@@ -169,17 +169,14 @@ const Forum = () => {
 
   return logged? <div >
     <h1>Welcome back {user.username}!</h1>
-  <h1>Forum!</h1>
-  <br/>  
-  <Link to="/pureforum">Visit Pure Maths Forum!</Link>
-  <br/> 
-  <Link to="/statforum">Visit Statistics Forum!</Link>
+  <h1>Pure Maths Forum!</h1>
   {loading ? (
     <FidgetSpinner />
   ) : data && data.length ? (
     data.map((x) => (
       <div key={x._id}>
-        <br></br>
+        {x.topic==="pure"?    //change this
+        <div> <br></br>
         <br></br>
         <h1> {x.question}</h1>
         <h1>{x?.answer ? x.answer : "Be the first to Answer! 🥳"}</h1>
@@ -192,8 +189,8 @@ const Forum = () => {
           e.preventDefault();
           DeleteComment(x._id)}}>Delete</button> {/**Once clicked needs to increase number of votes by 1 */}
           <br></br>
-          <form onSubmit={(e)=>{e.preventDefault();AnsweringQuestions(x._id)}}><input onChange={(e)=>{setAnswer(e.target.value)}} placeholder="Answer..." type="text"></input><button>Answer!</button></form>
-        <br></br>
+          <form onSubmit={(e)=>{e.preventDefault();AnsweringQuestions(x._id)}}><input onChange={(e)=>{setAnswer(e.target.value)}} placeholder="Answer..." type="text"></input><button>Answer!</button></form></div>
+        :<h1>Not a Pure Math Question</h1>} {/**showing topic names of the ones that are not stat for now we can completely get rid of this lol! */}
       </div>
     ))  
   ) : (
@@ -203,4 +200,4 @@ const Forum = () => {
 </div>:<div><h1>Please <Link to="/login">login</Link> to continue to the forum </h1></div>
 };
 
-export default Forum;
+export default PureForum;
