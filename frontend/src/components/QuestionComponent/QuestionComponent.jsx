@@ -1,5 +1,8 @@
+/* eslint-disable react/prop-types */
 import "./QuestionComponent.css"
-import { useEffect, useState } from "react";
+import { useContext, useEffect, useState } from "react";
+import Axios from "axios";
+import { UserContext } from "../../App";
 
 function SubQuestion( {sqNum, sqText} ) {
     return (
@@ -20,9 +23,29 @@ function SubQuestion( {sqNum, sqText} ) {
 function QuestionComponent( {question, mqNum} ) {
 
     // If there is only one answer, make sure theres only the main text and the answer
+    const {outcome,setOutcome,marks,setMarks} = useContext(UserContext)
     const [isOneAnswerQuestion, setIsOneAnswerQuestion] = useState(false);
     const [hasContext, setHasContext] = useState(false);
     const [subQuestions, setSubQuestions] = useState([]);
+    const [answer,setAnswer]  = useState("")
+
+    async function compareAnswer(id){
+        try{
+                const data = await Axios.post(`http://localhost:8000/getQuestion/${id}`,answer)
+                if(data.status===200){
+                setOutcome(data.data);
+                setMarks((prev)=>{prev+=outcome.filter((x)=>x.marks),console.log(prev)})
+                console.log(outcome);
+                console.log(`Your marks are ${marks}`)
+                }else if(data.status===203){
+                    setOutcome(data.data);
+                    console.log(outcome);
+                    console.log(`Your marks are ${marks}`)
+                }
+        }catch(err){    
+            console.error(err);
+        }
+    }
 
     // Alphabet values for sub questions
     const subQuestionAlphabet = 'abcdefghijklmnopqrstuvwxyz';
@@ -77,8 +100,11 @@ function QuestionComponent( {question, mqNum} ) {
                 </div>
                 {isOneAnswerQuestion &&
                 <div className="mq-answer-container">
-                <input className="answer-input" placeholder="Answer..."></input>
-                <div className="mark-for-mq">(2 marks)</div>
+                <form onSubmit={(e)=>{e.preventDefault();compareAnswer(question._id)}} >   
+                    <input className="answer-input" placeholder="Answer..." onChange={(e)=>{
+                    setAnswer(e.target.value)
+                }}></input><button type="submit">Next</button></form>
+                <div className="mark-for-mq">{question.mark}(2 marks)</div>
                 </div> 
                 }
             </div>

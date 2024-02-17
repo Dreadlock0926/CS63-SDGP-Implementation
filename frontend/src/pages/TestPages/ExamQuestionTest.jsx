@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import QuestionComponent from "../../components/QuestionComponent/QuestionComponent"
 import Axios from 'axios';
 
@@ -32,10 +32,11 @@ function ExamQuestionTest() {
         questionSource: "Probability and Statistics I"
     }
 
+    
     const getQuestion = async () => {
 
         const questionArray = [];
-        const questionsList = ["s1_p_1_w_2022_2", "s1_tnd_2_w_2022_2", "s1_p_3_w_2022_2", "s1_p_5_w_2022_2", "s1_pac_7_w_2022_2"];
+        const questionsList = ["p1_s_2_w_2022_2","p1_cg_1_w_2022_2","s1_p_3_w_2022_2"];
 
         for (let i = 0; i < questionsList.length; i++) {
 
@@ -57,9 +58,14 @@ function ExamQuestionTest() {
 
     }
 
+    useEffect(()=>{
+        getQuestion();
+    },[])
+
+
     return (
         <>
-        <button onClick={getQuestion}>Click to display questions</button>
+        {/* <button onClick={getQuestion}>Click to display questions</button> */}
         {/* <QuestionComponent question={noContextTestQuestion} mqNum={1}/> */}
         {questions}
         </>
