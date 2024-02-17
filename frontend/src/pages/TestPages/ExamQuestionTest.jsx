@@ -62,12 +62,19 @@ function ExamQuestionTest() {
         getQuestion();
     },[])
 
+    const getAnswers = () => {
+        const answers = document.querySelectorAll(".answer-input");
+        const answerValues = Array.from(answers).map((answer) => answer.value);
+        console.log("Answers:", answerValues);
+    };
+
 
     return (
         <>
         {/* <button onClick={getQuestion}>Click to display questions</button> */}
         {/* <QuestionComponent question={noContextTestQuestion} mqNum={1}/> */}
         {questions}
+        <button onClick={getAnswers}>Log the answers</button>
         </>
     )
 
