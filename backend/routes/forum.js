@@ -3,27 +3,53 @@ const router = express.Router();
 const forumModel = require("../models/forum")
 
 router.route("/").get(async (req,res)=>{
-    try{
-        const data = await forumModel.find();
-        res.status(200).json(data);
-    }catch(err){
-        console.error(err);
-        res.status(500).json({Alert:err})
-    }
 
+    const user = req.session.user
 
-}).post(async (req,res)=>{
-    const{question, answer ,topic ,rating }  = req?.body;
-    if(!question || !topic) res.status(400).json({Alert:"NO Question/Topic!"})
-
-    const conflict = await forumModel.findOne({question})
-    if(!conflict){
-        const created = await forumModel.create({question,answer,topic,rating});
-        if(created){
-            res.status(201).json({Alert:`${question} Added!`})
-        }else{
-            res.status(409).json({Alert:`${question} was Already posted before!`})
+    if(user && user.length>0){
+        try{
+            const data = await forumModel.find({_id:req.session.user.id}).populate("by");
+            res.status(200).json(data);
+        }catch(err){
+            console.error(err);
+            res.status(500).json({Alert:err})
         }
+    }else{
+        try{
+            const data = await forumModel.find();
+            res.status(200).json(data);
+        }catch(err){
+            console.error(err);
+            res.status(500).json({Alert:err})
+        }
+    }
+   
+
+
+}).post(async (req, res) => {
+    try {
+        const { question, answer, topic, rating } = req?.body;
+        
+        if (!question || !topic) {
+            return res.status(400).json({ Alert: "NO Question/Topic!" });
+        }
+
+        const conflict = await forumModel.findOne({ question });
+
+        if (conflict) {
+            return res.status(409).json({ Alert: `${question} was Already posted before!` });
+        }
+
+        const created = await forumModel.create({ question, answer, topic, rating });
+        
+        if (created) {
+            return res.status(201).json({ Alert: `${question} Added!` });
+        } else {
+            return res.status(500).json({ Alert: "Failed to create the question." });
+        }
+    } catch (error) {
+        console.error(error);
+        return res.status(500).json({ Alert: "An error occurred while processing your request." });
     }
 })
 
@@ -53,9 +79,6 @@ router.route("/:id").put(async (req, res) => {
         await exists.deleteOne({_id:String(id)});
         res.status(200).json({Alert:`Deleted ${id}`})
     }
-
-
-
 
 })
 

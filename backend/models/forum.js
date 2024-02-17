@@ -3,7 +3,6 @@ const forumSchema = mongoose.Schema(
   {
     question: {
       type: String,
-      required: true,
       trim: true,
     },
     answer: {
@@ -19,7 +18,7 @@ const forumSchema = mongoose.Schema(
       default: 0,
     },
     by: {
-      type: mongoose.Schema.ObjectId,
+      type: String,
       ref: "users", //referencing to the users collection to make a connection!
     },
   },
