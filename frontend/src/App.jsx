@@ -13,14 +13,25 @@ function App() {
   const [data, setData] = useState(null);
   const [voxalPoints, setVoxalpoints] = useState(0);
   const [hours,setHours] = useState(0);
-  const [progress,setProgress] = useState([])
+  const [progress,setProgress] = useState([]);
+  const [statValue,setstatValue] = useState([]);
+  const [course,setCourse] = useState(0);
+  const [ongoingCourse, setongoingCourses] = useState(0);
 
   // Structuring the context value explicitly
   const contextValue = {
     loading: loading,
     setLoading: setLoading,
     value: value,
-    setValue: setValue,data,setData,voxalPoints,setVoxalpoints,hours,setHours,progress,setProgress
+    setValue: setValue,
+    data,setData,
+    voxalPoints,
+    setVoxalpoints,hours,
+    setHours,progress,
+    setProgress,statValue,
+    setstatValue,
+    course,setCourse,
+    ongoingCourse,setongoingCourses
   };
 
   return (

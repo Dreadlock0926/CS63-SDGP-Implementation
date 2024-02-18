@@ -23,6 +23,7 @@ const progressionSchema = new mongoose.Schema(
     type:Number,
     default:0,
   },
+
   voxalPoints :{
     type:Number,
     default:0

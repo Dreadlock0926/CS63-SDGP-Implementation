@@ -7,6 +7,7 @@ import "./Progressionmark.css"
 
 function Progressionmark() {
     const {value,setValue} = useContext(UserContext)
+    const {statValue,setstatValue} = useContext(UserContext);
   const [totalMark, setTotalMark] = useState(0); // Use a state variable to store the total marks
   const [average,setAverage] = useState(0);
   const apiUrl = "http://localhost:8000/progression/get";
@@ -49,17 +50,25 @@ function Progressionmark() {
   }, [apiUrl]); // Include apiUrl as a dependency
 
   const renderLineChart = (
-    <LineChart
+    <>
+       <LineChart
       width={500}
       height={350}
       data={value}
       margin={{ top: 5, right: 20, bottom: 5, left: 0 }}
     >
-      <Line type="monotone" dataKey="marks" stroke="#8884d8" />
+      
+      <Line type="monotone" dataKey="PureMathematics.learnedProgress" stroke="#8884d8" />
+      <Line type="monotone" dataKey="Statistics.learnedProgress" stroke="#8884d8" />
       <CartesianGrid stroke="#ccc" strokeDasharray="5 5" />
       <XAxis dataKey="testnumber" />
       <YAxis />
     </LineChart>
+    
+    </>
+   
+
+    
   );
 
   return (

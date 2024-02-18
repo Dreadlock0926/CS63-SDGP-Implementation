@@ -10,8 +10,8 @@ import axios from "axios";
 
 // Dashboard Header Tab
 function DashboardHeader() {
-
-  const{ data,setData,voxalPoints,setVoxalpoints,setHours} = useContext(UserContext)
+  const { data, setData, voxalPoints, setVoxalpoints, setHours } =
+    useContext(UserContext);
   const fetchData = async () => {
     try {
       // Replace 'your-api-url' with the actual API URL
@@ -21,20 +21,20 @@ function DashboardHeader() {
       let counter = 0;
       let hoursLearned = 0;
       // Extracting voxalPoints using map
-      await response.data.map(item => {
-        counter+=(item.voxalPoints)
+      await response.data.map((item) => {
+        counter += item.voxalPoints;
       });
-      await response.data.map((x)=>{hoursLearned+=x.hoursLearned})
-      setVoxalpoints((counter));
+      await response.data.map((x) => {
+        hoursLearned += x.hoursLearned;
+      });
+      setVoxalpoints(counter);
       setHours(hoursLearned);
       console.log("the points are ", voxalPoints); // Logging the voxalPoints
-  
     } catch (error) {
       console.error("Error fetching data: ", error);
       // Handle error here, e.g., set an error state
     }
   };
-  
 
   useEffect(() => {
     fetchData();
@@ -69,8 +69,42 @@ function DashboardGraph() {
 
 // Dashboard Statistics Tab
 function DashboardStatistics() {
+  const { voxalPoints, hours, data, setData, course,setCourse,ongoingCourse, setongoingCourses } = useContext(UserContext);
+  
+  let incompleteCourse =0;
+  let courseCount =0;
 
-    const {voxalPoints,hours,data,setData} = useContext(UserContext)
+  const fetchData = async () => {
+    try {
+      // Replace 'your-api-url' with the actual API URL
+      const response = await axios.get("http://localhost:8000/progression/get");
+      setData(response.data); // Assuming you want to set the response data
+      console.log(response.data); // Logging the response data
+      let counter = 0;
+      let hoursLearned = 0;
+      
+      // Extracting voxalPoints using map
+      await response.data.map((item) => {
+        counter += item.voxalPoints;
+      });
+      await response.data.map((x) => {
+        hoursLearned += x.hoursLearned;
+      });
+      courseCount = await response.data[response.data.length-1].completeCourse;
+      incompleteCourse = await response.data[response.data.length-1].ongoingCourses;
+      setCourse(courseCount);
+      setongoingCourses(incompleteCourse);
+      console.log("the points are ", voxalPoints); // Logging the voxalPoints
+    } catch (error) {
+      console.error("Error fetching data: ", error);
+      // Handle error here, e.g., set an error state
+    }
+  };
+
+  useEffect(() => {
+    fetchData();
+  }, []);
+
   return (
     <>
       <div className="dashboard-statistics-container">
@@ -86,11 +120,11 @@ function DashboardStatistics() {
           </div>
           <div className="points-tab">
             <h3 className="tab-header">Ongoing Courses</h3>
-            <p className="st-num ongcourses-num">1</p>
+            <p className="st-num ongcourses-num">{ongoingCourse}</p>
           </div>
           <div className="points-tab">
             <h3 className="tab-header">Completed Courses</h3>
-            <p className="st-num comcourses-num">2</p>
+            <p className="st-num comcourses-num">{course}</p>
           </div>
         </div>
       </div>
@@ -100,88 +134,139 @@ function DashboardStatistics() {
 
 // Dashboard Courses Tab
 function DashboardCourses() {
-    const { data,setData,setVoxalpoints,setHours,voxalPoints,setProgress,progress } = useContext(UserContext);
+  const {
+    data,
+    setData,
+    setVoxalpoints,
+    setHours,
+    voxalPoints,
+    setProgress,
+    progress,
+    totalMathsmarks,
+    settotalMathsmarks,
+  } = useContext(UserContext);
+  const [mathsProgress, setMathsProgress] = useState(0);
+  const [statisticsProgress, setstatisticsProgress] = useState(0);
+  const [statLessonMark, setstatLessonMark] = useState(0);
+  const [mathsLessonMark,setmathsLessonMark] = useState(0);
 
-    let PurelearnedProgress=0;
-    let PuretestedProgress=0;
-    let StatlearnedProgress=0;
-    let StattestedProgress=0;
-    
-
-    const fetchData = async () => {
-        try {
-          // Replace 'your-api-url' with the actual API URL
-          const response = await axios.get("http://localhost:8000/progression/get");
-          setData(response.data); // Assuming you want to set the response data
-          console.log(response.data); // Logging the response data
-     
-          // Extracting voxalPoints using map
-
-
-          data.map((x)=>PurelearnedProgress+=x.PureMathematics)
-            setProgress(PurelearnedProgress)
-
-          console.log("the points are ", voxalPoints); // Logging the voxalPoints
-      
-        } catch (error) {
-          console.error("Error fetching data: ", error);
-          // Handle error here, e.g., set an error state
-        }
-      };
-      
-    
-      useEffect(() => {
-        fetchData();
-      }, [])
+  let PurelearnedProgress = 0;
   
-    return (
-      <>
-        {/* {data && data.length ? data.map((course) => (
+  let StatlearnedProgress = 0;
+  let mathsLearning = 0;
+  let statisticsLearning = 0;
+  let mathlearningTracker = 0;
+  let statisticsLearningTracker = 0;
+
+  const fetchData = async () => {
+    try {
+      // Replace 'your-api-url' with the actual API URL
+      const response = await axios.get("http://localhost:8000/progression/get");
+      setData(response.data); // Assuming you want to set the response data
+      console.log(response.data); // Logging the response data
+
+      await response.data.map((item) => {
+        mathlearningTracker += item.PureMathematics.learnedProgress;
+        statisticsLearningTracker += item.Statistics.learnedProgress;
+        mathsLearning += item.marks;
+      });
+
+      setMathsProgress(mathlearningTracker / response.data.length);
+      setstatisticsProgress(statisticsLearningTracker / response.data.length);
+      setstatLessonMark(mathlearningTracker/response.data.length);
+      setmathsLessonMark(mathlearningTracker/response.data.length);
+
+
+      // Extracting voxalPoints using map
+
+      data.map((x) => (PurelearnedProgress += x.PureMathematics));
+      setProgress(PurelearnedProgress);
+
+      console.log("the points are ", voxalPoints); // Logging the voxalPoints
+    } catch (error) {
+      console.error("Error fetching data: ", error);
+      // Handle error here, e.g., set an error state
+    }
+  };
+
+  useEffect(() => {
+    fetchData();
+  }, []);
+
+  return (
+    <>
+      {/* {data && data.length ? data.map((course) => (
           
         )) : <h1>No results found!</h1>} */}
-        <div >
-            <div className="dashboard-courses">
-              <h2 className="courses-header">My Courses</h2>
-              <div className="courses-tab">
-                <div className="course-card">
-                  <div className="course-title">Pure Mathematics I</div>
-                  <div className="course-lessons">{12} lessons</div>
-                  <div className="course-progress-tab">
-                    <div className="prog-bar">
-                      <p className="course-learn-progress">{progress}</p>
-                      <p className="prog-bar-text">Learned Progress</p>
-                    </div>
-                    <div className="prog-bar">
-                      <p className="course-test-progress">{PuretestedProgress}</p>
-                      <p className="prog-bar-text">Tested Progress</p>
-                    </div>
-                  </div>
+      <div>
+        <div className="dashboard-courses">
+          <h2 className="courses-header">My Courses</h2>
+          <div className="courses-tab">
+            <div className="course-card">
+              <div className="course-title">Pure Mathematics I</div>
+              <div className="course-lessons">{12} lessons</div>
+              <div className="course-progress-tab">
+                <div className="prog-bar">
+                  <p className="course-learn-progress">{mathsLessonMark}</p>
+                  <p className="prog-bar-text">Learned Progress</p>
                 </div>
-                <div className="course-card">
-                  <div className="course-title">Statistics</div>
-                  <div className="course-lessons">{5} lessons</div>
-                  <div className="course-progress-tab">
-                    <div className="prog-bar">
-                      <p className="course-learn-progress">{StatlearnedProgress}</p>
-                      <p className="prog-bar-text">Learned Progress</p>
-                    </div>
-                    <div className="prog-bar">
-                      <p className="course-test-progress">{StattestedProgress}</p>
-                      <p className="prog-bar-text">Tested Progress</p>
-                    </div>
-                  </div>
+                <div className="prog-bar">
+                  <p className="course-test-progress">{mathsProgress}</p>
+                  <p className="prog-bar-text">Tested Progress</p>
+                </div>
+              </div>
+            </div>
+            <div className="course-card">
+              <div className="course-title">Statistics</div>
+              <div className="course-lessons">{5} lessons</div>
+              <div className="course-progress-tab">
+                <div className="prog-bar">
+                  <p className="course-learn-progress">{statLessonMark}</p>
+                  <p className="prog-bar-text">Learned Progress</p>
+                </div>
+                <div className="prog-bar">
+                  <p className="course-test-progress">{statisticsProgress}</p>
+                  <p className="prog-bar-text">Tested Progress</p>
                 </div>
               </div>
             </div>
           </div>
-      </>
-    );
-  }
-  
+        </div>
+      </div>
+    </>
+  );
+}
 
 // Dashboard Activity Tab
 function DashboardActivity() {
   const { value, setValue } = useContext(UserContext);
+  const fetchData = async () => {
+    try {
+      // Replace 'your-api-url' with the actual API URL
+      const response = await axios.get("http://localhost:8000/progression/get");
+      setData(response.data); // Assuming you want to set the response data
+      console.log(response.data); // Logging the response data
+      let counter = 0;
+      let hoursLearned = 0;
+      // Extracting voxalPoints using map
+      await response.data.map((item) => {
+        counter += item.voxalPoints;
+      });
+      await response.data.map((x) => {
+        hoursLearned += x.hoursLearned;
+      });
+      setVoxalpoints(counter);
+      setHours(hoursLearned);
+      console.log("the points are ", voxalPoints); // Logging the voxalPoints
+    } catch (error) {
+      console.error("Error fetching data: ", error);
+      // Handle error here, e.g., set an error state
+    }
+  };
+
+  useEffect(() => {
+    fetchData();
+  }, []);
 
   const data = [
     { name: "January", uv: 4000, pv: 2400, amt: 2400 },
