@@ -87,32 +87,36 @@ const Forum = () => {
 
   const navigator = useNavigate();
 
-  let totalVotes = 0;
+
   const EndPoint = "http://localhost:8000/forum";
+
+  let totalVotes = 0;
 
   const increaseVotes = async (id) => {
     try {
       setLoading(true);
-
-      
-      const updatedData = data.map((x)=>{
-        totalVotes+=x.rating
-        totalVotes++; 
-      })
-
-      const upvote = await Axios.put(`${EndPoint}/upvotes/${id}`, {
-        votes:totalVotes
+ 
+  
+      // Calculate total votes
+      data.forEach((x) => {
+        totalVotes += x.rating; // Add existing votes
       });
-   
-     
-
+      totalVotes++; // Increment by 1
+  
+      // Update votes on the server
+      const upvote = await Axios.put(`${EndPoint}/upvotes/${id}`, {
+        votes: totalVotes
+      });
+  
       if (upvote.status === 200) {
-        setVotes(updatedData)
+        // Assuming `setVotes` is a function to update the UI with new data
+        setVotes(totalVotes); // Update UI with new vote count
         setStatus("Upvoted!");
       } else {
         setStatus("Error while upvoting!");
       }
-      setInterval(() => {
+  
+      setTimeout(() => {
         navigator("/forum");
       }, 2000);
     } catch (err) {
@@ -120,7 +124,8 @@ const Forum = () => {
     } finally {
       setLoading(false);
     }
-  }; //route not made
+  };
+  
 
 
 
@@ -137,37 +142,38 @@ const Forum = () => {
     }
   };
 
-  async function AnsweringQuestions(id,answer) {
+  async function AnsweringQuestions(id, answer) {
     try {
       setLoading(true);
-      const r = await Axios.put(`${EndPoint}/${id}`, answer);
+      const r = await Axios.put(`${EndPoint}/${id}`, { answer });
+  
       if (r.data.status === 200) {
         setStatus("Answer Posted!");
+        setTimeout(() => {
+          navigator("/forum");
+        }, 2000);
       }
-
-      setTimeout(() => {
-        navigator("/forum");
-      }, 2000);
     } catch (err) {
       console.error(err);
     } finally {
       setLoading(false);
     }
   }
-
-  async function DeleteComment(id){
-    try{
-      const deleteRequest = await Axios.delete(`${EndPoint}/${id}`)
-      if(deleteRequest.status===200){
-        alert("Deleted Question!")
-        navigator("/forum")
-      }else{
-        alert("Couldn't delete question!")
+  
+  async function DeleteComment(id) {
+    try {
+      const deleteRequest = await Axios.delete(`${EndPoint}/${id}`);
+      if (deleteRequest.status === 200) {
+        alert("Deleted Question!");
+        navigator("/forum");
+      } else {
+        alert("Couldn't delete question!");
       }
-    }catch(err){
+    } catch (err) {
       console.error(err);
     }
   }
+  
 
 
 
@@ -201,7 +207,11 @@ const Forum = () => {
           e.preventDefault();
           DeleteComment(x._id)}}>Delete</button> {/**Once clicked needs to increase number of votes by 1 */}
           <br></br>
-    {/**There's an NO ANSWER ERROR COMING FROM HERE */}      <form onSubmit={(e)=>{e.preventDefault();AnsweringQuestions(x._id,answer)}}><input onChange={(e)=>{setAnswer(e.target.value)}} placeholder="Answer..." type="text"></input><button>Answer!</button></form>
+    {/**There's an NO ANSWER ERROR COMING FROM HERE */}      
+    <form onSubmit={(e)=>{e.preventDefault();AnsweringQuestions(x._id,answer)}}>
+      <input onChange={(e)=>{setAnswer(e.target.value)}} placeholder="Answer..." type="text">
+        </input><button>Answer!</button>
+        </form>
         <br></br>
       </div>
     ))  

@@ -1,10 +1,10 @@
-import { useContext, useState } from "react";
+import { useContext, useEffect, useState } from "react";
 import { UserContext } from "../../App";
 import { Link } from "react-router-dom";
 import Axios from "axios";
 
 const CreateForum = () => {
-  const [forum, setForum] = useState({ question: "", answer: "", topic: "", rating: 1 });
+  const [forum, setForum] = useState({ question: "", answer: "", topic: "Pure Mathematics I", rating: 1 });
   const [errorMessage, setErrorMessage] = useState("");
   const [successMessage, setSuccessMessage] = useState("");
 
@@ -29,6 +29,10 @@ const CreateForum = () => {
       console.error(err);
     }
   }
+
+  useEffect(()=>{
+    console.log(forum.topic);
+  },[forum.topic])
 
   const { logged } = useContext(UserContext);
 

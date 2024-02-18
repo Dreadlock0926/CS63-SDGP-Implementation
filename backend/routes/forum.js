@@ -4,7 +4,7 @@ const forumModel = require("../models/forum")
 
 router.route("/").get(async (req,res)=>{
 
-    const user = req.session.user
+    const user = req?.session?.user
 
     if(user && user.length>0){
         try{
@@ -61,9 +61,9 @@ router.route("/:id").put(async (req, res) => {
         return res.status(400).json({ Alert: "NO Answer!" });
     }
 
-    const exists = await forumModel.findOne({ _id: String(id) });
+    const exists = await forumModel.findById(id);
     if (!exists) {
-        return res.status(404).json({ Alert: "ID doesn't exist!" });
+        return res.status(404).json({ Alert: "Invalid ID" });
     } else {
         await exists.updateOne({answer}); // Update the document
         return res.status(200).json({ Alert: `Updated ${id}` });
@@ -72,11 +72,11 @@ router.route("/:id").put(async (req, res) => {
     const id = req.params.id
     if(!id) res.status(400).json({Alert:"NO ID Provided!"})
 
-    const exists = await forumModel.findOne({_id:String(id)});
+    const exists = await forumModel.findById(id);
     if(!exists){
-        res.status(404).json({Alert:"ID doesn't exist!"})
+        res.status(404).json({Alert:"Invalid ID"})
     } else{
-        await exists.deleteOne({_id:String(id)});
+        await exists.deleteOne();
         res.status(200).json({Alert:`Deleted ${id}`})
     }
 
@@ -88,7 +88,7 @@ router.route("/upvotes/:id").put(async (req,res)=>{
 
     if(!id || !votes) res.status(400).json({Alert:"No ID/Votes Sent!"})
 
-    const verify = await forumModel.findOne({_id:String(id)})
+    const verify = await forumModel.findById(id)
     if(!verify){
         res.status(404).json({Alert:`${id} brings an invalid question!`})
     }else{
