@@ -18,7 +18,7 @@ const CreateForum = () => {
       const response = await Axios.post("http://localhost:8000/forum", forum);
       if (response.status === 201) {
         setSuccessMessage("Question added successfully!");
-        setForum({ question: "", answer: "", topic: "", rating: 1 }); // Clear the form after successful submission
+        setForum({ question: "", answer: "", topic: "Pure Mathematics I", rating: 1 }); // Clear the form after successful submission
       }
     } catch (err) {
       if (err.response && err.response.status === 409) {
@@ -27,6 +27,8 @@ const CreateForum = () => {
         setErrorMessage("An error occurred while processing your request. Please try again later.");
       }
       console.error(err);
+    }finally{
+      setForum(forum.topic==="Pure Mathematics I")
     }
   }
 

@@ -8,7 +8,7 @@ router.route("/").get(async (req,res)=>{
 
     if(user && user.length>0){
         try{
-            const data = await forumModel.find({_id:req.session.user.id}).populate("by");
+            const data = await forumModel.find({_id:req.session.user.id}).populate("by").sort({rating:-1});
             res.status(200).json(data);
         }catch(err){
             console.error(err);
@@ -16,7 +16,7 @@ router.route("/").get(async (req,res)=>{
         }
     }else{
         try{
-            const data = await forumModel.find();
+            const data = await forumModel.find().sort({rating:-1});
             res.status(200).json(data);
         }catch(err){
             console.error(err);
