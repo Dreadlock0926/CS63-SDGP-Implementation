@@ -10,7 +10,6 @@ router
   .get(async (req, res) => {
     try{  
       const data = await learningModel.find(); //data sent regardless
-     
         res.status(200).json(data)
       
     }catch(err){
@@ -20,7 +19,7 @@ router
   })
   .post(async (req, res) => {
     const { topic, title, about, subtopic } = req?.body;
-    const {file:image} = req; 
+    const {file:image} = req;  //if uploading images is a must
 
     //we could implement images (cloudinary possibly) logic here if y'all want!
 

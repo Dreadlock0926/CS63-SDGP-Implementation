@@ -19,10 +19,16 @@ const LearningStatistics = () => {
   },[])
 
 
-
-
   return (
-    <div><h1>Statistics Material</h1><>{resource && resource.length ? JSON.stringify(resource) : <h1>No results found!</h1>}</></div>
+    <div><h1>Statistics</h1>{resource && resource.length && resource.title==="Probability And Statistics" ? 
+    resource.map((x)=>(
+    <div key={x._id}>
+      <h1>{x.topic}</h1>
+      <h1>{x.title}</h1>
+      <h1>{x.about}</h1>
+      <h1>{x.subtopic}</h1>
+      </div>))
+       : <h1>No Statistics Resources found!</h1>}</div>
   )
 }
 
