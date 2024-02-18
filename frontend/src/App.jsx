@@ -17,16 +17,9 @@ function App() {
 
   // Create an object with the states and setter functions
   const userContextValue = {
-    loading: loading,
-    setLoading: setLoading,
-   logged:logged,
-   setLogged:setLogged,
-    user: user,
-    setUser: setUser,
-    status: status,
-    setStatus: setStatus,
-    response: response,
-    setResponse: setResponse
+    loading   ,setLoading,
+   logged,setLogged ,   user,setUser ,  status ,setStatus,
+    response ,   setResponse
   
   };
 

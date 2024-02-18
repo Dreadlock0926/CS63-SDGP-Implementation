@@ -1,5 +1,6 @@
 import { useContext, useState } from "react";
 import { AddMaterial } from "../Api/Api";
+import Axios from "axios";
 import { UserContext } from "../../App";
 import { RingLoader } from "react-spinners/RingLoader";
 import "./Add.css";
@@ -7,7 +8,7 @@ import "./Add.css";
 const AddStudy = () => {
   const { loading, setLoading, status, setStatus } = useContext(UserContext);
   const [data, setData] = useState({
-    topic: "",
+    topic: "Pure Mathematics I",
     title: "",
     about: "",
     subtopic: "",
@@ -17,7 +18,9 @@ const AddStudy = () => {
     e.preventDefault();
     try {
       setLoading(true);
-      const resources = await AddMaterial(data); //there's an issue here
+    
+    const resources = await Axios.post("http://localhost:8000/resources", {data});
+   
       if (resources.status === 201) {
         setStatus("Added Resource!");
       }
