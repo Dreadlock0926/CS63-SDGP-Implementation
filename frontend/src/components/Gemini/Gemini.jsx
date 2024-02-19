@@ -58,7 +58,7 @@ function Gemini() {
               <h2>
                 {searchCounter === 0
                   ? "Hi, i'm Vexy , how may I help you today! 🤖👋🏻"
-                  : "Unfortunately , I'm unable to assist you with that!☹️"}
+                  : "Anything else?"}
               </h2>
             )}
           </form>
