@@ -11,6 +11,7 @@ router.route("/").post(async (req, res) => {
     questionsFiguresGrid,
     answersTypeGrid,
     answersGrid,
+    marksGrid,
     questionSource,
   } = req?.body;
 
@@ -28,6 +29,7 @@ router.route("/").post(async (req, res) => {
       questionsFiguresGrid,
       answersTypeGrid,
       answersGrid,
+      marksGrid,
       questionSource,
     });
 
