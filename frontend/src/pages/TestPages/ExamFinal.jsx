@@ -75,6 +75,38 @@ const addWrongAnswers = () => {
 
 };
 
+function createMarksList() {
+  let marksArray = [];
+
+  JSON.parse(examData).forEach(element => {
+    for (let index = 0; index < element.length; index++) {
+      if (element[index] !== "") {
+        console.log("test",element[index])
+        marksArray.push(parseInt(element[index]))
+      }
+    }
+    
+  });
+  console.log(marksArray)
+}
+
+const calculateMarks = () => {
+  let totalMarks = 0;
+
+  for (let i = 0; i < JSON.parse(examData).length; i++) {
+    if (!wrongAnswersIndex.includes(i)){
+      totalMarks += marks[i];
+    }
+  }
+}
+
+function logMarks() {
+  JSON.parse(examData).forEach(element => {
+    console.log(element.marksGrid)
+  });
+}
+
+
   // end of getting answers
 
   return (
@@ -83,6 +115,7 @@ const addWrongAnswers = () => {
         <div>
           <h1>Exam</h1>
           <button onClick={getAnswers}>log answers</button>
+          <button onClick={createMarksList}>Marks List</button>
           <div>
             {JSON.parse(examData).map((question, index) => {
               return (
