@@ -28,7 +28,7 @@ router.route("/").get(async (req,res)=>{
 
 }).post(async (req, res) => {
     try {
-        const { question, answer, topic, rating } = req?.body;
+        const { question, answer, topic, rating,by="guest" } = req?.body;
         
         if (!question || !topic) {
             return res.status(400).json({ Alert: "NO Question/Topic!" });
@@ -40,7 +40,7 @@ router.route("/").get(async (req,res)=>{
             return res.status(409).json({ Alert: `${question} was Already posted before!` });
         }
 
-        const created = await forumModel.create({ question, answer, topic, rating });
+        const created = await forumModel.create({ question, answer, topic, rating ,by});
         
         if (created) {
             return res.status(201).json({ Alert: `${question} Added!` });

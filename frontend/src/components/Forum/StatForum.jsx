@@ -80,6 +80,7 @@ const StatForum = () => {
 
   return logged ? (
     <div>
+    <h1>Welcome back {user.username || user}!</h1>
       <h1>Statistics Forum!</h1>
       {loading ? (
         <FidgetSpinner />

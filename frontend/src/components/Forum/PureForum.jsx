@@ -168,7 +168,7 @@ const PureForum = () => {
   }, []);
 
   return logged? <div >
-    <h1>Welcome back {user.username}!</h1>
+          <h1>Welcome back {user.username || user}!</h1>
   <h1>Pure Maths Forum!</h1>
   {loading ? (
     <FidgetSpinner />

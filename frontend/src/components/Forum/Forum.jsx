@@ -89,7 +89,7 @@ const Forum = () => {
 
   return logged ? (
     <div>
-      <h1>Welcome back {user.username}!</h1>
+      <h1>Welcome back {user.username || user}!</h1>
       <h1>Forum!</h1>
       <br />
       <Link to="/pureforum">Visit Pure Maths Forum!</Link>
@@ -110,7 +110,7 @@ const Forum = () => {
             <button onClick={(e) => { e.preventDefault(); DeleteComment(x._id) }}>Delete</button>
             <br />
             <form onSubmit={(e) => { e.preventDefault(); AnsweringQuestions(x._id, answer) }}>
-              <input onChange={(e) => { setAnswer(e.target.value) }} value={answer} placeholder="Answer..." type="text" />
+              <input onChange={(e) => { setAnswer(e.target.value) }} placeholder="Answer..." type="text" />
               <button type="submit">Answer!</button>
             </form>
             <br />
