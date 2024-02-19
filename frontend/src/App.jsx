@@ -13,7 +13,7 @@ function App() {
   const [loading, setLoading] = useState(false);
   const [logged, setLogged] = useState(false);
   const [status, setStatus] = useState("");
-  const [user,setUser] = useState([])
+  const [user,setUser] = useState("")
 
  
   const userContextValue = {

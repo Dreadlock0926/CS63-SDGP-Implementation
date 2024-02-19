@@ -9,37 +9,36 @@ import "./account.css";
 
 const Register = () => {
   const navigator = useNavigate();
-  const { loading, setLoading, setLogged, setUser,status,setStatus } = useContext(UserContext);
+  const { loading,setLoading } = useContext(UserContext);
   const [newUser, setNewUser] = useState({ username: "", password: "" });
 
 
-  const handleChange = (e) => {~
+  const handleChange = (e) => {
     setNewUser({ ...newUser, [e.target.id]: e.target.value });
   };
 
   async function handleRegister(e) {
     e.preventDefault();
     try {
-      //   setLoading(true);
+        setLoading(true);
       const loginUser = await Axios.post(
         "http://localhost:8000/register",
         newUser
       );
 
       
-      alert("You're registered,  Please login to Continue!")
+      alert("You're registered,  Please login to Continue!");
       if (loginUser.status === 201) {
         navigator("/login")
-
-        
-       
       }else if(loginUser.response.status===409){
         alert(`${newUser.username} Already Taken!`)
+      }else{
+        alert("Server error!")
       }
     } catch (err) {
       console.error(err);
     } finally {
-      //   setLoading(false);
+        setLoading(false);
       setNewUser({username: "", password: ""});
     }
   }
