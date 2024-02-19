@@ -1,6 +1,7 @@
 /* eslint-disable react-hooks/exhaustive-deps */
 import Axios from "axios";
 import { useEffect, useState } from "react";
+import "./Pure.css";
 
 const LearningPureMaths = () => { 
 
