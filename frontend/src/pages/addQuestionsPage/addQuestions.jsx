@@ -148,6 +148,7 @@ function QuestionGridUnit( {index, onInputChange} ) {
     const [questionText, setQuestionText] = useState('');
     const [answerText, setAnswerText] = useState('');
     const [answerType, setAnswerType] = useState('Expression');
+    const [marksText, setMarksText] = useState('');
     const [figureText, setFigureText] = useState('');
 
     useEffect(() => {
@@ -155,9 +156,10 @@ function QuestionGridUnit( {index, onInputChange} ) {
           questionText,
           answerText,
           answerType,
+          marksText,
           figureText,
         });
-      }, [index, questionText, answerText, answerType, figureText, onInputChange]);
+      }, [index, questionText, answerText, answerType, marksText, figureText, onInputChange]);
 
     return (
 
@@ -180,6 +182,8 @@ function QuestionGridUnit( {index, onInputChange} ) {
                     </div>
                     <input placeholder="Figure" value={figureText} onChange={e => setFigureText(e.target.value)}
                      type="text" className="qgu-figure-input" />
+                     <input placeholder="Marks" value={marksText} onChange={e => setMarksText(e.target.value)}
+                    type="text" className="qgu-answer-input" />
                 </div>
             </div>
         </>
@@ -283,14 +287,13 @@ function QuestionFinalPanel() {
                 }
 
                 questionIDFinal = questionIDSource + "_" + questionIDTopic + questionIDNumYearVariant;
-                console.log(questionIDFinal);
-                console.log(questionObject);
                 axios.post('http://localhost:8000/addQuestion', {
                     "questionID":questionIDFinal,
                     "questionTopic":questionTopic,
                     "questionsGrid":Object.values(questionObject).map(question => question.questionText),
                     "questionsFiguresGrid":Object.values(questionObject).map(question => question.figureText),
                     "answersTypeGrid":Object.values(questionObject).map(question => question.answerType),
+                    "marksGrid":Object.values(questionObject).map(question => question.marksText),
                     "answersGrid":Object.values(questionObject).map(question => question.answerText),
                     "questionSource":questionSource
                 })
