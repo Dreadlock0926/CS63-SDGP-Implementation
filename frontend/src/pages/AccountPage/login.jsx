@@ -11,7 +11,7 @@ const Login = () => {
   const BASE = "http://localhost:8000/login";
 
   const navigator = useNavigate();
-  const {user,  loading, setLoading, setLogged, logged, setUser, setStatus, status } =
+  const {user,  loading, setLoading, setLogged, logged, setUser } =
     useContext(UserContext); //there's a problem here (context)
   const [newUser, setnewUser] = useState({ username: "", password: "" });
 
@@ -29,7 +29,7 @@ const Login = () => {
         const loginUser = await Axios.post(BASE, newUser);
         if (loginUser.status === 200) {
           console.log(loginUser.data);
-          setStatus(loginUser.data.Session.username); //double check the payload
+     
           setUser(loginUser.data);
           console.log(user);
           setLogged(true);
@@ -63,7 +63,7 @@ const Login = () => {
     src="./images/background2.png"/>
   <div className="container">
     <img alt="avatar" className="avItem2" src="./images/avatar.png" />
-    <h1 style={{textAlign:"center"}}>Hi {status} your logged in!</h1>
+    <h1 style={{textAlign:"center"}}>Hi {user.Session.username} your logged in!</h1>
   </div>
 </div>:(
     <>

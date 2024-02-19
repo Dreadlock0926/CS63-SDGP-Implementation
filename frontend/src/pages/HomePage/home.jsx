@@ -2,17 +2,14 @@
 import NavBar from "../../components/NavigationBar/navBar.jsx";
 import "./home.css";
 import "../main.css"
-import { useContext, useState } from "react";
+import { useContext } from "react";
 import { Link } from "react-router-dom";
 import {UserContext} from "../../App.jsx"
 
 
 function Home() {
 
-    const {logged,setLogged,status} = useContext(UserContext)
-    
-
-
+    const {logged,user} = useContext(UserContext)
     return logged?
     (
         <>
@@ -20,7 +17,7 @@ function Home() {
         <div className="backgroundContainer">
             <img alt="background" className="bgImg" src="./images/background.png" />
             <div className="itemsContainer">
-                <p className="webText"><b>ALiyah</b> <br />Welcome Back  {status}</p>
+                <p className="webText"><b>ALiyah</b> <br />Welcome Back  {user.Session.username}</p>
                 <a className="coursesBtn" href="#">GO TO COURSES</a>
             </div>
         </div>
