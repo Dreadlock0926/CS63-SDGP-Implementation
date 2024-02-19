@@ -26,7 +26,7 @@ const ExamFinalized = () => {
   const getAnswers = () => {
     const answers = document.querySelectorAll(".answer-input");
     answerValues = Array.from(answers).map((answer) => answer.value);
-    console.log("Answers:", answerValues);
+    console.log("This is what the user inputted for the answers:", answerValues);
 
     correctAnswers = [];
     JSON.parse(examData).forEach(question => {
@@ -36,7 +36,7 @@ const ExamFinalized = () => {
             }
         }) 
     });
-    console.log(correctAnswers);
+    console.log("These are the correct answers:", correctAnswers);
     compareAnswers();
     addWrongAnswers();
 };
@@ -50,7 +50,7 @@ const compareAnswers = () => {
         }
         
     }
-    console.log(wrongAnswersIndex);
+    console.log("these are the index of the wrong answers", wrongAnswersIndex);
 };
 
 const addWrongAnswers = () => {
@@ -71,7 +71,7 @@ const addWrongAnswers = () => {
         }) 
     });
 
-    console.log(wrongQuestions);
+    console.log("these are the IDs of the wrong questions", wrongQuestions);
 
 };
 
