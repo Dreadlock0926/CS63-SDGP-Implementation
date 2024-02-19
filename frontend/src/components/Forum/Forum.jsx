@@ -33,17 +33,15 @@ const Forum = () => {
 
   const increaseVotes = async (id) => {
     try {
-      const voteChecker = await Axios.get(`${EndPoint}`,{id})
+      
     
       setLoading(true);
-      let totalVotes = 0;
-      data.filter((x) => {
-        totalVotes += x.rating[id];
-      });
-      totalVotes++;
-      const upvote = await Axios.put(`${EndPoint}/upvotes/${id}`, { votes: totalVotes });
+      // data.filter((x) => {
+      //   totalVotes += x.rating[id];
+      // });
+
+      const upvote = await Axios.put(`${EndPoint}/upvotes/${id}`);
       if (upvote.status === 200) {
-        setVotes(totalVotes);
         setStatus("Upvoted!");
       } else {
         setStatus("Error while upvoting!");

@@ -5,15 +5,19 @@ const forumModel = require("../models/forum")
 router.route("/").get(async (req,res)=>{
 
     const user = req?.session?.user
+    const id = req.body.id;
 
-    if(user && user.length>0){
-        try{
-            const data = await forumModel.find({_id:req.session.user.id}).populate("by").sort({rating:-1});
-            res.status(200).json(data);
-        }catch(err){
-            console.error(err);
-            res.status(500).json({Alert:err})
-        }
+    if(user){
+       
+            try{
+                const data = await forumModel.find({_id:req.session.user.id}).populate("by").sort({rating:-1});
+                res.status(200).json(data);
+            }catch(err){
+                console.error(err);
+                res.status(500).json({Alert:err})
+            }
+        
+        
     }else{
         try{
             const data = await forumModel.find().sort({rating:-1});
@@ -82,20 +86,25 @@ router.route("/:id").put(async (req, res) => {
 })
 
 
-router.route("/upvotes/:id").put(async (req,res)=>{
-    const id = req?.params?.id
-    const votes = req.body.votes;
+router.route("/upvotes/:id").put(async (req, res) => {
+    const id = req?.params?.id;
 
-    if(!id || !votes) res.status(400).json({Alert:"No ID/Votes Sent!"})
 
-    const verify = await forumModel.findById(id)
-    if(!verify){
-        res.status(404).json({Alert:`${id} brings an invalid question!`})
-    }else{
-        await verify.updateOne({rating:votes})
-        res.status(200).json({Votes:`Upvotes updated to ${rating}!`});
+    if (!id) {
+        return res.status(400).json({ Alert: "No ID" });
     }
-})
+
+    try {
+        const verify = await forumModel.findByIdAndUpdate(id, { $inc: { rating: 1 } }, { new: true });
+        if (!verify) {
+            return res.status(404).json({ Alert: `${id} brings an invalid question!` });
+        }
+        res.status(200).json({ Votes: `Upvotes updated to ${verify.rating}! Data ${JSON.stringify(verify)}` });
+    } catch (error) {
+        res.status(500).json({ Alert: "Internal Server Error" });
+    }
+});
+
 
 
 module.exports = router;
