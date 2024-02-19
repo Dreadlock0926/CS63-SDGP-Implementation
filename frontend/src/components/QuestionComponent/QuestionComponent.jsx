@@ -1,14 +1,16 @@
 import "./QuestionComponent.css";
 import { useEffect, useState } from "react";
+import { MathJax, MathJaxContext } from "better-react-mathjax";
 
 function SubQuestion({ sqNum, sqText, sqMarks }) {
   const [answer, setAnswer] = useState("");
 
   return (
+    <MathJaxContext>
     <div className="sub-question">
       <div className="sub-question-text-container">
         <div className="sq-num">{sqNum}</div>
-        <div className="sub-question-text">{sqText}</div>
+        <div className="sub-question-text"><MathJax>{sqText}</MathJax></div>
       </div>
       <div className="figure-for-sub-question"></div>
       <div className="answer-for-sub-question">
@@ -16,6 +18,7 @@ function SubQuestion({ sqNum, sqText, sqMarks }) {
         <div className="mark-for-sq">({sqMarks} marks)</div>
       </div>
     </div>
+    </MathJaxContext>
   );
 }
 
@@ -82,6 +85,7 @@ function QuestionComponent({ question, mqNum }) {
 
   return (
     <>
+      <MathJaxContext>
       <div className="question-component-container">
         <div className="main-question-container">
           <div className="main-text-container">
@@ -89,7 +93,7 @@ function QuestionComponent({ question, mqNum }) {
               {mqNum}
             </div>
             {(hasContext || isOneAnswerQuestion) && (
-              <div className="main-text">{question.questionsGrid[0]}</div>
+              <div className="main-text"><MathJax>{question.questionsGrid[0]}</MathJax></div>
             )}
           </div>
           {isOneAnswerQuestion && (
@@ -104,6 +108,7 @@ function QuestionComponent({ question, mqNum }) {
           <div className="sub-question-container">{subQuestions}</div>
         )}
       </div>
+      </MathJaxContext>
     </>
   );
 }
