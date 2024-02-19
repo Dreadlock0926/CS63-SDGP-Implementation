@@ -5,6 +5,7 @@ import Login from "./pages/AccountPage/login";
 import Register from "./pages/AccountPage/register";
 import ErrorPage from "./components/Error404/ErrorPage";
 import Gemini from "./components/Gemini/Gemini";
+import ModalTest from "./pages/ModalTest";
 
 export const UserContext = createContext();
 
@@ -35,6 +36,7 @@ function App() {
             <Route path="login" element={<Login />} />
             <Route path="register" element={<Register />} />
             <Route path="*" element={<ErrorPage />} />
+            <Route path="mod" element={<ModalTest />} />
           </Routes>
         </BrowserRouter>
       </UserContext.Provider>

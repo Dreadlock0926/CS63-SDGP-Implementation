@@ -1,0 +1,56 @@
+/* Fade in & out animation */
+@keyframes fadeIn {
+    0% {
+      opacity: 0;
+    }
+    100% {
+      opacity: 1;
+    }
+  }
+
+  /* Container for the Button and the Image inside */
+.botBtn {
+    position: fixed;
+    right: 0;
+    bottom: 0;
+    padding: 20px;
+}
+
+/* Button to open the Modal */
+.modalBtn {
+    height: 55px;
+    width: 55px;
+    border: none;
+    background-color: white;
+    transition: 0.2s;
+}
+.modalBtn:hover {
+    transition: 0.2s;
+    transform: scale(1.1);
+    box-shadow: rgba(0, 0, 0, 0.24) 0px 3px 8px;
+    border-radius: 10px;
+}
+
+/* Modal Container */
+.modal {
+    animation: fadeIn 0.2s;
+    box-shadow: rgba(17, 17, 26, 0.1) 0px 4px 16px, rgba(17, 17, 26, 0.1) 0px 8px 24px, rgba(17, 17, 26, 0.1) 0px 16px 56px;
+    margin: 15% auto;
+    width: 40%;
+    padding: 20px;
+    border-radius: 12px;
+}
+
+.closeModal {
+    text-decoration: none;
+    border: none;
+    background-color: white;
+    color: #666666;
+    font-size: 16px;
+    transition: 0.5s;
+}
+
+.closeModal:hover {
+    color: #068C1F;
+    transition: 0.5s;
+}
