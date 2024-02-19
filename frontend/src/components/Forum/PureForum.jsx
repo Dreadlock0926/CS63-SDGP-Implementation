@@ -91,7 +91,7 @@ const PureForum = () => {
     try {
       setLoading(true);
       const upvote = await Axios.put(`${EndPoint}/upvotes/${id}`, {
-        answer: updatedData,
+        votes: updatedData,
       });
       const updatedData = data.map((item) =>
         item._id === id ? { ...item, upvotes: item.upvotes + 1 } : item
@@ -167,7 +167,7 @@ const PureForum = () => {
     forumData();
   }, []);
 
-  return logged? <div >
+  return logged? <div style={forumStyle}>
           <h1>Welcome back {user.username || user}!</h1>
   <h1>Pure Maths Forum!</h1>
   {loading ? (
@@ -185,7 +185,7 @@ const PureForum = () => {
         <p>{x.rating?`Upvoted by ${x.rating}`:<h1>Rated by none!</h1>}</p>
         <button onClick={(e)=>{
           e.preventDefault();
-          increaseVotes(x._id)}}>Upvote!</button> {/**Once clicked needs to increase number of votes by 1 */}
+          increaseVotes(x._id)}}>Upvote!</button> {/**Once   clicked needs to increase number of votes by 1 */}
            <button onClick={(e)=>{
           e.preventDefault();
           DeleteComment(x._id)}}>Delete</button> {/**Once clicked needs to increase number of votes by 1 */}

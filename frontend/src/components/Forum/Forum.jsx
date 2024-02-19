@@ -114,6 +114,7 @@ const Forum = () => {
               <button type="submit">Answer!</button>
             </form>
             <br />
+            <p>{status}</p>
           </div>
         ))
       ) : (
