@@ -1,6 +1,7 @@
 import "./QuestionComponent.css";
 import { useEffect, useState } from "react";
 import { MathJax, MathJaxContext } from "better-react-mathjax";
+import "//unpkg.com/mathlive";
 
 function SubQuestion({ sqNum, sqText, sqMarks }) {
   const [answer, setAnswer] = useState("");
@@ -14,7 +15,7 @@ function SubQuestion({ sqNum, sqText, sqMarks }) {
       </div>
       <div className="figure-for-sub-question"></div>
       <div className="answer-for-sub-question">
-        <input className="answer-input" placeholder="Answer..."></input>
+        <math-field className="answer-input" placeholder="Answer..."></math-field>
         <div className="mark-for-sq">({sqMarks} marks)</div>
       </div>
     </div>
@@ -98,7 +99,7 @@ function QuestionComponent({ question, mqNum }) {
           </div>
           {isOneAnswerQuestion && (
             <div className="mq-answer-container">
-              <input className="answer-input" placeholder="Answer..."></input>
+              <math-field className="answer-input" placeholder="Answer..."></math-field>
               <div className="mark-for-mq">({question.marksGrid[0]} marks)</div>
             </div>
           )}

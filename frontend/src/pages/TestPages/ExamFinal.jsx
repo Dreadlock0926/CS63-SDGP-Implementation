@@ -21,10 +21,14 @@ const ExamFinalized = () => {
   let answerValues = [];
   let correctAnswers = [];
   let wrongAnswersIndex = [];
+  
   let wrongQuestions = [];
 
+  let marksArray = [];
+  let totalMarks = 0;
+
   const getAnswers = () => {
-    const answers = document.querySelectorAll(".answer-input");
+    const answers = document.querySelectorAll("math-field");
     answerValues = Array.from(answers).map((answer) => answer.value);
     console.log("This is what the user inputted for the answers:", answerValues);
 
@@ -73,39 +77,27 @@ const addWrongAnswers = () => {
 
     console.log("these are the IDs of the wrong questions", wrongQuestions);
 
+    getTotalMarks();
+
 };
 
-function createMarksList() {
-  let marksArray = [];
+function getTotalMarks() {
+  marksArray = [];
 
   JSON.parse(examData).forEach(element => {
-    for (let index = 0; index < element.length; index++) {
-      if (element[index] !== "") {
-        console.log("test",element[index])
-        marksArray.push(parseInt(element[index]))
+    for (let index = 0; index < element.marksGrid.length; index++) {
+      if (element.marksGrid[index] !== "") {
+        marksArray.push(parseInt(element.marksGrid[index]))
       }
     }
     
   });
-  console.log(marksArray)
-}
-
-const calculateMarks = () => {
-  let totalMarks = 0;
-
-  for (let i = 0; i < JSON.parse(examData).length; i++) {
-    if (!wrongAnswersIndex.includes(i)){
-      totalMarks += marks[i];
-    }
+  totalMarks = marksArray.reduce((a,b) => a+b, 0);
+  for (let i = 0; i < wrongAnswersIndex.length; i++) {
+      totalMarks -= marksArray[wrongAnswersIndex[i]];    
   }
+  console.log("Total marks:", totalMarks);
 }
-
-function logMarks() {
-  JSON.parse(examData).forEach(element => {
-    console.log(element.marksGrid)
-  });
-}
-
 
   // end of getting answers
 
@@ -115,7 +107,6 @@ function logMarks() {
         <div>
           <h1>Exam</h1>
           <button onClick={getAnswers}>log answers</button>
-          <button onClick={createMarksList}>Marks List</button>
           <div>
             {JSON.parse(examData).map((question, index) => {
               return (

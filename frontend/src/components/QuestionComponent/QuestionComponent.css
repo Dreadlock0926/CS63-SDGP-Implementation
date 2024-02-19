@@ -89,3 +89,12 @@ input:focus {
 .mark-for-mq {
     align-self: flex-end;
 }
+
+.answer-input {
+    width: 40%;
+}
+
+math-field {
+    display: block;
+    width: 40%;
+}
