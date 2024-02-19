@@ -30,7 +30,7 @@ function Home() {
     <img alt="background" className="bgImg" src="./images/background.png" />
     <div className="itemsContainer">
         <p className="webText"><b>ALiyah</b> <br />Your partner for learning <br />Advanced Level Mathematics!</p>
-        <Link to="login" style={{color:"white"}}>Click Here to Login!</Link>
+        <Link to="login" className="clickLogBtn">CLICK HERE TO LOGIN</Link>
     </div>
 </div></div>
 }

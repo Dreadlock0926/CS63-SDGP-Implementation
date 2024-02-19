@@ -55,7 +55,7 @@ const Register = () => {
           <img alt="avatar" className="avItem2" src="./images/avatar.png"/>
           <p className="containerTitle">Register</p>
           <p className="containerText">
-            Already have an account?&nbsp;<a href="login">Login</a>
+            Already have an account?&nbsp;<a href="login" style={{color:"black"}}>Login</a>
           </p>
           <form onSubmit={handleRegister} className="forms">
             <div className="inputLabelGrp">

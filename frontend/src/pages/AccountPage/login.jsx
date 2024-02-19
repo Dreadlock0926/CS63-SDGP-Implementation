@@ -77,7 +77,7 @@ const Login = () => {
           <img alt="avatar" className="avItem2" src="./images/avatar.png" />
           <p className="containerTitle">Login</p>
           <p className="containerText">
-            Dont have an account?&nbsp;<Link to="/register">Register</Link>
+            Dont have an account?&nbsp;<Link to="/register" style={{color:"black"}}>Register</Link>
           </p>
           <form onSubmit={Login} className="forms">
             <div className="inputLabelGrp">

@@ -12,9 +12,9 @@
 
 .itemsContainer {
   position: absolute;
-  top: 40%;
+  top: 45%;
   left: 50%;
-  transform: translate(-50%, -40%);
+  transform: translate(-50%, -45%);
   text-align: center;
 }
 
@@ -23,8 +23,25 @@
   font-size: 64px;
 }
 
+    /* Courses button */
+    .coursesBtn {
+      padding: 12px;
+      text-decoration: none;
+      color: white;
+      border: 2px solid white;
+      border-radius: 6px;
+      transition: 0.5s;
+    }
+  
+    /* Courses button hover effects */
+    .coursesBtn:hover {
+      color: black;
+      background: white;
+      transition: 0.5s;
+    }
+
   /* Login button */
-  .coursesBtn {
+  .clickLogBtn {
     padding: 12px;
     text-decoration: none;
     color: white;
@@ -34,7 +51,7 @@
   }
 
   /* Login button hover effects */
-  .coursesBtn:hover {
+  .clickLogBtn:hover {
     color: black;
     background: white;
     transition: 0.5s;
