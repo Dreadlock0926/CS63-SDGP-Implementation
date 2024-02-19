@@ -95,6 +95,11 @@ const Scope = () => {
 
         console.log(response.data);
         setQuestions(response.data);
+
+        const examJSON = JSON.stringify(response.data);
+        sessionStorage.setItem("examData", examJSON);
+
+        window.location.href = "/examfinal";
       } catch (error) {}
     }
   };
@@ -126,7 +131,7 @@ const Scope = () => {
               }
             }}
           >
-            Select All
+            {selectAllTopics ? "De-select All" : "Select All"}
           </button>
 
           <ul className="topicsCheckbox">

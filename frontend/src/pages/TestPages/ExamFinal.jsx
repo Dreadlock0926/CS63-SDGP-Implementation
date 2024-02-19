@@ -1,34 +1,47 @@
 /* eslint-disable no-unused-vars */
 import { useContext, useEffect, useState } from "react";
 import { Link } from "react-router-dom";
-import { UserContext } from "../../App";
+import { CountdownCircleTimer } from "react-countdown-circle-timer";
+import QuestionComponent from "../../components/QuestionComponent/QuestionComponent";
+
+// import { UserContext } from "../../App";
 
 const ExamFinalized = () => {
-  // const {} = useContext(UserContext)
-  const [marks, setMarks] = useState(0);
-  const [tracker,setTracker] = useState(0)
+  const examData = sessionStorage.getItem("examData");
 
-  //might have to use some local storage approach for this!
+  if (examData) {
+    console.log(examData);
+  } else {
+    window.location.href = "/scope";
+  }
 
-  useEffect( ()=>{
-      const oldProgress = localStorage.getItem("progress");
-    if(oldProgress){
-      setTracker((prev)=>prev+=oldProgress)
-    } else{
-      const item = localStorage.setItem("progress",marks);
-      item ? setMarks(item) : console.log('Invalid no time!');
-    }
-   
-  },[])
+  //might have to use some local storage approach for this
 
-
-  
   return (
-    <div style={{textAlign:"center",color:"white"}}>
-      <h1>Your Exam is Over!</h1>
-      <p>Marks {marks}</p>
-      <p>{`Tracking records -> ${tracker}`}</p>
-      <Link to="/">Go Back?</Link>
+    <div>
+      {examData ? (
+        <div>
+          <h1>Exam</h1>
+          <div>
+            {JSON.parse(examData).map((question, index) => {
+              return (
+                <div>
+                  <QuestionComponent
+                    key={question.questionID}
+                    question={question}
+                    mqNum={index + 1}
+                  />
+                </div>
+              );
+            })}
+          </div>
+        </div>
+      ) : (
+        <div>
+          <h1>No exam data found</h1>
+          <Link to="/scope">Go back to scope</Link>
+        </div>
+      )}
     </div>
   );
 };
