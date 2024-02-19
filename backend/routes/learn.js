@@ -7,16 +7,6 @@ const learningModel = require("../models/learningResources");
 
 router
   .route("/")
-  .get(async (req, res) => {
-    try{  
-      const data = await learningModel.find(); //data sent regardless
-        res.status(200).json(data)
-      
-    }catch(err){
-      console.error(err);
-    }
-    
-  })
   .post(async (req, res) => {
     const { topic, title, about, subtopic } = req?.body;
     const {file:image} = req;  //if uploading images is a must
@@ -44,31 +34,28 @@ router
     }
   });
 
-  router.route("/pure").get(async (req,res)=>{
-    try{
-      const pureMath = await learningModel.find({topics:"Pure Mathematics I"})
-      if(pureMath && pureMath.length > 0){
+  router.route("/topic").get(async (req,res)=>{
+    const topic = req?.body?.topic;
+    if(!topic){
+      const everything = await learningModel.find();
+      res.status(200).json(everything)
+    }else if(topic==="Pure Mathematics I "){
+      const pureMath = await learningModel.find({topic:"Pure Mathematics I"});
+      if(pureMath && pureMath.length > 0 ){
         res.status(200).json(pureMath)
       }else{
-        res.status(203).json({Alert:"No results found!"})
+        res.status(203).json({Alert:"No Pure Mathematics Resources found!"})
       }
-    }catch(err){
-      console.error(err);
+    }else if(topic==="Probability And Statistics "){
+      const Statistics = await learningModel.find({topic:"Probability And Statistics"});
+      if(Statistics && Statistics.length > 0 ){
+        res.status(200).json(Statistics)
+      }else{
+        res.status(203).json({Alert:"No Statstics Resources found!"})
+      }
     }
   })
 
-  router.route("/stat").get(async (req,res)=>{
-    try{
-      const stat = await learningModel.find({topics:"Probability And Statistics"})
-      if(stat && stat.length > 0){
-        res.status(200).json(stat)
-      }else{
-        res.status(203).json({Alert:"No results found!"})
-      }
-    }catch(err){
-      console.error(err);
-    }
-  })
 
 
 router

@@ -7,7 +7,7 @@ const LearningStatistics = () => {
 
   async function StatRelated(){
     try{
-      const response = await Axios.get("http://localhost:8000/resources/stat"); //might have to change these routes
+      const response = await Axios.get("http://localhost:8000/resources/topic",{topic:"Probability And Statistics"}); //might have to change these routes
       setResources(response.data)
     }catch(err){
       console.error(err);
@@ -20,7 +20,7 @@ const LearningStatistics = () => {
 
 
   return (
-    <div><h1>Statistics</h1>{resource && resource.length && resource.title==="Probability And Statistics" ? 
+    <div><h1>Statistics</h1>{resource && resource.length ? 
     resource.map((x)=>(
     <div key={x._id}>
       <h1>{x.topic}</h1>
