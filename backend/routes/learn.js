@@ -20,14 +20,18 @@ router
     }
 
     try {
-      const existingLearningResource = await learningModel.findOne({ topic });
+    //we might have to add some extra logic here
+
+    const topicExistence = await learningModel.findOne({topic});
+    if(!topicExistence){
+      await learningModel.create({ topic, title, about,photo:image, subtopic }); //let's replace this with cloudinary logic
+      return res
+        .status(201)
+        .json({ Alert: "Added Learning Resource to Learn" });
+    }else{
+      res.status(409).json({Alert:`${topic} Already Exists!`})
+    }
     
-        await learningModel.create({ topic, title, about,photo:image, subtopic }); //let's replace this with cloudinary logic
-        return res
-          .status(201)
-          .json({ Alert: "Added Learning Resource to Learn" });
-      
-       
     } catch (error) {
       console.error(error);
       return res.status(500).json({ Alert: "Internal Server Error" });
@@ -38,7 +42,12 @@ router
     const topic = req?.body?.topic;
     if(!topic){
       const everything = await learningModel.find();
-      res.status(200).json(everything)
+      if(everything && everything.length>0){
+              res.status(200).json(everything)
+      }else{
+        res.status(203).json({Alert:"No Resources found in general"})
+      }
+
     }else if(topic==="Pure Mathematics I "){
       const pureMath = await learningModel.find({topic:"Pure Mathematics I"});
       if(pureMath && pureMath.length > 0 ){

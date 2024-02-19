@@ -1,7 +1,7 @@
 const mongoose = require("mongoose");
 const learningResources = mongoose.Schema({
-  topic: { type: String, required: true },
-  title: { type: String, required: true },
+  topic: { type: String },
+  title: { type: String },
   about: { type: String },
   subtopic: {
     type: String,
