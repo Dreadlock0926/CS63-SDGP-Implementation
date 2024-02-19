@@ -79,8 +79,8 @@ router.route("/:id").put(async (req, res) => {
         await exists.deleteOne();
         res.status(200).json({Alert:`Deleted ${id}`})
     }
-
 })
+
 
 router.route("/upvotes/:id").put(async (req,res)=>{
     const id = req?.params?.id
@@ -92,10 +92,9 @@ router.route("/upvotes/:id").put(async (req,res)=>{
     if(!verify){
         res.status(404).json({Alert:`${id} brings an invalid question!`})
     }else{
-        await verify.updateOne({votes})
-        res.status(200).json({Votes:`Upvoted!`});
+        await verify.updateOne({rating:votes})
+        res.status(200).json({Votes:`Upvotes updated to ${rating}!`});
     }
-
 })
 
 

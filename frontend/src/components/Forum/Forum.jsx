@@ -33,10 +33,12 @@ const Forum = () => {
 
   const increaseVotes = async (id) => {
     try {
+      const voteChecker = await Axios.get(`${EndPoint}`,{id})
+    
       setLoading(true);
       let totalVotes = 0;
-      data.forEach((x) => {
-        totalVotes += x.rating;
+      data.filter((x) => {
+        totalVotes += x.rating[id];
       });
       totalVotes++;
       const upvote = await Axios.put(`${EndPoint}/upvotes/${id}`, { votes: totalVotes });
