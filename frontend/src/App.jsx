@@ -3,7 +3,6 @@ import { BrowserRouter, Routes, Route } from "react-router-dom";
 import Home from "./pages/HomePage/home";
 import Login from "./pages/LoginPage/login";
 import AddQuestionsPage from "./pages/addQuestionsPage/addQuestions";
-import UnknownPage from "./components/Error404/Unknown";
 import ErrorPage from "./components/Error404/ErrorPage";
 
 const UserContext = createContext();
