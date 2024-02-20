@@ -33,7 +33,7 @@ const Learn = () => {
     <div style={{fontFamily:"poppins"}}>
       <h1>Learning Resources 📔</h1>
       {logged ? (
-        <div className="container">
+        <div className="container" style={{margin:"5%",padding:"5%"}}>
           {loading ? (
             <p className="loading-message">Loading...</p>
           ) : resources && resources.length ? (
