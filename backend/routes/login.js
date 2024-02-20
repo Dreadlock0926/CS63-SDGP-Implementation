@@ -19,7 +19,7 @@ router.route("/").post(async (req, res) => {
       if (!passwordMatch) {
         return res.status(401).json({ Alert: "Incorrect Password!" });
       } else {
-        req.session.user = { username,_id:validityUser._id, maxAge: 60000 };  //there's an issue here
+        req.session.user = { username,_id:validityUser._id, maxAge: 60000 };  //there's an issue here, temporarily storing session!
         return res
           .status(200)
           .json({

@@ -18,7 +18,7 @@ router.route("/").post(async (req, res) => {
     const text = response.text();
 
     if (text.length) {
-      return res.status(200).json(text);
+      return res.status(200).json({Data:text});
     } else {
       return res.status(400).send("No results found!");
     }

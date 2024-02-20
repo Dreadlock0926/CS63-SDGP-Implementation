@@ -53,7 +53,9 @@ function Gemini() {
               {loading ? <TailSpin></TailSpin> : <p>Search</p>}
             </button>
             {data && data.length ? (
-              JSON.stringify(data)
+              data.map((x,index)=>(
+                <div key={x.id || index}><p>{x.Data}</p></div> //we will have to double check and verify this!
+              ))
             ) : (
               <h2>
                 {searchCounter === 0

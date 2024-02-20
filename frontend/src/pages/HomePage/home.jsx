@@ -22,12 +22,16 @@ function Home() {
             </div>
         </div>
         </>
-    ):<div>        
+    ):<div>  
+              
         <div className="backgroundContainer">
     <img alt="background" className="bgImg" src="./images/background.png" />
-    <div className="itemsContainer">
+    
+    <div className="itemsContainer" >
         <p className="webText"><b>ALiyah</b> <br />Your partner for learning <br />Advanced Level Mathematics!</p>
         <Link to="login" className="clickLogBtn">CLICK HERE TO LOGIN</Link>
+        <br/>
+        <Link to="register" className="clickLogBtn" >Or Register!</Link>
     </div>
 </div></div>
 }

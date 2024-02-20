@@ -14,6 +14,7 @@ const Login = () => {
   const {user,  loading, setLoading, setLogged, logged, setUser } =
     useContext(UserContext); //there's a problem here (context)
   const [newUser, setnewUser] = useState({ username: "", password: "" });
+  const [issue,setIssue] = useState("")
 
   const handleChange = (e) => {
     setnewUser({ ...newUser, [e.target.name]: e.target.value });
@@ -36,14 +37,10 @@ const Login = () => {
           setTimeout(() => {
             navigator("/");
           }, 1500);
-        } else if (loginUser.status === 404) {
-          alert("Username does not exist!") 
-        } else if (loginUser.status === 401) {
-          alert("Incorrect Password!");
-        } else if (loginUser.status === 400) { //handle status codes from top to bottom refer to login.js backend file
-          alert("Username and Password are missing!");
-        } else {
-          alert("Technical issue , kindly refresh and try again! 🥹");
+        } else if(loginUser.status===401){
+          setIssue("Wrong Password , Please try again!")
+        }else if(loginUser.status===404){
+          setIssue("Invalid Username, Please Check Again!")
         }
       } catch (err) {
         console.error(err);
@@ -104,6 +101,7 @@ const Login = () => {
               Login
             </button>
           </form>
+          <p>{issue}</p>
         </div>
       </div>
     </>
