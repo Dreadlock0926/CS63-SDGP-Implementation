@@ -1,10 +1,13 @@
+/* eslint-disable no-unused-vars */
 /* eslint-disable react/prop-types */
-import { useEffect, useRef, useState } from "react";
+import { useContext, useEffect, useRef, useState } from "react";
 import "./histogram.css";
+import { UserContext } from "../../App";
 
 const Marker = ({ position, axis, scale }) => {
   const markerRef = useRef(null);
   const markerTextRef = useRef(null);
+
 
   useEffect(() => {
     const marker = markerRef.current;
@@ -84,6 +87,8 @@ const Axis = ({ numMarkers, size, dim, updateGraphSize, scale }) => {
 const Box = ({ width, height, position }) => {
   const boxRef = useRef(null);
 
+ 
+
   useEffect(() => {
     const box = boxRef.current;
 
@@ -111,8 +116,15 @@ const Histogram = ({
   const [lastPosition, setLastPosition] = useState([]);
   const [enteredBoxWidth, setEnteredBoxWidth] = useState(0);
   const [enteredBoxHeight, setEnteredBoxHeight] = useState(0);
+  // const [answerData, setAnswerData] = useState([]);
 
-  const [answerData, setAnswerData] = useState([]);
+  const {answerData,setAnswerData} = useContext(UserContext)
+  
+  useEffect(()=>{
+    console.log(`${enteredBoxHeight} Height\n${enteredBoxWidth} Width\n ${JSON.stringify(answerData)};`);
+  },[enteredBoxHeight,enteredBoxWidth])
+
+
 
   useEffect(() => {
     const graph = graphRef.current;
@@ -183,9 +195,12 @@ const Histogram = ({
     }
   };
 
+  const [cordinates,setCordinates] = useState({0:[enteredBoxHeight],1:[enteredBoxWidth]})
+
   return (
     <div className="graph-container">
       <div className="graph" ref={graphRef}>
+        <h1>{cordinates[0]}</h1>
         <Axis
           numMarkers={numXMarkers}
           dim={"x"}

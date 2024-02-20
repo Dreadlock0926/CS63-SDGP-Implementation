@@ -10,6 +10,7 @@ const ExamFinalized = () => {
   const examData = sessionStorage.getItem("examData");
 
   if (examData) {
+    //
   } else {
     window.location.href = "/scope";
   }
@@ -110,7 +111,7 @@ function getTotalMarks() {
           <div>
             {JSON.parse(examData).map((question, index) => {
               return (
-                <div>
+                <div key={question._id}>
                   <QuestionComponent
                     key={question.questionID}
                     question={question}

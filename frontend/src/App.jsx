@@ -14,9 +14,10 @@ function App() {
   const [loading, setLoading] = useState(false);
   const [outcome,setOutcome] = useState([]);
   const [marks,setMarks] = useState(0)
+  const [answerData, setAnswerData] = useState([]);
 
   const userData = {
-    loading, setLoading,outcome,setOutcome,marks,setMarks
+    loading, setLoading,outcome,setOutcome,marks,setMarks,answerData,setAnswerData
   }
 
   return (

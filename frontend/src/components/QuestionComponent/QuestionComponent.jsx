@@ -1,82 +1,81 @@
+/* eslint-disable no-unused-vars */
+/* eslint-disable react-hooks/exhaustive-deps */
+/* eslint-disable react/prop-types */
 import "./QuestionComponent.css";
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { MathJax, MathJaxContext } from "better-react-mathjax";
+import Histogram from "../graphs/histogram"
 import "//unpkg.com/mathlive";
 
-function SubQuestion({ sqNum, sqText, sqMarks }) {
+function SubQuestion({ sqNum, sqText, sqMarks, sqHistogram }) {
   const [answer, setAnswer] = useState("");
+  const answerRef = useRef();
 
   return (
-    <MathJaxContext>
     <div className="sub-question">
       <div className="sub-question-text-container">
         <div className="sq-num">{sqNum}</div>
-        <div className="sub-question-text"><MathJax>{sqText}</MathJax></div>
+        <div className="sub-question-text">
+          <MathJax>{sqText}</MathJax>
+        </div>
       </div>
-      <div className="figure-for-sub-question"></div>
+      <div className="figure-for-sub-question">
+  {sqHistogram ? sqHistogram && (
+    <Histogram
+    className="answer-input"
+      width={300}
+      height={500}
+      numXMarkers={5}
+      numYMarkers={7}
+      scaleX={5}
+      scaleY={10}
+      maxBoxes={5}
+    />
+  ) :  ""}
+  <math-field className="answer-input" placeholder="Answer..."  />
+  <p>{answer? `The answer is ${answer}`:""}</p>
+</div>
+
       <div className="answer-for-sub-question">
-        <math-field className="answer-input" placeholder="Answer..."></math-field>
+       
         <div className="mark-for-sq">({sqMarks} marks)</div>
       </div>
     </div>
-    </MathJaxContext>
   );
 }
 
 function QuestionComponent({ question, mqNum }) {
-  // If there is only one answer, make sure theres only the main text and the answer
   const [isOneAnswerQuestion, setIsOneAnswerQuestion] = useState(false);
   const [hasContext, setHasContext] = useState(false);
   const [subQuestions, setSubQuestions] = useState([]);
 
-  // Alphabet values for sub questions
   const subQuestionAlphabet = "abcdefghijklmnopqrstuvwxyz";
 
   useEffect(() => {
-    // If there is only one answer, set this to true
-    if (question.questionsGrid.length === 1) {
-      setIsOneAnswerQuestion(true);
-    } else {
-      setIsOneAnswerQuestion(false);
-    }
-    // If there is context, set this to true
-    if (question.answersGrid[0] === "") {
-      setHasContext(true);
-    } else {
-      setHasContext(false);
-    }
-  }, [question]);
+    setIsOneAnswerQuestion(question.questionsGrid.length === 1);
+    setHasContext(question.answersGrid[0] === "");
+  }, [question]);   
+  let isAHistogram = false;
 
-  //If there is context, sub questions start from index 1
   useEffect(() => {
-    if (hasContext) {
-      let newArray = [];
-      for (let i = 1; i < question.questionsGrid.length; i++) {
-        newArray.push(
-          <SubQuestion
-            key={i}
-            sqNum={subQuestionAlphabet[i - 1]}
-            sqText={question.questionsGrid[i]}
-            sqMarks={question.marksGrid[i]}
-          />
-        );
-      }
+    const generateSubQuestions = () => {
+      const startIdx = hasContext ? 1 : 0;
+      const newArray = question.questionsGrid.slice(startIdx).map((sqText, index) => (
+     
+        <SubQuestion
+          key={index}
+          sqNum={subQuestionAlphabet[index]}
+          sqText={sqText}
+          sqHistogram={question.answersTypeGrid[index + startIdx] === "Histogram" }
+          isAHistogram={question.answersTypeGrid[index + startIdx] === "Histogram" ? true : false}
+          sqMarks={question.marksGrid[index + startIdx]}
+        />
+      ));
       setSubQuestions(newArray);
-    } else {
-      let newArray = [];
-      for (let i = 0; i < question.questionsGrid.length; i++) {
-        newArray.push(
-          <SubQuestion
-            key={i}
-            sqNum={subQuestionAlphabet[i]}
-            sqText={question.questionsGrid[i]}
-            sqMarks={question.marksGrid[i]}
-          />
-        );
-      }
-      setSubQuestions(newArray);
-    }
-  }, [hasContext]);
+    };
+
+    generateSubQuestions();
+  }, [question, hasContext]);
 
   function log() {
     console.log("One answer question: " + isOneAnswerQuestion);
@@ -85,8 +84,7 @@ function QuestionComponent({ question, mqNum }) {
   }
 
   return (
-    <>
-      <MathJaxContext>
+    <MathJaxContext>
       <div className="question-component-container">
         <div className="main-question-container">
           <div className="main-text-container">
@@ -94,23 +92,27 @@ function QuestionComponent({ question, mqNum }) {
               {mqNum}
             </div>
             {(hasContext || isOneAnswerQuestion) && (
-              <div className="main-text"><MathJax>{question.questionsGrid[0]}</MathJax></div>
+              <div className="main-text">
+                {question.questionsGrid[0] && (
+                  <MathJax>{question.questionsGrid[0]}</MathJax>
+                )}
+              </div>
             )}
           </div>
           {isOneAnswerQuestion && (
             <div className="mq-answer-container">
-              <math-field className="answer-input" placeholder="Answer..."></math-field>
-              <div className="mark-for-mq">({question.marksGrid[0]} marks)</div>
+              <math-field className="answer-input" placeholder="Answer..." />
+              <div className="mark-for-mq">
+                ({question.marksGrid[0]} marks)
+              </div>
             </div>
           )}
         </div>
-        {/* If it is a one answer question, do not display subquestions */}
         {!isOneAnswerQuestion && (
           <div className="sub-question-container">{subQuestions}</div>
         )}
       </div>
-      </MathJaxContext>
-    </>
+    </MathJaxContext>
   );
 }
 
