@@ -47,6 +47,7 @@ const Learn = () => {
       ) : (
         <div>Please <Link to="login">Login</Link> to Access Learning Resources!</div>
       )}
+      <br/>
       <Link to="/learning-pure">Pure Mathematics 1</Link><br/><Link to="/learning-stat">Statistics</Link>
       <Link to="/addresources" className="link">
             Add Learning Resources 🤓

@@ -11,7 +11,7 @@ const LearningPureMaths = () => {
 
   async function PureMathsRelated(){
     try{
-      const response = await Axios.get("http://localhost:8000/resources/topic",{topic:"Pure Mathematics I"}); //might have to change these routes
+      const response = await Axios.post("http://localhost:8000/resources/topic",{topic:"Pure Mathematics I"}); //might have to change these routes
       setResources(response.data)
       console.log(resource)
     }catch(err){
@@ -27,9 +27,9 @@ const LearningPureMaths = () => {
 
 
   return (
-    <div><h1>Pure Maths Materials</h1>{resource && resource.length ? 
+    <div style={{textAlign:"center",margin:"5%"}}><h1>Pure Maths Materials</h1>{resource && resource.length ? 
       resource.map((x)=>(
-      <div key={x._id}>
+      <div key={x._id} style={{margin:"5%",padding:"5%"}}>
         <h1>{x.topic}</h1>
         <h1>{x.title}</h1>
         <h1>{x.about}</h1>

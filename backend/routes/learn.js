@@ -38,7 +38,7 @@ router
     }
   });
 
-  router.route("/topic").get(async (req,res)=>{
+  router.route("/topic").post(async (req,res)=>{
     const topic = req?.body?.topic;
     if(!topic){
       const everything = await learningModel.find();
@@ -48,14 +48,14 @@ router
         res.status(203).json({Alert:"No Resources found in general"})
       }
 
-    }else if(topic==="Pure Mathematics I "){
+    }else if(topic==="Pure Mathematics I"){
       const pureMath = await learningModel.find({topic:"Pure Mathematics I"});
       if(pureMath && pureMath.length > 0 ){
         res.status(200).json(pureMath)
       }else{
         res.status(203).json({Alert:"No Pure Mathematics Resources found!"})
       }
-    }else if(topic==="Probability And Statistics "){
+    }else if(topic==="Probability And Statistics"){
       const Statistics = await learningModel.find({topic:"Probability And Statistics"});
       if(Statistics && Statistics.length > 0 ){
         res.status(200).json(Statistics)

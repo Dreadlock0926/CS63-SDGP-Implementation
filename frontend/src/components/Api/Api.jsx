@@ -33,7 +33,7 @@ export async function NewUser(data) {
 
 export async function FetchMaterial() {
   try {
-    const resources = await Axios.get(`${BASE}/resources/topic`);
+    const resources = await Axios.post(`${BASE}/resources/topic`);
     return resources.data;
   } catch (err) {
     console.error(err);
