@@ -43,6 +43,7 @@ const Forum = () => {
       const upvote = await Axios.put(`${EndPoint}/upvotes/${id}`);
       if (upvote.status === 200) {
         setStatus("Upvoted!");
+        window.location.reload();
       } else {
         setStatus("Error while upvoting!");
       }
@@ -114,12 +115,13 @@ const Forum = () => {
               <button type="submit">Answer!</button>
             </form>
             <br />
-            <p>{status}</p>
+         
           </div>
         ))
       ) : (
         <h1>No forum questions added yet!</h1>
       )}
+         <p>{status}</p>
       <Link to="/addforum">Add question to forum? 🤔</Link>
     </div>
   ) : (

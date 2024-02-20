@@ -1,6 +1,7 @@
 const express = require("express");
 const router = express.Router();
-const forumModel = require("../models/forum")
+const forumModel = require("../models/forum");
+const userModel  =require("../models/user");
 
 router.route("/").get(async (req,res)=>{
 
@@ -88,14 +89,17 @@ router.route("/:id").put(async (req, res) => {
 
 router.route("/upvotes/:id").put(async (req, res) => {
     const id = req?.params?.id;
-
-
     if (!id) {
         return res.status(400).json({ Alert: "No ID" });
     }
-
     try {
         const verify = await forumModel.findByIdAndUpdate(id, { $inc: { rating: 1 } }, { new: true });
+        const nerdPointsUpdate = await userModel.findByIdAndUpdate({_id:req.session.user.id},{$inc:{nerdPoints:1}})
+        if(!nerdPointsUpdate){
+            res.status(400).json({Alert:"Error while updating nerd points , perhaps user not logged in?"})
+        }else{
+            res.status(200).json({Alert:`Nerd Points Updated For The User ${nerdPointsUpdate}!`})
+        }
         if (!verify) {
             return res.status(404).json({ Alert: `${id} brings an invalid question!` });
         }
