@@ -2,20 +2,28 @@ import "./QuestionComponent.css";
 import { useEffect, useState } from "react";
 import { MathJax, MathJaxContext } from "better-react-mathjax";
 import "//unpkg.com/mathlive";
+import Histogram from "../graphs/histogram"
 
-function SubQuestion({ sqNum, sqText, sqMarks }) {
+function SubQuestion({ sqNum, sqText, sqMarks, sqHistogram }) {
   const [answer, setAnswer] = useState("");
+
+  function logAnswer() {
+    console.log(answer);
+  }
+
+  
 
   return (
     <MathJaxContext>
     <div className="sub-question">
       <div className="sub-question-text-container">
-        <div className="sq-num">{sqNum}</div>
+        <div className="sq-num" onClick={logAnswer}>{sqNum}</div>
         <div className="sub-question-text"><MathJax>{sqText}</MathJax></div>
       </div>
       <div className="figure-for-sub-question"></div>
+      {sqHistogram === "Histogram" && <Histogram width={300} height={450} numXMarkers={6} numYMarkers={5} scaleX={5} scaleY={10} maxBoxes={5} setAnswer={setAnswer}/>}
       <div className="answer-for-sub-question">
-        <math-field className="answer-input" placeholder="Answer..."></math-field>
+        <math-field className="answer-input" placeholder="Answer...">{answer}</math-field>
         <div className="mark-for-sq">({sqMarks} marks)</div>
       </div>
     </div>
@@ -58,6 +66,7 @@ function QuestionComponent({ question, mqNum }) {
             sqNum={subQuestionAlphabet[i - 1]}
             sqText={question.questionsGrid[i]}
             sqMarks={question.marksGrid[i]}
+            sqHistogram={question.answersTypeGrid[i]}
           />
         );
       }
