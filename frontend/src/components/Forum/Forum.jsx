@@ -89,7 +89,7 @@ const Forum = () => {
   };
 
   return logged ? (
-    <div>
+    <div className="forumContainer">
       <h1>Welcome back {user.username || user}!</h1>
       <h1>Forum!</h1>
       <br />
@@ -110,7 +110,7 @@ const Forum = () => {
             <button onClick={(e) => { e.preventDefault(); increaseVotes(x._id) }}>Upvote!</button>
             <button onClick={(e) => { e.preventDefault(); DeleteComment(x._id) }}>Delete</button>
             <br />
-            <form onSubmit={(e) => { e.preventDefault(); AnsweringQuestions(x._id, answer) }}>
+            <form className="replyForm" onSubmit={(e) => { e.preventDefault(); AnsweringQuestions(x._id, answer) }}>
               <input onChange={(e) => { setAnswer(e.target.value) }} placeholder="Answer..." type="text" />
               <button type="submit">Answer!</button>
             </form>
