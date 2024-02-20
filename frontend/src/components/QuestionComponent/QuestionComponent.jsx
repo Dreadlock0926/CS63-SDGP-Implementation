@@ -11,6 +11,17 @@ function SubQuestion({ sqNum, sqText, sqMarks, sqHistogram }) {
     console.log(answer);
   }
 
+  function returnAnswerInput(sqHistogram) {
+    if (sqHistogram !== "Expression") {
+      return (
+        <math-field style={{"backgroundColor":"gray","color":"white"}} readOnly={true} className="answer-input" placeholder="Answer...">{answer}</math-field>
+      )
+    } else {
+      return (
+        <math-field className="answer-input" placeholder="Answer...">{answer}</math-field>
+      )
+    }
+  }
   
 
   return (
@@ -23,7 +34,7 @@ function SubQuestion({ sqNum, sqText, sqMarks, sqHistogram }) {
       <div className="figure-for-sub-question"></div>
       {sqHistogram === "Histogram" && <Histogram width={300} height={450} numXMarkers={6} numYMarkers={5} scaleX={5} scaleY={10} maxBoxes={5} setAnswer={setAnswer}/>}
       <div className="answer-for-sub-question">
-        <math-field className="answer-input" placeholder="Answer...">{answer}</math-field>
+        {returnAnswerInput(sqHistogram)}
         <div className="mark-for-sq">({sqMarks} marks)</div>
       </div>
     </div>
@@ -80,6 +91,7 @@ function QuestionComponent({ question, mqNum }) {
             sqNum={subQuestionAlphabet[i]}
             sqText={question.questionsGrid[i]}
             sqMarks={question.marksGrid[i]}
+            sqHistogram={question.answersTypeGrid[i]}
           />
         );
       }
