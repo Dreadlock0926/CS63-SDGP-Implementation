@@ -1,35 +1,70 @@
-/* Style for the container div */
+/* Style for the container of the Learn component */
 .container {
-    font-family: 'Poppins', Courier, monospace;
-    margin: 20px;
-    padding: 20px;
-    border: 1px solid #ccc;
-    border-radius: 5px;
-  }
-  
-  /* Style for the loading message */
-  .loading-message {
-    font-size: 18px;
-    color: #555;
-  }
-  
-  /* Style for the no materials message */
-  .no-materials-message {
-    font-size: 24px;
-    color: #f00;
-  }
-  
-  /* Style for the link */
-  .link {
-    display: block;
-    margin-top: 20px;
-    font-size: 18px;
-    text-decoration: none;
-    color: #007bff;
-  }
-  
-  /* Style for the link hover effect */
-  .link:hover {
-    text-decoration: underline;
-  }
-  
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); /* Responsive grid layout */
+  gap: 20px; /* Gap between grid items */
+}
+
+/* Style for loading message */
+.loading-message {
+  text-align: center;
+  font-size: 20px;
+  color: #333; /* Dark gray color */
+}
+
+/* Style for no materials message */
+.no-materials-message {
+  text-align: center;
+}
+
+/* Style for login message */
+.login-message {
+  text-align: center;
+  font-size: 18px;
+  color: #333; /* Dark gray color */
+}
+
+/* Style for links */
+.link {
+  display: block;
+  text-align: center;
+  margin-top: 20px;
+  text-decoration: none;
+  background-color: #007bff; /* Blue color for the background */
+  color: #fff; /* White color for the text */
+  padding: 10px 20px;
+  border-radius: 5px;
+  transition: background-color 0.3s ease; /* Smooth transition effect */
+}
+
+/* Hover effect for links */
+.link:hover {
+  background-color: #0056b3; /* Darker blue color on hover */
+}
+
+/* Style for h1 */
+h1 {
+  text-align: center;
+  color: #333; /* Dark gray color */
+}
+
+/* Style for links to different learning sections */
+.learn-links {
+  display: flex;
+  justify-content: center;
+  margin-top: 20px;
+}
+
+/* Style for individual learning links */
+.learn-link {
+  margin-right: 20px;
+  font-size: 18px;
+  color: #007bff; /* Blue color for the text */
+  text-decoration: none;
+  transition: color 0.3s ease; /* Smooth transition effect */
+}
+
+/* Hover effect for individual learning links */
+.learn-link:hover {
+  color: #0056b3; /* Darker blue color on hover */
+}

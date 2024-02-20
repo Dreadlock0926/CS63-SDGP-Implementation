@@ -26,7 +26,10 @@ const AddStudy = () => {
     const resources = await Axios.post("http://localhost:8000/resources", data);
    
       if (resources.status === 201) {
-        setStatus("Added Resource!");
+        const temporary = setStatus("Added Resource!");
+        setTimeout(()=>{
+         setStatus("")
+        },2000)
       }
     } catch (err) {
       console.error(err);
