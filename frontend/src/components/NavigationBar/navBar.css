@@ -22,11 +22,9 @@
     transition: 0.5s;
   }
   
-  /* Avatar item next to navigation bar */
-  .avItem {
+  /* Logo item next to navigation bar */
+  .siteLogo {
     height: 38px;
-    border-radius: 50%;
-    box-shadow: rgba(0, 0, 0, 0.35) 0px 5px 15px;
   }
   
   /* Login & Signup button container */
