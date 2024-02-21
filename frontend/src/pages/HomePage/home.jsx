@@ -29,9 +29,10 @@ function Home() {
     
     <div className="itemsContainer" >
         <p className="webText"><b>ALiyah</b> <br />Your partner for learning <br />Advanced Level Mathematics!</p>
-        <Link to="login" className="clickLogBtn">CLICK HERE TO LOGIN</Link>
-        <br/>
-        <Link to="register" className="clickLogBtn" >Or Register!</Link>
+        <div className="registration-btns">
+            <Link to="login" className="clickLogBtn">CLICK HERE TO LOGIN</Link>
+            <Link to="register" className="clickLogBtn" >Or Register!</Link>
+        </div>
     </div>
 </div></div>
 }
