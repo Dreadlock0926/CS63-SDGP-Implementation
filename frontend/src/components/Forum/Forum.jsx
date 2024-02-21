@@ -88,15 +88,25 @@ const Forum = () => {
     }
   };
 
+  const [down,setDown] = useState(0)
+
+  useEffect(()=>{
+    console.log(down);
+  },[down])
+ 
+
   return logged ? (
     <div className="forumContainer">
       <h1>Welcome back, {user.username || user}!</h1>
       <br />
-      <Link className="forumBtn" to="/pureforum">Visit Pure Maths Forum</Link>
-      <Link className="forumBtn" to="/statforum">Visit Statistics Forum</Link>
+      <select onChange={(e)=>setDown(Number(e.target.value))}>
+        <option value={0}>All</option>
+        <option value={1}>Pure Math</option>
+        <option value={2}>Statistics</option>
+      </select>
       {loading ? (
         <h1>Loading...</h1>
-      ) : data && data.length ? (
+      ) : data && data.length && down===0 ? (
         data.map((x) => (
           <div key={x._id}>
             <br />
@@ -113,18 +123,60 @@ const Forum = () => {
               <button type="submit">Answer!</button>
             </form>
             <br />
-         
           </div>
         ))
-      ) : (
-        <h1>No forum questions added yet!</h1>
-      )}
-         <p>{status}</p>
+      ) : data && data.length && down===1 ? (
+        data.map((x) => (
+          x.topic === "Pure Mathematics I" ? (
+            <div key={x._id}>
+              <br />
+              <br />
+              <h2>{x.topic}</h2>
+              <h1>{x.question}</h1>
+              <h1>{x?.answer ? x.answer : "Be the first to Answer! 🥳"}</h1>
+              <p>{x.by ? `Posted by ${x.by}` : ""}</p>
+              <p>{x.rating ? `Upvoted by ${x.rating}` : <h1>Rated by none!</h1>}</p>
+              <button onClick={(e) => { e.preventDefault(); increaseVotes(x._id) }}>Upvote!</button>
+              <button onClick={(e) => { e.preventDefault(); DeleteComment(x._id) }}>Delete</button>
+              <br />
+              <form onSubmit={(e) => { e.preventDefault(); AnsweringQuestions(x._id, answer) }}>
+                <input onChange={(e) => { setAnswer(e.target.value) }} placeholder="Answer..." type="text" />
+                <button type="submit">Answer!</button>
+              </form>
+              <br />
+            </div>
+          ) : null
+        ))
+      ) : data && data.length && down===2 ? (
+        data.map((x) => (
+          x.topic === "Probability And Statistics" ? (
+            <div key={x._id}>
+              <br />
+              <br />
+              <h2>{x.topic}</h2>
+              <h1>{x.question}</h1>
+              <h1>{x?.answer ? x.answer : "Be the first to Answer! 🥳"}</h1>
+              <p>{x.by ? `Posted by ${x.by}` : ""}</p>
+              <p>{x.rating ? `Upvoted by ${x.rating}` : <h1>Rated by none!</h1>}</p>
+              <button onClick={(e) => { e.preventDefault(); increaseVotes(x._id) }}>Upvote!</button>
+              <button onClick={(e) => { e.preventDefault(); DeleteComment(x._id) }}>Delete</button>
+              <br />
+              <form onSubmit={(e) => { e.preventDefault(); AnsweringQuestions(x._id, answer) }}>
+                <input onChange={(e) => { setAnswer(e.target.value) }} placeholder="Answer..." type="text" />
+                <button type="submit">Answer!</button>
+              </form>
+              <br />
+            </div>
+          ) : null
+        ))
+      ) : null}
+      <p>{status}</p>
       <Link to="/addforum">Add question to forum? 🤔</Link>
     </div>
   ) : (
     <div><h1>Please <Link to="/login">login</Link> to continue to the forum </h1></div>
   );
-};
+}
+  
 
 export default Forum;

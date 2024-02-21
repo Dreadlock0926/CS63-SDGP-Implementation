@@ -50,7 +50,7 @@ const CreateForum = () => {
               <option value="Pure Mathematics I">Pure Maths I</option>
               <option value="Probability And Statistics">Statistics</option>
             </select>
-            <input onChange={handleChange} name="rating" value={forum.rating} placeholder="Enter Rating..." type="number" min={1} /> {/**Optional, might have to remove! */}
+            {/* <input onChange={handleChange} name="rating" value={forum.rating} placeholder="Enter Rating..." type="number" min={1} /> *Optional, might have to remove! */}
             <button type="submit">Add Resource!</button>
           </form>
           {errorMessage && <p style={{ color: "red" }}>{errorMessage}</p>}
