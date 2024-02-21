@@ -90,12 +90,10 @@ const Forum = () => {
 
   return logged ? (
     <div className="forumContainer">
-      <h1>Welcome back {user.username || user}!</h1>
-      <h1>Forum!</h1>
+      <h1>Welcome back, {user.username || user}!</h1>
       <br />
-      <Link to="/pureforum">Visit Pure Maths Forum!</Link>
-      <br />
-      <Link to="/statforum">Visit Statistics Forum!</Link>
+      <Link className="forumBtn" to="/pureforum">Visit Pure Maths Forum</Link>
+      <Link className="forumBtn" to="/statforum">Visit Statistics Forum</Link>
       {loading ? (
         <h1>Loading...</h1>
       ) : data && data.length ? (
