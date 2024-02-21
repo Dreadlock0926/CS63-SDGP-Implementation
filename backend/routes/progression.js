@@ -1,18 +1,20 @@
 const express = require('express');
 const router = express.Router();
-const progressionModel = require("../models/progressionSchema");
+const progressionModel = require("../models/user");
 
-router.route("/post").post(async (req, res) => {
+router.route("/patch").patch(async (req, res) => {
+  if(!req.session.user) return res.sendStatus(401);
+  const username = req.session.user.username;
+  const password = req.session.user.password;
+
   const { marks, testHistory, testnumber,voxalPoints,hoursLearned,ongoingCourses,completeCourse,PureMathematics,Statistics } = req?.body;
 
   if (!marks || !testHistory || !testnumber||!testnumber||!voxalPoints||!hoursLearned||!ongoingCourses||!completeCourse||!PureMathematics||!Statistics) {
     return res.status(400).json({ Alert: "Please provide correct data!" });
-
   }
   console.log(req.body);
-
   try {
-    const progressionData = (await progressionModel.create({ 
+    const progressionData = (await progressionModel.updateOne({username:username,password:password},{$set:{
       marks, 
       testHistory, 
       testnumber,
@@ -23,7 +25,8 @@ router.route("/post").post(async (req, res) => {
       PureMathematics,
       Statistics,
 
-    })); //check this
+    }},{ new: true })); //check this
+    console.log(progressionData);
 
     if (!progressionData) {
       return res.status(400).json({ Alert: "It has not been stored in the database!" });
@@ -39,10 +42,15 @@ router.route("/post").post(async (req, res) => {
 router.route("/get").get(async (req, res) => {
 
   try{
+    if(!req.session.user) return res.sendStatus(401);
+    const username = req.session.user.username;
+    const password = req.session.user.password;
+    
     // const userData = await progressionModel.find({_id:req?.session?.user?._id}).populate("users");
-    const userData = await progressionModel.find();
-    console.log(JSON.stringify(req.session.user)); //the session is not being created
-      if(userData&& userData.length>0){
+    if(!req.session.user)return res.sendStatus(401);
+    const userData = await progressionModel.findOne({username,password});
+    
+      if(userData){
         return res.status(200).json(userData);
       }else{
         return res.status(203).json({Alert:"No resources found!"})

@@ -11,6 +11,9 @@ function Login() {
           className="bgImg2"
           src="./images/background2.png"
         ></img>
+       
+        <input type="text" placeholder="Enter the Username"/>
+        <input type="password" placeholder="Enter the Password"/>
       </div>
     </>
   );

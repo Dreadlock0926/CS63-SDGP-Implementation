@@ -4,6 +4,9 @@ import Home from "./pages/HomePage/home";
 import UnknownPage from "./components/Error404/Unknown";
 import Progressionmark from "./components/graphs/Progressionmark";
 import DashboardPage from "./pages/DashboardPage/DashboardPage";
+import Login from "./pages/LoginPage/login";
+import regstration from "./components/graphs/Regstration";
+import Regstration from "./components/graphs/Regstration";
 
 export const UserContext = createContext();
 
@@ -41,6 +44,8 @@ function App() {
           <Route path="/" element={<Home />} />
           <Route path="/progression" element={<Progressionmark  />} />
           <Route path="/dashboard" element={<DashboardPage />} />
+          <Route path="/login" element={<Login/>} />
+          <Route path="/registration" element ={<Regstration/>}/>
           <Route path="*" element={<UnknownPage />} />
         </Routes>
       </BrowserRouter>

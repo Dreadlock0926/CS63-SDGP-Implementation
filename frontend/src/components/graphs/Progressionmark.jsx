@@ -79,6 +79,7 @@ function Progressionmark() {
         <p>Average Mark</p>
         <h2>{average}</h2>
       </div>
+      
       <div>{renderLineChart}</div>
     </div>
   );

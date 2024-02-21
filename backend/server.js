@@ -9,6 +9,8 @@ const session = require("express-session");
 const helmet = require("helmet");
 const { join } = require("path");
 const progression = require("./routes/progression");
+const registration = require("./routes/registration");
+const cookieParser = require("cookie-parser");
 
 async function authenticated(req, res, next) {
   if (req?.session?.user) {
@@ -28,6 +30,7 @@ app.use(express.urlencoded()); //allow access from anywhere for now!
 app.use(helmet());
 app.use(express.json());
 
+
 app.get("/", (req, res) => {
   res.status(200).send("<h1>Hey docker!</h1>");
 });
@@ -39,12 +42,13 @@ app.use(
     secret: "keyboard cat",
     resave: false,
     saveUninitialized: false,
-    cookie: { secure: true },
+    cookie: { maxAge:60000*60 },
   })
 );
 
 
 app.use("/progression",progression);
+app.use("/registration",registration);
 
 
 app.use("*", (req, res) => {
