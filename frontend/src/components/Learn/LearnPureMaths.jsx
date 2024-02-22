@@ -2,6 +2,8 @@
 import Axios from "axios";
 import { useEffect, useState } from "react";
 import "./Pure.css";
+import { Container, Typography, Card, CardContent, Link } from "@mui/material";
+
 
 const LearningPureMaths = () => { 
 
@@ -27,17 +29,34 @@ const LearningPureMaths = () => {
 
 
   return (
-    <div style={{textAlign:"center",margin:"5%"}}><h1>Pure Maths Materials</h1>{resource && resource.length ? 
-      resource.map((x)=>(
-      <div key={x._id} style={{margin:"5%",padding:"5%"}}>
-        <h1>{x.topic}</h1>
-        <h1>{x.title}</h1>
-        <h1>{x.about}</h1>
-        <h1>{x.subtopic}</h1>
-     < a href={x.url? x.url :""}>{`Click here to learn more about ${x.title}`}</a>
-        </div>))
-         : <h1>No Pure Maths resources found!</h1>}</div>
-  )
+    <Container maxWidth="md" sx={{ textAlign: "center", marginTop: "5%" }}>
+      <Typography variant="h3" gutterBottom>
+        Pure Maths Materials
+      </Typography>
+      {resource.length ? (
+        resource.map((resource) => (
+          <Card key={resource._id} sx={{ margin: "20px", padding: "20px", boxShadow: 4 }}>
+            <CardContent>
+              <Typography variant="h4" gutterBottom>
+                {resource.title}
+              </Typography>
+              <Typography variant="body1" color="textSecondary" gutterBottom>
+                {resource.about}
+              </Typography>
+              <Typography variant="body2" color="textSecondary">
+                {resource.subtopic}
+              </Typography>
+              <Link href={resource.url ? resource.url : ""} color="primary" underline="hover">
+                Click here to learn more
+              </Link>
+            </CardContent>
+          </Card>
+        ))
+      ) : (
+        <Typography variant="h4">No Pure Maths resources found!</Typography>
+      )}
+    </Container>
+  );
 }
 
 export default LearningPureMaths

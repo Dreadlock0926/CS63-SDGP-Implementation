@@ -31,8 +31,14 @@ const Learn = () => {
 
   return (
     <div style={{fontFamily:"poppins"}}>
-      <h1>Learning Resources 📔</h1>
-      {logged ? (
+            <h1>Learning Resources 📔</h1>
+      <Link to="/learning-pure">Pure Mathematics 1</Link><br/><Link to="/learning-stat">Statistics</Link>
+      <Link to="/addresources" className="link">
+            Add Learning Resources 🤓
+          </Link>
+          <br/>
+   
+      {/* {logged ? (
         <div className="container" style={{margin:"5%",padding:"5%"}}>
           {loading ? (
             <p className="loading-message">Loading...</p>
@@ -46,12 +52,8 @@ const Learn = () => {
         </div>
       ) : (
         <div>Please <Link to="login">Login</Link> to Access Learning Resources!</div>
-      )}
-      <br/>
-      <Link to="/learning-pure">Pure Mathematics 1</Link><br/><Link to="/learning-stat">Statistics</Link>
-      <Link to="/addresources" className="link">
-            Add Learning Resources 🤓
-          </Link>
+      )} */}
+
     </div>
   );
 };

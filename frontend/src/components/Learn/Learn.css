@@ -1,5 +1,7 @@
 /* Style for the container of the Learn component */
+
 .container {
+ 
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); /* Responsive grid layout */
   gap: 20px; /* Gap between grid items */

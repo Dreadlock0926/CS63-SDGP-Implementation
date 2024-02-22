@@ -1,5 +1,8 @@
+/* eslint-disable no-unused-vars */
 import Axios from "axios";
 import { useEffect, useState } from "react";
+import { Container, Typography, Card, CardContent } from "@mui/material";
+
 
 const LearningStatistics = () => {
 
@@ -20,16 +23,31 @@ const LearningStatistics = () => {
 
 
   return (
-    <div style={{padding:"10%"}}><h1>Statistics</h1>{resource && resource.length ? 
-    resource.map((x)=>(
-    <div key={x._id} style={{margin:"5%",padding:"5%"}}>
-      <h1>{x.topic}</h1>
-      <h1>{x.title}</h1>
-      <h1>{x.about}</h1>
-      <h1>{x.subtopic}</h1>
-      </div>))
-       : <h1>No Statistics Resources found!</h1>}</div>
-  )
+    <Container maxWidth="md" sx={{ padding: "10%" }}>
+      <Typography variant="h3" gutterBottom>
+        Statistics
+      </Typography>
+      {resource.length ? (
+        resource.map((resource) => (
+          <Card key={resource._id} sx={{ margin: "5%", padding: "5%", boxShadow: 4 }}>
+            <CardContent>
+              <Typography variant="h4" gutterBottom>
+                {resource.title}
+              </Typography>
+              <Typography variant="body1" color="textSecondary" gutterBottom>
+                {resource.about}
+              </Typography>
+              <Typography variant="body2" color="textSecondary">
+                {resource.subtopic}
+              </Typography>
+            </CardContent>
+          </Card>
+        ))
+      ) : (
+        <Typography variant="h4">No Statistics Resources found!</Typography>
+      )}
+    </Container>
+  );
 }
 
 export default LearningStatistics;
