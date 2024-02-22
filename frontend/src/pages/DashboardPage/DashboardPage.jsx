@@ -7,6 +7,7 @@ import { LineChart, Line, CartesianGrid, XAxis, YAxis } from "recharts";
 import { useContext, useEffect, useState } from "react";
 import { UserContext } from "../../App";
 import axios from "axios";
+import Tracking from "../../components/graphs/Tracking";
 
 // Dashboard Header Tab
 function DashboardHeader() {
@@ -307,6 +308,7 @@ function DashboardPage() {
           <DashboardStatistics />
           <DashboardCourses />
           <DashboardActivity />
+          <Tracking/>
         </div>
       </div>
     </>
