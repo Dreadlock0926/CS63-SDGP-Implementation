@@ -29,9 +29,9 @@ function App() {
             <Route path="login" element={<Login />} />
             <Route path="add-questions" element={<AddQuestionsPage />}/>
             <Route path="exam-test-page" element={<ExamQuestionTest />}/>
-            <Route path="finalized" element={<Finalized/>}/>
             <Route path="/examfinal" element={<ExamFinalized/>}></Route> {/**Incomplete */}
             <Route path="/scope" element={<Scope/>}></Route> {/**Radhul is working on this */}
+            <Route path="finalized" element={<Finalized/>}/>
             <Route path="*" element={<ErrorPage />} />
           </Routes>
         </BrowserRouter>
