@@ -7,6 +7,7 @@ import ErrorPage from "./components/Error404/ErrorPage";
 import ExamQuestionTest from "./pages/TestPages/ExamQuestionTest";
 import Scope from "./pages/TestPages/Scope";
 import ExamFinalized from "./pages/TestPages/ExamFinal";
+import Finalized from "./pages/TestPages/Finalized";
 
 export const UserContext = createContext();
 
@@ -28,6 +29,7 @@ function App() {
             <Route path="login" element={<Login />} />
             <Route path="add-questions" element={<AddQuestionsPage />}/>
             <Route path="exam-test-page" element={<ExamQuestionTest />}/>
+            <Route path="finalized" element={<Finalized/>}/>
             <Route path="/examfinal" element={<ExamFinalized/>}></Route> {/**Incomplete */}
             <Route path="/scope" element={<Scope/>}></Route> {/**Radhul is working on this */}
             <Route path="*" element={<ErrorPage />} />

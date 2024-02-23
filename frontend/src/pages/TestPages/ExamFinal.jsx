@@ -81,6 +81,8 @@ const addWrongAnswers = () => {
 
 };
 
+
+let finalMark = 0;
 function getTotalMarks() {
   marksArray = [];
 
@@ -96,10 +98,21 @@ function getTotalMarks() {
   for (let i = 0; i < wrongAnswersIndex.length; i++) {
       totalMarks -= marksArray[wrongAnswersIndex[i]];    
   }
+  finalMark+=totalMarks;
+
   console.log("Total marks:", totalMarks);
 }
+finalMark=200
+localStorage.setItem("marks",finalMark)
 
   // end of getting answers
+
+  const finalMarks  = (e)=>{
+    e.preventDefault();
+    setTimeout(()=>{
+              <Link to="finalized"/>
+    },1000)
+  }
 
   return (
     <div>
@@ -108,9 +121,10 @@ function getTotalMarks() {
           <h1>Exam</h1>
           <button onClick={getAnswers}>log answers</button>
           <div>
+            <form onSubmit={finalMarks}>            
             {JSON.parse(examData).map((question, index) => {
               return (
-                <div>
+                <div key={question.questionID || index }>
                   <QuestionComponent
                     key={question.questionID}
                     question={question}
@@ -119,6 +133,8 @@ function getTotalMarks() {
                 </div>
               );
             })}
+            <button type="submit" >Done!</button></form>
+
           </div>
         </div>
       ) : (
