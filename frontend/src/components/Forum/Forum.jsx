@@ -57,6 +57,32 @@ const Forum = () => {
     }
   };
 
+  const downVote = async (id) => {
+    try {
+      
+    
+      setLoading(true);
+      // data.filter((x) => {
+      //   totalVotes += x.rating[id];
+      // });
+
+      const upvote = await Axios.put(`${EndPoint}/downvotes/${id}`);
+      if (upvote.status === 200) {
+        setStatus("Down Voted!");
+        window.location.reload();
+      } else {
+        setStatus("Error while upvoting!");
+      }
+      setTimeout(() => {
+        navigator("/forum");
+      }, 2000);
+    } catch (err) {
+      console.error(err);
+    } finally {
+      setLoading(false);
+    }
+  };
+
   const AnsweringQuestions = async (id, answer) => {
     try {
       setLoading(true);
@@ -116,6 +142,7 @@ const Forum = () => {
             <p>{x.by ? `Posted by ${x.by}` : ""}</p>
             <p>{x.rating ? `Upvoted by ${x.rating}` : <h1>Rated by none!</h1>}</p>
             <button onClick={(e) => { e.preventDefault(); increaseVotes(x._id) }}>Upvote!</button>
+            <button onClick={(e) => { e.preventDefault(); downVote(x._id) }}>DownVote!</button>
             <button onClick={(e) => { e.preventDefault(); DeleteComment(x._id) }}>Delete</button>
             <br />
             <form className="replyForm" onSubmit={(e) => { e.preventDefault(); AnsweringQuestions(x._id, answer) }}>
@@ -137,6 +164,7 @@ const Forum = () => {
               <p>{x.by ? `Posted by ${x.by}` : ""}</p>
               <p>{x.rating ? `Upvoted by ${x.rating}` : <h1>Rated by none!</h1>}</p>
               <button onClick={(e) => { e.preventDefault(); increaseVotes(x._id) }}>Upvote!</button>
+              <button onClick={(e) => { e.preventDefault(); downVote(x._id) }}>DownVote!</button>
               <button onClick={(e) => { e.preventDefault(); DeleteComment(x._id) }}>Delete</button>
               <br />
               <form onSubmit={(e) => { e.preventDefault(); AnsweringQuestions(x._id, answer) }}>
@@ -159,6 +187,7 @@ const Forum = () => {
               <p>{x.by ? `Posted by ${x.by}` : ""}</p>
               <p>{x.rating ? `Upvoted by ${x.rating}` : <h1>Rated by none!</h1>}</p>
               <button onClick={(e) => { e.preventDefault(); increaseVotes(x._id) }}>Upvote!</button>
+              <button onClick={(e) => { e.preventDefault(); downVote(x._id) }}>DownVote!</button>
               <button onClick={(e) => { e.preventDefault(); DeleteComment(x._id) }}>Delete</button>
               <br />
               <form onSubmit={(e) => { e.preventDefault(); AnsweringQuestions(x._id, answer) }}>
