@@ -1,3 +1,4 @@
+/* eslint-disable react-hooks/exhaustive-deps */
 /* eslint-disable no-unused-vars */
 import Axios from "axios";
 import { useEffect } from "react";
@@ -8,30 +9,11 @@ const Finalized = () => {
 
     const marks = localStorage.getItem("marks")
     const progressOvertime = [];
-    
-
-    if(!marks){
-        return (
-            <div>Exam records not found! Please try again!</div>
-        )
-    }else{
-        console.log(`Your marks today are ${marks}`);
-        progressOvertime.push(marks)
-  
-    }
-
-    function OvertimeRecords() {
-        for (let i = 0; i < progressOvertime.length; i++) {
-            let todayProgress = progressOvertime[progressOvertime.length - 1] - progressOvertime.slice(0,-1);
-            console.log(`The overtime records are ${todayProgress}`);
-            return todayProgress;
-        }
-    }
-    
-
+      progressOvertime.push(marks)
+ 
     async function UpdateNewProgress(){
         try{
-            const data = await Axios.post("PUTTHEURLHERE",OvertimeRecords())
+            const data = await Axios.post("http://localhost:8000/progress",{progress:OvertimeRecords()})
             if(data.status===200){
                 console.log("Added new records!");
             }else{
@@ -42,10 +24,30 @@ const Finalized = () => {
         }
     }
 
+    useEffect(()=>{
+        UpdateNewProgress();
+    },[UpdateNewProgress()])
+    
 
+
+
+    function OvertimeRecords() {
+        for (let i = 0; i < progressOvertime.length; i++) {
+            let todayProgress = progressOvertime[progressOvertime.length - 1] - progressOvertime.slice(0,-1);
+            console.log(`The overtime records are ${todayProgress}`);
+            return todayProgress;
+        }
+    }
+    
+
+
+    
  
   return (
-    <div style={{textAlign:"center"}}><h1>Finalized</h1><p>{`${OvertimeRecords() !== 0  ? `Congrats you've made ${OvertimeRecords()} progress today!` : "Seems like there's no new progress today , better luck next time!"}`}</p></div>
+    <div style={{textAlign:"center"}}>
+        <h1>Finalized</h1>
+        <p>{`${OvertimeRecords() !== 0  ? `Congrats you've made ${OvertimeRecords()} progress today!` : "Seems like there's no new progress today , better luck next time!"}`}</p>
+        </div>
   )
 }
 
