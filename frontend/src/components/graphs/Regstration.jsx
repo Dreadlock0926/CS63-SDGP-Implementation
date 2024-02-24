@@ -17,8 +17,13 @@ function Regstration() {
     const fetchData = async () => {
       try {
         const response = await axios.post(apiUrl, { username, password });
-        console.log(response.data);
-        
+        console.log(response);
+        if (response.status == 200) {
+          alert("You have successfully registered ! ");
+        }
+        if (response.status == 401) {
+          alert("Invalid input ! ");
+        }
       } catch (error) {
         console.error("Error fetching data:", error);
       }
@@ -36,7 +41,9 @@ function Regstration() {
         <label htmlFor="">Enter the password :</label>
         <input type="password" value={password} onChange={handlePassword} />
       </div>
-      <button type="submit" onClick={handleSubmit}>Register</button>
+      <button type="submit" onClick={handleSubmit}>
+        Register
+      </button>
     </form>
   );
 }

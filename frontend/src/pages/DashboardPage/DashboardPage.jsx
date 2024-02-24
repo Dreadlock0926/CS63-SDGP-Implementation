@@ -8,6 +8,7 @@ import { useContext, useEffect, useState } from "react";
 import { UserContext } from "../../App";
 import axios from "axios";
 import Tracking from "../../components/graphs/Tracking";
+import NavBar from "../../components/NavigationBar/navBar";
 
 // Dashboard Header Tab
 function DashboardHeader() {
@@ -301,6 +302,7 @@ function DashboardActivity() {
 function DashboardPage() {
   return (
     <>
+    <NavBar/>
       <div className="dashboard-complete-container">
         <DashboardHeader />
         <div className="dashboard-main">

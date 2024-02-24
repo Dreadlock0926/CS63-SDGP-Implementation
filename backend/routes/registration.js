@@ -45,7 +45,7 @@ router.route("/registration").post(async(req,res)=>{
 
 })
 
-router.route("/login").get(async(req,res)=>{
+router.route("/login").post(async(req,res)=>{
   const {username,password} = req?.body;
   try{
     const getuserDetails = await userModel.findOne({username,password});
@@ -55,7 +55,9 @@ router.route("/login").get(async(req,res)=>{
       return res.status(401).json({Alert:"Invalid input ! "});
     }
     req.session.user = getuserDetails;
+    console.log(getuserDetails);
     return res.status(200).json({Successfull:getuserDetails});
+    
 
     
   }catch(err){

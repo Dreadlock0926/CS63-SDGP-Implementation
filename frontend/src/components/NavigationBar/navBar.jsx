@@ -22,15 +22,18 @@ const NavBar = () => {
           <a className="navItem" href="questions">
             Test
           </a>
-          <a className="navItem" href="progression">
+          <a className="navItem" href="dashboard">
             Progression
+          </a>
+          <a className="navItem" href="authenticate">
+            Auth
           </a>
         </nav>
         <div className="logContainer">
           <a className="loginBtn" href="login">
             Login
           </a>
-          <a className="signupBtn" href="signup">
+          <a className="signupBtn" href="registration">
             Sign up
           </a>
         </div>
