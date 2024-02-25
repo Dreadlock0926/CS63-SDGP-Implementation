@@ -14,11 +14,10 @@ export const UserContext = createContext();
 function App() {
   const [loading, setLoading] = useState(false);
   const [outcome,setOutcome] = useState([]);
-  const [marks,setMarks] = useState(0);
-  const [user,setUser] = useState({})
+  const [marks,setMarks] = useState(0)
 
   const userData = {
-    loading, setLoading,outcome,setOutcome,marks,setMarks,user,setUser
+    loading, setLoading,outcome,setOutcome,marks,setMarks
   }
 
   return (

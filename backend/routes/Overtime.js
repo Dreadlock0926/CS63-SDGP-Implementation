@@ -3,8 +3,8 @@ const router = express.Router();
 const userModel = require("../models/user")
 
 router.route("/").post(async (req,res)=>{
-    // const userSpecific = await userModel.findById(req.session.user.id)
-        const userSpecific = await userModel.find();
+    if(req.session.user){
+        const userSpecific = await userModel.findById(req.session.user.id)
     const progress = req?.body?.progress;
     if(!progress) res.status(400).json({Alert:"No progress!"})
 
@@ -14,20 +14,10 @@ router.route("/").post(async (req,res)=>{
     }else{
         res.status(200).json({Alert:"Updated!"})
     }
-   
+    }
     
 
-}).get(async (req,res)=>{
-    const data = await userModel.find()
-
-    if(!data){
-        res.status(404).json({Alert:"No progress!"})
-    }else{
-        res.status(200).json(data);
-    }
 })
-
-
 
 
 module.exports = router;
