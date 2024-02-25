@@ -22,8 +22,6 @@ const ExamFinalized = () => {
   let correctAnswers = [];
   let wrongAnswersIndex = [];
   
-
-  
   let wrongQuestions = [];
 
   let marksArray = [];
