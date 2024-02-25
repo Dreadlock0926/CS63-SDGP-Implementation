@@ -14,6 +14,7 @@ const AddStudy = () => {
     title: "",
     about: "",
     subtopic: "",
+    url:""
   });
 
   const theDrop = useRef();
@@ -26,7 +27,7 @@ const AddStudy = () => {
     const resources = await Axios.post("http://localhost:8000/resources", data);
    
       if (resources.status === 201) {
-        const temporary = setStatus("Added Resource!");
+       setStatus("Added Resource!");
         setTimeout(()=>{
          setStatus("")
         },2000)
@@ -79,6 +80,12 @@ const AddStudy = () => {
               onChange={handleChange}
               name="subtopic"
               placeholder="Enter subtopic"
+              type="text"
+            ></input>
+            <input
+              onChange={handleChange}
+              name="url"
+              placeholder="Enter Link"
               type="text"
             ></input>
             <button type="submit">Add Resource</button>

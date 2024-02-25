@@ -2,6 +2,7 @@
 import Axios from "axios";
 import { useEffect, useState } from "react";
 import { Container, Typography, Card, CardContent } from "@mui/material";
+import { Link } from "react-router-dom";
 
 
 const LearningStatistics = () => {
@@ -23,7 +24,7 @@ const LearningStatistics = () => {
 
 
   return (
-    <Container maxWidth="md" sx={{ padding: "10%" }}>
+    <Container sx={{ textAlign: "center", marginTop: "5%" }}>
       <Typography variant="h3" gutterBottom>
         Statistics
       </Typography>
@@ -40,6 +41,9 @@ const LearningStatistics = () => {
               <Typography variant="body2" color="textSecondary">
                 {resource.subtopic}
               </Typography>
+              <Link href={resource.url } color="primary" underline="hover">
+                {resource.url ? "Click Here to Learn More!" : ""}
+              </Link>
             </CardContent>
           </Card>
         ))

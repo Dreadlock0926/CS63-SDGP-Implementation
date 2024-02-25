@@ -6,6 +6,11 @@ const learningResources = mongoose.Schema({
   subtopic: {
     type: String,
   },
+  url:{
+    type:String,
+    required:false,
+    trim:true,
+  },
   photo:{
     type:String,
     trim:true,

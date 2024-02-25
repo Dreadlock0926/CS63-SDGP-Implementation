@@ -8,7 +8,7 @@ const learningModel = require("../models/learningResources");
 router
   .route("/")
   .post(async (req, res) => {
-    const { topic, title, about, subtopic } = req?.body;
+    const { topic, title, about, subtopic,link } = req?.body;
     const {file:image} = req;  //if uploading images is a must
 
     //we could implement images (cloudinary possibly) logic here if y'all want!
@@ -24,7 +24,7 @@ router
 
     const titleExists = await learningModel.findOne({title});
     if(!titleExists){
-      await learningModel.create({ topic, title, about,photo:image, subtopic }); //let's replace this with cloudinary logic
+      await learningModel.create({ topic, title, about,photo:image, subtopic , link }); //let's replace this with cloudinary logic
       return res
         .status(201)
         .json({ Alert: "Added Learning Resource to Learn" });

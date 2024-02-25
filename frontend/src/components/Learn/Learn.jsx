@@ -5,6 +5,7 @@ import { UserContext } from "../../App";
 import { FetchMaterial } from "../Api/Api";
 import { Link } from "react-router-dom";
 import Materials from "./Materials";
+import NotLogged from "../NotLogged"
 import "./Learn.css";
 
 const Learn = () => {
@@ -29,7 +30,7 @@ const Learn = () => {
     fetchMaterial();
   }, []);
 
-  return (
+  return logged? (
     <div style={{fontFamily:"poppins"}}>
             <h1>Learning Resources 📔</h1>
       <Link to="/learning-pure">Pure Mathematics 1</Link><br/><Link to="/learning-stat">Statistics</Link>
@@ -55,7 +56,7 @@ const Learn = () => {
       )} */}
 
     </div>
-  );
+  ) : <NotLogged/>;
 };
 
 export default Learn;

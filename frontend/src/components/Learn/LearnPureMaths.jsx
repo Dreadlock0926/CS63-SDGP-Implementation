@@ -46,8 +46,8 @@ const LearningPureMaths = () => {
               <Typography variant="body2" color="textSecondary">
                 {resource.subtopic}
               </Typography>
-              <Link href={resource.url ? resource.url : ""} color="primary" underline="hover">
-                Click here to learn more
+              <Link href={resource.url } color="primary" underline="hover">
+                {resource.url ? "Click Here to Learn More!" : ""}
               </Link>
             </CardContent>
           </Card>
