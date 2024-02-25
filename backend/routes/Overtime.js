@@ -6,10 +6,10 @@ router.route("/").post(async (req, res) => {
     const userId = req?.session?.user?.id;
     const progress = req?.body?.progress;
     
-    if (!progress) {
-        return res.status(400).json({ Alert: "No progress!" });
+    if (!progress || userId) {
+        return res.status(400).json({ Alert: "No progress or ID sent!" });
     }
-
+    
     try {
         const updatedUser = await userModel.findByIdAndUpdate(userId, { $push: { progress } }, { new: true });
 
