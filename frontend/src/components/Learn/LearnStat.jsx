@@ -42,7 +42,7 @@ const LearningStatistics = () => {
                 {resource.subtopic}
               </Typography>
               <Link href={resource.url } color="primary" underline="hover">
-                {resource.url ? "Click Here to Learn More!" : ""}
+              {resource.url!=="" ? "Click Here to Learn More!" : ""}
               </Link>
             </CardContent>
           </Card>

@@ -14,7 +14,7 @@ const AddStudy = () => {
     title: "",
     about: "",
     subtopic: "",
-    url:""
+    url: ""
   });
 
   const theDrop = useRef();
@@ -23,21 +23,23 @@ const AddStudy = () => {
     e.preventDefault();
     try {
       setLoading(true);
-    
-    const resources = await Axios.post("http://localhost:8000/resources", data);
+     
+      console.log(data);
+     
+      const resources = await Axios.post("http://localhost:8000/resources", data);
    
       if (resources.status === 201) {
-       setStatus("Added Resource!");
-        setTimeout(()=>{
-         setStatus("")
-        },2000)
+        setStatus("Added Resource!");
+        setTimeout(() => {
+          setStatus("");
+        }, 2000);
       }
     } catch (err) {
       console.error(err);
     } finally {
       setLoading(false);
-      setData({topic:"Pure Mathematics I",title:"",about:"",subtopic:""})
-      theDrop.current="Pure Mathematics I"
+      setData({ topic: "Pure Mathematics I", title: "", about: "", subtopic: "", url: "" });
+      // theDrop.current.value = "Pure Mathematics I";
     }
   };
 
@@ -46,10 +48,8 @@ const AddStudy = () => {
   };
 
   const handleDrop = (e) => {
-    setData({ ...data, [e.target.name]: e.target.value });
+    setData({ ...data, topic: e.target.value });
   };
-  
-
 
   return (
     <>
@@ -59,7 +59,7 @@ const AddStudy = () => {
         <div className="addQues">
           <h1>Adding Learning Resources 📚🐳</h1>
           <form onSubmit={addMaterial}>
-            <select onChange={handleDrop} name="topic" ref={theDrop}>
+            <select onChange={handleDrop} name="topic" ref={theDrop} value={data.topic}>
               <option value="Pure Mathematics I">Pure Math 1</option>
               <option value="Probability And Statistics">Statistics</option>
             </select>
@@ -68,6 +68,8 @@ const AddStudy = () => {
               name="title"
               placeholder="Enter title"
               type="text"
+              required
+              minLength={5}
             ></input>
             <input
               onChange={handleChange}

@@ -8,7 +8,7 @@ const learningResources = mongoose.Schema({
   },
   url:{
     type:String,
-    required:false,
+    default:"",
     trim:true,
   },
   photo:{
