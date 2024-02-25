@@ -1,22 +1,28 @@
 import axios from "axios";
 import React, { useEffect, useState } from "react";
+import { useContext } from "react";
+import { UserContext } from "../../App";
 
 export default function Authenticate() {
   const [user, setUser] = useState("");
   const [isAuthenticated, setIsAuthenticated] = useState(false);
   const [isLoading, setIsLoading] = useState(true);
+  const { username, password } = useContext(UserContext);
 
   useEffect(() => {
     const authenticated = async () => {
       try {
-        const response = await axios.get(
-          "http://localhost:8000/registration/api/auth/status"
+       
+        const response = await axios.post(
+          "http://localhost:8000/registration/api/auth/status",
+          { username, password }
         );
+        console.log("Valid User" + response.data);
         console.log(`the response is  ${response}`);
-        if (response.status === 200) {
+        if (response.data) {
           setUser(response.data); // Store user data on successful authentication
           setIsAuthenticated(true);
-        }else{
+        } else {
           alert("You have not logged in !");
         }
       } catch (error) {
@@ -27,7 +33,7 @@ export default function Authenticate() {
       }
     };
     authenticated();
-  }, []);
+  }, [username,password]);
 
   if (isLoading) {
     return <h1>Loading !</h1>;

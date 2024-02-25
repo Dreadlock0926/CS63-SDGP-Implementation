@@ -1,75 +1,112 @@
 /* eslint-disable no-unused-vars */
 /* eslint-disable react-hooks/exhaustive-deps */
-import  { useContext, useEffect, useState } from "react";
+import { useContext, useEffect, useState } from "react";
 import axios from "axios";
 import { LineChart, Line, CartesianGrid, XAxis, YAxis } from "recharts";
-import {UserContext} from "../../App"
-import "./Progressionmark.css"
+import { UserContext } from "../../App";
+import "./Progressionmark.css";
 
 function Progressionmark() {
-    const {value,setValue} = useContext(UserContext)
-    const {statValue,setstatValue} = useContext(UserContext);
+  const { value, setValue } = useContext(UserContext);
+  const { statValue, setstatValue, username, password,setUserName,setPassword} = useContext(UserContext);
+
   const [totalMark, setTotalMark] = useState(0); // Use a state variable to store the total marks
-  const [average,setAverage] = useState(0);
+  const [totalStatMarks,setTotalStatMarks] = useState(0);
+  const [average, setAverage] = useState(0);
+  const [chartData, setChartData] = useState([]);
+
   const apiUrl = "http://localhost:8000/progression/get";
 
-  function calculation() {
-    // Use reduce to sum up the marks in the value array
-    const total = value.reduce((acc, e) => {
-      return acc + e.marks; //PLEASE COMMENT WHEN U DO SOME NEW SHIT 
-     
-    }, 0);
+  function calculation(data) {
 
-    setTotalMark(total); // Update the total marks state
-    setAverage(totalMark/value.length); //this logic is wrong
+    const mathsMarks = data.testHistory.Maths;
+    const statMarks = data.testHistory.Statistics;
 
-    console.log("The total marks are " + total);
+    if(mathsMarks.length>=statMarks.length){
+      const transFormData = mathsMarks.map((mark,index)=>({
+        testNumber: index + 1, // Or any other identifier for the X-axis
+        Maths: mark,
+        Statistics: statMarks[index] || 0,
+      }))
+    setChartData(transFormData);
+
+    }else{
+      const transFormData = statMarks.map((mark,index)=>({
+         testNumber: index + 1, // Or any other identifier for the X-axis
+         Statistics: mark,
+         Maths: mathsMarks[index] || 0,
+    }))
+    setChartData(transFormData);
+    }
+
+    // Assuming `data` is the object containing the `testHistory` and other properties
+    if (data && data.testHistory && data.testHistory.Maths) {
+      const totalMathsMarks = data.testHistory.Maths.reduce((acc, currentMark) => acc + currentMark, 0);
+      const averageMathsMarks =  Math.round(totalMathsMarks / data.testHistory.Maths.length);
+      setTotalMark(totalMathsMarks); // Update the total marks state with the total for Maths
+      setAverage(averageMathsMarks); // Update the average marks state with the average for Maths
+      console.log("Total Maths marks: " + totalMathsMarks + ", Average Maths marks: " + averageMathsMarks);
+    }
+
+    if(data&&data.testHistory && data.testHistory.Statistics){
+      const totalStatMathMarks = data.testHistory.Statistics.reduce((acc,currentMark)=>acc+currentMark,0);
+      const averageStatMarks = Math.round(totalStatMathMarks/data.testHistory.Statistics.length);
+      setTotalStatMarks(averageStatMarks);
+
+    }
   }
-
-
-
- 
-
-
-
+  
+  
+  
+  const username1 = localStorage.getItem('username');
+  const password1 = localStorage.getItem('password');
+        
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const response = await axios.get(apiUrl);
-        console.log(response.data);
-        setValue(response.data);
-    
-        console.log(`Value contains ${JSON.stringify(value)}`);
-    
-        calculation(); // Call the calculation function after updating the value state
+        
+        const response = await axios.post(apiUrl, {
+          username1: username1, // Ensure this matches the expected API parameters
+          password1: password1,
+        });
+        
+        
+        console.log("Fetched data: ", response.data);
+        setValue(response.data); // Assuming this updates your component state correctly
+  
+        // Now call calculation with the fetched data
+        calculation(response.data);
       } catch (error) {
         console.error("Error fetching data:", error);
       }
     };
-
+  
     fetchData();
-  }, [apiUrl]); // Include apiUrl as a dependency
+  }, [username1,password1]); // Include apiUrl as a dependency
 
   const renderLineChart = (
     <>
-       <LineChart
-      width={500}
-      height={350}
-      data={value}
-      margin={{ top: 5, right: 20, bottom: 5, left: 0 }}
-    >
-      
-      <Line type="monotone" dataKey="PureMathematics.learnedProgress" stroke="#8884d8" />
-      <Line type="monotone" dataKey="Statistics.learnedProgress" stroke="#8884d8" />
-      <CartesianGrid stroke="#ccc" strokeDasharray="5 5" />
-      <XAxis dataKey="testnumber" />
-      <YAxis />
-    </LineChart>
-    
+      <LineChart
+        width={500}
+        height={350}
+        data={chartData}
+        margin={{ top: 5, right: 20, bottom: 5, left: 0 }}
+      >
+        <Line
+          type="monotone"
+          dataKey="Maths"
+          stroke="#8884d8"
+        />
+        <Line
+          type="monotone"
+          dataKey="Statistics"
+          stroke="#8884d8"
+        />
+        <CartesianGrid stroke="#ccc" strokeDasharray="5 5" />
+        <XAxis dataKey="testNumber" />
+        <YAxis />
+      </LineChart>
     </>
-   
-
-    
   );
 
   return (
@@ -77,10 +114,13 @@ function Progressionmark() {
       {/* <h1>Student progression tracker</h1> */}
       {/* <p>Total Marks: {totalMark}</p> */}
       <div className="avg-mark-container">
-        <p>Average Mark</p>
-        <h2>{average}</h2>
+        <p>Average Mathematics Mark</p>
+        <h2>{average}</h2><br />
+        <p>Average Statistics Mark</p>
+        <h2>{totalStatMarks}</h2>
+
       </div>
-      
+
       <div>{renderLineChart}</div>
     </div>
   );

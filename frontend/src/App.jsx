@@ -22,6 +22,9 @@ function App() {
   const [statValue, setstatValue] = useState([]);
   const [course, setCourse] = useState(0);
   const [ongoingCourse, setongoingCourses] = useState(0);
+  const [username,setUserName] = useState("");
+  const [password,setPassword] = useState("");
+  
 
   // Structuring the context value explicitly
   const contextValue = {
@@ -43,6 +46,10 @@ function App() {
     setCourse,
     ongoingCourse,
     setongoingCourses,
+    username,
+    setUserName,
+    password,
+    setPassword
   };
 
   return (

@@ -15,13 +15,13 @@ const userSchema = new mongoose.Schema({
   
   testHistory: { 
     type: Object, default: {
-    rank:{
-      type:Number,
-      default: 0,
+    Maths:{
+      type:Array,
+      default: [0],
     },
-    done:{
+    Statistics:{
       type: Array,
-      default:[],
+      default:[0],
     }
   }
   

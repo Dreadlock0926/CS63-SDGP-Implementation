@@ -56,7 +56,7 @@ router.route("/login").post(async(req,res)=>{
     }
     req.session.user = getuserDetails;
     console.log(getuserDetails);
-    return res.status(200).json({Successfull:getuserDetails});
+    return res.send(getuserDetails);
     
 
     
@@ -65,12 +65,28 @@ router.route("/login").post(async(req,res)=>{
   }
 })
 
-router.route("/api/auth/status").get((req,res)=>{
-  req.sessionStore.get(req.sessionID,(err,session)=>{
-    console.log(session);
-  })
-  return req.session.user ? res.status(200).send(req.session.user):res.status(401).send({msg:"Not athuanticated"});
+router.route("/api/auth/status").post(async(req,res)=>{
+  // req.sessionStore.get(req.sessionID,(err,session)=>{
+  //   console.log(session);
+  // })
+  // return req.session.user ? res.status(200).send(req.session.user):res.status(401).send({msg:"Not athuanticated"});
+  try{
+    const {username,password} = req?.body;
+    const getuserDetails = await userModel.findOne({username,password});
 
+
+    if(!getuserDetails){
+      return res.status(401).json({Alert:"Invalid input ! "});
+    }
+    req.session.user = getuserDetails;
+    console.log(getuserDetails);
+    return res.send(getuserDetails);
+    
+
+    
+  }catch(err){
+
+  }
 });
 
 

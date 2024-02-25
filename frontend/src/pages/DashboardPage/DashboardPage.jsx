@@ -10,28 +10,29 @@ import axios from "axios";
 import Tracking from "../../components/graphs/Tracking";
 import NavBar from "../../components/NavigationBar/navBar";
 
+
 // Dashboard Header Tab
 function DashboardHeader() {
-  const { data, setData, voxalPoints, setVoxalpoints, setHours } =
-    useContext(UserContext);
+  const { data, setData, voxalPoints, setVoxalpoints, setHours, username,setUserName,password,setPassword } = useContext(UserContext);
   const fetchData = async () => {
     try {
       // Replace 'your-api-url' with the actual API URL
-      const response = await axios.get("http://localhost:8000/progression/get");
+      const username1 = localStorage.getItem('username');
+      const password1 = localStorage.getItem('password');
+
+     
+    
+      const response = await axios.post("http://localhost:8000/progression/get",{username1,password1});
       setData(response.data); // Assuming you want to set the response data
       console.log(response.data); // Logging the response data
       let counter = 0;
       let hoursLearned = 0;
       // Extracting voxalPoints using map
-      await response.data.map((item) => {
-        counter += item.voxalPoints;
-      });
-      await response.data.map((x) => {
-        hoursLearned += x.hoursLearned;
-      });
-      setVoxalpoints(counter);
-      setHours(hoursLearned);
-      console.log("the points are ", voxalPoints); // Logging the voxalPoints
+      
+      setVoxalpoints(response.data.voxalPoints);
+      console.log(response.data.voxalPoints)
+      setHours(response.data.hoursLearned);
+      
     } catch (error) {
       console.error("Error fetching data: ", error);
       // Handle error here, e.g., set an error state
@@ -72,30 +73,29 @@ function DashboardGraph() {
 // Dashboard Statistics Tab
 function DashboardStatistics() {
   const { voxalPoints, hours, data, setData, course,setCourse,ongoingCourse, setongoingCourses } = useContext(UserContext);
-  
+  const username1 = localStorage.getItem('username');
+  const password1 = localStorage.getItem('password');
+
   let incompleteCourse =0;
   let courseCount =0;
 
   const fetchData = async () => {
     try {
       // Replace 'your-api-url' with the actual API URL
-      const response = await axios.get("http://localhost:8000/progression/get");
+      const response = await axios.post("http://localhost:8000/progression/get",{username1,password1});
       setData(response.data); // Assuming you want to set the response data
-      console.log(response.data); // Logging the response data
+      console.log("Completed courses "+response.data.completeCourse); // Logging the response data
       let counter = 0;
       let hoursLearned = 0;
       
       // Extracting voxalPoints using map
-      await response.data.map((item) => {
-        counter += item.voxalPoints;
-      });
-      await response.data.map((x) => {
-        hoursLearned += x.hoursLearned;
-      });
-      courseCount = await response.data[response.data.length-1].completeCourse;
-      incompleteCourse = await response.data[response.data.length-1].ongoingCourses;
-      setCourse(courseCount);
-      setongoingCourses(incompleteCourse);
+     
+      
+      setCourse(response.data.completeCourse);
+      setongoingCourses(response.data.ongoingCourses);
+      console.log(response)
+      console.log("Completed courses "+course);
+
       console.log("the points are ", voxalPoints); // Logging the voxalPoints
     } catch (error) {
       console.error("Error fetching data: ", error);
@@ -105,7 +105,7 @@ function DashboardStatistics() {
 
   useEffect(() => {
     fetchData();
-  }, []);
+  }, [password1,username1]);
 
   return (
     <>
@@ -151,6 +151,11 @@ function DashboardCourses() {
   const [statisticsProgress, setstatisticsProgress] = useState(0);
   const [statLessonMark, setstatLessonMark] = useState(0);
   const [mathsLessonMark,setmathsLessonMark] = useState(0);
+  const [mathsLesson,setMathsLessons] = useState(0);
+  const [statlesson,setStatLessons] = useState(0);
+
+  const username1 = localStorage.getItem('username');
+  const password1 = localStorage.getItem('password');
 
   let PurelearnedProgress = 0;
   
@@ -163,21 +168,18 @@ function DashboardCourses() {
   const fetchData = async () => {
     try {
       // Replace 'your-api-url' with the actual API URL
-      const response = await axios.get("http://localhost:8000/progression/get");
+      const response = await axios.post("http://localhost:8000/progression/get",{username1,password1});
       setData(response.data); // Assuming you want to set the response data
       console.log(response.data); // Logging the response data
 
-      await response.data.map((item) => {
-        mathlearningTracker += item.PureMathematics.learnedProgress;
-        statisticsLearningTracker += item.Statistics.learnedProgress;
-        mathsLearning += item.marks;
-      });
+      
 
-      setMathsProgress(mathlearningTracker / response.data.length);
-      setstatisticsProgress(statisticsLearningTracker / response.data.length);
-      setstatLessonMark(mathlearningTracker/response.data.length);
-      setmathsLessonMark(mathlearningTracker/response.data.length);
-
+      setMathsProgress(response.data.PureMathematics.learnedProgress);
+      setstatisticsProgress(response.data.Statistics.learnedProgress);
+      setstatLessonMark(response.data.Statistics.learnedProgress);
+      setmathsLessonMark(response.data.PureMathematics.learnedProgress);
+      setMathsLessons(response.data.PureMathematics.lesson);
+      setStatLessons(response.data.Statistics.lesson);
 
       // Extracting voxalPoints using map
 
@@ -193,7 +195,7 @@ function DashboardCourses() {
 
   useEffect(() => {
     fetchData();
-  }, []);
+  }, [username1,password1]);
 
   return (
     <>
@@ -206,7 +208,7 @@ function DashboardCourses() {
           <div className="courses-tab">
             <div className="course-card">
               <div className="course-title">Pure Mathematics I</div>
-              <div className="course-lessons">{12} lessons</div>
+              <div className="course-lessons">{mathsLesson} lessons</div>
               <div className="course-progress-tab">
                 <div className="prog-bar">
                   <p className="course-learn-progress">{mathsLessonMark}</p>
@@ -220,7 +222,7 @@ function DashboardCourses() {
             </div>
             <div className="course-card">
               <div className="course-title">Statistics</div>
-              <div className="course-lessons">{5} lessons</div>
+              <div className="course-lessons">{statlesson} lessons</div>
               <div className="course-progress-tab">
                 <div className="prog-bar">
                   <p className="course-learn-progress">{statLessonMark}</p>
@@ -242,10 +244,13 @@ function DashboardCourses() {
 // Dashboard Activity Tab
 function DashboardActivity() {
   const { value, setValue } = useContext(UserContext);
+  const username1 = localStorage.getItem('username');
+  const password1 = localStorage.getItem('password');
+
   const fetchData = async () => {
     try {
       // Replace 'your-api-url' with the actual API URL
-      const response = await axios.get("http://localhost:8000/progression/get");
+      const response = await axios.post("http://localhost:8000/progression/get",{username1,password1});
       setData(response.data); // Assuming you want to set the response data
       console.log(response.data); // Logging the response data
       let counter = 0;
@@ -268,7 +273,7 @@ function DashboardActivity() {
 
   useEffect(() => {
     fetchData();
-  }, []);
+  }, [username1,password1]);
 
   const data = [
     { name: "January", uv: 4000, pv: 2400, amt: 2400 },
