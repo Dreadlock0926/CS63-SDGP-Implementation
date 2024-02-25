@@ -24,7 +24,7 @@ router
 
     const titleExists = await learningModel.findOne({title});
     if(!titleExists){
-      await learningModel.create({ topic, title, about,photo:image, subtopic , link }); //let's replace this with cloudinary logic
+      await learningModel.create({ topic, title, about,photo:image, subtopic , url:link }); //let's replace this with cloudinary logic
       return res
         .status(201)
         .json({ Alert: "Added Learning Resource to Learn" });
