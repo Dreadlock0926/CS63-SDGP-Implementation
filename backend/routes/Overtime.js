@@ -2,25 +2,30 @@ const express = require("express");
 const router = express.Router();
 const userModel = require("../models/user")
 
-router.route("/").post(async (req,res)=>{
-    // const userSpecific = await userModel.findById(req.session.user.id)
-        const userSpecific = await userModel.find();
+router.route("/").post(async (req, res) => {
+    const userId = req?.session?.user?.id;
     const progress = req?.body?.progress;
-    if(!progress) res.status(400).json({Alert:"No progress!"})
-
-    const newProgress = await userSpecific.updateOne({progress})
-    if(!newProgress){
-        res.status(403).json({Alert:"error while updating!"})
-    }else{
-        res.status(200).json({Alert:"Updated!"})
-    }
-   
     
+    if (!progress) {
+        return res.status(400).json({ Alert: "No progress!" });
+    }
 
+    try {
+        const updatedUser = await userModel.findByIdAndUpdate(userId, { $push: { progress } }, { new: true });
+
+        if (!updatedUser) {
+            return res.status(404).json({ Alert: "User not found!" });
+        }
+
+        return res.status(200).json({ Alert: "Updated!", user: updatedUser });
+    } catch (error) {
+        console.error("Error while updating:", error);
+        return res.status(500).json({ Alert: "Error while updating!" });
+    }
 }).get(async (req,res)=>{
     const data = await userModel.find()
 
-    if(!data){
+    if(!data || data.length===0){
         res.status(404).json({Alert:"No progress!"})
     }else{
         res.status(200).json(data);
