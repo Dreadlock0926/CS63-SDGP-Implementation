@@ -5,9 +5,13 @@ const forumSchema = mongoose.Schema(
       type: String,
       trim: true,
     },
+    description:{
+      type:String,
+      trim:true,
+    },
     answer: {
-      type: String,
-      default: "",
+      type: Array,
+      default:[],
     },
     topic: {
       type: String,

@@ -138,6 +138,7 @@ const Forum = () => {
             <br />
             <br />
             <h1>{x.question}</h1>
+            <h2>{x.description}</h2>
             <h1>{x?.answer ? x.answer : "Be the first to Answer! 🥳"}</h1>
             <p>{x.by ? `Posted by ${x.by}` : ""}</p>
             <p>{x.rating ? `Upvoted by ${x.rating}` : <h1>Rated by none!</h1>}</p>
@@ -159,6 +160,7 @@ const Forum = () => {
               <br />
               <br />
               <h2>{x.topic}</h2>
+              <h2>{x.description}</h2>
               <h1>{x.question}</h1>
               <h1>{x?.answer ? x.answer : "Be the first to Answer! 🥳"}</h1>
               <p>{x.by ? `Posted by ${x.by}` : ""}</p>
@@ -182,6 +184,7 @@ const Forum = () => {
               <br />
               <br />
               <h2>{x.topic}</h2>
+              <h2>{x.description}</h2>
               <h1>{x.question}</h1>
               <h1>{x?.answer ? x.answer : "Be the first to Answer! 🥳"}</h1>
               <p>{x.by ? `Posted by ${x.by}` : ""}</p>

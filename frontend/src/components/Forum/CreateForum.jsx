@@ -44,7 +44,8 @@ const CreateForum = () => {
         <>
           <h1>Add Something to the forum!</h1>
           <form onSubmit={createQuestions}>
-            <input onChange={handleChange} name="question" value={forum.question} placeholder="Enter Question..." required />
+            <input onChange={handleChange} name="question" value={forum.question} placeholder="Enter Question..." required maxLength={20} />
+            <input onChange={handleChange} name="description"  placeholder="Enter Description..." required />
             <input onChange={handleChange} name="answer" value={forum.answer} placeholder="Enter Answer..." />
             <select onChange={handleChange} name="topic" value={forum.topic}>
               <option value="Pure Mathematics I">Pure Maths I</option>

@@ -33,7 +33,7 @@ router.route("/").get(async (req,res)=>{
 
 }).post(async (req, res) => {
     try {
-        const { question, answer, topic, rating,by="guest" } = req?.body;
+        const { question, description , answer, topic, rating,by="guest"} = req?.body;
         
         if (!question || !topic) {
             return res.status(400).json({ Alert: "NO Question/Topic!" });
@@ -45,7 +45,7 @@ router.route("/").get(async (req,res)=>{
             return res.status(409).json({ Alert: `${question} was Already posted before!` });
         }
 
-        const created = await forumModel.create({ question, answer, topic, rating ,by});
+        const created = await forumModel.create({ question, description, answer, topic, rating ,by});
         
         if (created) {
             return res.status(201).json({ Alert: `${question} Added!` });
@@ -58,33 +58,53 @@ router.route("/").get(async (req,res)=>{
     }
 })
 
-router.route("/:id").put(async (req, res) => {
-    const answer = req?.body.answer;
-    const id = req?.params?.id;
+router.route("/:id")
+    .put(async (req, res) => {
+        const { answer } = req.body;
+        const { id } = req.params;
 
-    if (!answer || !id) {
-        return res.status(400).json({ Alert: "NO Answer!" });
-    }
+        if (!answer || !id) {
+            return res.status(400).json({ Alert: "No Answer or ID Provided!" });
+        }
 
-    const exists = await forumModel.findById(id);
-    if (!exists) {
-        return res.status(404).json({ Alert: "Invalid ID" });
-    } else {
-        await exists.updateOne({answer}); // Update the document
-        return res.status(200).json({ Alert: `Updated ${id}` });
-    }
-}).delete(async(req,res)=>{
-    const id = req.params.id
-    if(!id) res.status(400).json({Alert:"NO ID Provided!"})
+        try {
+            const exists = await forumModel.findById(id);
+            
+            if (!exists) {
+                return res.status(404).json({ Alert: "Invalid ID" });
+            }
 
-    const exists = await forumModel.findById(id);
-    if(!exists){
-        res.status(404).json({Alert:"Invalid ID"})
-    } else{
-        await exists.deleteOne();
-        res.status(200).json({Alert:`Deleted ${id}`})
-    }
-})
+            exists.answer.push(answer);
+            await exists.save(); // Save the changes to the document
+
+            return res.status(200).json({ Alert: `Updated ${id}` });
+        } catch (error) {
+            console.error("Error updating answer:", error);
+            return res.status(500).json({ Alert: "Internal Server Error" });
+        }
+    })
+    .delete(async(req, res) => {
+        const { id } = req.params;
+
+        if (!id) {
+            return res.status(400).json({ Alert: "No ID Provided!" });
+        }
+
+        try {
+            const exists = await forumModel.findById(id);
+            
+            if (!exists) {
+                return res.status(404).json({ Alert: "Invalid ID" });
+            }
+
+            await exists.deleteOne();
+            return res.status(200).json({ Alert: `Deleted ${id}` });
+        } catch (error) {
+            console.error("Error deleting document:", error);
+            return res.status(500).json({ Alert: "Internal Server Error" });
+        }
+    });
+
 
 
 router.route("/upvotes/:id").put(async (req, res) => {
