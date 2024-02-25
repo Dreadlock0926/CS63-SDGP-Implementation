@@ -2,8 +2,8 @@ const mongoose = require("mongoose");
 const progressionSchema = new mongoose.Schema(
   {
     marks: {
-      type: Number,
-      default: 0,
+      type: [Number],
+      default: [],
     },
 
     by: {

@@ -1,5 +1,20 @@
 const mongoose = require("mongoose");
-const forumSchema = mongoose.Schema(
+const forumAnswerSchema = mongoose.Schema(
+  {
+    answer: {
+      type: String,
+      required: true,
+      trim: true,
+    },
+    by: {
+      type: mongoose.Schema.ObjectId,
+      ref: "users", //referencing to the users collection to make a connection!
+    },
+  },
+  { timestamps: true }
+);
+
+const forumQuestionSchema = mongoose.Schema(
   {
     question: {
       type: String,
@@ -7,8 +22,8 @@ const forumSchema = mongoose.Schema(
       trim: true,
     },
     answer: {
-      type: String,
-      default: "",
+      type: [forumAnswerSchema],
+      default: [],
     },
     topic: {
       type: String,
@@ -26,5 +41,8 @@ const forumSchema = mongoose.Schema(
 
   { timestamps: true }
 );
-const forumModel = mongoose.model("forums", forumSchema);
-module.exports = forumModel;
+const forumQuestionModel = mongoose.model("forums", forumQuestionSchema);
+const forumAnswerModel = mongoose.model("forumsAnswers", forumAnswerSchema);
+
+module.exports = forumQuestionModel;
+module.exports = forumAnswerModel;
