@@ -10,7 +10,6 @@ const ExamFinalized = () => {
   const examData = sessionStorage.getItem("examData");
 
   if (examData) {
-    console.log("Exam Data found!");
   } else {
     window.location.href = "/scope";
   }
@@ -134,7 +133,7 @@ localStorage.setItem("marks",finalMark)
                 </div>
               );
             })}
-            <button type="submit">Done!</button></form>
+            <button type="submit" >Done!</button></form>
 
           </div>
         </div>
