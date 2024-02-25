@@ -3,6 +3,7 @@ import { useContext, useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 import { CountdownCircleTimer } from "react-countdown-circle-timer";
 import QuestionComponent from "../../components/QuestionComponent/QuestionComponent";
+import Axios from "axios";
 
 // import { UserContext } from "../../App";
 
@@ -10,6 +11,7 @@ const ExamFinalized = () => {
   const examData = sessionStorage.getItem("examData");
 
   if (examData) {
+    console.log("");
   } else {
     window.location.href = "/scope";
   }
@@ -45,6 +47,8 @@ const ExamFinalized = () => {
     addWrongAnswers();
 };
 
+
+
 const compareAnswers = () => {
     wrongAnswersIndex = [];
     for (let i = 0; i < correctAnswers.length; i++) {
@@ -55,6 +59,7 @@ const compareAnswers = () => {
         
     }
     console.log("these are the index of the wrong answers", wrongAnswersIndex);
+   
 };
 
 const addWrongAnswers = () => {
@@ -80,6 +85,62 @@ const addWrongAnswers = () => {
     getTotalMarks();
 
 };
+
+const filtered = wrongQuestions.filter((question) => question.includes("_"));
+const index = [];
+
+index.push(filtered);
+let outcome = [];
+
+index[0].forEach((topicKeys) => {
+  const topic = topicKeys.split("_")[0]; // Taking the first part after split
+  switch (topic) {
+    case "rod":
+      outcome.push(0);
+      break;
+    case "pac":
+      outcome.push(1);
+      break;
+    case "p":
+      outcome.push(2);
+      break;
+    case "drv":
+      outcome.push(3);
+      break;
+    case "tnd":
+      outcome.push(4);
+      break;
+    default:
+      break;
+  }
+});
+
+// Now, outcome will contain occurrences of specific keywords, including the initial filtered array
+// If you want to count occurrences of keywords, you might need to refactor your logic
+
+const maxOccurrences = outcome.reduce((maxCount, currentValue) => {
+  const count = outcome.filter((val) => val === currentValue).length;
+  return count > maxCount ? count : maxCount;
+}, 0);
+
+console.log(`Max occur is ${JSON.stringify(outcome)}`); // This will give you the maximum occurrence count
+
+
+
+async function fetchTopic(e){
+  e.preventDefault();
+  try{
+    const {data} = await Axios.get("http://localhost:8000/addQuestion/index",{theIndex:maxOccurrences})
+    if(data.status==200){
+      alert(data)
+    }else{
+      console.log(data);
+    }
+  }catch(err){
+    console.error(err);
+  }
+}
+
 
 function getTotalMarks() {
   marksArray = [];
@@ -110,7 +171,7 @@ function getTotalMarks() {
           <div>
             {JSON.parse(examData).map((question, index) => {
               return (
-                <div>
+                <div key={question._id || index}>
                   <QuestionComponent
                     key={question.questionID}
                     question={question}
@@ -127,6 +188,7 @@ function getTotalMarks() {
           <Link to="/scope">Go back to scope</Link>
         </div>
       )}
+      <button onClick={fetchTopic}>Find Indexing!</button>
     </div>
   );
 };
