@@ -1,12 +1,9 @@
-/* eslint-disable no-unused-vars */
 import { useEffect, useState } from "react";
 import QuestionComponent from "../../components/QuestionComponent/QuestionComponent"
 import Axios from 'axios';
-import { CountdownCircleTimer } from "react-countdown-circle-timer";
 
 function ExamQuestionTest() {
 
-  
     const [questions, setQuestions] = useState([]);
 
     const noContextTestQuestion = {
@@ -65,41 +62,19 @@ function ExamQuestionTest() {
         getQuestion();
     },[])
 
-    let userAnswers = [];
-
-
     const getAnswers = () => {
         const answers = document.querySelectorAll(".answer-input");
         const answerValues = Array.from(answers).map((answer) => answer.value);
         console.log("Answers:", answerValues);
-        userAnswers.push(answerValues);
-    };  
+    };
 
-console.log(JSON.stringify(userAnswers));
-console.log(JSON.stringify(questions));
-
-  
-
-  
-   
-    const duration = questions.filter((x)=>x.duration)
 
     return (
         <>
-         {/* <button onClick={getQuestion}>Click to display questions</button> */}
+        {/* <button onClick={getQuestion}>Click to display questions</button> */}
         {/* <QuestionComponent question={noContextTestQuestion} mqNum={1}/> */}
-        {questions} 
-
+        {questions}
         <button onClick={getAnswers}>Log the answers</button>
-                <CountdownCircleTimer
-            isPlaying
-            duration={duration ? duration : ""}
-            colors={['#004777', '#F7B801', '#A30000', '#A30000']}
-            colorsTime={[Math.random()]}
-        >
-            {({ remainingTime }) => remainingTime > 0 ? remainingTime - 1 : 0}
-        </CountdownCircleTimer>
-
         </>
     )
 

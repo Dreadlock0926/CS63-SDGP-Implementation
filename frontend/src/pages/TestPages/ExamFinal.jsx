@@ -115,22 +115,6 @@ localStorage.setItem("marks",finalMark)
     },1000)
   }
 
-  const duration = examData.reduce((acc, curr) => {
-    if (curr.props.question.duration) {
-        return acc + curr.props.question.duration;
-    }
-    return acc;
-}, 0);
-
-  <CountdownCircleTimer
-  isPlaying
-  duration={duration}
-  colors={['#004777', '#F7B801', '#A30000', '#A30000']}
-  colorsTime={[Math.random()]}
->
-  {({ remainingTime }) => remainingTime > 0 ? remainingTime - 1 : 0}
-</CountdownCircleTimer>
-
   return (
     <div>
       {examData ? (
@@ -151,14 +135,7 @@ localStorage.setItem("marks",finalMark)
               );
             })}
             <button type="submit">Done!</button></form>
-            <CountdownCircleTimer
-                  isPlaying
-                  duration={duration}
-                  colors={['#004777', '#F7B801', '#A30000', '#A30000']}
-                  colorsTime={[Math.random()]}
-                >
-                  {({ remainingTime }) => remainingTime > 0 ? remainingTime - 1 : 0}
-                </CountdownCircleTimer>
+
           </div>
         </div>
       ) : (
