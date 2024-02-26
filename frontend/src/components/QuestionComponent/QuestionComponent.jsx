@@ -115,9 +115,12 @@ function QuestionComponent({ question, mqNum }) {
               {mqNum}
             </div>
             {(hasContext || isOneAnswerQuestion) && (
-              <div className="main-text"><MathJax>{question.questionsGrid[0]}</MathJax></div>
+              <div className="main-info-container">
+                <div className="main-text"><MathJax>{question.questionsGrid[0]}</MathJax></div>
+              </div>
             )}
           </div>
+          <img src={question.questionsFiguresGrid[0]} />
           {isOneAnswerQuestion && (
             <div className="mq-answer-container">
               <math-field className="answer-input" placeholder="Answer..."></math-field>
