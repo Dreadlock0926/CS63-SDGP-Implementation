@@ -35,8 +35,8 @@ function App() {
             <Route path="/" element={<Home />} />
             <Route path="login" element={<Login />} />
             <Route path="register" element={<Register />} />
-            <Route path="*" element={<ErrorPage />} />
             <Route path="mod" element={<ModalTest />} />
+            <Route path="*" element={<ErrorPage />} />
           </Routes>
         </BrowserRouter>
       </UserContext.Provider>

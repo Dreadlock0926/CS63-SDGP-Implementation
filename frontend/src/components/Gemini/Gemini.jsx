@@ -1,6 +1,7 @@
 import { useContext, useState } from "react";
 import Axios from "axios";
 import { UserContext } from "../../App";
+import BarLoader from "react-spinners/BarLoader"
 
 function Gemini() {
   const {logged} = useContext(UserContext)
@@ -49,14 +50,14 @@ function Gemini() {
               placeholder="Say something"
             />
             <button type="submit" disabled={loading}>
-              {loading ? <TailSpin></TailSpin> : <p>Search</p>}
+              {loading ? <BarLoader></BarLoader> : <p>Search</p>}
             </button>
             {data && data.length ? (
               data.map((x,index)=>(
                 <div key={x.id || index}><p>{x.Data}</p></div> //we will have to double check and verify this!
               ))
             ) : (
-              <h2>
+              <h2 style={{color:"white"}}>
                 {searchCounter === 0
                   ? "Hi, i'm Vexy , how may I help you today! 🤖👋🏻"
                   : "Anything else?"}

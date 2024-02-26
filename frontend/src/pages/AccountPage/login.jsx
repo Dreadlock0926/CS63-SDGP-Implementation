@@ -22,38 +22,33 @@ const Login = () => {
 
   async function Login(e) {
     e.preventDefault();
-    if (logged === true) { //context issue so this won't work , which is why it doesn't move past this
-      alert(`${newUser.username} already logged in!`);
-    } else {
-      try {
-        setLoading(true);
-        const loginUser = await Axios.post(BASE, newUser);
-        if (loginUser.status === 200) {
-          console.log(loginUser.data);
-     
-          setUser(loginUser.data);
-          console.log(user);
-          setLogged(true);
-          setTimeout(() => {
-            navigator("/");
-          }, 1500);
-        } else if(loginUser.status===401){
-          setIssue("Wrong Password , Please try again!")
-        }else if(loginUser.status===404){
-          setIssue("Invalid Username, Please Check Again!")
-        }
-      } catch (err) {
-        console.error(err);
-      } finally {
-        setLoading(false);
-        setnewUser({username: "", password: ""});
+    try {
+      setLoading(true);
+      const loginUser = await Axios.post(BASE, newUser);
+      if (loginUser.status === 200) {
+        console.log(loginUser.data);
+        setUser(loginUser.data);
+        setLogged(true);
+        setTimeout(() => {
+          navigator("/");
+        }, 1500);
+      } else if (loginUser.status === 401) {
+        setIssue("Wrong Password, Please try again!");
+      } else if (loginUser.status === 404) {
+        setIssue("Invalid Username, Please Check Again!");
       }
+    } catch (err) {
+      console.error(err);
+    } finally {
+      setLoading(false);
+      setnewUser({ username: "", password: "" });
     }
   }
+  
 
 
-
-  return logged?       <div className="backgroundContainer">
+  return logged?      
+   <div className="backgroundContainer">
   <img
     alt="background"
     className="bgImg2"

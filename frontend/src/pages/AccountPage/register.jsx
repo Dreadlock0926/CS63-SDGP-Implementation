@@ -11,7 +11,7 @@ const Register = () => {
   const navigator = useNavigate();
   const { loading,setLoading } = useContext(UserContext);
   const [newUser, setNewUser] = useState({ username: "", password: "" });
-
+const [status,setStatus] = useState("")
 
   const handleChange = (e) => {
     setNewUser({ ...newUser, [e.target.id]: e.target.value });
@@ -26,14 +26,10 @@ const Register = () => {
         newUser
       );
 
-      
-      alert("You're registered,  Please login to Continue!");
       if (loginUser.status === 201) {
         navigator("/login")
-      }else if(loginUser.response.status===409){
-        alert(`${newUser.username} Already Taken!`)
-      }else{
-        alert("Server error!")
+      }else if(loginUser.status===409){
+        setStatus(`${newUser.username} Already Taken!`)
       }
     } catch (err) {
       console.error(err);
@@ -65,6 +61,7 @@ const Register = () => {
                 name="username"
                 onChange={handleChange}
                 placeholder="Enter your username here..."
+                required
               />
             </div>
             <div className="inputLabelGrp">
@@ -75,6 +72,7 @@ const Register = () => {
                 name="password"
                 onChange={handleChange}
                 placeholder="Enter your password here..."
+                required
               />
             </div>
             <button type="submit" className="button" disabled={loading} >
