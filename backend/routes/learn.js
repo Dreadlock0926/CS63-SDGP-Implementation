@@ -63,6 +63,29 @@ router
     }
   })
 
+  router.route("/topic/id").post(async (req,res)=>{
+    const id = req?.params?.id;
+    const topic = req?.body?.topic;
+    if(!topic || !id){
+      res.status(400).json({Alert:"Topic and ID is required!"})
+
+    }else if(topic==="Pure Mathematics I"){
+      const pureMath = await learningModel.find({topic:"Pure Mathematics I"});
+      if(pureMath && pureMath.length > 0 ){
+        res.status(200).json(pureMath)
+      }else{
+        res.status(203).json({Alert:"No Pure Mathematics Resources found!"})
+      }
+    }else if(topic==="Probability And Statistics"){
+      const Statistics = await learningModel.find({topic:"Probability And Statistics"});
+      if(Statistics && Statistics.length > 0 ){
+        res.status(200).json(Statistics)
+      }else{
+        res.status(203).json({Alert:"No Statstics Resources found!"})
+      }
+    }
+  })
+
 
 
 router

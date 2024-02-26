@@ -32,7 +32,9 @@ function App() {
             <Route path="/resources" element={<Learn />} />
             <Route path="/addresources" element={<AddStudy />} />
             <Route path="learning-pure" element={<LearningPureMaths/>}></Route>
+            <Route path="learning-pure/:id" element={<LearningPureMaths/>}></Route>
             <Route path="learning-stat" element={<LearningStatistics/>}></Route>
+            <Route path="learning-stat/:id" element={<LearningStatistics/>}></Route>
             <Route path="*" element={<UnknownPage />} />
           </Routes>
         </UserContext.Provider>

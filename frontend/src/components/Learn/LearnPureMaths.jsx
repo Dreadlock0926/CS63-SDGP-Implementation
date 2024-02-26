@@ -13,7 +13,7 @@ const LearningPureMaths = () => {
 
   async function PureMathsRelated(){
     try{
-      const response = await Axios.post("http://localhost:8000/resources/topic",{topic:"Pure Mathematics I"}); //might have to change these routes
+      const response = await Axios.post("http://localhost:8000/resources/topic",{topic:"Pure Mathematics I"}); 
       setResources(response.data)
       console.log(resource)
     }catch(err){
