@@ -145,7 +145,7 @@ const Forum = () => {
             <br />
             <Typography variant="h4">{x.question}</Typography>
             <Typography variant="body1">{x.description}</Typography>
-            <Typography variant="h4">{x?.answer ? x.answer : "Be the first to Answer! 🥳"}</Typography>
+            <Typography variant="h4">{x?.answer ? `${x.answer}` : "Be the first to Answer! 🥳"}</Typography>
             <Typography variant="body2">{x.by ? `Posted by ${x.by}` : ""}</Typography>
             <Typography variant="body2">{x.rating ? `Upvoted by ${x.rating}` : <Typography variant="h4">Rated by none!</Typography>}</Typography>
             <Button onClick={(e) => { e.preventDefault(); increaseVotes(x._id) }}>Upvote!</Button>
@@ -168,7 +168,7 @@ const Forum = () => {
               <Typography variant="h2">{x.topic}</Typography>
               <Typography variant="body2">{x.description}</Typography>
               <Typography variant="h4">{x.question}</Typography>
-              <Typography variant="h4">{x?.answer ? x.answer : "Be the first to Answer! 🥳"}</Typography>
+              <Typography variant="h4">{x?.answer ? `${x.answer}\n` : "Be the first to Answer! 🥳"}</Typography>
               <Typography variant="body2">{x.by ? `Posted by ${x.by}` : ""}</Typography>
               <Typography variant="body2">{x.rating ? `Upvoted by ${x.rating}` : <Typography variant="h4">Rated by none!</Typography>}</Typography>
               <Button onClick={(e) => { e.preventDefault(); increaseVotes(x._id) }}>Upvote!</Button>
