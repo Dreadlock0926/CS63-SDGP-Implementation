@@ -198,6 +198,7 @@ function QuestionGridUnit({ index, onInputChange }) {
       try {
         const response = await Axios.post("https://api.cloudinary.com/v1_1/dl13hpmzu/upload", formData);
         console.log(response);
+        setFigureText(response.data.secure_url);
       } catch (error) {
         console.error(error);
       }
