@@ -4,6 +4,7 @@ import { useContext, useEffect, useState } from "react";
 import { UserContext } from "../../App";
 import { FetchMaterial } from "../Api/Api";
 import { Link } from "react-router-dom";
+import {Button} from "@mui/material"
 import Materials from "./Materials";
 import NotLogged from "../NotLogged"
 import "./Learn.css";
@@ -34,27 +35,11 @@ const Learn = () => {
     <div style={{fontFamily:"poppins"}}>
             <h1>Learning Resources 📔</h1>
       <Link to="/learning-pure">Pure Mathematics 1</Link><br/><Link to="/learning-stat">Statistics</Link>
-      <Link to="/addresources" className="link">
+      <br/>
+    <Button>  <Link to="/addresources" className="link">
             Add Learning Resources 🤓
-          </Link>
+          </Link></Button>
           <br/>
-   
-      {/* {logged ? (
-        <div className="container" style={{margin:"5%",padding:"5%"}}>
-          {loading ? (
-            <p className="loading-message">Loading...</p>
-          ) : resources && resources.length ? (
-            resources.map((x) => <div key={x._id}><Materials key={x._id} data={x} thekey={x._id} /></div>)
-          ) : (
-            <div className="no-materials-message">
-              <h1>No materials added yet!</h1>
-            </div>
-          )}
-        </div>
-      ) : (
-        <div>Please <Link to="login">Login</Link> to Access Learning Resources!</div>
-      )} */}
-
     </div>
   ) : <NotLogged/>;
 };

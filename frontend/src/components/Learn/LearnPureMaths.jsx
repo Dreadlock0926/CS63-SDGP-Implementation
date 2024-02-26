@@ -33,7 +33,7 @@ const LearningPureMaths = () => {
       <Typography variant="h3" gutterBottom>
         Pure Maths Materials
       </Typography>
-      {resource.length ? (
+      {resource && resource.length ? (
         resource.map((resource) => (
           <Card key={resource._id} sx={{ margin: "20px", padding: "20px", boxShadow: 4 }}>
             <CardContent>
@@ -46,6 +46,8 @@ const LearningPureMaths = () => {
               <Typography variant="body2" color="textSecondary">
                 {resource.subtopic}
               </Typography>
+              <img src={resource.image ? resource.image : ""} />
+              <br/>
               <Link href={resource.url} color="primary" underline="hover">
                 {resource.url!=="" ? "Click Here to Learn More!" : ""}
               </Link>

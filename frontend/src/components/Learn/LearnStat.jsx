@@ -28,7 +28,7 @@ const LearningStatistics = () => {
       <Typography variant="h3" gutterBottom>
         Statistics
       </Typography>
-      {resource.length ? (
+      {resource && resource.length ? (
         resource.map((resource) => (
           <Card key={resource._id} sx={{ margin: "5%", padding: "5%", boxShadow: 4 }}>
             <CardContent>
