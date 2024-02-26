@@ -14,6 +14,7 @@ const AddStudy = () => {
     title: "",
     about: "",
     subtopic: "",
+    photo:null,
     url: ""
   });
 
@@ -25,8 +26,14 @@ const AddStudy = () => {
       setLoading(true);
      
       console.log(data);
-     
-      const resources = await Axios.post("http://localhost:8000/resources", data);
+      const userForm = new FormData();
+      userForm.append("topic",data.topic);
+      userForm.append("title",data.title);
+      userForm.append("about",data.about);
+      userForm.append("subtopic",data.subtopic);
+      userForm.append("photo",data.photo);
+      userForm.append("url",data.url);
+      const resources = await Axios.post("http://localhost:8000/resources",userForm,{headers:{"Content-Type":"multipart/form-data"}} );
    
       if (resources.status === 201) {
         setStatus("Added Resource!");
@@ -50,6 +57,10 @@ const AddStudy = () => {
   const handleDrop = (e) => {
     setData({ ...data, topic: e.target.value });
   };
+
+  const handleFile = (e)=>{
+    setData({...data,[e.target.name]:e.target.file[0]})
+  }
 
   return (
     <>
@@ -77,7 +88,11 @@ const AddStudy = () => {
               placeholder="Enter about"
               type="text"
             ></input>
-
+             {/* <input
+              onChange={handleFile}
+              type="file"
+              name="photo"
+            ></input> */} {/**UNCOMMENT IF YALL WANNA UPLOAD IMAGES LUL */}
             <input
               onChange={handleChange}
               name="subtopic"
