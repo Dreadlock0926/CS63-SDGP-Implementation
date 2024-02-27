@@ -4,7 +4,7 @@ import { MathJax, MathJaxContext } from "better-react-mathjax";
 import "//unpkg.com/mathlive";
 import Histogram from "../graphs/histogram"
 
-function SubQuestion({ sqNum, sqText, sqMarks, sqHistogram }) {
+function SubQuestion({ sqNum, sqText, sqMarks, sqFigure, sqHistogram }) {
   const [answer, setAnswer] = useState("");
 
   function logAnswer() {
@@ -31,7 +31,7 @@ function SubQuestion({ sqNum, sqText, sqMarks, sqHistogram }) {
         <div className="sq-num" onClick={logAnswer}>{sqNum}</div>
         <div className="sub-question-text"><MathJax>{sqText}</MathJax></div>
       </div>
-      <div className="figure-for-sub-question"></div>
+      {sqFigure!=="" && <img src={sqFigure} />}
       {sqHistogram === "Histogram" && <Histogram width={300} height={450} numXMarkers={6} numYMarkers={5} scaleX={5} scaleY={10} maxBoxes={5} setAnswer={setAnswer}/>}
       <div className="answer-for-sub-question">
         {returnAnswerInput(sqHistogram)}
@@ -77,6 +77,7 @@ function QuestionComponent({ question, mqNum }) {
             sqNum={subQuestionAlphabet[i - 1]}
             sqText={question.questionsGrid[i]}
             sqMarks={question.marksGrid[i]}
+            sqFigure={question.questionsFiguresGrid[i]}
             sqHistogram={question.answersTypeGrid[i]}
           />
         );
@@ -91,6 +92,7 @@ function QuestionComponent({ question, mqNum }) {
             sqNum={subQuestionAlphabet[i]}
             sqText={question.questionsGrid[i]}
             sqMarks={question.marksGrid[i]}
+            sqFigure={question.questionsFiguresGrid[i]}
             sqHistogram={question.answersTypeGrid[i]}
           />
         );
@@ -120,7 +122,7 @@ function QuestionComponent({ question, mqNum }) {
               </div>
             )}
           </div>
-          <img src={question.questionsFiguresGrid[0]} />
+          {question.questionsFiguresGrid[0]!=="" && <img src={question.questionsFiguresGrid[0]} />}
           {isOneAnswerQuestion && (
             <div className="mq-answer-container">
               <math-field className="answer-input" placeholder="Answer..."></math-field>
