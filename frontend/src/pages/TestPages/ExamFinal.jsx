@@ -4,12 +4,14 @@ import { Link } from "react-router-dom";
 import { CountdownCircleTimer } from "react-countdown-circle-timer";
 import QuestionComponent from "../../components/QuestionComponent/QuestionComponent";
 import Axios from "axios";
+import {UserContext} from "../../App"
 // import { UserContext } from "../../App";
 
 
 
 const ExamFinalized = () => {
   const examData = sessionStorage.getItem("examData");
+  const {user="guest",setUser} = useContext(UserContext); //guest by default cuz the state hasn't been made so far!
 
   if (examData) {
     //
@@ -52,7 +54,7 @@ const ExamFinalized = () => {
 
 async function sendAnswers(){
     try{
-       await Axios.post("http://localhost:8000/history",{ExamData:answerValues,questionID:questionIDs});
+       await Axios.post("http://localhost:8000/history",{questionID:questionIDs},{by:user.username || "guest"});
       alert("Exam History Added!")
     }catch(err){  
       console.error(err);
