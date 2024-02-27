@@ -3,13 +3,16 @@ import { useContext, useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 import { CountdownCircleTimer } from "react-countdown-circle-timer";
 import QuestionComponent from "../../components/QuestionComponent/QuestionComponent";
-
+import Axios from "axios";
 // import { UserContext } from "../../App";
+
+
 
 const ExamFinalized = () => {
   const examData = sessionStorage.getItem("examData");
 
   if (examData) {
+    //
   } else {
     window.location.href = "/scope";
   }
@@ -41,9 +44,21 @@ const ExamFinalized = () => {
         }) 
     });
     console.log("These are the correct answers:", correctAnswers);
+    sendAnswers();
     compareAnswers();
     addWrongAnswers();
 };
+
+
+async function sendAnswers(){
+    try{
+       await Axios.post("http://localhost:8000/history",{ExamData:answerValues});
+      alert("Exam History Added!")
+    }catch(err){  
+      console.error(err);
+    }
+}
+
 
 const compareAnswers = () => {
     wrongAnswersIndex = [];
@@ -110,7 +125,7 @@ function getTotalMarks() {
           <div>
             {JSON.parse(examData).map((question, index) => {
               return (
-                <div>
+                <div key={question._id}>
                   <QuestionComponent
                     key={question.questionID}
                     question={question}
