@@ -11,12 +11,6 @@ const examResourcesSchema = mongoose.Schema({
       type: Array,
       default: []
    },
-   By: {
-      type: String,
-      ref:"users",
-      required:false,
-      default:"guest"
-   },
 });
 
 const ExamResource = mongoose.model('ExamResource', examResourcesSchema);

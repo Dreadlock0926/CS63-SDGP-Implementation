@@ -52,13 +52,14 @@ const ExamFinalized = () => {
 };
 
 
-async function sendAnswers(){
-    try{
-       await Axios.post("http://localhost:8000/history",{questionID:questionIDs},{by:user.username || "guest"});
-      alert("Exam History Added!")
-    }catch(err){  
-      console.error(err);
-    }
+async function sendAnswers(e){
+  e.preventDefault();
+    // try{
+    //    await Axios.post("http://localhost:8000/history",{questionID:questionIDs},{by:user.username || "guest"});
+    //   alert("Exam History Added!")
+    // }catch(err){  
+    //   console.error(err);
+    // }
 }
 
 
@@ -94,6 +95,11 @@ const addWrongAnswers = () => {
 
     console.log("these are the IDs of the wrong questions", wrongQuestions);
 
+    const counts = {};
+    const outcome = wrongQuestions.forEach(function (x) { counts[x] = (counts[x] || 0) + 1; });
+    outcome.split("_")
+    const filtered = [];
+    console.log(`The count is ${JSON.stringify(counts)}`)
     getTotalMarks();
 
 };
