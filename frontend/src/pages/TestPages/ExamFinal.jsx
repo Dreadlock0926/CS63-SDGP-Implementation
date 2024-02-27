@@ -24,7 +24,7 @@ const ExamFinalized = () => {
   let answerValues = [];
   let correctAnswers = [];
   let wrongAnswersIndex = [];
-  
+  let questionIDs = [];
   let wrongQuestions = [];
 
   let marksArray = [];
@@ -52,7 +52,7 @@ const ExamFinalized = () => {
 
 async function sendAnswers(){
     try{
-       await Axios.post("http://localhost:8000/history",{ExamData:answerValues});
+       await Axios.post("http://localhost:8000/history",{ExamData:answerValues,questionID:questionIDs});
       alert("Exam History Added!")
     }catch(err){  
       console.error(err);
@@ -116,6 +116,8 @@ function getTotalMarks() {
 
   // end of getting answers
 
+
+
   return (
     <div>
       {examData ? (
@@ -124,6 +126,7 @@ function getTotalMarks() {
           <button onClick={getAnswers}>log answers</button>
           <div>
             {JSON.parse(examData).map((question, index) => {
+                      questionIDs.push(question.questionID);
               return (
                 <div key={question._id}>
                   <QuestionComponent

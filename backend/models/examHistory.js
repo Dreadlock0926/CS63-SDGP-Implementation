@@ -9,8 +9,12 @@ const examResourcesSchema = mongoose.Schema({
       trim: true
    },
    theExam: {
-      type: Array,
-      default: []
+      type:Array,
+      default:[]
+   },
+   questionID:{
+      type:Array,
+      default:[],
    }
 });
 
