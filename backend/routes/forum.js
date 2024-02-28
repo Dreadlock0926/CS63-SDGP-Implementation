@@ -9,16 +9,13 @@ router.route("/").get(async (req,res)=>{
     const id = req.body.id;
 
     if(user){
-       
             try{
-                const data = await forumModel.find({_id:req.session.user.id}).populate("by").sort({rating:-1});
+                const data = await forumModel.findById(id).sort({rating:-1});
                 res.status(200).json(data);
             }catch(err){
                 console.error(err);
                 res.status(500).json({Alert:err})
-            }
-        
-        
+            }  
     }else{
         try{
             const data = await forumModel.find().sort({rating:-1});
@@ -84,8 +81,7 @@ router.route("/:id")
         }
     })
     .delete(async(req, res) => {
-        const { id } = req.params;
-
+        const id = req?.params?.id;
         if (!id) {
             return res.status(400).json({ Alert: "No ID Provided!" });
         }
@@ -150,7 +146,5 @@ router.route("/downvotes/:id").put(async (req, res) => {
         res.status(500).json({ Alert: "Internal Server Error" });
     }
 });
-
-
 
 module.exports = router;
