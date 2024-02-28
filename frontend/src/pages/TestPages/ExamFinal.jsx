@@ -1,3 +1,4 @@
+/* eslint-disable react-hooks/exhaustive-deps */
 /* eslint-disable no-unused-vars */
 import { useContext, useEffect, useState } from "react";
 import { Link } from "react-router-dom";
@@ -19,6 +20,8 @@ const ExamFinalized = () => {
     window.location.href = "/scope";
   }
 
+
+
   //might have to use some local storage approach for this
 
   // getting answers
@@ -31,6 +34,14 @@ const ExamFinalized = () => {
 
   let marksArray = [];
   let totalMarks = 0;
+
+  useEffect(()=>{
+    if(questionIDs.length!==0){
+      do{
+        questionIDs.pop();
+      }while(questionIDs.length!==0);
+    } 
+  },[])
 
   const getAnswers = () => {
     const answers = document.querySelectorAll("math-field");
@@ -52,14 +63,13 @@ const ExamFinalized = () => {
 };
 
 
-async function sendAnswers(e){
-  e.preventDefault();
-    // try{
-    //    await Axios.post("http://localhost:8000/history",{questionID:questionIDs},{by:user.username || "guest"});
-    //   alert("Exam History Added!")
-    // }catch(err){  
-    //   console.error(err);
-    // }
+async function sendAnswers(){
+    try{
+       await Axios.post("http://localhost:8000/history",{questionID:questionIDs});
+       alert("Exam History Added!")
+    }catch(err){  
+      console.error(err);
+    }
 }
 
 
