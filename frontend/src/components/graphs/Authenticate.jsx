@@ -1,26 +1,23 @@
-import axios from "axios";
+/* eslint-disable react-hooks/exhaustive-deps */
+/* eslint-disable no-unused-vars */
+import Axios from "axios";
 import React, { useEffect, useState } from "react";
 import { useContext } from "react";
 import { UserContext } from "../../App";
 
 export default function Authenticate() {
-  const [user, setUser] = useState("");
-  const [isAuthenticated, setIsAuthenticated] = useState(false);
-  const [isLoading, setIsLoading] = useState(true);
-  const { username, password } = useContext(UserContext);
+  const { user, loading,setLoading,isAuthenticated, setIsAuthenticated, setData } = useContext(UserContext);
 
   useEffect(() => {
     const authenticated = async () => {
-      try {
-       
-        const response = await axios.post(
+      try { 
+        const {data} = await Axios.post(
           "http://localhost:8000/registration/api/auth/status",
-          { username, password }
+          user
         );
-        console.log("Valid User" + response.data);
-        console.log(`the response is  ${response}`);
-        if (response.data) {
-          setUser(response.data); // Store user data on successful authentication
+        console.log("Valid User" + data);
+        if (data) {
+          setData(data); // Store user data on successful authentication
           setIsAuthenticated(true);
         } else {
           alert("You have not logged in !");
@@ -29,13 +26,13 @@ export default function Authenticate() {
         console.error("Authentication check failed", error);
         setIsAuthenticated(false);
       } finally {
-        setIsLoading(false);
+        setLoading(false);
       }
     };
     authenticated();
-  }, [username,password]);
+  }, [user.username,user.password]);
 
-  if (isLoading) {
+  if (loading) {
     return <h1>Loading !</h1>;
   }
 

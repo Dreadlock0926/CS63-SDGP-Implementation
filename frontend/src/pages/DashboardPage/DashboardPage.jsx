@@ -1,3 +1,4 @@
+/* eslint-disable no-undef */
 /* eslint-disable react-hooks/exhaustive-deps */
 /* eslint-disable no-unused-vars */
 import "../main.css";
@@ -6,7 +7,7 @@ import ProgressGraph from "../../components/graphs/Progressionmark";
 import { LineChart, Line, CartesianGrid, XAxis, YAxis } from "recharts";
 import { useContext, useEffect, useState } from "react";
 import { UserContext } from "../../App";
-import axios from "axios";
+import Axios from "axios";
 import Tracking from "../../components/graphs/Tracking";
 import NavBar from "../../components/NavigationBar/navBar";
 import { CircularProgressbar } from 'react-circular-progressbar';
@@ -25,29 +26,26 @@ function DashboardHeader() {
     setUserName,
     password,
     setPassword,
+   
+    user,
   } = useContext(UserContext);
+
+  let counter = 0;
+  let hoursLearned = 0;
   const fetchData = async () => {
     try {
-      // Replace 'your-api-url' with the actual API URL
-      const username1 = localStorage.getItem("username");
-      const password1 = localStorage.getItem("password");
-
-      const response = await axios.post(
+      const response = await Axios.post(
         "http://localhost:8000/progression/get",
-        { username1, password1 }
+        user
       );
-      setData(response.data); // Assuming you want to set the response data
-      console.log(response.data); // Logging the response data
-      let counter = 0;
-      let hoursLearned = 0;
-      // Extracting voxalPoints using map
-
+      setData(response.data); 
+      console.log(response.data);
+ 
       setVoxalpoints(response.data.voxalPoints);
       console.log(response.data.voxalPoints);
       setHours(response.data.hoursLearned);
     } catch (error) {
       console.error("Error fetching data: ", error);
-      // Handle error here, e.g., set an error state
     }
   };
 
@@ -82,6 +80,9 @@ function DashboardGraph() {
   );
 }
 
+let incompleteCourse = 0;
+let courseCount = 0;
+
 // Dashboard Statistics Tab
 function DashboardStatistics() {
   const {
@@ -97,20 +98,18 @@ function DashboardStatistics() {
   const username1 = localStorage.getItem("username");
   const password1 = localStorage.getItem("password");
 
-  let incompleteCourse = 0;
-  let courseCount = 0;
+ 
 
   const fetchData = async () => {
     try {
       // Replace 'your-api-url' with the actual API URL
-      const response = await axios.post(
+      const response = await Axios.post(
         "http://localhost:8000/progression/get",
-        { username1, password1 }
+       user,
       );
       setData(response.data); // Assuming you want to set the response data
       console.log("Completed courses " + response.data.completeCourse); // Logging the response data
-      let counter = 0;
-      let hoursLearned = 0;
+      
 
       // Extracting voxalPoints using map
 
@@ -137,19 +136,19 @@ function DashboardStatistics() {
         <div className="statistics-tab">
           <div className="points-tab">
             <h3 className="tab-header">VoXel Points Earned</h3>
-            <p className="st-num vox-num">{voxalPoints}</p>
+            <p className="st-num vox-num">{data.voxalPoints}</p>
           </div>
           <div className="points-tab">
             <h3 className="tab-header">Hours Learned</h3>
-            <p className="st-num hour-num">{hours}</p>
+            <p className="st-num hour-num">{data.hours}</p>
           </div>
           <div className="points-tab">
             <h3 className="tab-header">Ongoing Courses</h3>
-            <p className="st-num ongcourses-num">{ongoingCourse}</p>
+            <p className="st-num ongcourses-num">{data.ongoingCourse}</p>
           </div>
           <div className="points-tab">
             <h3 className="tab-header">Completed Courses</h3>
-            <p className="st-num comcourses-num">{course}</p>
+            <p className="st-num comcourses-num">{data.course}</p>
           </div>
         </div>
       </div>
@@ -232,17 +231,17 @@ function DashboardCourses() {
           <div className="courses-tab">
             <div className="course-card">
               <div className="course-title">Pure Mathematics I</div>
-              <div className="course-lessons">{mathsLesson} lessons</div>
+              <div className="course-lessons">{data.mathsLesson} lessons</div>
               <div className="course-progress-tab">
                 <div className="prog-bar">
                 <div style={{ width: 100, height: 100 }}>
-                    <CircularProgressbar value={mathsLessonMark} text={`${mathsLessonMark}%`} />;
+                    <CircularProgressbar value={data.mathsLessonMark} text={`${mathsLessonMark}%`} />;
                  </div> 
                   <p className="prog-bar-text">Learned Progress</p>
                 </div>
                 <div className="prog-bar">
                 <div style={{ width: 100, height: 100 }}>
-                    <CircularProgressbar value={mathsProgress} text={`${mathsProgress}%`} />;
+                    <CircularProgressbar value={data.mathsProgress} text={`${mathsProgress}%`} />;
                 </div>
                   <p className="prog-bar-text">Tested Progress</p>
                 </div>
@@ -254,13 +253,13 @@ function DashboardCourses() {
               <div className="course-progress-tab">
                 <div className="prog-bar">
                 <div style={{ width: 100, height: 100 }}>
-                    <CircularProgressbar value={statLessonMark} text={`${statLessonMark}%`} />;
+                    <CircularProgressbar value={data.statLessonMark} text={`${statLessonMark}%`} />;
                 </div>
                   <p className="prog-bar-text">Learned Progress</p>
                 </div>
                 <div className="prog-bar">
                 <div style={{ width: 100, height: 100 }}>
-                  <CircularProgressbar value={statisticsProgress} text={`${statisticsProgress}%`} />;
+                  <CircularProgressbar value={data.statisticsProgress} text={`${statisticsProgress}%`} />;
                 </div>
                   <p className="prog-bar-text">Tested Progress</p>
                 </div>
@@ -282,7 +281,7 @@ function DashboardActivity() {
   const fetchData = async () => {
     try {
       // Replace 'your-api-url' with the actual API URL
-      const response = await axios.post(
+      const response = await Axios.post(
         "http://localhost:8000/progression/get",
         { username1, password1 }
       );

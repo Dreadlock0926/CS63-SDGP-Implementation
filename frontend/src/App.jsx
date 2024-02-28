@@ -14,26 +14,24 @@ export const UserContext = createContext();
 
 function App() {
   const [loading, setLoading] = useState(false);
-  const [value, setValue] = useState([]);
-  const [data, setData] = useState(null);
+  const [data, setData] = useState([]);
   const [voxalPoints, setVoxalpoints] = useState(0);
   const [hours, setHours] = useState(0);
   const [progress, setProgress] = useState([]);
   const [statValue, setstatValue] = useState([]);
   const [course, setCourse] = useState(0);
   const [ongoingCourse, setongoingCourses] = useState(0);
-  const [username,setUserName] = useState("");
-  const [password,setPassword] = useState("");
+  const [isAuthenticated, setIsAuthenticated] = useState(false);
+  const [user,setUser]  =useState({
+    username:"",password:""
+  })
   
 
   // Structuring the context value explicitly
   const contextValue = {
     loading: loading,
     setLoading: setLoading,
-    value: value,
-    setValue: setValue,
-    data,
-    setData,
+    data,setData,
     voxalPoints,
     setVoxalpoints,
     hours,
@@ -46,10 +44,8 @@ function App() {
     setCourse,
     ongoingCourse,
     setongoingCourses,
-    username,
-    setUserName,
-    password,
-    setPassword
+    user,setUser,
+    isAuthenticated, setIsAuthenticated
   };
 
   return (
