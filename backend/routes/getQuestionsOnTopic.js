@@ -5,11 +5,22 @@ const router = express.Router();
 const questionModel = require("../models/question");
 
 router.route("/").post(async (req, res) => {
-  const { scope } = req?.body;
+  const { selectedSeason, selectedYear, selectedVariant, selectedModule } =
+    req?.body;
 
-  if (!scope) return res.status(400).json({ Alert: "The scope is missing!" });
+  if (!selectedSeason || !selectedYear || !selectedVariant || !selectedModule) {
+    return res.status(400).json({ Alert: "Missing required parameters." });
+  }
+
   const questionData = await questionModel.find({
-    questionID: { $regex: "w_2022_2" },
+    $and: [
+      {
+        questionID: {
+          $regex: `${selectedSeason}_${selectedYear}_${selectedVariant}`,
+        },
+      },
+      { questionID: { $regex: `${selectedModule}_` } },
+    ],
   });
 
   if (!questionData) {
