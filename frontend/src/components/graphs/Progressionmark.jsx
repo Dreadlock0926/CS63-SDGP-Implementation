@@ -7,8 +7,8 @@ import { UserContext } from "../../App";
 import "./Progressionmark.css";
 
 function Progressionmark() {
-  const { value, setValue } = useContext(UserContext);
-  const { statValue, setstatValue, username, password,setUserName,setPassword} = useContext(UserContext);
+  const { value, setValue, data ,user} = useContext(UserContext);
+  console.log(data);
 
   const [totalMark, setTotalMark] = useState(0); // Use a state variable to store the total marks
   const [totalStatMarks,setTotalStatMarks] = useState(0);
@@ -58,31 +58,27 @@ function Progressionmark() {
   
   
   
-  const username1 = localStorage.getItem('username');
-  const password1 = localStorage.getItem('password');
-        
+
   useEffect(() => {
     const fetchData = async () => {
-      try {
-        
-        const response = await axios.post(apiUrl, {
-          username1: username1, // Ensure this matches the expected API parameters
-          password1: password1,
+      try { 
+        const {data}  = await axios.post(apiUrl, {
+          username: data.username // Ensure this matches the expected API parameters
         });
-        
-        
-        console.log("Fetched data: ", response.data);
-        setValue(response.data); // Assuming this updates your component state correctly
+      
+        console.log("Fetched data: ", data);
+        setChartData(data); // Assuming this updates your component state correctly
   
-        // Now call calculation with the fetched data
-        calculation(response.data);
+        // // Now call calculation with the fetched data
+        // calculation(value);
       } catch (error) {
         console.error("Error fetching data:", error);
       }
     };
   
     fetchData();
-  }, [username1,password1]); // Include apiUrl as a dependency
+    JSON.stringify(chartData)
+  }, []); // Include apiUrl as a dependency
 
   const renderLineChart = (
     <>
@@ -109,7 +105,7 @@ function Progressionmark() {
     </>
   );
 
-    const {data} = useContext(UserContext)
+    
 
     async function theAverage() {
       try {
@@ -142,9 +138,7 @@ function Progressionmark() {
         <h2>{average}</h2><br />
         <p>Average Statistics Mark</p>
         <h2>{totalStatMarks}</h2>
-
       </div>
-
       <div>{renderLineChart}</div>
     </div>
   );

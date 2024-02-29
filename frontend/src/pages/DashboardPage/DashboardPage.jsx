@@ -1,3 +1,4 @@
+/* eslint-disable react-hooks/exhaustive-deps */
 /* eslint-disable react/prop-types */
 /* eslint-disable no-unused-vars */
 import "../main.css"
@@ -6,6 +7,8 @@ import ProgressGraph from "../../components/graphs/Progressionmark"
 import { LineChart, Line, CartesianGrid, XAxis, YAxis } from "recharts";
 import { useContext, useEffect, useState } from "react";
 import { UserContext } from "../../App";
+import {CircularProgressbar} from "react-circular-progressbar"
+import Axios from "axios";
 
 // Dashboard Header Tab
 function DashboardHeader() {
@@ -73,83 +76,144 @@ function DashboardStatistics({voxal,ongoingCourses,completeCourses}) {
 
 // Dashboard Courses Tab
 function DashboardCourses() {
+    const {
+      data,
+      setData,
+      user,
+      setVoxalpoints,
+      setHours,
+      voxalPoints,
+      setProgress,
+      progress,
+      totalMathsmarks,
+      settotalMathsmarks,
+    } = useContext(UserContext);
+    const [mathsProgress, setMathsProgress] = useState(0);
+    const [statisticsProgress, setstatisticsProgress] = useState(0);
+    const [statLessonMark, setstatLessonMark] = useState(0);
+    const [mathsLessonMark, setmathsLessonMark] = useState(0);
+    const [mathsLesson, setMathsLessons] = useState(0);
+    const [statlesson, setStatLessons] = useState(0);
+  
 
-    return (
-        <>
-            <div className="dashboard-courses">
-                <h2 className="courses-header">My Courses</h2>
-                <div className="courses-tab">
-                    <div className="course-card">
-                        <div className="course-title">Pure Mathematics I</div>
-                        <div className="course-lessons">12 lessons</div>
-                        <div className="course-progress-tab">
-                            <div className="prog-bar">
-                                <p className=" course-learn-progress">35%</p>
-                                <p className="prog-bar-text">Learned Progress</p>
-                            </div>
-                            <div className="prog-bar">
-                                <p className="course-test-progress">55%</p>
-                                <p className="prog-bar-text">Tested Progress</p>
-                            </div>
-                        </div>
-                    </div>
-                    <div className="course-card">
-                        <div className="course-title">Probability and Statistics I</div>
-                        <div className="course-lessons">5 lessons</div>
-                        <div className="course-progress-tab">
-                            <div className="prog-bar">
-                                    <p className="course-learn-progress">25%</p>
-                                    <p className="prog-bar-text">Learned Progress</p>
-                            </div>
-                            <div className="prog-bar">
-                                    <p className="course-test-progress">85%</p>
-                                    <p className="prog-bar-text">Tested Progress</p>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </>
-    );
-
-}
-
-// Dashboard Activity Tab
-function DashboardActivity() {
-
-    const {data} = useContext(UserContext)
-    const [chartData, setChartData] = useState([]);
-
-    useEffect(() => {
-      
-      function transformData(data) {
-        const transformedData = [
-          { subject: 'Pure Mathematics', score: data.PureMathematics },
-          { subject: 'Statistics', score: data.Statistics }
-        ];
-        return transformedData;
+    let PurelearnedProgress = 0;
+  
+    let StatlearnedProgress = 0;
+    let mathsLearning = 0;
+    let statisticsLearning = 0;
+    let mathlearningTracker = 0;
+    let statisticsLearningTracker = 0;
+  
+    const fetchData = async () => {
+      try {
+        // Replace 'your-api-url' with the actual API URL
+        const response = await Axios.post(
+          "http://localhost:8000/progression/get",
+            {username:data.username}
+        );
+        setData(response.data); // Assuming you want to set the response data
+        console.log(`The outcome is ${JSON.stringify(response.data)}`); // Logging the response data
+  
+        setMathsProgress(response.data.PureMathematics.learnedProgress);
+        setstatisticsProgress(response.data.Statistics.learnedProgress);
+        setstatLessonMark(response.data.Statistics.learnedProgress);
+        setmathsLessonMark(response.data.PureMathematics.learnedProgress);
+        setMathsLessons(response.data.PureMathematics.lesson);
+        setStatLessons(response.data.Statistics.lesson);
+  
+    
+  
+        data.map((x) => (PurelearnedProgress += x.PureMathematics));
+        setProgress(PurelearnedProgress);
+  
+        console.log("the points are ", voxalPoints); // Logging the voxalPoints
+      } catch (error) {
+        console.error("Error fetching data: ", error);
       }
+    };
   
-      setChartData(transformData(data));
-    }, [data]); 
+    useEffect(() => {
+      fetchData();
+    }, []);
   
     return (
-        <>
-            <div className="dashboard-activity">
-                <h2 className="activity-title">Activity</h2>
-                <div className="activity-graph"><LineChart width={500} height={300} data={chartData}>
-    <XAxis dataKey="name"/>
-    <YAxis/>
-    <CartesianGrid stroke="#eee" strokeDasharray="5 5"/>
-    <Line type="monotone" dataKey="uv" stroke="#8884d8" />
-    <Line type="monotone" dataKey="pv" stroke="#82ca9d" />
-  </LineChart>
-    </div>
+      <>
+        {/* {data && data.length ? data.map((course) => (
+            
+          )) : <h1>No results found!</h1>} */}
+        <div>
+          <div className="dashboard-courses">
+            <h2 className="courses-header">My Courses</h2>
+            <div className="courses-tab">
+              <div className="course-card">
+                <div className="course-title">Pure Mathematics I</div>
+                <div className="course-lessons">{mathsLesson} lessons</div>
+                <div className="course-progress-tab">
+                  <div className="prog-bar">
+                  <div style={{ width: 100, height: 100 }}>
+                      <CircularProgressbar value={mathsLessonMark} text={`${mathsLessonMark}%`} />;
+                   </div> 
+                    <p className="prog-bar-text">Learned Progress</p>
+                  </div>
+                  <div className="prog-bar">
+                  <div style={{ width: 100, height: 100 }}>
+                      <CircularProgressbar value={mathsProgress} text={`${mathsProgress}%`} />;
+                  </div>
+                    <p className="prog-bar-text">Tested Progress</p>
+                  </div>
+                </div>
+              </div>
+              <div className="course-card">
+                <div className="course-title">Statistics</div>
+                <div className="course-lessons">{statlesson} lessons</div>
+                <div className="course-progress-tab">
+                  <div className="prog-bar">
+                  <div style={{ width: 100, height: 100 }}>
+                      <CircularProgressbar value={statLessonMark} text={`${statLessonMark}%`} />;
+                  </div>
+                    <p className="prog-bar-text">Learned Progress</p>
+                  </div>
+                  <div className="prog-bar">
+                  <div style={{ width: 100, height: 100 }}>
+                    <CircularProgressbar value={statisticsProgress} text={`${statisticsProgress}%`} />;
+                  </div>
+                    <p className="prog-bar-text">Tested Progress</p>
+                  </div>
+                </div>
+              </div>
             </div>
-        </>
+          </div>
+        </div>
+      </>
     );
+  }
+  
 
-}
+function DashboardActivity() {
+    const { data } = useContext(UserContext);
+
+    const transformedData = [
+        { subject: 'Pure Mathematics', score: 200 },
+        { subject: 'Statistics', score: 100 }
+    ];
+
+    return (
+        <div className="dashboard-activity">
+            <h2 className="activity-title">Activity</h2>
+            <div className="activity-graph">
+                <LineChart width={500} height={300} data={transformedData}>
+                    <XAxis dataKey="subject"/>
+                    <YAxis/>
+                    <CartesianGrid stroke="#eee" strokeDasharray="5 5"/>
+                    <Line type="monotone" dataKey="score" stroke="#8884d8" />
+                </LineChart>
+            </div>
+        </div>
+    );
+    }
+
+
+
 
 // Dashboard Final Display Page
 function DashboardPage() {
@@ -165,7 +229,7 @@ function DashboardPage() {
             <div className="dashboard-main">
                 <DashboardGraph />
                 <DashboardStatistics voxal={data.voxalPoints} ongoingCourses={data.ongoingCourses}  completedCourses={data.completeCourse} />
-                <DashboardCourses/>
+                <DashboardCourses />
                 <DashboardActivity/>
             </div>
         </div>

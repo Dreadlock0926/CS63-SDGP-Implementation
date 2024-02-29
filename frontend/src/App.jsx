@@ -20,7 +20,7 @@ function App() {
   const [course, setCourse] = useState(0);
   const [ongoingCourses, setOngoingCourses] = useState(0); // corrected function name here
   const [isAuthenticated, setIsAuthenticated] = useState(false);
-  const [value,setValue] = useState("")
+  const [value,setValue] = useState([])
   const [user, setUser] = useState({
     username: "",
     password: ""

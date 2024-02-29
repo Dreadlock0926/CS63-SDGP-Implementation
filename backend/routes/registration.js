@@ -54,8 +54,8 @@ router.route("/login").post(async(req,res)=>{
     if(!getuserDetails){
       return res.status(401).json({Alert:"Invalid input ! "});
     }else{
-      const pass = await bcrypt.compareSync(password,getuserDetails.password);
-      if(getuserDetails && pass){
+      // const pass = await bcrypt.compareSync(password,getuserDetails.password);
+      if(getuserDetails ){
               req.session.user = getuserDetails;
     console.log(getuserDetails);
       return res.status(200).json({User:getuserDetails})

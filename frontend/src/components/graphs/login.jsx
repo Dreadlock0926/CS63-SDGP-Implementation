@@ -21,6 +21,7 @@ const Login = () => {
       if(data.status===200){
         return <h1>You have logged in!</h1>
       }
+      setStatus(data.response);
       navigator("/dashboard");
     } catch (err) {
       console.error(err);

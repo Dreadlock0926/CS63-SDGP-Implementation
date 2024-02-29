@@ -48,13 +48,8 @@ router.route("/get").post(async (req, res) => {
     
     // const userData = await progressionModel.find({_id:req?.session?.user?._id}).populate("users");
     // if(!req.session.user)return res.sendStatus(401);
-    const username = req.body.username1;
-    const password = req.body.password1;
-  
-    console.log("The user name is "+username);
-    console.log("The password is"+password);
-
-    const userData = await progressionModel.findOne({username,password});
+    const username  = req.body.username;
+    const userData = await progressionModel.findOne({username});
     
       if(userData){
         return res.send(userData);
