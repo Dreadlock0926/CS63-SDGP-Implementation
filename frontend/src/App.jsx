@@ -5,6 +5,7 @@ import Learn from "./components/Learn/Learn";
 import AddStudy from "./components/Learn/AddStudy";
 import LearningPureMaths from "./components/Learn/LearnPureMaths";
 import LearningStatistics from "./components/Learn/LearnStat";
+import { Trigonometry } from "./components/Learn/Trigonometry";
 
 export const UserContext = createContext();
 
@@ -35,9 +36,12 @@ function App() {
             <Route path="learning-pure/:id" element={<LearningPureMaths/>}></Route>
             <Route path="learning-stat" element={<LearningStatistics/>}></Route>
             <Route path="learning-stat/:id" element={<LearningStatistics/>}></Route>
+            <Route path = '/Trigonometry' element = {<Trigonometry/>}></Route>
             <Route path="*" element={<UnknownPage />} />
+            
           </Routes>
         </UserContext.Provider>
+        
       </BrowserRouter>
     </>
   );
