@@ -34,7 +34,7 @@ const Forum = () => {
   const increaseVotes = async (id) => {
     try {
       setLoading(true);
-      const response = await Axios.put(`${EndPoint}/upvotes/${id}`);
+      const response = await Axios.put(`${EndPoint}/upvotes/${id}`,{userId:user.id});
       if (response.data.status === 200) {
         setStatus("Upvoted!");
         setData(prevData => prevData.map(item => item._id === id ? { ...item, rating: item.rating + 1 } : item));
@@ -54,7 +54,7 @@ const Forum = () => {
   const downVote = async (id) => {
     try {
       setLoading(true);
-      const response = await Axios.put(`${EndPoint}/downvotes/${id}`);
+      const response = await Axios.put(`${EndPoint}/downvotes/${id}`,{userId:user.id});
       if (response.data.status === 200) {
         setStatus("Down Voted!");
       } else {
@@ -87,12 +87,10 @@ const Forum = () => {
   const DeleteComment = async (id) => {
     try {
       const response = await Axios.delete(`${EndPoint}/${id}`);
-      if (response.data.status === 200) {
+      if (response.status === 200) {
         alert("Deleted Question!");
         navigator("/forum");
-      } else {
-        alert("Couldn't delete question!");
-      }
+      } 
     } catch (error) {
       console.error("Error deleting comment:", error);
     }
@@ -115,7 +113,7 @@ const Forum = () => {
       <Typography variant="h4">Welcome back, {user.username || user}!</Typography>
       <br />
       <FormControl>
-        <InputLabel>Select Topic</InputLabel>
+        <InputLabel >Select Topic</InputLabel>
         <Select
           value={down}
           onChange={(e) => setDown(Number(e.target.value))}
@@ -127,7 +125,8 @@ const Forum = () => {
       </FormControl>
       {loading ? (
         <Typography variant="h5">Loading...</Typography>
-      ) : data && data.length && down === 0 ? (
+      ) : down === 0 ? (
+        data && data.length ? 
         data.map((x) => (
           <div key={x._id}>
             <br />
@@ -147,7 +146,8 @@ const Forum = () => {
             <br />
           </div>
         ))
-      ) : data && data.length && down === 1 ? (
+      :`No questions have been posted yet!`) :  down === 1 ? (
+        data && data.length ?
         data.map((x) => (
           x.topic === "Pure Mathematics I" ? (
            
@@ -171,7 +171,8 @@ const Forum = () => {
             </div>
           ) : null
         ))
-      ) : data && data.length && down === 2 ? (
+      :"No Pure Math Questions have been posted yet!") :  down === 2 ? (
+        data && data.length?
         data.map((x) => (
           x.topic === "Probability And Statistics" ? (
             <div key={x._id}>
@@ -194,7 +195,7 @@ const Forum = () => {
             </div>
           ) : null
         ))
-      ) : null}
+      :"No statistics questions have been posted yet!") : null}
       <Typography>{status}</Typography>
       <Link to="/addforum">Add question to forum? 🤔</Link>
     </div>

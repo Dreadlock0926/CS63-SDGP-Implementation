@@ -30,7 +30,7 @@ router.route("/").get(async (req,res)=>{
 
 }).post(async (req, res) => {
     try {
-        const { question, description , answer, topic, rating,by="guest"} = req?.body;
+        const { question, description , topic, rating,by="guest"} = req?.body;
         
         if (!question || !topic) {
             return res.status(400).json({ Alert: "NO Question/Topic!" });
@@ -42,7 +42,7 @@ router.route("/").get(async (req,res)=>{
             return res.status(409).json({ Alert: `${question} was Already posted before!` });
         }
 
-        const created = await forumModel.create({ question, description, answer, topic, rating ,by});
+        const created = await forumModel.create({ question, description,  topic, rating ,by});
         
         if (created) {
             return res.status(201).json({ Alert: `${question} Added!` });
@@ -61,7 +61,7 @@ router.route("/:id")
         const { id } = req.params;
 
         if (!answer || !id) {
-            return res.status(400).json({ Alert: "No Answer or ID Provided!" });
+            return res.status(400).json({ Alert: "No `Answer` or ID Provided!" });
         }
 
         try {
@@ -71,9 +71,7 @@ router.route("/:id")
                 return res.status(404).json({ Alert: "Invalid ID" });
             }
 
-            exists.answer.push(answer);
-            await exists.save(); // Save the changes to the document
-
+            await exists.answer.push(answer).then(async  (response)=>await response.save());
             return res.status(200).json({ Alert: `Updated ${id}` });
         } catch (error) {
             console.error("Error updating answer:", error);
@@ -105,12 +103,13 @@ router.route("/:id")
 
 router.route("/upvotes/:id").put(async (req, res) => {
     const id = req?.params?.id;
+    const userId = req.body.userId;
     if (!id) {
         return res.status(400).json({ Alert: "No ID" });
     }
     try {
         const verify = await forumModel.findByIdAndUpdate(id, { $inc: { rating: 1 } }, { new: true });
-        const nerdPointsUpdate = await userModel.findByIdAndUpdate({_id:req.session.user.id},{$inc:{nerdPoints:1}})
+        const nerdPointsUpdate = await userModel.findByIdAndUpdate({_id:userId},{$inc:{nerdPoints:1}}) //increment points by 1
         if(!nerdPointsUpdate){
             res.status(400).json({Alert:"Error while updating nerd points , perhaps user not logged in?"})
         }else{
@@ -127,12 +126,13 @@ router.route("/upvotes/:id").put(async (req, res) => {
 
 router.route("/downvotes/:id").put(async (req, res) => {
     const id = req?.params?.id;
+    const userId = req.body.userId;
     if (!id) {
         return res.status(400).json({ Alert: "No ID" });
     }
     try {
         const verify = await forumModel.findByIdAndUpdate(id, { $inc: { rating: -1 } }, { new: true });
-        const nerdPointsUpdate = await userModel.findByIdAndUpdate({_id:req.session.user.id},{$inc:{nerdPoints:1}})
+        const nerdPointsUpdate = await userModel.findByIdAndUpdate({_id:userId},{$inc:{nerdPoints:-1}}) //decrement points by 1
         if(!nerdPointsUpdate){
             res.status(400).json({Alert:"Error while updating nerd points , perhaps user not logged in?"})
         }else{
