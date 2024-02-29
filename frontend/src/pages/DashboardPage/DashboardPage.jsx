@@ -4,7 +4,7 @@ import "../main.css"
 import "./DashboardPage.css"
 import ProgressGraph from "../../components/graphs/Progressionmark"
 import { LineChart, Line, CartesianGrid, XAxis, YAxis } from "recharts";
-import { useContext } from "react";
+import { useContext, useEffect, useState } from "react";
 import { UserContext } from "../../App";
 
 // Dashboard Header Tab
@@ -118,18 +118,26 @@ function DashboardCourses() {
 function DashboardActivity() {
 
     const {data} = useContext(UserContext)
+    const [chartData, setChartData] = useState([]);
 
-    const theData = [
-      {PureMath:data.PureMathematics},
-      {Statistics:data.Statistics}
-      ];
+    useEffect(() => {
       
-
+      function transformData(data) {
+        const transformedData = [
+          { subject: 'Pure Mathematics', score: data.PureMathematics },
+          { subject: 'Statistics', score: data.Statistics }
+        ];
+        return transformedData;
+      }
+  
+      setChartData(transformData(data));
+    }, [data]); 
+  
     return (
         <>
             <div className="dashboard-activity">
                 <h2 className="activity-title">Activity</h2>
-                <div className="activity-graph"><LineChart width={500} height={300} data={theData}>
+                <div className="activity-graph"><LineChart width={500} height={300} data={chartData}>
     <XAxis dataKey="name"/>
     <YAxis/>
     <CartesianGrid stroke="#eee" strokeDasharray="5 5"/>

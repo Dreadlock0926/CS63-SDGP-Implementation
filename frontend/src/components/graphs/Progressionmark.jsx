@@ -109,6 +109,30 @@ function Progressionmark() {
     </>
   );
 
+    const {data} = useContext(UserContext)
+
+    async function theAverage() {
+      try {
+        if (data && data.PureMathematics !== undefined && data.Statistics !== undefined) {
+          const total = data.PureMathematics + data.Statistics;
+          if (total !== 0) {
+            setAverage(total / 2); 
+          } else {
+            console.error("Error: Total is zero.");
+          }
+        } else {
+          console.error("Error: PureMathematics or Statistics is missing in data.");
+        }
+      } catch (err) {
+        console.error(err);
+      }
+    }
+    
+    useEffect(()=>{
+      theAverage();
+    },[data])
+
+
   return (
     <div className="progress-container">
       {/* <h1>Student progression tracker</h1> */}
