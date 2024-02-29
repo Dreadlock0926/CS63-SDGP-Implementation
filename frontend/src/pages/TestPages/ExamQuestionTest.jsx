@@ -1,3 +1,4 @@
+/* eslint-disable no-unused-vars */
 import { useEffect, useState } from "react";
 import QuestionComponent from "../../components/QuestionComponent/QuestionComponent"
 import Axios from 'axios';
