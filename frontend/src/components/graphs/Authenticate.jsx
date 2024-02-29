@@ -17,7 +17,7 @@ export default function Authenticate() {
         );
         console.log("Valid User" + data);
         if (data) {
-          setData(data); // Store user data on successful authentication
+          setData(data); 
           setIsAuthenticated(true);
         } else {
           alert("You have not logged in !");

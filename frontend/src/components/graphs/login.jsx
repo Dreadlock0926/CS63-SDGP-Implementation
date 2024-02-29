@@ -1,75 +1,52 @@
+/* eslint-disable react-hooks/rules-of-hooks */
 /* eslint-disable no-unused-vars */
-import  { useContext, useState } from "react";
-import Axios from "axios";
-import NavBar from "../NavigationBar/navBar";
-import Authenticate from "./Authenticate";
+import { useState, useContext, useEffect } from "react";
 import { UserContext } from "../../App";
+import { useNavigate } from "react-router-dom";
+import Axios from 'axios';
+
+const Login = () => {
+  const { setUser,user, setData, isAuthenticated, setIsAuthenticated } = useContext(UserContext);
+  const navigator = useNavigate();
+  const [status,setStatus]  =useState("");
 
 
-function Login() {
-  // Note: Component names should start with a capital letter
 
-  const { user,setUser } = useContext(UserContext);
-
-  const apiUrl = "http://localhost:8000/registration/login";
-
-  const handleChange = (e)=>{
-    setUser({...user,[e.target.name]:e.target.value})
+  const handleLogin = async (e) => {
+    e.preventDefault();
+    try {
+      const { data } = await Axios.post("http://localhost:8000/registration/login", user);
+      setData(data.User);
+      console.log(data);
+      if(data.status===200){
+        return <h1>You have logged in!</h1>
+      }
+      navigator("/dashboard");
+    } catch (err) {
+      console.error(err);
+    }
   }
 
-  const handleSubmit = async (e) => {
-    e.preventDefault(); 
-    try {
-      const response = await Axios.post(apiUrl, {
-      user
-      });
+  const handleChange = (e) => {
+    setUser({ ...user, [e.target.name]: e.target.value });
+  }
 
-      console.log("The data is " + response);
-      if (response.data) {
-        alert("You have successfully logged in!");
-        console.log(user.username);
-        localStorage.setItem('username', user.username);
-        localStorage.setItem('password', user.passsword);
-        
-      }
-    } catch (error) {
-      console.error("Error fetching data:", error);
-    }
-  };
+  useEffect(()=>{
+    console.log(JSON.stringify(user));
+  },[user])
 
-  return (
-    <>
-      <NavBar />
-      <form onSubmit={handleSubmit}>
-        <div>
-          <label htmlFor="username">Enter the username:</label>
-          <input
-            name="username"
-            type="text"
-            value={user.username}
-            onChange={handleChange}
-          />
-          <br />
-          <label htmlFor="password">Enter the password:</label>
-          <input
-            name="password"
-            type="password"
-            value={user.password}
-            onChange={handleChange}
-          />
-        </div>
-        <button type="submit">Login</button>
-        {/* Changed to a proper submit button */}
+
+  return !isAuthenticated && (
+    <div>
+      <h1>Login!</h1>
+      <form onSubmit={handleLogin}>
+        <input onChange={handleChange} name="username" placeholder="Enter username..." type="text" />
+        <input onChange={handleChange} name="password" placeholder="Enter password..." type="password" /> {/* Changed input type to password */}
+        <button type="submit">Login!</button>
       </form>
-      {user ? (
-        <Authenticate />
-      ) : (
-        <>
-          <h1>Nothing here !</h1>
-        </>
-      )}
-    </>
-  );
+      <p>{status}</p>
+    </div>
+  )
 }
 
 export default Login;

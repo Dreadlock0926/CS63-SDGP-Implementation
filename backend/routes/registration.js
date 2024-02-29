@@ -1,6 +1,7 @@
 const express = require('express');
 const router = express.Router();
 const userModel  = require("../models/user");
+const bcrypt = require("bcrypt");
 
 router.route("/registration").post(async(req,res)=>{
   const {username , password } = req?.body;
@@ -48,20 +49,24 @@ router.route("/registration").post(async(req,res)=>{
 router.route("/login").post(async(req,res)=>{
   const {username,password} = req?.body;
   try{
-    const getuserDetails = await userModel.findOne({username,password});
-
-
+    const getuserDetails = await userModel.findOne({username});
+    
     if(!getuserDetails){
       return res.status(401).json({Alert:"Invalid input ! "});
-    }
-    req.session.user = getuserDetails;
+    }else{
+      const pass = await bcrypt.compareSync(password,getuserDetails.password);
+      if(getuserDetails && pass){
+              req.session.user = getuserDetails;
     console.log(getuserDetails);
-    return res.send(getuserDetails);
-    
+      return res.status(200).json({User:getuserDetails})
+      }else{
+        return res.status(401).json({Alert:`Wrong ${password}`})
+      }
 
-    
+    }
   }catch(err){
-
+    console.log(err.message);
+    return res.status(500).json({Message:err.message})
   }
 })
 
@@ -72,20 +77,18 @@ router.route("/api/auth/status").post(async(req,res)=>{
   // return req.session.user ? res.status(200).send(req.session.user):res.status(401).send({msg:"Not athuanticated"});
   try{
     const {username,password} = req?.body;
+    if(!username || !password) return res.status(400).json({Alert:"No username and password!"})
+
     const getuserDetails = await userModel.findOne({username,password});
 
 
     if(!getuserDetails){
-      return res.status(401).json({Alert:"Invalid input ! "});
+      return res.status(401).json({Alert:"Invalid input!"});
+    }else{
+          req.session.user = getuserDetails;
     }
-    req.session.user = getuserDetails;
-    console.log(getuserDetails);
-    return res.send(getuserDetails);
-    
-
-    
   }catch(err){
-
+    console.error(err);
   }
 });
 
