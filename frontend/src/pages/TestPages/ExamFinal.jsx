@@ -86,15 +86,15 @@ const addWrongAnswers = () => {
 
 };
 
-const filtered = wrongQuestions.every((question) => question.split("_"));
+const filtered = wrongQuestions.filter((question) => question.includes("_"));
 const index = [];
 
 index.push(filtered);
-//index contains filtered 
-const outcome = [];
+let outcome = [];
 
-index.forEach((topicKeys) => {
-  switch (topicKeys) {
+index[0].forEach((topicKeys) => {
+  const topic = topicKeys.split("_")[0]; // Taking the first part after split
+  switch (topic) {
     case "rod":
       outcome.push(0);
       break;
@@ -119,15 +119,18 @@ index.forEach((topicKeys) => {
 // If you want to count occurrences of keywords, you might need to refactor your logic
 
 const maxOccurrences = outcome.reduce((maxCount, currentValue) => {
-  const count = outcome.filter((val) => val === currentValue).length; //how many times a certain index has repeated
-  return count > maxCount ? count : maxCount; //compare that with 0 , default index (0 representing "rod")
+  const count = outcome.filter((val) => val === currentValue).length;
+  return count > maxCount ? count : maxCount;
 }, 0);
-//so max count is 0 , if that's the most occuring then that's the index that has repeated the most , else the other index (count)
+
+console.log(`Max occur is ${JSON.stringify(outcome)}`); // This will give you the maximum occurrence count
+
+
 
 async function fetchTopic(e){
   e.preventDefault();
   try{
-    const {data} = await Axios.post("http://localhost:8000/index",{theIndex:maxOccurrences})
+    const {data} = await Axios.get("http://localhost:8000/addQuestion/index",{theIndex:maxOccurrences})
     if(data.status==200){
       alert(data)
     }else{
@@ -137,11 +140,6 @@ async function fetchTopic(e){
     console.error(err);
   }
 }
-
-console.log(`Max occur is ${JSON.stringify(outcome)}`); // This will give you the maximum occurrence count
-
-
-
 
 
 function getTotalMarks() {
