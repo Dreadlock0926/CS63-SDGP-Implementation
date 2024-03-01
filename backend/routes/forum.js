@@ -56,28 +56,29 @@ router.route("/").get(async (req,res)=>{
 })
 
 router.route("/:id")
-    .put(async (req, res) => {
-        const { answer } = req.body;
-        const { id } = req.params;
+.put(async (req, res) => {
+    const  answer  = req.body?.answer;
+    const  id  = req.params?.id;
 
-        if (!answer || !id) {
-            return res.status(400).json({ Alert: "No `Answer` or ID Provided!" });
+    if (!answer || !id) {
+        return res.status(400).json({ Alert: "No `Answer` or ID Provided!" });
+    }
+
+    try {
+        const exists = await forumModel.findById(id); 
+        if (!exists) {
+            return res.status(404).json({ Alert: "Invalid ID" });
         }
 
-        try {
-            const exists = await forumModel.findById(id);
-            
-            if (!exists) {
-                return res.status(404).json({ Alert: "Invalid ID" });
-            }
+        exists.answer.push(answer);
+        await exists.save();
 
-            await exists.answer.push(answer).then(async  (response)=>await response.save());
-            return res.status(200).json({ Alert: `Updated ${id}` });
-        } catch (error) {
-            console.error("Error updating answer:", error);
-            return res.status(500).json({ Alert: "Internal Server Error" });
-        }
-    })
+        return res.status(200).json({ Alert: `Updated ${id}` });
+    } catch (error) {
+        console.error("Error updating answer:", error);
+        return res.status(500).json({ Alert: "Internal Server Error" });
+    }
+})
     .delete(async(req, res) => {
         const id = req?.params?.id;
         if (!id) {

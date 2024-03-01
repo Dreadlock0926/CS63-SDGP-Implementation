@@ -24,7 +24,7 @@ router.route("/").post(async (req, res) => {
       questionsFiguresGrid, answersTypeGrid, answersGrid, questionSource 
     });
     
-    return res.status(200).json({ Alert: `${questionID} Registered!` });
+    return res.status(200).json({ Alert: `${questionID} Addded!` });
 
   } else {
 

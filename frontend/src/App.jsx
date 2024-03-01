@@ -25,7 +25,6 @@ function App() {
 
   return (
     <>
-      {/**Needs to generally exist on the side with a popup type scenario! */}
       <BrowserRouter>
         <UserContext.Provider value={userData}>
           <Routes>
