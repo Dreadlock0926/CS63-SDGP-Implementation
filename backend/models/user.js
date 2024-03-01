@@ -12,6 +12,10 @@ const userSchema = new mongoose.Schema({
     incorrectAnsIndex: { type: Array },
     userExamID: { type: String },
   },
+  photo:{
+    type:String,
+    default:"https://static-00.iconduck.com/assets.00/person-icon-476x512-hr6biidg.png"
+  },
     marks: {
       type: Number,
       default: 0,

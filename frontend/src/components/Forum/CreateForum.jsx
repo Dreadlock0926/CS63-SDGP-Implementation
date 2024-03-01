@@ -38,30 +38,85 @@ const CreateForum = () => {
 
   const { logged } = useContext(UserContext);
 
+  const styles = {
+    container: {
+      maxWidth: "600px",
+      margin: "auto",
+      padding: "20px",
+      fontFamily: "Arial, sans-serif",
+    },
+    title: {
+      fontSize: "24px",
+      marginBottom: "20px",
+      textAlign: "center",
+    },
+    form: {
+      display: "flex",
+      flexDirection: "column",
+    },
+    input: {
+      marginBottom: "15px",
+      padding: "10px",
+      fontSize: "16px",
+      border: "1px solid #ccc",
+      borderRadius: "5px",
+      outline: "none",
+    },
+
+    button: {
+      padding: "10px 20px",
+      fontSize: "18px",
+      backgroundColor: "#4CAF50",
+      color: "#fff",
+      border: "none",
+      borderRadius: "5px",
+      cursor: "pointer",
+      outline: "none",
+      marginBottom: "20px",
+    },
+    link: {
+      fontSize: "16px",
+      color: "#4CAF50",
+      textDecoration: "none",
+      textAlign: "center",
+      display: "block",
+    },
+    errorMessage: {
+      color: "red",
+      marginBottom: "10px",
+    },
+    successMessage: {
+      color: "green",
+      marginBottom: "10px",
+    },
+  };
+  
+
   return (
-    <div>
-      {logged ? (
-        <>
-          <h1>Add Something to the forum!</h1>
-          <form onSubmit={createQuestions}>
-            <input onChange={handleChange} name="question" value={forum.question} placeholder="Enter Question..." required maxLength={20} />
-            <input onChange={handleChange} name="description"  placeholder="Enter Description..." required />
-            <select onChange={handleChange} name="topic" value={forum.topic}>
-              <option value="Pure Mathematics I">Pure Maths I</option>
-              <option value="Probability And Statistics">Statistics</option>
-            </select>
-            <button type="submit">Add Resource!</button>
-          </form>
-          {errorMessage && <p style={{ color: "red" }}>{errorMessage}</p>}
-          {successMessage && <p style={{ color: "green" }}>{successMessage}</p>}
-          <Link to="/forum">Check Forum!</Link>
-        </>
-      ) : (
-        <div>
-          <Link to="login">Please Login to Continue!</Link>
-        </div>
-      )}
-    </div>
+    <div style={styles.container}>
+    {logged ? (
+      <>
+        <h1 style={styles.title}>Add Something to the forum!</h1>
+        <form style={styles.form} onSubmit={createQuestions}>
+          <input style={styles.input} onChange={handleChange} name="question" value={forum.question} placeholder="Enter Question..." required maxLength={20} />
+          <input style={styles.input} onChange={handleChange} name="description"  placeholder="Enter Description..." required />
+          <select style={{border:"2px solid purple"}} onChange={handleChange} name="topic" value={forum.topic}>
+            <option value="Pure Mathematics I">Pure Maths I</option>
+            <option value="Probability And Statistics">Statistics</option>
+          </select>
+          <br/>
+          <button style={styles.button} type="submit">Add Resource!</button>
+        </form>
+        {errorMessage && <p style={styles.errorMessage}>{errorMessage}</p>}
+        {successMessage && <p style={styles.successMessage}>{successMessage}</p>}
+        <Link style={styles.link} to="/forum">Check Forum!</Link>
+      </>
+    ) : (
+      <div>
+        <Link style={styles.link} to="login">Please Login to Continue!</Link>
+      </div>
+    )}
+  </div>
   );
 };
 

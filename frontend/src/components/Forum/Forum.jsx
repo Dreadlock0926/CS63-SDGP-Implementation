@@ -108,142 +108,146 @@ const Forum = () => {
   }, [toggle]);
 
   return logged ? (
-    <div style={{ margin: "5%" }}>
-      <Typography variant="h4" style={{ textAlign: "center", margin: "5%", fontSize: 48 }}>Forum</Typography>
-      <button onClick={() => { setToggle(toggle) }}>{toggle ? "☀️" : "🌙"}</button>
-      <Typography variant="h4">Welcome back, {user.username || user}</Typography>
-      <br />
-      <FormControl>
-        <InputLabel>Select Topic</InputLabel>
-        <Select
-          value={down}
-          onChange={(e) => setDown(Number(e.target.value))}
-        >
-          <MenuItem value={0}>All</MenuItem>
-          <MenuItem value={1}>Pure Math</MenuItem>
-          <MenuItem value={2}>Statistics</MenuItem>
-        </Select>
-      </FormControl>
-      {loading ? (
-        <Typography variant="h5">Loading...</Typography>
-      ) : down === 0 ? (
-        data && data.length ?
-          data.map((x) => (
-            <div key={x._id}>
+    <div className="main">    <div style={{ margin: "5%",border:"12px" }} className="container">
+    <Typography variant="h4"  className="forumTitle">Forum</Typography>
+    <br/>
+    <button onClick={() => { setToggle(!toggle) }}>{toggle ? "☀️" : "🌙"}</button>
+    <Typography variant="h4">Welcome back, {user.username || user}</Typography>
+    <br/>
+    <br />
+    <FormControl >
+      <InputLabel >Select Topic</InputLabel>
+      <br/>
+      <Select
+      className="theDrop"
+        value={down}
+        onChange={(e) => setDown(Number(e.target.value))}
+      >
+        <MenuItem value={0}>All</MenuItem>
+        <MenuItem value={1}>Pure Math</MenuItem>
+        <MenuItem value={2}>Statistics</MenuItem>
+      </Select>
+    </FormControl>
+    {loading ? (
+      <Typography variant="h5">Loading...</Typography>
+    ) : down === 0 ? (
+      data && data.length ?
+        data.map((x) => (
+          <div key={x._id} className="card">
+            <br />
+            <Typography variant="h4">{x.question}</Typography>
+            <Typography variant="body1">{x.description}</Typography>
+            <Typography variant="h4">
+                    {x?.answer ? (
+                      <div>
+                        <h2>Responses</h2>
+                        {x.answer.map((answer, index) => (
+                          <div key={index} style={{marginBottom:"1%"}}>
+                            <h1>{answer}</h1>
+                            <button onClick={()=>{nerdPoints+=5;alert(`Given user ${nerdPoints}!`)}}>Give Points!</button>
+                          </div>
+                        ))}
+                      </div>
+                    ) : (
+                      "Be the first to Answer 🥳"
+                    )}
+                  </Typography>
+            <Typography variant="body2">{x.by ? `Posted by ${x.by}` : ""}</Typography>
+            <Typography variant="body2">{x.rating ? `Upvoted by ${x.rating}` : <Typography variant="h4">Rated by none</Typography>}</Typography>
+            <Button onClick={(e) => { e.preventDefault(); increaseVotes(x._id) }}>Upvote</Button>
+            <Button onClick={(e) => { e.preventDefault(); downVote(x._id) }}>DownVote</Button>
+            <Button onClick={(e) => { e.preventDefault(); DeleteComment(x._id) }}>Delete</Button>
+            <br />
+            <form className="replyForm" onSubmit={(e) => { e.preventDefault(); AnsweringQuestions(x._id, answer) }}>
+              <Input onChange={(e) => { setAnswer(e.target.value) }} placeholder="Answer..." type="text" />
+              <Button type="submit">Answer</Button>
+            </form>
+            <br />
+          </div>
+        ))
+        : `No questions have been posted yet`
+    ) : down === 1 ? (
+      data && data.length ?
+        data.map((x) => (
+          x.topic === "Pure Mathematics I" ? (
+            <div key={x._id} className="card">
               <br />
+              <Typography variant="h2">{x.topic}</Typography>
+              <Typography variant="body2">{x.description}</Typography>
               <Typography variant="h4">{x.question}</Typography>
-              <Typography variant="body1">{x.description}</Typography>
               <Typography variant="h4">
-                      {x?.answer ? (
-                        <div>
-                          <h2>Responses</h2>
-                          {x.answer.map((answer, index) => (
-                            <div key={index} style={{marginBottom:"1%"}}>
-                              <h1>{answer}</h1>
-                              <button onClick={()=>{nerdPoints+=5;alert(`Given user ${nerdPoints}!`)}}>Give Points!</button>
-                            </div>
-                          ))}
-                        </div>
-                      ) : (
-                        "Be the first to Answer 🥳"
-                      )}
-                    </Typography>
+                    {x?.answer ? (
+                      <div>
+                        <h2>Responses</h2>
+                        {x.answer.map((answer, index) => (
+                          <div key={index} style={{marginBottom:"1%"}}>
+                            <h1>{answer}</h1>
+                            <button onClick={()=>{nerdPoints+=5;alert(`Given user ${nerdPoints}!`)}}>Give Points!</button>
+                          </div>
+                        ))}
+                      </div>
+                    ) : (
+                      "Be the first to Answer 🥳"
+                    )}
+                  </Typography>
               <Typography variant="body2">{x.by ? `Posted by ${x.by}` : ""}</Typography>
               <Typography variant="body2">{x.rating ? `Upvoted by ${x.rating}` : <Typography variant="h4">Rated by none</Typography>}</Typography>
               <Button onClick={(e) => { e.preventDefault(); increaseVotes(x._id) }}>Upvote</Button>
               <Button onClick={(e) => { e.preventDefault(); downVote(x._id) }}>DownVote</Button>
               <Button onClick={(e) => { e.preventDefault(); DeleteComment(x._id) }}>Delete</Button>
               <br />
-              <form className="replyForm" onSubmit={(e) => { e.preventDefault(); AnsweringQuestions(x._id, answer) }}>
+              <form onSubmit={(e) => { e.preventDefault(); AnsweringQuestions(x._id, answer) }}>
                 <Input onChange={(e) => { setAnswer(e.target.value) }} placeholder="Answer..." type="text" />
                 <Button type="submit">Answer</Button>
               </form>
               <br />
             </div>
-          ))
-          : `No questions have been posted yet`
-      ) : down === 1 ? (
-        data && data.length ?
-          data.map((x) => (
-            x.topic === "Pure Mathematics I" ? (
-              <div key={x._id}>
-                <br />
-                <Typography variant="h2">{x.topic}</Typography>
-                <Typography variant="body2">{x.description}</Typography>
-                <Typography variant="h4">{x.question}</Typography>
-                <Typography variant="h4">
-                      {x?.answer ? (
-                        <div>
-                          <h2>Responses</h2>
-                          {x.answer.map((answer, index) => (
-                            <div key={index} style={{marginBottom:"1%"}}>
-                              <h1>{answer}</h1>
-                              <button onClick={()=>{nerdPoints+=5;alert(`Given user ${nerdPoints}!`)}}>Give Points!</button>
-                            </div>
-                          ))}
-                        </div>
-                      ) : (
-                        "Be the first to Answer 🥳"
-                      )}
-                    </Typography>
-                <Typography variant="body2">{x.by ? `Posted by ${x.by}` : ""}</Typography>
-                <Typography variant="body2">{x.rating ? `Upvoted by ${x.rating}` : <Typography variant="h4">Rated by none</Typography>}</Typography>
-                <Button onClick={(e) => { e.preventDefault(); increaseVotes(x._id) }}>Upvote</Button>
-                <Button onClick={(e) => { e.preventDefault(); downVote(x._id) }}>DownVote</Button>
-                <Button onClick={(e) => { e.preventDefault(); DeleteComment(x._id) }}>Delete</Button>
-                <br />
-                <form onSubmit={(e) => { e.preventDefault(); AnsweringQuestions(x._id, answer) }}>
-                  <Input onChange={(e) => { setAnswer(e.target.value) }} placeholder="Answer..." type="text" />
-                  <Button type="submit">Answer</Button>
-                </form>
-                <br />
-              </div>
-            ) : null
-          ))
-          : "No Pure Math Questions have been posted yet"
-      ) : down === 2 ? (
-        data && data.length ?
-          data.map((x) => (
-            x.topic === "Probability And Statistics" ? (
-              <div key={x._id}>
-                <br />
-                <Typography variant="h2">{x.topic}</Typography>
-                <Typography variant="body2">{x.description}</Typography>
-                <Typography variant="h4">{x.question}</Typography>
-                <Typography variant="h4">
-                      {x?.answer ? (
-                        <div>
-                          <h2>Responses</h2>
-                          {x.answer.map((answer, index) => (
-                            <div key={index} style={{marginBottom:"1%"}}>
-                              <h1>{answer}</h1>
-                              <button onClick={()=>{nerdPoints+=5;alert(`Given user ${nerdPoints}!`)}}>Give Points!</button>
-                            </div>
-                          ))}
-                        </div>
-                      ) : (
-                        "Be the first to Answer 🥳"
-                      )}
-                    </Typography>
-                <Typography variant="body2">{x.by ? `Posted by ${x.by}` : ""}</Typography>
-                <Typography variant="body2">{x.rating ? `Upvoted by ${x.rating}` : <Typography variant="h4">Rated by none</Typography>}</Typography>
-                <Button onClick={(e) => { e.preventDefault(); increaseVotes(x._id) }}>Upvote</Button>
-                <Button onClick={(e) => { e.preventDefault(); downVote(x._id) }}>DownVote</Button>
-                <Button onClick={(e) => { e.preventDefault(); DeleteComment(x._id) }}>Delete</Button>
-                <br />
-                <form onSubmit={(e) => { e.preventDefault(); AnsweringQuestions(x._id, answer) }}>
-                  <Input onChange={(e) => { setAnswer(e.target.value) }} placeholder="Answer..." type="text" />
-                  <Button type="submit">Answer</Button>
-                </form>
-                <br />
-              </div>
-            ) : null
-          ))
-          : "No statistics questions have been posted yet"
-      ) : null}
-      <Typography>{status}</Typography>
-      <Link to="/addforum">Add question to forum? 🤔</Link>
-    </div>
+          ) : null
+        ))
+        : "No Pure Math Questions have been posted yet"
+    ) : down === 2 ? (
+      data && data.length ?
+        data.map((x) => (
+          x.topic === "Probability And Statistics" ? (
+            <div key={x._id} className="card">
+              <br />
+              <Typography variant="h2">{x.topic}</Typography>
+              <Typography variant="body2">{x.description}</Typography>
+              <Typography variant="h4">{x.question}</Typography>
+              <Typography variant="h4">
+                    {x?.answer ? (
+                      <div>
+                        <h2>Responses</h2>
+                        {x.answer.map((answer, index) => (
+                          <div key={index} style={{marginBottom:"1%"}}>
+                            <h1>{answer}</h1>
+                            <button onClick={()=>{nerdPoints+=5;alert(`Given user ${nerdPoints}!`)}}>Give Points!</button>
+                          </div>
+                        ))}
+                      </div>
+                    ) : (
+                      "Be the first to Answer 🥳"
+                    )}
+                  </Typography>
+              <Typography variant="body2">{x.by ? `Posted by ${x.by}` : ""}</Typography>
+              <Typography variant="body2">{x.rating ? `Upvoted by ${x.rating}` : <Typography variant="h4">Rated by none</Typography>}</Typography>
+              <Button onClick={(e) => { e.preventDefault(); increaseVotes(x._id) }}>Upvote</Button>
+              <Button onClick={(e) => { e.preventDefault(); downVote(x._id) }}>DownVote</Button>
+              <Button onClick={(e) => { e.preventDefault(); DeleteComment(x._id) }}>Delete</Button>
+              <br />
+              <form onSubmit={(e) => { e.preventDefault(); AnsweringQuestions(x._id, answer) }}>
+                <Input onChange={(e) => { setAnswer(e.target.value) }} placeholder="Answer..." type="text" />
+                <Button type="submit">Answer</Button>
+              </form>
+              <br />
+            </div>
+          ) : null
+        ))
+        : "No statistics questions have been posted yet"
+    ) : null}
+    <Typography>{status}</Typography>
+    <Link to="/addforum">Add question to forum? 🤔</Link>
+  </div></div>
   ) : (
       <div>
         <Typography variant="h1">Please <Link to="/login">login</Link> to continue to the forum </Typography>
