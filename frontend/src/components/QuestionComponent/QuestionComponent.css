@@ -98,3 +98,8 @@ math-field {
     display: block;
     width: 40%;
 }
+
+.main-info-container {
+    display: flex;
+    flex-direction: column;
+}

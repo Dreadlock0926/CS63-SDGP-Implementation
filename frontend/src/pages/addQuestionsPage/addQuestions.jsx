@@ -4,6 +4,7 @@ import "../addQuestionsPage/addQuestions.css";
 import { useRef, useState } from "react";
 import { useEffect } from "react";
 import Axios from "axios";
+import { Image } from "cloudinary-react";
 
 function QuestionSourcePanel({
   setQuestionSource,
@@ -186,6 +187,26 @@ function QuestionGridUnit({ index, onInputChange }) {
   const [marksText, setMarksText] = useState("");
   const [figureText, setFigureText] = useState("");
 
+  const [selectedImage, setSelectedImage] = useState([]);
+
+  const uploadFigure = () => {
+    const formData = new FormData();
+    formData.append("file", selectedImage);
+    formData.append("upload_preset", "xpr9hqrv");
+
+    const postFigure = async () => {
+      try {
+        const response = await Axios.post("https://api.cloudinary.com/v1_1/dl13hpmzu/upload", formData);
+        console.log(response);
+        setFigureText(response.data.secure_url);
+      } catch (error) {
+        console.error(error);
+      }
+    }
+
+    postFigure();
+  }
+
   useEffect(() => {
     onInputChange(index, {
       questionText,
@@ -238,13 +259,19 @@ function QuestionGridUnit({ index, onInputChange }) {
               <option value="Box and Whisker" />
             </datalist>
           </div>
-          <input
-            placeholder="Figure"
-            value={figureText}
-            onChange={(e) => setFigureText(e.target.value)}
-            type="text"
-            className="qgu-figure-input"
-          />
+          <div className="figure-container">
+            <input
+              readOnly={true}
+              placeholder="Figure"
+              value={figureText}
+              onChange={(e) => setFigureText(e.target.value)}
+              type="text"
+              className="qgu-figure-input"
+            />
+            <input type="file" name="file" id="file" className="figure-input-btn" accept="image/png, image/gif, image/jpeg" onChange={(e) =>
+            setSelectedImage(e.target.files[0])}/>
+            <button onClick={uploadFigure} className="figure-upload-btn">Upload Image</button>
+          </div>
           <input
             placeholder="Marks"
             value={marksText}

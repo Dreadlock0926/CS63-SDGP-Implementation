@@ -1,0 +1,87 @@
+/* General page settings */
+body {
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+  background-color: #f0f2f5;
+  color: #333;
+  margin: 0;
+  padding: 20px;
+}
+
+.heading {
+  color: #0056b3;
+  text-align: center;
+  margin-bottom: 20px;
+}
+
+/* Button styling */
+button {
+  background-color: #007bff;
+  color: white;
+  border: none;
+  padding: 10px 20px;
+  border-radius: 5px;
+  cursor: pointer;
+  font-size: 16px;
+  transition: background-color 0.3s ease;
+  transform: translateX(1200px);
+}
+
+button:hover {
+  background-color: #0056b3;
+}
+
+/* Question and answer container */
+.question-container {
+  background-color: #ffffff;
+  box-shadow: 0 0 5px rgba(0,0,0,0.2);
+  margin-bottom: 20px;
+  padding: 20px;
+  border-radius: 8px;
+}
+
+.question {
+  font-weight: bold;
+}
+
+/* Specific styles for wrong and correct answers could go here */
+.wrong-answer {
+  color: #dc3545;
+}
+
+.correct-answer {
+  color: #28a745;
+}
+
+/* Link styling */
+a {
+  color: #007bff;
+  text-decoration: none;
+}
+
+a:hover {
+  text-decoration: underline;
+}
+
+/* Layout adjustments */
+.container {
+  max-width: 800px;
+  margin: auto;
+}
+
+/* Countdown timer customization */
+.countdown-timer {
+  display: flex;
+  justify-content: center;
+  margin-bottom: 20px;
+}
+
+.react-countdown-circle-timer {
+  display: flex;
+  justify-content: center;
+  padding: 5px;
+}
+.details{
+  position: relative;
+  display: flex;
+  left: 300px;
+}
