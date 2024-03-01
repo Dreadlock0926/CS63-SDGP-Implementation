@@ -19,6 +19,11 @@ const userSchema = new mongoose.Schema({
   },
   password: { type: String, required: true },
   examHistory: { type: [examHistorySchema], required: false },
+    photo:{
+    type:String,
+    default:"https://static-00.iconduck.com/assets.00/person-icon-476x512-hr6biidg.png"
+  },
+  //I wanted to add an default user pfp
 });
 
 const userModel = mongoose.model("users", userSchema);
