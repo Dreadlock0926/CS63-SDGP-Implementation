@@ -3,7 +3,6 @@ import { useContext, useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 import { CountdownCircleTimer } from "react-countdown-circle-timer";
 import QuestionComponent from "../../components/QuestionComponent/QuestionComponent";
-import "./ExamFinal.css";
 
 // import { UserContext } from "../../App";
 
@@ -22,7 +21,7 @@ const ExamFinalized = () => {
   let answerValues = [];
   let correctAnswers = [];
   let wrongAnswersIndex = [];
-
+  
   let wrongQuestions = [];
 
   let marksArray = [];
@@ -31,73 +30,74 @@ const ExamFinalized = () => {
   const getAnswers = () => {
     const answers = document.querySelectorAll("math-field");
     answerValues = Array.from(answers).map((answer) => answer.value);
-    console.log(
-      "This is what the user inputted for the answers:",
-      answerValues
-    );
+    console.log("This is what the user inputted for the answers:", answerValues);
 
     correctAnswers = [];
-    JSON.parse(examData).forEach((question) => {
-      question.answersGrid.forEach((answer) => {
-        if (answer !== "") {
-          correctAnswers.push(answer);
-        }
-      });
+    JSON.parse(examData).forEach(question => {
+        question.answersGrid.forEach(answer => {
+            if (answer !== "") {
+                correctAnswers.push(answer);
+            }
+        }) 
     });
     console.log("These are the correct answers:", correctAnswers);
     compareAnswers();
     addWrongAnswers();
-  };
+};
 
-  const compareAnswers = () => {
+const compareAnswers = () => {
     wrongAnswersIndex = [];
     for (let i = 0; i < correctAnswers.length; i++) {
-      if (answerValues[i] !== correctAnswers[i]) {
-        wrongAnswersIndex.push(i);
-      }
+
+        if (answerValues[i] !== correctAnswers[i]) {
+            wrongAnswersIndex.push(i);
+        }
+        
     }
     console.log("these are the index of the wrong answers", wrongAnswersIndex);
-  };
+};
 
-  const addWrongAnswers = () => {
+const addWrongAnswers = () => {
+
     let count = -1;
     wrongQuestions = [];
 
-    JSON.parse(examData).forEach((question) => {
-      question.answersGrid.forEach((answer) => {
-        if (answer !== "") {
-          count += 1;
-        }
-        if (
-          wrongAnswersIndex.includes(count) &&
-          !wrongQuestions.includes(question.questionID)
-        ) {
-          wrongQuestions.push(question.questionID);
-        }
-      });
+    JSON.parse(examData).forEach(question => {
+        question.answersGrid.forEach(answer => {
+            if (answer !== "") {
+                count += 1;
+            }
+            if (wrongAnswersIndex.includes(count) && (!wrongQuestions.includes(question.questionID))) {
+
+                wrongQuestions.push(question.questionID);
+
+            }
+        }) 
     });
 
     console.log("these are the IDs of the wrong questions", wrongQuestions);
 
     getTotalMarks();
-  };
 
-  function getTotalMarks() {
-    marksArray = [];
+};
 
-    JSON.parse(examData).forEach((element) => {
-      for (let index = 0; index < element.marksGrid.length; index++) {
-        if (element.marksGrid[index] !== "") {
-          marksArray.push(parseInt(element.marksGrid[index]));
-        }
+function getTotalMarks() {
+  marksArray = [];
+
+  JSON.parse(examData).forEach(element => {
+    for (let index = 0; index < element.marksGrid.length; index++) {
+      if (element.marksGrid[index] !== "") {
+        marksArray.push(parseInt(element.marksGrid[index]))
       }
-    });
-    totalMarks = marksArray.reduce((a, b) => a + b, 0);
-    for (let i = 0; i < wrongAnswersIndex.length; i++) {
-      totalMarks -= marksArray[wrongAnswersIndex[i]];
     }
-    console.log("Total marks:", totalMarks);
+    
+  });
+  totalMarks = marksArray.reduce((a,b) => a+b, 0);
+  for (let i = 0; i < wrongAnswersIndex.length; i++) {
+      totalMarks -= marksArray[wrongAnswersIndex[i]];    
   }
+  console.log("Total marks:", totalMarks);
+}
 
   // end of getting answers
 
@@ -105,12 +105,12 @@ const ExamFinalized = () => {
     <div>
       {examData ? (
         <div>
-          <h1 className="heading">Exam</h1>
-          
+          <h1>Exam</h1>
+          <button onClick={getAnswers}>log answers</button>
           <div>
             {JSON.parse(examData).map((question, index) => {
               return (
-                <div className="details">
+                <div>
                   <QuestionComponent
                     key={question.questionID}
                     question={question}
@@ -120,7 +120,6 @@ const ExamFinalized = () => {
               );
             })}
           </div>
-          <button onClick={getAnswers}>log answers</button>
         </div>
       ) : (
         <div>
