@@ -21,6 +21,7 @@ const Login = () => {
       if(data.status===200){
         return <h1>You have logged in!</h1>
       }
+      setIsAuthenticated(true);
       setStatus(data.response);
       navigator("/dashboard");
     } catch (err) {

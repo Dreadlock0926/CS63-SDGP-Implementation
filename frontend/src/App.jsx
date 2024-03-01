@@ -18,6 +18,7 @@ function App() {
   const [progress, setProgress] = useState([]);
   const [statValue, setStatValue] = useState([]); // corrected typo here
   const [course, setCourse] = useState(0);
+  const [logged,setLogged]  = useState(false)
   const [ongoingCourses, setOngoingCourses] = useState(0); // corrected function name here
   const [isAuthenticated, setIsAuthenticated] = useState(false);
   const [value,setValue] = useState([])
@@ -44,7 +45,7 @@ function App() {
     setCourse,
     ongoingCourses,
     setOngoingCourses,
-    user,
+    user,logged,setLogged,
     setUser,
     isAuthenticated,
     setIsAuthenticated,value,setValue

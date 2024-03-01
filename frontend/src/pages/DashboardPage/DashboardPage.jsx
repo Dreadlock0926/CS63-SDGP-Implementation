@@ -44,9 +44,9 @@ function DashboardGraph() {
 }
 
 // Dashboard Statistics Tab
-function DashboardStatistics({voxal,ongoingCourses,completeCourses}) {
+function DashboardStatistics({voxal,ongoingCourses,completeCourses,hoursLearned}) {
 
-    return (
+    return voxal && ongoingCourses && completeCourses && hoursLearned ? (
         <>
             <div className="dashboard-statistics-container">
                 <h2 className="statistics-title">Statistics</h2>
@@ -56,8 +56,8 @@ function DashboardStatistics({voxal,ongoingCourses,completeCourses}) {
                         <p className="st-num vox-num">{voxal}</p>
                     </div>
                     <div className="points-tab">
-                        <h3 className="tab-header">Hours Learned</h3> {/**This wasn't provided in the data */}
-                        <p className="st-num hour-num">23</p>
+                        <h3 className="tab-header">Hours Learned</h3>
+                        <p className="st-num hour-num">{hoursLearned}</p>
                     </div>
                     <div className="points-tab">
                         <h3 className="tab-header">Ongoing Courses</h3>
@@ -70,7 +70,7 @@ function DashboardStatistics({voxal,ongoingCourses,completeCourses}) {
                 </div>
             </div>
         </>
-    );
+    ) : "Some data is hasn't been assigned properly!";
 
 }
 
@@ -190,11 +190,11 @@ function DashboardCourses() {
   
 
 function DashboardActivity() {
-    const { data } = useContext(UserContext);
+    const { data } = useContext(UserContext); 
 
     const transformedData = [
-        { subject: 'Pure Mathematics', score: 200 },
-        { subject: 'Statistics', score: 100 }
+        { subject: 'Pure Mathematics', score: data.PureMathematics[0] },
+        { subject: 'Statistics', score: data.Statistics[0] }
     ];
 
     return (
@@ -218,23 +218,23 @@ function DashboardActivity() {
 // Dashboard Final Display Page
 function DashboardPage() {
 
-  const {data} = useContext(UserContext)
+  const {data, isAuthenticated, user} = useContext(UserContext)
   console.log(data);
 
 
-    return (
+    return  isAuthenticated && user?  (
         <>
         <div className="dashboard-complete-container">
             <DashboardHeader/>
             <div className="dashboard-main">
                 <DashboardGraph />
-                <DashboardStatistics voxal={data.voxalPoints} ongoingCourses={data.ongoingCourses}  completedCourses={data.completeCourse} />
+                <DashboardStatistics voxal={data.voxalPoints} ongoingCourses={data.ongoingCourses}  completedCourses={data.completeCourse} hoursLearned={data.hoursLearned} />
                 <DashboardCourses />
                 <DashboardActivity/>
             </div>
         </div>
         </>
-    );
+    ) : "Please login to continue!";
 
 }
 
