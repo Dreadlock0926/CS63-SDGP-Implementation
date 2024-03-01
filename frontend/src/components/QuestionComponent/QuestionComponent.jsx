@@ -1,4 +1,3 @@
-/* eslint-disable react/prop-types */
 import "./QuestionComponent.css";
 import { useEffect, useState } from "react";
 import { MathJax, MathJaxContext } from "better-react-mathjax";

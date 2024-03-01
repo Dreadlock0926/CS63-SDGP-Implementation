@@ -3,16 +3,14 @@ import { useContext, useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 import { CountdownCircleTimer } from "react-countdown-circle-timer";
 import QuestionComponent from "../../components/QuestionComponent/QuestionComponent";
-import Axios from 'axios';
 import "./ExamFinal.css";
 
 // import { UserContext } from "../../App";
 
 const ExamFinalized = () => {
   const examData = sessionStorage.getItem("examData");
- let answerValues = [];
+
   if (examData) {
-    answerValues.push(JSON.parse(examData))
   } else {
     window.location.href = "/scope";
   }
@@ -21,15 +19,14 @@ const ExamFinalized = () => {
 
   // getting answers
 
- 
+  let answerValues = [];
   let correctAnswers = [];
   let wrongAnswersIndex = [];
+
   let wrongQuestions = [];
 
   let marksArray = [];
   let totalMarks = 0;
-
-  
 
   const getAnswers = () => {
     const answers = document.querySelectorAll("math-field");
@@ -50,25 +47,7 @@ const ExamFinalized = () => {
     console.log("These are the correct answers:", correctAnswers);
     compareAnswers();
     addWrongAnswers();
-    QuestionIDs();
   };
-
-  async function QuestionIDs(){ //velo wrote this
-    console.log(answerValues)
-
-    try{
-      for(let i = 0 ; i < answerValues.length ; i++){
-          await Axios.post("http://localhost:8000/history",{questionID:answerValues[i]})
-          alert("Posted!")
-      }
-    
-    }catch(err){
-      console.error(err);
-    }
-  }
-
-
-
 
   const compareAnswers = () => {
     wrongAnswersIndex = [];
@@ -120,9 +99,6 @@ const ExamFinalized = () => {
     console.log("Total marks:", totalMarks);
   }
 
-
-  
-
   // end of getting answers
 
   return (
@@ -134,7 +110,7 @@ const ExamFinalized = () => {
           <div>
             {JSON.parse(examData).map((question, index) => {
               return (
-                <div className="details" key={question._id || index}>
+                <div className="details">
                   <QuestionComponent
                     key={question.questionID}
                     question={question}
