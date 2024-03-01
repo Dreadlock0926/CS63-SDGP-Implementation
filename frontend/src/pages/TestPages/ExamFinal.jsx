@@ -127,7 +127,7 @@ console.log(`The maxOccuring index is ${maxOccurrences}`);
 async function fetchTopic(e) {
     e.preventDefault();
     try {
-        const { data } = await Axios.post("http://localhost:8000/index", { theIndex: maxOccurrences }); //this is not sending the data forward
+        const { data } = await Axios.post("http://localhost:8000/index", { theIndex: maxOccurrences });
         if (data.status == 200) {
             alert(`The weakest topic is ${data}`);
         } else {
