@@ -1,6 +1,7 @@
 import React from "react";
 import { useState, useReducer, useEffect } from "react";
 import Axios from "axios";
+import "./pastPaperScope.css";
 
 const PastPaperScope = () => {
   const initialState = {
@@ -72,6 +73,7 @@ const PastPaperScope = () => {
 
       if (response.data.length === 0) {
         alert("No questions found under this past paper!");
+        setQuestions([]);
         return;
       }
       setQuestions(response.data);
@@ -111,10 +113,12 @@ const PastPaperScope = () => {
   };
 
   return (
-    <div>
+    <div className="bodyDiv">
       {modulesArr.length > 0 && (
         <>
+          <label htmlFor="moduleDropdown"> Select Module : </label>
           <select
+            name="moduleDropdown"
             id="moduleDropdown"
             onChange={handleModuleChange}
             value={selectedModuleState}
@@ -126,6 +130,7 @@ const PastPaperScope = () => {
             ))}
           </select>
 
+          <label htmlFor="yearDropdown"> Select Year : </label>
           <select id="yearDropdown" onChange={handleYearChange}>
             {Array.from({ length: 5 }, (_, i) => (
               <option key={`year_${2018 + i}`} value={2018 + i}>
@@ -134,11 +139,13 @@ const PastPaperScope = () => {
             ))}
           </select>
 
+          <label htmlFor="seasonDropDown"> Select Season : </label>
           <select id="seasonDropDown" onChange={handleSeasonChange}>
             <option value="s">May/June</option>
             <option value="w">October/November</option>
           </select>
 
+          <label htmlFor="variantDropDown"> Select Variant : </label>
           <select id="variantDropDown" onChange={handleVariantChange}>
             {Array.from({ length: 3 }, (_, i) => (
               <option key={`variant_${i + 1}`} value={i + 1}>
