@@ -1,56 +1,50 @@
-/* eslint-disable no-unused-vars */
 import Axios from "axios";
-import { UserContext } from "../../App";
 import { useContext, useState } from "react";
-import {useNavigate} from "react-router-dom"
+import { useNavigate } from "react-router-dom";
 import NavBar from "../../components/NavigationBar/navBar.jsx";
 import "../main.css";
 import "./account.css";
+import { UserContext } from "../../App.jsx";
 
 const Register = () => {
   const navigator = useNavigate();
-  const { loading,setLoading } = useContext(UserContext);
+  const { loading, setLoading } = useContext(UserContext);
   const [newUser, setNewUser] = useState({ username: "", password: "" });
-const [status,setStatus] = useState("")
+  const [status, setStatus] = useState("");
 
   const handleChange = (e) => {
     setNewUser({ ...newUser, [e.target.id]: e.target.value });
   };
 
-  async function handleRegister(e) {
+  const handleRegister = async (e) => {
     e.preventDefault();
     try {
-        setLoading(true);
-      const loginUser = await Axios.post(
-        "http://localhost:8000/register",
-        newUser
-      );
+      setLoading(true);
+      const response = await Axios.post("http://localhost:8000/register", newUser);
 
-      if (loginUser.status === 201) {
-        navigator("/login")
-      }else if(loginUser.status===409){
-        setStatus(`${newUser.username} Already Taken!`)
+      if (response.status === 201) {
+        navigator("/login");
+      } else if (response.status === 409) {
+        setStatus(`${newUser.username} Already Taken!`);
       }
     } catch (err) {
       console.error(err);
     } finally {
-        setLoading(false);
-      setNewUser({username: "", password: ""});
+      setLoading(false);
+      setNewUser({ username: "", password: "" });
     }
-  }
+  };
 
-  return loading ? (
-    "Loading..."
-  ) : (
+  return (
     <>
       <NavBar />
       <div className="backgroundContainer">
-        <img alt="background" className="bgImg2" src="./images/background2.png"/>
+        <img alt="background" className="bgImg2" src="./images/background2.png" />
         <div className="container">
-          <img alt="avatar" className="avItem2" src="./images/avatar.png"/>
+          <img alt="avatar" className="avItem2" src="./images/avatar.png" />
           <p className="containerTitle">Register</p>
           <p className="containerText">
-            Already have an account?&nbsp;<a href="login" style={{color:"black"}}>Login</a>
+            Already have an account?&nbsp;<a href="login" style={{ color: "black" }}>Login</a>
           </p>
           <form onSubmit={handleRegister} className="forms">
             <div className="inputLabelGrp">
@@ -75,10 +69,11 @@ const [status,setStatus] = useState("")
                 required
               />
             </div>
-            <button type="submit" className="button" disabled={loading} >
+            <button type="submit" className="button" disabled={loading}>
               Register
             </button>
           </form>
+          <p>{status}</p>
         </div>
       </div>
     </>

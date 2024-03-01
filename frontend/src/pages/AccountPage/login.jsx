@@ -24,26 +24,26 @@ const Login = () => {
     e.preventDefault();
     try {
       setLoading(true);
-      const loginUser = await Axios.post(BASE, newUser);
-      if (loginUser.status === 200) {
-        console.log(loginUser.data);
-        setUser(loginUser.data);
+      const response = await Axios.post(BASE, newUser);
+    
+      if (response.status === 200) {
+        console.log(response.data);
+        setUser(response.data);
         setLogged(true);
-        setTimeout(() => {
-          navigator("/");
-        }, 1500);
-      } else if (loginUser.status === 401) {
+        navigator("/");
+      } else if (response.status === 401) {
         setIssue("Wrong Password, Please try again!");
-      } else if (loginUser.status === 404) {
+      } else if (response.status === 404) {
         setIssue("Invalid Username, Please Check Again!");
       }
-    } catch (err) {
-      console.error(err);
+    } catch (error) {
+      console.error(error);
     } finally {
       setLoading(false);
       setnewUser({ username: "", password: "" });
     }
   }
+  
   
 
 

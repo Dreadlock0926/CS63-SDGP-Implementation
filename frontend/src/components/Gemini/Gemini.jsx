@@ -37,7 +37,7 @@ function Gemini() {
 
   return logged ? (
     <div className="bot-container">
-      <AiFillRobot className="dabot" onClick={() => setMenu((prev) => !prev)}>
+      <AiFillRobot className="dabot" onClick={() => setMenu(prev => !prev)}>
         {menu ? "Close Bot" : "Open Bot!"}
       </AiFillRobot>
       {menu && (
