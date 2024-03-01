@@ -57,19 +57,6 @@ router.route("/getQuestionInfo").post(async (req, res) => {
   }
 });
 
-router.get("/index",async (req,res)=>{
-  const theIndex = req.body.theIndex;
-  if(!theIndex) res.status(400).json({Alert:"No index provided!"})
-
-
-  const data = await topicsModel.findOne({topics:theIndex})
-  if(!data){
-    res.status(404).json({Alert:"No data found!"})
-  } else{
-    res.status(200).json(data);
-  }
-})
-
 router.route("/getModules").get(async (req, res) => {
   try {
     const result = await topicsModel.find({}, "source");
