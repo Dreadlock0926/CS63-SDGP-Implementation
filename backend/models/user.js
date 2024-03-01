@@ -12,10 +12,6 @@ const userSchema = new mongoose.Schema({
     incorrectAnsIndex: { type: Array },
     userExamID: { type: String },
   },
-  incorrectSections:{
-    type:Array,
-    default:[]
-  }
 });
 
 const userModel = mongoose.model("users", userSchema);

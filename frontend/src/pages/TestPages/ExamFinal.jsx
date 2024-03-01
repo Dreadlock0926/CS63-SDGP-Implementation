@@ -62,9 +62,6 @@ const compareAnswers = () => {
    
 };
 
-let theOccurences = 0;
-
-let counts = {};
 const addWrongAnswers = () => {
 
     let count = -1;
@@ -87,43 +84,52 @@ const addWrongAnswers = () => {
 
     getTotalMarks();
 
-    const filtered = wrongQuestions.map((question) => question.split("_"));
+};
+
+const filtered = wrongQuestions.map((question) => question.split("_"));
 const index = [];
 
 filtered.forEach(question => {
     index.push(question[1]);
 });
 
+const outcome = [];
 
-///index has the split at this point
-index.forEach((x)=> { counts[x] = (counts[x] || 0) + 1; });
-console.log(`The counter is ${JSON.stringify(counts)}`);
+index.forEach((topicKeys) => {
+    switch (topicKeys) {
+        case "rod":
+            outcome.push(0);
+            break;
+        case "pac":
+            outcome.push(1);
+            break;
+        case "p":
+            outcome.push(2);
+            break;
+        case "drv":
+            outcome.push(3);
+            break;
+        case "tnd":
+            outcome.push(4);
+            break;
+        default:
+            break;
+    }
+});
 
+const maxOccurrences = outcome.reduce((maxCount, currentValue) => {
+    const count = outcome.filter((val) => val === currentValue).length;
+    return count > maxCount ? count : maxCount;
+}, 0);
 
-//below is sorted but ain't properly displaying
+console.log(`The maxOccuring index is ${maxOccurrences}`);
 
-// let sortable = [];
-// for (var item in counts) {
-//     sortable.push([item, counts[item]]);
-// }
-
-// sortable.sort(function(a, b) {
-//     return b[1] - a[1]; // Reverse order of comparison for descending order
-// });
-
-// console.log(`Sorted array is ${JSON.stringify(sortable)}`); //shows max here!
-
-// const maxVal = sortable.map((x)=>x>x+1)
-// console.log(`The max value is ${maxVal}`);
-
-};
-
-async function fetchTopic(e) { //find indexing
+async function fetchTopic(e) {
     e.preventDefault();
     try {
-        const { data } = await Axios.post("http://localhost:8000/index", { theIndex: counts  }); //this is not sending the data forward
+        const { data } = await Axios.post("http://localhost:8000/index", { theIndex: maxOccurrences }); //this is not sending the data forward
         if (data.status == 200) {
-            console.log(data);
+            alert(`The weakest topic is ${data}`);
         } else {
             console.log(data);
         }
@@ -131,6 +137,10 @@ async function fetchTopic(e) { //find indexing
         console.error(err);
     }
 }
+
+
+
+
 
 
 function getTotalMarks() {

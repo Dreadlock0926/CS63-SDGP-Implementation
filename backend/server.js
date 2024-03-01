@@ -15,7 +15,6 @@ const session = require("express-session");
 const examResources = require("./routes/exams")
 const { join } = require("path");
 const indexRoute = require("./routes/indexWise")
-const morgan = require("morgan")
 
 app.use(express.json());
 app.use(cors({ origin: "*" })); //allow access from anywhere for now!
@@ -34,7 +33,6 @@ app.use(
   })
 );
 
-app.use(morgan("dev"))
 app.use("/home", home);
 app.use("/register", register);
 app.use("/login", login);
