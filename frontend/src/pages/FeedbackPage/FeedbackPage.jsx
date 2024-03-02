@@ -63,6 +63,7 @@ const FeedbackPage = () => {
 
     //Get questions based on probabilities
     const getQuestionsOnProbability = async () => {
+
         await Axios.post("http://localhost:8000/getQuestion/getAllQuestions", {
             moduleID: "p1"
         })
@@ -73,9 +74,11 @@ const FeedbackPage = () => {
         .catch(function (error) {
             console.log(error);
           })
+
     }
 
     const getAvailableQuestions = (questionsList) => {
+
         for (const question in questionsList) {
             let id = questionsList[question].questionID
             if (!correctAnswers.includes(id) && !examQuestions.includes(id)) {
@@ -86,18 +89,22 @@ const FeedbackPage = () => {
                 }
             }
         }
+
     }
 
     const matchProbabilities = (availableQuestions) => {
+
         let tempExamQuestions = [];
         while (tempExamQuestions.length < 10) {
 
             for (const i in availableQuestions) {
-
                 let chance = Math.random();
                 for (const topic in topicProbabilities) {
                     if (availableQuestions[i].split("_")[1] === topic && !tempExamQuestions.includes(availableQuestions[i])) {
                         if (topicProbabilities[topic] >= chance) {
+                            if (tempExamQuestions.length === 10) {
+                                break;
+                            }
                             tempExamQuestions.push(availableQuestions[i]);
                         }
                     }
@@ -107,15 +114,8 @@ const FeedbackPage = () => {
 
         }
         setExamQuestions(tempExamQuestions);
+
     }
-
-    useEffect(() => {
-        console.log(topicProbabilities);
-    }, [topicProbabilities]);
-
-    useEffect(() => {
-        console.log(examQuestions);
-    }, [examQuestions])
 
     useEffect(() => {
         if (availableQuestions.length < 11) {
@@ -126,11 +126,14 @@ const FeedbackPage = () => {
     }, [availableQuestions])
 
     useEffect(() => {
-        console.log("probabilities are set")
         if (probabilitiesSet) {
             getAvailableQuestions(questionsList);
         }
     }, [probabilitiesSet])
+
+    useEffect(() => {
+        console.log(examQuestions);
+    }, [examQuestions])
 
     return (
         <>
