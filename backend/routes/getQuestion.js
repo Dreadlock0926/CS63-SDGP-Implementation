@@ -30,7 +30,7 @@ router.route("/getAllQuestions").post(async (req, res) => {
 
   if (!moduleID) return res.status(400).json({Alert: "The module ID is missing!"});
   let regExp = new RegExp("^" + moduleID)
-  const moduleData = await questionModel.find({questionID: regExp});
+  const moduleData = await questionModel.find({questionID: regExp}, {questionID:1, _id:0});
 
   if (!moduleData) {
     res.status(400).json({Alert: "The question data is not matching records."});
