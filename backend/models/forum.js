@@ -5,19 +5,30 @@ const forumSchema = mongoose.Schema(
       type: String,
       trim: true,
     },
-    description:{
-      type:String,
-      trim:true,
+    description: {
+      type: String,
+      trim: true,
     },
-    answer: {
+    answers: {
       type: Array,
-      default:[],
+      default: [],
+      index: {
+        type: Object,
+        default: {},
+        text: {
+          type: String,
+        },
+        answeredBy: {
+          type: String,
+        },
+      },
     },
+
     topic: {
       type: String,
       default: "",
     },
-    rating: {    type: Number,    default: 0,    min: 0 },
+    rating: { type: Number, default: 0, min: 0 },
     by: {
       type: String,
       ref: "users", //referencing to the users collection to make a connection!

@@ -57,20 +57,21 @@ router.route("/").get(async (req,res)=>{
 
 router.route("/:id")
 .put(async (req, res) => {
-    const  answer  = req.body?.answer;
-    const  id  = req.params?.id;
+    const { answer, whoAnswered="guest" } = req.body; //by default the guest answers
+    const id = req.params.id;
 
     if (!answer || !id) {
         return res.status(400).json({ Alert: "No `Answer` or ID Provided!" });
     }
 
     try {
-        const exists = await forumModel.findById(id); 
+        const exists = await forumModel.findById(id);
         if (!exists) {
             return res.status(404).json({ Alert: "Invalid ID" });
         }
 
-        exists.answer.push(answer);
+        
+        exists.answers.push({ text: answer, answeredBy: whoAnswered });
         await exists.save();
 
         return res.status(200).json({ Alert: `Updated ${id}` });
@@ -110,7 +111,7 @@ router.route("/upvotes/:id").put(async (req, res) => {
     }
     try {
         const verify = await forumModel.findByIdAndUpdate(id, { $inc: { rating: 1 } }, { new: true });
-        const nerdPointsUpdate = await userModel.findByIdAndUpdate({_id:userId},{$inc:{nerdPoints:1}}) //increment points by 1
+        const nerdPointsUpdate = await userModel.findByIdAndUpdate({_id:userId},{$inc:{nerdPoints:5}}) //increment points by 1
         if(!nerdPointsUpdate){
             res.status(400).json({Alert:"Error while updating nerd points , perhaps user not logged in?"})
         }else{
@@ -124,6 +125,27 @@ router.route("/upvotes/:id").put(async (req, res) => {
         res.status(500).json({ Alert: "Internal Server Error" });
     }
 });
+
+router.route("/nerds/:id").put(async (req, res) => {
+    const id = req?.params?.id;
+    const {userID="65e443cfcd871e196b006f9c"} = req?.body;
+
+    console.log(`Payload ${id} and ${userID}`)
+    if (!id || !userID) return res.status(400).json({ Alert: "ID AND userID are REQUIRED!" });
+    try {
+        const exists = await forumModel.findById(id);
+        if (!exists) {
+            return res.status(404).json({ Alert: `${String(id)} is invalid!` });
+        } else {
+            await userModel.findByIdAndUpdate(userID, { $inc: { nerdPoints: 5 } });
+            return res.status(200).json(exists); 
+        }
+    } catch (error) {
+        console.error("Error occurred:", error);
+        return res.status(500).json({ Alert: "Internal Server Error" });
+    }
+});
+
 
 router.route("/downvotes/:id").put(async (req, res) => {
     const id = req?.params?.id;

@@ -14,8 +14,7 @@ const { join } = require("path");
 const forum = require("./routes/forum");
 
 app.use(express.json());
-
-app.use(cors({ origin: "*" })); //allow access from anywhere for now!
+app.use(cors()); //allow access from anywhere for now!
 
 app.get("/", (req, res) => {
   res.status(200).send("<h1>Hey docker!</h1>");
