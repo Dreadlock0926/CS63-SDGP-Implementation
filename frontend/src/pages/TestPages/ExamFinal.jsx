@@ -3,16 +3,17 @@ import { useContext, useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 import { CountdownCircleTimer } from "react-countdown-circle-timer";
 import QuestionComponent from "../../components/QuestionComponent/QuestionComponent";
-import Axios from 'axios';
+import Axios from "axios";
 import "./ExamFinal.css";
+import App from "./test";
 
 // import { UserContext } from "../../App";
 
 const ExamFinalized = () => {
   const examData = sessionStorage.getItem("examData");
- let answerValues = [];
+  let answerValues = [];
   if (examData) {
-    answerValues.push(JSON.parse(examData))
+    answerValues.push(JSON.parse(examData));
   } else {
     window.location.href = "/scope";
   }
@@ -21,15 +22,12 @@ const ExamFinalized = () => {
 
   // getting answers
 
- 
   let correctAnswers = [];
   let wrongAnswersIndex = [];
   let wrongQuestions = [];
 
   let marksArray = [];
   let totalMarks = 0;
-
-  
 
   const getAnswers = () => {
     const answers = document.querySelectorAll("math-field");
@@ -53,22 +51,21 @@ const ExamFinalized = () => {
     QuestionIDs();
   };
 
-  async function QuestionIDs(){ //velo wrote this
-    console.log(answerValues)
+  async function QuestionIDs() {
+    //velo wrote this
+    console.log(answerValues);
 
-    try{
-      for(let i = 0 ; i < answerValues.length ; i++){
-          await Axios.post("http://localhost:8000/history",{questionID:answerValues[i]})
-          alert("Posted!")
+    try {
+      for (let i = 0; i < answerValues.length; i++) {
+        await Axios.post("http://localhost:8000/history", {
+          questionID: answerValues[i],
+        });
+        alert("Posted!");
       }
-    
-    }catch(err){
+    } catch (err) {
       console.error(err);
     }
   }
-
-
-
 
   const compareAnswers = () => {
     wrongAnswersIndex = [];
@@ -120,9 +117,6 @@ const ExamFinalized = () => {
     console.log("Total marks:", totalMarks);
   }
 
-
-  
-
   // end of getting answers
 
   return (
@@ -130,7 +124,8 @@ const ExamFinalized = () => {
       {examData ? (
         <div>
           <h1 className="heading">Exam</h1>
-          
+
+          <App />
           <div>
             {JSON.parse(examData).map((question, index) => {
               return (
