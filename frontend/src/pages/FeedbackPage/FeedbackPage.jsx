@@ -79,6 +79,7 @@ const FeedbackPage = () => {
 
     const getAvailableQuestions = (questionsList) => {
 
+        //Checks if the ID is already in the Exam Questions list or if the user has already done the question before
         for (const question in questionsList) {
             let id = questionsList[question].questionID
             if (!correctAnswers.includes(id) && !examQuestions.includes(id)) {
