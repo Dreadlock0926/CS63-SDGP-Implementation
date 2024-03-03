@@ -6,7 +6,7 @@ import Axios from "axios";
 
 const LearnPureSpecific = () => {
 
-    const baseURL = "http://localhost:8000/resources/topic/:id"
+    const baseURL = "http://localhost:8000/resources/topic/"
 
     let { id } = useParams();
     const [data,setData] = useState([])
@@ -16,6 +16,7 @@ const LearnPureSpecific = () => {
             const {data} = await Axios.get(`${baseURL}/${id}`,{topic:"Pure Mathematics I"})
             if(data.status===200){
                     setData(data);
+      console.log(data);
             }else{
                 alert("An error occured while fetching!")
             }

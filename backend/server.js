@@ -22,9 +22,8 @@ app.get("/", (req, res) => {
   res.status(200).send("<h1>Hey docker! 🐳</h1>");
 });
 
-app.set("trust proxy", 1); // trust first proxy
+app.set("trust proxy", 1); 
 app.use(
-  //adding sessions to test!
   session({
     secret: "keyboard cat",
     resave: false,

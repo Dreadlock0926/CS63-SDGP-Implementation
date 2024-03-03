@@ -33,7 +33,9 @@ const AddStudy = () => {
       userForm.append("subtopic",data.subtopic);
       userForm.append("photo",data.photo);
       userForm.append("url",data.url);
-      const resources = await Axios.post("http://localhost:8000/resources",userForm,{headers:{"Content-Type":"multipart/form-data"}} );
+      console.log(userForm);
+      const resources = await Axios.post("http://localhost:8000/resources", userForm, {headers: {"Content-Type": "multipart/form-data"}});
+      //there's a problem here
    
       if (resources.status === 201) {
         setStatus("Added Resource!");

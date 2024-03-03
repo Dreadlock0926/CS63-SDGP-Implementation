@@ -13,9 +13,9 @@ const LearningPureMaths = () => {
 
   async function PureMathsRelated(){
     try{
-      const response = await Axios.post("http://localhost:8000/resources/topic",{topic:"Pure Mathematics I"}); 
-      setResources(response.data)
-      console.log(resource)
+      const {data} = await Axios.post("http://localhost:8000/resources/topic",{topic:"Pure Mathematics I"}); 
+      setResources(data)
+      console.log(data);
     }catch(err){
       console.error(err);
     }
@@ -46,7 +46,7 @@ const LearningPureMaths = () => {
               <Typography variant="body2" color="textSecondary">
                 {resource.subtopic}
               </Typography>
-              <img src={resource.image ? resource.image : ""} />
+              <img src={resource.image ? resource.image : ""} height={500}/>
               <br/>
               <Link href={resource.url} color="primary" underline="hover">
                 {resource.url!=="" ? "Click Here to Learn More!" : ""}

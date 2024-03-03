@@ -34,6 +34,13 @@ router
       console.error(error);
       return res.status(500).json({ Alert: "Internal Server Error" });
     }
+  }).get(async (req,res)=>{
+    try{
+      const data = await learningModel.find();
+      res.status(200).json(data); 
+    }catch(err){
+      console.error(err);
+    }
   });
 
   router.route("/topic").post(async (req,res)=>{
