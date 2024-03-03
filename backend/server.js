@@ -47,6 +47,7 @@ app.use("/home", home);
 app.use("/login", login);
 app.use("/register", register);
 app.use("/gemini",gemini)
+app.use("/addQuestion", addQuestion)
 
 
 app.use("*", (req, res) => {
