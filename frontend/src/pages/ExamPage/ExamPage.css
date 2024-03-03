@@ -1,0 +1,63 @@
+.timer {
+    margin-block: 40px;
+    width: 100px;
+    height: 100px;
+    border-radius: 100px;
+    background-color: green;
+}
+
+.exam-info-header, .timer-text {
+    font-weight: bold;
+    font-size: 1.5rem;
+    text-align: center;
+}
+
+.exam-info-header {
+    margin-bottom: 40px;
+}
+
+.subject-info, .exam-meta-info {
+    display: flex;
+    justify-content: space-between;
+    margin-block: 15px;
+}
+
+.timer-container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.info-panel {
+    width: 450px;
+    padding: 20px;
+    margin-right: 100px;
+    border-radius: 25px;
+    position: sticky;
+    top: 150px;
+    height: 500px;
+    background-color: white;
+}
+
+.exam-info {
+    margin-top: 40px;
+}
+
+.questions-remaining {
+    text-align: center;
+    font-size: 1.25rem;
+}
+
+.subject-tag, .exam-type {
+    font-weight: bold;
+}
+
+.container {
+    display: flex;
+}
+
+.exam-page {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
