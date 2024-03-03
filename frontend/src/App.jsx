@@ -22,14 +22,20 @@ function App() {
   const [statValue, setstatValue] = useState([]);
   const [course, setCourse] = useState(0);
   const [ongoingCourse, setongoingCourses] = useState(0);
-  const [username,setUserName] = useState("");
-  const [password,setPassword] = useState("");
+  const [user,setUser] = useState({
+    username:"",password:""
+  })
   const [completeCourse,setCompleteCourse] = useState(0);
   const [hoursLearned,setHoursLearned] = useState(0);
   const [mathLearnedProgress,setMathLearnedProgress] = useState(0);
   const [statLearnedProgress,setStatLearnedProgress] = useState(0);
   const [mathLesson,setMathLesson] = useState(0);
   const [statlLesson,setStatLesson] = useState(0);
+  const[isAuthenticated,setIsAuthenticated] = useState(false);
+  
+  const [lessons,setLessons]  =useState({
+    //append all the individual states to an object
+  })
 
   // Structuring the context value explicitly
   const contextValue = {
@@ -51,10 +57,7 @@ function App() {
     setCourse,
     ongoingCourse,
     setongoingCourses,
-    username,
-    setUserName,
-    password,
-    setPassword,
+    user,setUser,
     hoursLearned,
     setHoursLearned,
     completeCourse,
@@ -66,8 +69,9 @@ function App() {
     mathLesson,
     setMathLesson,
     statlLesson,
-    setStatLesson
-    
+    setStatLesson,
+    isAuthenticated,setIsAuthenticated,
+    lessons,setLessons
   };
 
   return (

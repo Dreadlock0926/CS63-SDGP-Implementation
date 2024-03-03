@@ -48,15 +48,13 @@ router.route("/registration").post(async(req,res)=>{
 router.route("/login").post(async(req,res)=>{
   const {username,password} = req?.body;
   try{
-    const getuserDetails = await userModel.findOne({username,password});
-
-
+    const getuserDetails = await userModel.findOne({username});
     if(!getuserDetails){
-      return res.status(401).json({Alert:"Invalid input ! "});
+      return res.status(400).json({Alert:"Invalid input ! "});
     }
     req.session.user = getuserDetails;
     console.log(getuserDetails);
-    return res.send(getuserDetails);
+    res.status(200).json(getuserDetails);
   }catch(err){
 
   }
@@ -82,7 +80,7 @@ router.route("/api/auth/status").post(async(req,res)=>{
 
     
   }catch(err){
-
+    console.log(err);
   }
 });
 

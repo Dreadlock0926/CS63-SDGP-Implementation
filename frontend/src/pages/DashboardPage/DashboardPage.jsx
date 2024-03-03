@@ -95,12 +95,6 @@ function DashboardCourses() {
       statLearnedProgress,
     } = useContext(UserContext);
     
-    
-  
-    
-  
-    
-  
     return (
       <>
         {/* {data && data.length ? data.map((course) => (
@@ -121,13 +115,11 @@ function DashboardCourses() {
                     text={`${mathLearnedProgress}%`}
                     styles={{
                      path: {
-            
                     stroke: `rgba(62, 152, 199, ${mathLearnedProgress / 100})`,
                     },
                    
                   }}
                 />
-
                    </div> 
                     <p className="prog-bar-text">Learned Progress</p>
                   </div>
@@ -142,7 +134,6 @@ function DashboardCourses() {
                               stroke: `rgba(62, 152, 199, ${mathLearnedProgress / 100})`,
                               },
                             // Customize the text color and style as needed
-                              
                             }}
                           />
                   </div>
@@ -161,11 +152,9 @@ function DashboardCourses() {
                               text={`${statLearnedProgress}%`}
                               styles={{
                               path: {
-                      
                               stroke: `rgba(62, 152, 199, ${statLearnedProgress / 100})`,
                               },
-                            // Customize the text color and style as needed
-                              
+                            // Customize the text color and style as needed          
                             }}
                           />
                   </div>
@@ -245,8 +234,6 @@ function DashboardPage() {
     progress,
     totalMathsmarks,
     settotalMathsmarks,
-    username,
-    password,
     ongoingCourse, 
     setongoingCourses,
     hoursLearned,
@@ -260,9 +247,11 @@ function DashboardPage() {
     mathLesson,
     setMathLesson,
     statlLesson,
-    setStatLesson
+    setStatLesson,
+    lessons,setLessons
     
   } = useContext(UserContext);
+
   
 
   useEffect(() => {
@@ -270,11 +259,11 @@ function DashboardPage() {
       try {
         
         const response = await Axios.post("http://localhost:8000/registration/login", {
-          username: username, 
-          password: password
+        user
         });
       
-        console.log("Fetched data: ", response);
+        console.log("Fetched data: ", response.data);
+        
         setVoxalpoints(response.data.voxalPoints);
         setHoursLearned(response.data.hoursLearned);
         setCompleteCourse(response.data.completeCourse);
@@ -283,6 +272,7 @@ function DashboardPage() {
         setStatLearnedProgress(response.data.Statistics.learnedProgress);
         setMathLesson(response.data.PureMathematics.lesson);
         setStatLesson(response.data.Statistics.lesson);
+        //all this 👆🏻 can be moved to lessons object state
       
         
       
@@ -293,14 +283,14 @@ function DashboardPage() {
     };
   
     fetchData();
-  }, [username,password]);
+  }, [user]);
 
   
 
 
 
 
-    return(
+    return user ? (
         <>
         <div className="dashboard-complete-container">
             <DashboardHeader/>
@@ -312,7 +302,7 @@ function DashboardPage() {
             </div>
         </div>
         </>
-    ) 
+    ) : "Please login to continue!"
 
 }
 
