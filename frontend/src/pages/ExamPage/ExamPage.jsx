@@ -2,6 +2,7 @@ import "./ExamPage.css"
 import QuestionComponent from "../../components/QuestionComponent/QuestionComponent"
 import Axios from 'axios';
 import { useEffect, useState } from "react";
+import "//unpkg.com/mathlive";
 
 function InfoPanel() {
 
@@ -29,6 +30,30 @@ function InfoPanel() {
 
 function ExamPageContent() {
 
+    function QuestionOnPage({question, mqNum}) {
+
+        const [workingVisible, setWorkingVisible] = useState(false);
+        const [answer, setAnswer] = useState("");
+
+        const spawnWorkingArea = () => {
+            setWorkingVisible(!workingVisible);
+        }
+
+        return (
+        <div className="question-on-page">
+                {
+                    workingVisible &&
+                    <math-field 
+                    onInput={evt => setAnswer(evt.target.value)} 
+                    style={{marginRight:20 + 'px', width: 275 + 'px', height: 200 + 'px', marginTop:20 + 'px'}}>{answer}
+                    </math-field>
+                }
+            <div onClick={spawnWorkingArea} className="working-panel"></div>
+            <QuestionComponent question={question} mqNum={mqNum}/>
+        </div>
+        )
+    }
+
     const [questions, setQuestions] = useState([]);
     
     const getQuestion = async () => {
@@ -44,7 +69,9 @@ function ExamPageContent() {
                 });
         
                 const questionData = response.data;
-                questionArray.push(<QuestionComponent key={questionsList[i]} question={questionData} mqNum={i+1}/>);
+                questionArray.push(
+                    <QuestionOnPage key={i} question={questionData} mqNum={i+1}/>
+                );
         
             } catch (err) {
                 console.log(err);
@@ -63,7 +90,7 @@ function ExamPageContent() {
     return (
         <>
             <div className="exam-page">
-                {questions}
+                <div className="questions-container">{questions}</div>
             </div>
         </>
     )

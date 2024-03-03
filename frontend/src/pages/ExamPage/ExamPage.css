@@ -32,11 +32,15 @@
     width: 450px;
     padding: 20px;
     margin-right: 100px;
-    border-radius: 25px;
+    border-radius: 25px 0px 25px 0px;
     position: sticky;
     top: 150px;
-    height: 500px;
+    height: 450px;
     background-color: white;
+}
+
+.mf {
+    margin-right: 500px;
 }
 
 .exam-info {
@@ -58,6 +62,25 @@
 
 .exam-page {
     display: flex;
-    flex-direction: column;
+    justify-content: center;
     align-items: center;
+}
+
+.working-panel {
+    border-radius: 5px 0px 0px 5px;
+    background-color: green;
+    width: 25px;
+    height: 50px;
+    margin-right: -5px;
+}
+
+.working-panel:hover {
+    cursor: pointer;
+}
+
+.question-on-page {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    position: relative;
 }
