@@ -5,12 +5,20 @@ import { CountdownCircleTimer } from "react-countdown-circle-timer";
 import QuestionComponent from "../../components/QuestionComponent/QuestionComponent";
 import Axios from "axios";
 import "./ExamFinal.css";
-import App from "./test";
-
+import ExamCountDown from "./ExamCount-Down";
 // import { UserContext } from "../../App";
 
 const ExamFinalized = () => {
   const examData = sessionStorage.getItem("examData");
+
+  let examModuleType = "";
+
+  const parsedExamData = JSON.parse(examData);
+
+  if (Array.isArray(parsedExamData) && parsedExamData.length > 0) {
+    examModuleType = parsedExamData[0].questionID.split("_")[0];
+  }
+
   let answerValues = [];
   if (examData) {
     answerValues.push(JSON.parse(examData));
@@ -39,6 +47,7 @@ const ExamFinalized = () => {
 
     correctAnswers = [];
     JSON.parse(examData).forEach((question) => {
+      console.log("This is the question:", question);
       question.answersGrid.forEach((answer) => {
         if (answer !== "") {
           correctAnswers.push(answer);
@@ -80,6 +89,8 @@ const ExamFinalized = () => {
   const addWrongAnswers = () => {
     let count = -1;
     wrongQuestions = [];
+
+    // console.log(JSON.parse(examData)[0]);
 
     JSON.parse(examData).forEach((question) => {
       question.answersGrid.forEach((answer) => {
@@ -125,7 +136,7 @@ const ExamFinalized = () => {
         <div>
           <h1 className="heading">Exam</h1>
 
-          <App />
+          <ExamCountDown examType={examModuleType} />
           <div>
             {JSON.parse(examData).map((question, index) => {
               return (
