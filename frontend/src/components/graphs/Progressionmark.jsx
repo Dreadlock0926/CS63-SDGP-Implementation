@@ -58,21 +58,19 @@ function Progressionmark() {
   
   
   
-  const username1 = localStorage.getItem('username');
-  const password1 = localStorage.getItem('password');
-        
+  
   useEffect(() => {
     const fetchData = async () => {
       try {
         
-        const response = await axios.post(apiUrl, {
-          username1: username1, // Ensure this matches the expected API parameters
-          password1: password1,
+        const response = await axios.post("http://localhost:8000/registration/login", {
+          username: username, 
+          password: password
         });
         
         
-        console.log("Fetched data: ", response.data);
-        setValue(response.data); // Assuming this updates your component state correctly
+        console.log("Fetched data: ", response);
+        setValue(response); // Assuming this updates your component state correctly
   
         // Now call calculation with the fetched data
         calculation(response.data);
@@ -82,7 +80,7 @@ function Progressionmark() {
     };
   
     fetchData();
-  }, [username1,password1]); // Include apiUrl as a dependency
+  }, [username,password]); // Include apiUrl as a dependency
 
   const renderLineChart = (
     <>

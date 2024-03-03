@@ -56,11 +56,12 @@ router.route("/get").post(async (req, res) => {
 
     const userData = await progressionModel.findOne({username,password});
     
-      if(userData){
-        return res.send(userData);
-      }else{
+      if(! userData){
         return res.status(203).json({Alert:"No resources found!"})
+       
       }
+      return res.send(userData);
+
   }catch(err){
     console.error(err);
   }

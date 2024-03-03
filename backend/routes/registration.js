@@ -57,9 +57,6 @@ router.route("/login").post(async(req,res)=>{
     req.session.user = getuserDetails;
     console.log(getuserDetails);
     return res.send(getuserDetails);
-    
-
-    
   }catch(err){
 
   }

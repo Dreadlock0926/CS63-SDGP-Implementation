@@ -1,82 +1,77 @@
-import React, { useContext, useState } from "react";
-import axios from "axios";
-import NavBar from "../NavigationBar/navBar";
-import Authenticate from "./Authenticate";
+/* eslint-disable react-hooks/rules-of-hooks */
+/* eslint-disable no-unused-vars */
+import { useState, useContext, useEffect } from "react";
 import { UserContext } from "../../App";
+import { useNavigate } from "react-router-dom";
+import Axios from "axios";
 
+const Login = () => {
+  const {
+    setUser,
+    user,
+    setData,
+    isAuthenticated,
+    setIsAuthenticated,
+    username,
+    setUserName,
+    password,
+    setPassword,
+  } = useContext(UserContext);
+  const navigator = useNavigate();
+  const [status, setStatus] = useState("");
 
-function Login() {
-  // Note: Component names should start with a capital letter
-  
-  const { username,setUserName,password,setPassword } = useContext(UserContext);
-  const [user, setUser] = useState(false);
-  const apiUrl = "http://localhost:8000/registration/login";
-
-  const handleUsername = (e) => {
-    setUserName(e.target.value);
-  };
-  const handlePassword = (e) => {
-    setPassword(e.target.value);
-  };
-
-  const handleSubmit = async (e) => {
-    e.preventDefault(); // Prevent default form submission
-
+  const handleLogin = async (e) => {
+    e.preventDefault();
     try {
-      const response = await axios.post(apiUrl, {
-        username,
-        password,
-      });
-
-      console.log("The data is " + response);
-      if (response.data) {
-        alert("You have successfully logged in!");
-        console.log(response.data.username);
-        localStorage.setItem('username', username);
-        localStorage.setItem('password', password);
-        setUser(true);
+      const response = await Axios.post("http://localhost:8000/registration/login",{ username: username, password: password });
+      if (response.status==200) {
+        console.log(response);
+        navigator("/dashboard");
+        return <h1>You have logged in!</h1>;
       }
-    } catch (error) {
-      console.error("Error fetching data:", error);
+      setIsAuthenticated(true);
+    } catch (err) {
+      console.error(err);
     }
   };
 
-  return (
-    <>
-      <NavBar />
+  const handleChange = (e) => {
+    if (e.target.name === "username") {
+      setUserName(e.target.value); // Update username
+    } else if (e.target.name === "password") {
+      setPassword(e.target.value); // Update password
+    }
+    
+  };
 
-      <form onSubmit={handleSubmit}>
-        {" "}
-        {/* Change here */}
-        <div>
-          <label htmlFor="username">Enter the username:</label>
+  useEffect(() => {
+    console.log(JSON.stringify(user));
+  }, [user]);
+
+  return (
+    !isAuthenticated && (
+      <div>
+        <h1>Login!</h1>
+        <form onSubmit={handleLogin}>
           <input
-            id="username"
+            onChange={handleChange}
+            name="username"
+            placeholder="Enter username..."
             type="text"
-            value={username}
-            onChange={handleUsername}
           />
-          <br />
-          <label htmlFor="password">Enter the password:</label>
           <input
-            id="password"
+            onChange={handleChange}
+            name="password"
+            placeholder="Enter password..."
             type="password"
-            value={password}
-            onChange={handlePassword}
-          />
-        </div>
-        <button type="submit">Login</button>{" "}
-        {/* Changed to a proper submit button */}
-      </form>
-      {user ? (
-        <Authenticate />
-      ) : (
-        <>
-          <h1>Nothing here !</h1>
-        </>
-      )}
-    </>
+          />{" "}
+          {/* Changed input type to password */}
+          <button type="submit">Login!</button>
+        </form>
+        <p>{status}</p>
+      </div>
+    )
   );
-}
+};
 
 export default Login;
