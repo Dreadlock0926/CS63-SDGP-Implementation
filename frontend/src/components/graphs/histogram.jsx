@@ -103,6 +103,7 @@ const Histogram = ({
   scaleX,
   scaleY,
   maxBoxes,
+  setAnswer,
 }) => {
   const graphRef = useRef(null);
   const [graphWidth, setGraphWidth] = useState(width);
@@ -113,6 +114,7 @@ const Histogram = ({
   const [enteredBoxHeight, setEnteredBoxHeight] = useState(0);
 
   const [answerData, setAnswerData] = useState([]);
+  let newAnswer = "";
 
   useEffect(() => {
     const graph = graphRef.current;
@@ -121,7 +123,7 @@ const Histogram = ({
   }, [graphWidth, graphHeight]);
 
   useEffect(() => {
-    console.log(answerData);
+    setAnswer(JSON.stringify(answerData));
   }, [answerData]);
 
   const updateGraphSize = (newWidth, newHeight) => {

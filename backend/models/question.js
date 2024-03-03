@@ -1,6 +1,5 @@
 const mongoose = require("mongoose");
 const questionSchema = new mongoose.Schema({
-
   questionID: { type: String, required: true, unique: true },
   questionTopic: { type: String, required: true },
   questionsGrid: { type: Array, required: true },
@@ -9,7 +8,6 @@ const questionSchema = new mongoose.Schema({
   answersGrid: { type: Array, required: true },
   marksGrid: {type: Array, required: true},
   questionSource: { type: String, required: false },
-
 });
 
 const questionModel = mongoose.model("questions", questionSchema);

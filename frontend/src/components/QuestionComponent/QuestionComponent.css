@@ -1,0 +1,105 @@
+body {
+    background-color: #f1f1f1;
+}
+
+.question-component-container {
+    background-color: rgb(255, 255, 255);
+    border-radius: 12px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding-block: 20px;
+    width: 60%;
+    margin: 6px;
+    margin-bottom: 20px;
+    padding: 16px;
+}
+
+.main-question-container {
+    width: 100%;
+}
+
+.main-text-container {
+    width: 100%;
+    display: flex;
+    font-size: 1.2rem;
+    font-weight: bold;
+    align-items: center;
+    margin-bottom: 20px;
+}
+
+.mq-num {
+    margin-right: 25px;
+}
+
+.sub-question-text-container {
+    display: flex;
+    align-items: center;
+    width: 100%;
+}
+
+.sq-num {
+    margin-right: 15px;
+    font-weight: bold;
+}
+
+input {
+    padding: 6px;
+    border: 2px solid #ccc;
+    border-radius: 6px;
+    font-size: 14px;
+    color: #555;
+    outline: none;
+}
+
+input:focus {
+    border-color: #007bff;
+    box-shadow: 0 0 0 0.2rem rgba(0, 123, 255, 0.25);
+}
+
+.nextBtn {
+    
+}
+
+.sub-question-text {
+    font-size: 1.1rem;
+}
+
+.answer-for-sub-question {
+    display: flex;
+    align-items: flex-end;
+    justify-content: space-between;
+    margin-top: 10px;
+}
+
+.sub-question {
+    margin-bottom: 25px;
+    width: 100%;
+}
+
+.sub-question-container {
+    width: 100%;
+}
+
+.mq-answer-container {
+    display: flex;
+    justify-content: space-between;
+}
+
+.mark-for-mq {
+    align-self: flex-end;
+}
+
+.answer-input {
+    width: 40%;
+}
+
+math-field {
+    display: block;
+    width: 40%;
+}
+
+.main-info-container {
+    display: flex;
+    flex-direction: column;
+}
