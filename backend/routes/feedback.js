@@ -10,21 +10,9 @@ router.route("/").post(async (req, res) => {
     const theData = await userModel.findById(userId);
     if (!theData) {
       return res.status(404).json({ Alert: "User not found!" });
+    } else {
+      res.status(200).json(theData);
     }
-
-    // Extract necessary information
-    const examHistory = theData.examHistory.map((history) => ({
-      type: history.type,
-      correctQuestions: history.correctQuestions,
-      incorrectQuestions: history.incorrectQuestions,
-      questions: history.questions.map((question) => ({
-        question: question.question,
-        correctAnswer: question.correctAnswer,
-        userAnswer: question.userAnswer,
-      })),
-    }));
-
-    res.status(200).json(examHistory);
   } catch (err) {
     console.error(err);
     res.status(500).json({ Alert: "Internal Server Error" });
@@ -36,6 +24,8 @@ router.route("/add").post(async (req, res) => {
     userId = "65e5959fe25265c481c71f1c",
     newTopics,
     newProbability,
+    correctAnswers,
+    wrongAnswers,
   } = req?.body;
 
   if (!userId) return res.status(400).json({ Alert: "User ID required!" });
@@ -45,8 +35,14 @@ router.route("/add").post(async (req, res) => {
     if (!theData) {
       return res.status(404).json({ Alert: `${userId} not found!` });
     } else {
-      await theData.topicProbabilities.topics.push(newTopics);
-      await theData.topicProbabilities.probability.push(newProbability);
+      await theData.topicProbabilities.push({
+        topic: newTopics,
+        probability: newProbability,
+      }); 
+      const latestExamHistory =
+        theData.examHistory[theData.examHistory.length - 1]; 
+      latestExamHistory.correctAnswers.push(correctAnswers);
+      latestExamHistory.wrongAnswers.push(wrongAnswers);
       await theData.save();
       res.status(200).json({ Alert: "Added new resources!" });
     }
@@ -55,6 +51,5 @@ router.route("/add").post(async (req, res) => {
     res.status(500).json({ Alert: "Internal Server Error" });
   }
 });
-
 
 module.exports = router;

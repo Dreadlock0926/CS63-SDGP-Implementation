@@ -1,23 +1,14 @@
 const mongoose = require("mongoose");
 
-const questionSchema = new mongoose.Schema({
-  question: { type: String, required: true },
-  correctAnswer: { type: String, required: true },
-  userAnswer: { type: String },
-});
-
-const examTypeSchema = new mongoose.Schema({
-  name: { type: String, required: true }, // e.g., p1, s1, etc.
-  topicProbabilities: { type: Map, of: Number, default: {} }, // Topic probabilities for this exam type
-});
-
 const examHistorySchema = new mongoose.Schema(
   {
-    type: String, // Type of exam, e.g., p1, s1, etc.
-    questions: [questionSchema], // Array to hold every question
-    correctQuestions: { type: Number, default: 0 }, // Number of correct questions
-    incorrectQuestions: { type: Number, default: 0 }, // Number of incorrect questions
-    userExamID: { type: String },
+    examHistory: {
+      type: Object,
+      quesArr: { type: Array },
+      ansArr: { type: Array },
+      incorrectAnsIndex: { type: Array },
+      userExamID: { type: String },
+    },
   },
   { timestamps: true }
 );
@@ -29,17 +20,21 @@ const userSchema = new mongoose.Schema({
   },
   password: { type: String, required: true },
   examHistory: {
-    type:[examHistorySchema],
-    default:[],
+    type: [examHistorySchema],
+    default: [],
+  },
+  correctAnswers: {
+    type: [String],
+    default: [],
+  },
+  wrongAnswers: {
+    type: [String],
+    default: [],
   }, // Array to hold exam history
-  examTypes: {
-    type:[examTypeSchema],
-    default:[],
-  }, // Array to hold different exam types and their topic probabilities
   topicProbabilities: {
     topics: {
-      type: Array,
-      default: [],
+      type: Object,
+      default: {},
     },
     probability: { type: [Number], default: [] },
   },

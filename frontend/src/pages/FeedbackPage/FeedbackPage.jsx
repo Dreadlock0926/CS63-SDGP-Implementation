@@ -1,3 +1,4 @@
+/* eslint-disable no-unused-vars */
 /* eslint-disable react-hooks/exhaustive-deps */
 import { useContext, useEffect, useState } from "react";
 import Axios from "axios";
@@ -6,13 +7,11 @@ import { UserContext } from "../../App";
 
 const FeedbackPage = () => {
   const BASE = "http://localhost:8000/feedbacks";
-  const { setStatus } = useContext(UserContext);
-  const [userData, setUserData] = useState({});
+  const { setStatus, user } = useContext(UserContext);
+  const [userData, setUserData] = useState([]);
   const [correctAnswers, setCorrectAnswers] = useState([]);
   const [wrongAnswers, setWrongAnswers] = useState([]);
-  const [examQuestions, setExamQuestions] = useState([]);
-  const [availableQuestions, setAvailableQuestions] = useState([]);
-  const [questionsList, setQuestionsList] = useState([]);
+
   const [topicProbabilities, setTopicProbabilities] = useState({
     q: 0,
     f: 0,
@@ -22,24 +21,18 @@ const FeedbackPage = () => {
     d: 0,
   });
 
-  const [probabilitiesSet, setProbabilitiesSet] = useState(false);
-
   const fetchData = async () => {
     try {
       const response = await Axios.post(BASE, {
-        userId: "65e5959fe25265c481c71f1c",
+        userId: "65e5d5cea014a87ba21c66b9",
       });
+
       if (response.status === 200) {
         const responseData = response.data;
         setUserData(responseData);
         setCorrectAnswers([...correctAnswers, responseData.correctAnswers]);
         setWrongAnswers([...wrongAnswers, responseData.wrongAnswers]);
-        setExamQuestions([...examQuestions, responseData.examQuestions]);
-        setAvailableQuestions([
-          ...availableQuestions,
-          responseData.availableQuestions,
-        ]);
-        setQuestionsList([...questionsList, responseData.questionsList]);
+      
       }
     } catch (err) {
       console.error(err);
@@ -48,32 +41,21 @@ const FeedbackPage = () => {
       }
     }
   };
+  const [examQuestions, setExamQuestions] = useState([]);
+  const [availableQuestions, setAvailableQuestions] = useState([]);
+  const [probabilitiesSet, setProbabilitiesSet] = useState(false);
+  const [questionsList, setQuestionsList] = useState([]);
 
   useEffect(() => {
     fetchData();
+    console.log(userData);
   }, []);
 
-  async function sendUpdates(e) {
-    e.preventDefault();
-    try {
-      const outcome = await Axios.post(`${BASE}/add`, {
-        newTopics: Object.keys(topicProbabilities),
-        newProbability: Object.values(topicProbabilities),
-      });
-      if(outcome.status===200){
-        alert("Update sent!")
-      }
-    } catch (err) {
-      console.error(err);
-    }
-  }
+ 
 
   useEffect(() => {
-    console.log("User Data:", userData);
-    console.log("Correct Answers:", correctAnswers);
-    console.log("Wrong Answers:", wrongAnswers);
-    console.log("Exam Questions:", examQuestions);
-  }, [userData, correctAnswers, wrongAnswers, examQuestions]);
+    console.log(topicProbabilities);
+  }, [topicProbabilities]);
 
   const calculateProbabilities = () => {
     let topicProbabilitiesClone = { ...topicProbabilities };
@@ -172,6 +154,23 @@ const FeedbackPage = () => {
       getAvailableQuestions(questionsList);
     }
   }, [probabilitiesSet]);
+
+  async function sendUpdates(e) {
+    e.preventDefault();
+    try {
+      const outcome = await Axios.post(`${BASE}/add`, {
+        newTopics: Object.keys(topicProbabilities),
+        newProbability: Object.values(topicProbabilities),
+        correctAnswers,
+        wrongAnswers
+      });
+      if (outcome.status === 200) {
+        alert("Update sent!");
+      }
+    } catch (err) {
+      console.error(err);
+    }
+  }
 
   useEffect(() => {
     console.log("Exam Questions:", examQuestions);
