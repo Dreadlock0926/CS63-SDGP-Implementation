@@ -31,13 +31,14 @@ const Login = () => {
         setUser(response.data);
         setLogged(true);
         navigator("/");
-      } else if (response.status === 401) {
-        setIssue("Wrong Password, Please try again!");
-      } else if (response.status === 404) {
-        setIssue("Invalid Username, Please Check Again!");
-      }
+      } 
     } catch (error) {
       console.error(error);
+      if (error.response.status === 401) {
+        setIssue("Wrong Password, Please try again!");
+      } else if (error.response.status === 404) {
+        setIssue("Invalid Username, Please Check Again!");
+      }
     } finally {
       setLoading(false);
       setnewUser({ username: "", password: "" });
@@ -73,6 +74,7 @@ const Login = () => {
           </p>
           <form onSubmit={Login} className="forms">
             <div className="inputLabelGrp">
+            <p>{issue}</p>
               <label htmlFor="username">Your username</label>
               <input
                 onChange={handleChange}
@@ -96,7 +98,7 @@ const Login = () => {
               Login
             </button>
           </form>
-          <p>{issue}</p>
+          
         </div>
       </div>
     </>

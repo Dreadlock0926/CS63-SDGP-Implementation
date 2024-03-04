@@ -18,16 +18,24 @@ const Register = () => {
 
   const handleRegister = async (e) => {
     e.preventDefault();
+    setStatus("")
     try {
       setLoading(true);
       const response = await Axios.post("http://localhost:8000/register", newUser);
 
       if (response.status === 201) {
-        navigator("/login");
-      } else if (response.status === 409) {
-        setStatus(`${newUser.username} Already Taken!`);
-      }
+        setStatus("You are registered!")
+        setTimeout(()=>{    
+      navigator("/login");
+        },1000);
+  
+      } 
     } catch (err) {
+      if (err.response && err.response.status === 409) {
+        setStatus(`${newUser.username} Already Taken!`);
+      } else {
+        setStatus("An error occurred while registering. Please try again later.");
+      }
       console.error(err);
     } finally {
       setLoading(false);
@@ -39,6 +47,7 @@ const Register = () => {
     <>
       <NavBar />
       <div className="backgroundContainer">
+    
         <img alt="background" className="bgImg2" src="./images/background2.png" />
         <div className="container">
           <img alt="avatar" className="avItem2" src="./images/avatar.png" />
@@ -48,6 +57,7 @@ const Register = () => {
           </p>
           <form onSubmit={handleRegister} className="forms">
             <div className="inputLabelGrp">
+            <p>{status}</p>
               <label htmlFor="username">Your username</label>
               <input
                 type="text"
@@ -73,7 +83,6 @@ const Register = () => {
               Register
             </button>
           </form>
-          <p>{status}</p>
         </div>
       </div>
     </>
