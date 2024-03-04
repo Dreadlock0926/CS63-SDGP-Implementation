@@ -28,10 +28,16 @@ const userSchema = new mongoose.Schema({
     required: true,
   },
   password: { type: String, required: true },
-  examHistory: [examHistorySchema], // Array to hold exam history
-  examTypes: [examTypeSchema], // Array to hold different exam types and their topic probabilities
+  examHistory: {
+    type:[examHistorySchema],
+    default:[],
+  }, // Array to hold exam history
+  examTypes: {
+    type:[examTypeSchema],
+    default:[],
+  }, // Array to hold different exam types and their topic probabilities
   topicProbabilities: {
-    topic: {
+    topics: {
       type: Array,
       default: [],
     },
