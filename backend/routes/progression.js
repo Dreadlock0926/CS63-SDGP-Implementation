@@ -68,6 +68,4 @@ router.route("/get").post(async (req, res) => {
 
 });
 
-router.route("/the")
-
 module.exports = router;

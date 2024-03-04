@@ -12,7 +12,10 @@ const Login = () => {
     setData,
     isAuthenticated,
     setIsAuthenticated,
-  
+    username,
+    setUserName,
+    password,
+    setPassword,
   } = useContext(UserContext);
   const navigator = useNavigate();
   const [status, setStatus] = useState("");
@@ -20,13 +23,11 @@ const Login = () => {
   const handleLogin = async (e) => {
     e.preventDefault();
     try {
-      const response = await Axios.post("http://localhost:8000/registration/login",user);
+      const response = await Axios.post("http://localhost:8000/registration/login",{ username: username, password: password });
       if (response.status==200) {
-        console.log(response.data);
-        setData(response.data)
-        setStatus('you have logged in!')
+        console.log(response);
         navigator("/dashboard");
-      
+        return <h1>You have logged in!</h1>;
       }
       setIsAuthenticated(true);
     } catch (err) {
@@ -34,9 +35,14 @@ const Login = () => {
     }
   };
 
-  const handleChange = (e)=>{
-    setUser({...user,[e.target.name]:e.target.value})
-  }
+  const handleChange = (e) => {
+    if (e.target.name === "username") {
+      setUserName(e.target.value); // Update username
+    } else if (e.target.name === "password") {
+      setPassword(e.target.value); // Update password
+    }
+    
+  };
 
   useEffect(() => {
     console.log(JSON.stringify(user));
