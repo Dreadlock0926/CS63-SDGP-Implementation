@@ -1,55 +1,17 @@
-/* eslint-disable react-hooks/exhaustive-deps */
-/* eslint-disable no-unused-vars */
-import { useContext, useRef, useState } from "react";
-import { useEffect } from "react";
+import { useContext, useEffect, useState } from "react";
 import Axios from "axios";
 import "./FeedbackPage.css";
 import { UserContext } from "../../App";
 
 const FeedbackPage = () => {
   const BASE = "http://localhost:8000/feedbacks";
-  const { user } = useContext(UserContext);
-  const [userData, setUserData] = useState([]);
-  //Get correct answers from the UserData
+  const { setStatus } = useContext(UserContext);
+  const [userData, setUserData] = useState({});
   const [correctAnswers, setCorrectAnswers] = useState([]);
-  // Get wrong answers from the UserData
   const [wrongAnswers, setWrongAnswers] = useState([]);
-  // The questions for the feedback exam
   const [examQuestions, setExamQuestions] = useState([]);
-
-  async function fetchData() {
-    try {
-      const response = await Axios.post(BASE, {
-        userId: "65e5959fe25265c481c71f1c",
-      }); //user.id
-      if (response.status === 200) {
-        setUserData(response.data);
-        setCorrectAnswers([...correctAnswers, response.data.correctAnswers]);
-        setWrongAnswers([...wrongAnswers, response.data.wrongAnswers]);
-        setExamQuestions([...examQuestions, response.data.examQuestions]);
-      }
-    } catch (err) {
-      console.error(err);
-    }
-  }
-
-  useEffect(() => {
-    fetchData();
-    console.log(`User Data ${JSON.stringify(userData)}`);
-    console.log(`Correct answers ${JSON.stringify(correctAnswers)}`);
-    console.log(`Wrong answers ${JSON.stringify(wrongAnswers)}`);
-    console.log(`Exam Questions ${JSON.stringify(examQuestions)}`);
-  }, []);
-
-  //Variable tells if the probabilities are set
-  const [probabilitiesSet, setProbabilitiesSet] = useState(false);
-
-  //Available questions list
   const [availableQuestions, setAvailableQuestions] = useState([]);
-  //Final Questions List
   const [questionsList, setQuestionsList] = useState([]);
-
-  //Topic probabilities
   const [topicProbabilities, setTopicProbabilities] = useState({
     q: 0,
     f: 0,
@@ -58,16 +20,44 @@ const FeedbackPage = () => {
     i: 0,
     d: 0,
   });
+  const [probabilitiesSet, setProbabilitiesSet] = useState(false);
+
+  const fetchData = async () => {
+    try {
+      const response = await Axios.post(BASE, {
+        userId: "65e5959fe25265c481c71f1c",
+      });
+      if (response.status === 200) {
+        const responseData = response.data;
+        setUserData(responseData);
+        setCorrectAnswers([...correctAnswers, responseData.correctAnswers]);
+        setWrongAnswers([...wrongAnswers, responseData.wrongAnswers]);
+        setExamQuestions([...examQuestions, responseData.examQuestions]);
+        setAvailableQuestions([...availableQuestions, responseData.availableQuestions]);
+        setQuestionsList([...questionsList, responseData.questionsList]);
+      }
+    } catch (err) {
+      console.error(err);
+      if (err.response && err.response.status === 400) {
+        setStatus("User ID wasn't received!");
+      }
+    }
+  };
 
   useEffect(() => {
-    console.log(topicProbabilities);
-  });
+    fetchData();
+  }, []);
 
-  //Calculate Probabilities
+  useEffect(() => {
+    console.log("User Data:", userData);
+    console.log("Correct Answers:", correctAnswers);
+    console.log("Wrong Answers:", wrongAnswers);
+    console.log("Exam Questions:", examQuestions);
+  }, [userData, correctAnswers, wrongAnswers, examQuestions]);
+
   const calculateProbabilities = () => {
     let topicProbabilitiesClone = { ...topicProbabilities };
-
-    Object.keys(topicProbabilities).forEach((key) => {
+    Object.keys(topicProbabilitiesClone).forEach((key) => {
       let numCorrect = 0;
       let numWrong = 0;
       correctAnswers.forEach((ans) => {
@@ -89,54 +79,52 @@ const FeedbackPage = () => {
       }
       topicProbabilitiesClone[key] = probability;
     });
-
     setTopicProbabilities(topicProbabilitiesClone);
     setProbabilitiesSet(true);
   };
 
-  //Get questions based on probabilities
   const getQuestionsOnProbability = async () => {
-    await Axios.post("http://localhost:8000/getQuestion/getAllQuestions", {
-      moduleID: "p1",
-    })
-      .then(function (response) {
-        setQuestionsList(response.data);
-        calculateProbabilities();
-      })
-      .catch(function (error) {
-        console.log(error);
+    try {
+      const response = await Axios.post("http://localhost:8000/getQuestion/getAllQuestions", {
+        moduleID: "p1",
       });
+      if (response.status === 200) {
+        const responseData = response.data;
+        setQuestionsList(responseData);
+        calculateProbabilities();
+      }
+    } catch (error) {
+      console.log(error);
+    }
   };
 
-  const getAvailableQuestions = (questionsList) => {
-    //Checks if the ID is already in the Exam Questions list or if the user has already done the question before
-    for (const question in questionsList) {
-      let id = questionsList[question].questionID;
+  const getAvailableQuestions = (questions) => {
+    let available = [];
+    for (const question of questions) {
+      let id = question.questionID;
       if (!correctAnswers.includes(id) && !examQuestions.includes(id)) {
         for (const topic in topicProbabilities) {
           if (id.split("_")[1] === topic) {
-            setAvailableQuestions((prev) => [...prev, id]);
+            available.push(id);
           }
         }
       }
     }
+    setAvailableQuestions(available);
   };
 
-  const matchProbabilities = (availableQuestions) => {
+  const matchProbabilities = (available) => {
     let tempExamQuestions = [];
     while (tempExamQuestions.length < 10) {
-      for (const i in availableQuestions) {
+      for (const question of available) {
         let chance = Math.random();
         for (const topic in topicProbabilities) {
-          if (
-            availableQuestions[i].split("_")[1] === topic &&
-            !tempExamQuestions.includes(availableQuestions[i])
-          ) {
+          if (question.split("_")[1] === topic && !tempExamQuestions.includes(question)) {
             if (topicProbabilities[topic] >= chance) {
               if (tempExamQuestions.length === 10) {
                 break;
               }
-              tempExamQuestions.push(availableQuestions[i]);
+              tempExamQuestions.push(question);
             }
           }
         }
@@ -160,18 +148,17 @@ const FeedbackPage = () => {
   }, [probabilitiesSet]);
 
   useEffect(() => {
-    console.log(examQuestions);
+    console.log("Exam Questions:", examQuestions);
   }, [examQuestions]);
 
   return (
-    <>
-      <div className="modules-container">
-        <div className="module" onClick={getQuestionsOnProbability}>
-          Pure Mathematics I
-        </div>
-        <div className="module">Probability & Statistics I</div>
+    <div className="modules-container">
+      <div className="module" onClick={getQuestionsOnProbability}>
+        Pure Mathematics I
       </div>
-    </>
+      <div className="module">Probability & Statistics I</div>
+      <p>{status}</p>
+    </div>
   );
 };
 

@@ -24,7 +24,7 @@ router.route("/").post(async (req, res) => {
       })),
     }));
 
-    res.status(200).json({ examHistory });
+    res.status(200).json(examHistory);
   } catch (err) {
     console.error(err);
     res.status(500).json({ Alert: "Internal Server Error" });
@@ -41,7 +41,7 @@ router.route("/add").post(async (req, res) => {
     if (!theData) {
       return res.status(404).json({ Alert: `${userId} not found!` });
     } else {
-      theData.topicProbabilities.set(newTopics, newProbability);
+      await theData.topicProbabilities.set(newTopics, newProbability);
       await theData.save();
       res.status(200).json({ Alert: "Added new resources!" });
     }
