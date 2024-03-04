@@ -27,6 +27,7 @@ router.route("/add").post(async (req, res) => {
     correctAnswers,
     wrongAnswers,
   } = req?.body;
+  console.log(req.body);
 
   if (!userId) return res.status(400).json({ Alert: "User ID required!" });
 
@@ -35,14 +36,14 @@ router.route("/add").post(async (req, res) => {
     if (!theData) {
       return res.status(404).json({ Alert: `${userId} not found!` });
     } else {
-      await theData.topicProbabilities.push({
-        topic: newTopics,
+      theData.topicProbabilities.push({
+        topics: newTopics,
         probability: newProbability,
-      }); 
-      const latestExamHistory =
-        theData.examHistory[theData.examHistory.length - 1]; 
-      latestExamHistory.correctAnswers.push(correctAnswers);
-      latestExamHistory.wrongAnswers.push(wrongAnswers);
+      });
+
+      theData.correctAnswers.push(correctAnswers);
+      theData.wrongAnswers.push(wrongAnswers);
+
       await theData.save();
       res.status(200).json({ Alert: "Added new resources!" });
     }

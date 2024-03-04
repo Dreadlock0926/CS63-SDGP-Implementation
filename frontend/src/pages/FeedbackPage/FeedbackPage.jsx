@@ -24,7 +24,7 @@ const FeedbackPage = () => {
   const fetchData = async () => {
     try {
       const response = await Axios.post(BASE, {
-        userId: "65e5d5cea014a87ba21c66b9",
+        userId: "65e5ee3fa014a87ba21c66d5",
       });
 
       if (response.status === 200) {
@@ -32,7 +32,20 @@ const FeedbackPage = () => {
         setUserData(responseData);
         setCorrectAnswers([...correctAnswers, responseData.correctAnswers]);
         setWrongAnswers([...wrongAnswers, responseData.wrongAnswers]);
-      
+
+        // Extract topics and probabilities from responseData
+        const { topics, probability } = responseData.topicProbabilities;
+
+        // Create an object to hold the new topic probabilities
+        let newTopicProbabilities = {};
+
+        // Iterate over topics and set the state for each topic
+        for (let i = 0; i < topics.length; i++) {
+          newTopicProbabilities[topics[i]] = probability[i];
+        }
+
+        // Update the topicProbabilities state with the new values
+        setTopicProbabilities(newTopicProbabilities);
       }
     } catch (err) {
       console.error(err);
@@ -41,6 +54,7 @@ const FeedbackPage = () => {
       }
     }
   };
+
   const [examQuestions, setExamQuestions] = useState([]);
   const [availableQuestions, setAvailableQuestions] = useState([]);
   const [probabilitiesSet, setProbabilitiesSet] = useState(false);
@@ -50,8 +64,6 @@ const FeedbackPage = () => {
     fetchData();
     console.log(userData);
   }, []);
-
- 
 
   useEffect(() => {
     console.log(topicProbabilities);
@@ -159,12 +171,13 @@ const FeedbackPage = () => {
     e.preventDefault();
     try {
       const outcome = await Axios.post(`${BASE}/add`, {
+        
         newTopics: Object.keys(topicProbabilities),
         newProbability: Object.values(topicProbabilities),
         correctAnswers,
-        wrongAnswers
+        wrongAnswers,
       });
-      if (outcome.status === 200) {
+      if (outcome.response.status === 200) {
         alert("Update sent!");
       }
     } catch (err) {

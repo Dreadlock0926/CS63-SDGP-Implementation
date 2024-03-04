@@ -24,17 +24,17 @@ const userSchema = new mongoose.Schema({
     default: [],
   },
   correctAnswers: {
-    type: [String],
+    type: Array,
     default: [],
   },
   wrongAnswers: {
-    type: [String],
+    type: Array,
     default: [],
   }, // Array to hold exam history
   topicProbabilities: {
     topics: {
-      type: Object,
-      default: {},
+      type: Array,
+      default: [],
     },
     probability: { type: [Number], default: [] },
   },
