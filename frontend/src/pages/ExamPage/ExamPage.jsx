@@ -41,24 +41,32 @@ function ExamPageContent() {
 
         return (
         <div className="question-on-page">
-                {
+            <QuestionComponent question={question} mqNum={mqNum}/>
+            <div onClick={spawnWorkingArea} className="working-panel"></div>
+            {
                     workingVisible &&
                     <math-field 
+                    placeholder="Workings..."
                     onInput={evt => setAnswer(evt.target.value)} 
-                    style={{marginRight:20 + 'px', width: 275 + 'px', height: 200 + 'px', marginTop:20 + 'px'}}>{answer}
+                    style={{width: 275 + 'px', height: 200 + 'px',marginBlock: 20 + 'px', width: 60 + '%'}}>{answer}
                     </math-field>
                 }
-            <div onClick={spawnWorkingArea} className="working-panel"></div>
-            <QuestionComponent question={question} mqNum={mqNum}/>
         </div>
         )
     }
 
     const [questions, setQuestions] = useState([]);
-    
+    const [correctAnswers, setCorrectAnswers] = useState([]);
+    const [writtenAnswers, setWrittenAnswers] = useState([]);
+
+    useEffect(() => {
+        console.log(correctAnswers);
+    }, [correctAnswers])
+
     const getQuestion = async () => {
 
         const questionArray = [];
+        const answerArray = [];
         const questionsList = ["p1_s_2_w_2022_2","p1_cg_1_w_2022_2","s1_p_3_w_2022_2", "p1_s_2_w_2022_2","p1_cg_1_w_2022_2","s1_p_3_w_2022_2"];
 
         for (let i = 0; i < questionsList.length; i++) {
@@ -69,6 +77,13 @@ function ExamPageContent() {
                 });
         
                 const questionData = response.data;
+
+                questionData.answersGrid.forEach(answer => {
+                    if (answer !== "") {
+                        answerArray.push(answer);
+                    }
+                }) 
+
                 questionArray.push(
                     <QuestionOnPage key={i} question={questionData} mqNum={i+1}/>
                 );
@@ -80,6 +95,7 @@ function ExamPageContent() {
         }
 
         setQuestions(questionArray);
+        setCorrectAnswers(answerArray);
 
     }
 
@@ -87,10 +103,17 @@ function ExamPageContent() {
         getQuestion();
     },[])
 
+    const submitAnswers = () => {
+        const writtenAnswerContainer = document.querySelectorAll("math-field");
+        setWrittenAnswers(Array.from(writtenAnswerContainer).map((answer) => answer.value));
+        console.log(writtenAnswers);
+    }
+
     return (
         <>
             <div className="exam-page">
                 <div className="questions-container">{questions}</div>
+                <button onClick={submitAnswers} className="submit">Submit Answers</button>
             </div>
         </>
     )
