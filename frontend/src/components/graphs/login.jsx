@@ -15,6 +15,8 @@ const Login = () => {
     username,
     setUserName,
     password,
+    loading,
+    
     setPassword,
   } = useContext(UserContext);
   const navigator = useNavigate();
@@ -23,7 +25,7 @@ const Login = () => {
   const handleLogin = async (e) => {
     e.preventDefault();
     try {
-      const response = await Axios.post("http://localhost:8000/registration/login",{ username: username, password: password });
+      const response = await Axios.post("http://localhost:8000/registration/login",user);
       if (response.status==200) {
         console.log(response);
         navigator("/dashboard");
@@ -35,14 +37,9 @@ const Login = () => {
     }
   };
 
-  const handleChange = (e) => {
-    if (e.target.name === "username") {
-      setUserName(e.target.value); // Update username
-    } else if (e.target.name === "password") {
-      setPassword(e.target.value); // Update password
-    }
-    
-  };
+  const handleChange = (e)=>{
+    setUser({...user,[e.target.name]:e.target.value})
+  }
 
   useEffect(() => {
     console.log(JSON.stringify(user));
@@ -64,9 +61,8 @@ const Login = () => {
             name="password"
             placeholder="Enter password..."
             type="password"
-          />{" "}
-          {/* Changed input type to password */}
-          <button type="submit">Login!</button>
+          />
+          <button type="submit" disabled={loading}>Login!</button>
         </form>
         <p>{status}</p>
       </div>

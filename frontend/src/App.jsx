@@ -22,20 +22,23 @@ function App() {
   const [statValue, setstatValue] = useState([]);
   const [course, setCourse] = useState(0);
   const [ongoingCourse, setongoingCourses] = useState(0);
-  const [username,setUserName] = useState("");
-  const [password,setPassword] = useState("");
+  const [user,setUser] = useState({username:"",password:""})
   const [completeCourse,setCompleteCourse] = useState(0);
   const [hoursLearned,setHoursLearned] = useState(0);
-  const [mathLearnedProgress,setMathLearnedProgress] = useState(0);
+  const [pureMathLearnedProgress,setPureMathLearnedProgress] = useState(0);
   const [statLearnedProgress,setStatLearnedProgress] = useState(0);
   const [mathLesson,setMathLesson] = useState(0);
   const [statlLesson,setStatLesson] = useState(0);
+  const [status,setStatus]  = useState('')
+  const [testedPureProgress,setPureTestedProgress] = useState(0)
+  const [testedStatProgress,setStatTestedProgress] = useState(0)
+
 
   // Structuring the context value explicitly
   const contextValue = {
-    loading: loading,
+    loading,
     setLoading: setLoading,
-    value: value,
+    value,
     setValue: setValue,
     data,
     setData,
@@ -51,22 +54,21 @@ function App() {
     setCourse,
     ongoingCourse,
     setongoingCourses,
-    username,
-    setUserName,
-    password,
-    setPassword,
+    user,setUser,
     hoursLearned,
     setHoursLearned,
     completeCourse,
     setCompleteCourse,
     statLearnedProgress,
     setStatLearnedProgress,
-    mathLearnedProgress,
-    setMathLearnedProgress,
+    pureMathLearnedProgress,setPureMathLearnedProgress,
     mathLesson,
     setMathLesson,
     statlLesson,
-    setStatLesson
+    setStatLesson,
+    status,setStatus,
+    testedPureProgress,setPureTestedProgress,
+    testedStatProgress,setStatTestedProgress
     
   };
 

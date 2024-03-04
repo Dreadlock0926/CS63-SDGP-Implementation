@@ -8,7 +8,7 @@ import "./Progressionmark.css";
 
 function Progressionmark() {
   const { value, setValue } = useContext(UserContext);
-  const { statValue, setstatValue, username, password,setUserName,setPassword} = useContext(UserContext);
+  const { statValue, setstatValue, user} = useContext(UserContext);
 
   const [totalMark, setTotalMark] = useState(0); // Use a state variable to store the total marks
   const [totalStatMarks,setTotalStatMarks] = useState(0);
@@ -63,10 +63,7 @@ function Progressionmark() {
     const fetchData = async () => {
       try {
         
-        const response = await axios.post("http://localhost:8000/registration/login", {
-          username: username, 
-          password: password
-        });
+        const response = await axios.post("http://localhost:8000/registration/login",user);
         
         
         console.log("Fetched data: ", response);
@@ -80,7 +77,7 @@ function Progressionmark() {
     };
   
     fetchData();
-  }, [username,password]); // Include apiUrl as a dependency
+  }, [user]); // Include apiUrl as a dependency
 
   const renderLineChart = (
     <>

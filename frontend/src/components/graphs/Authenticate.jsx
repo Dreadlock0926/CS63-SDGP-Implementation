@@ -1,5 +1,6 @@
+/* eslint-disable no-unused-vars */
 import axios from "axios";
-import React, { useEffect, useState } from "react";
+import  { useEffect, useState } from "react";
 import { useContext } from "react";
 import { UserContext } from "../../App";
 
