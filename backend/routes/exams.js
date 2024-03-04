@@ -2,6 +2,7 @@ const express = require("express");
 const router = express.Router();
 const examModel = require("../models/question"); //importing the model
 
+
 router.route("/").post((req, res) => {
   const { answers } = req.body;
   if (!answers) return res.status(200).json({ Alert: "NO answers!" });
@@ -46,5 +47,7 @@ router.route("/scope").get(async (req, res) => {
     }
   }
 });
+
+
 
 module.exports = router;

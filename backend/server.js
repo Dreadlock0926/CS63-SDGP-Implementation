@@ -13,6 +13,7 @@ const port = process.env.PORT;
 const cluster = process.env.CLUSTER;
 const session = require("express-session");
 const examResources = require("./routes/exams")
+const feedbackStuff = require("./routes/feedback")
 const { join } = require("path");
 
 app.use(express.json());
@@ -38,6 +39,7 @@ app.use("/login", login);
 app.use("/addQuestion", addQuestion);
 app.use("/getQuestionsOnTopic", getQuestionsOnTopic);
 app.use("/getQuestion", getQuestion);
+app.use("/feedbacks",feedbackStuff);
 app.use("/exam",examResources);
 
 app.use("*", (req, res) => {
