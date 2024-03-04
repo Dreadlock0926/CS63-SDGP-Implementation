@@ -41,7 +41,7 @@ const userSchema = new mongoose.Schema({
       type: Array,
       default: [],
     },
-    probability: { type: Array, default: [] },
+    probability: { type: [Number], default: [] },
   },
   photo: {
     type: String,

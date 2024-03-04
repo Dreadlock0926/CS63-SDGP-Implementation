@@ -13,25 +13,32 @@ export const UserContext = createContext();
 
 function App() {
   const [loading, setLoading] = useState(false);
-  const [outcome,setOutcome] = useState([]);
-  const [marks,setMarks] = useState(0)
+  const [outcome, setOutcome] = useState([]);
+  const [marks, setMarks] = useState(0);
 
   const userData = {
-    loading, setLoading,outcome,setOutcome,marks,setMarks
-  }
+    loading,
+    setLoading,
+    outcome,
+    setOutcome,
+    marks,
+    setMarks,
+  };
 
   return (
     <>
       <UserContext.Provider value={userData}>
-        <BrowserRouter >
+        <BrowserRouter>
           <Routes>
             <Route path="/" element={<Home />} />
             <Route path="login" element={<Login />} />
-            <Route path="add-questions" element={<AddQuestionsPage />}/>
-            <Route path="exam-test-page" element={<ExamQuestionTest />}/>
-            <Route path="/examfinal" element={<ExamFinalized/>}></Route> {/**Incomplete */}
-            <Route path="/scope" element={<Scope/>}></Route> {/**Radhul is working on this */}
-            <Route path="/feedback" element={<FeedbackPage/>}></Route>
+            <Route path="add-questions" element={<AddQuestionsPage />} />
+            <Route path="exam-test-page" element={<ExamQuestionTest />} />
+            <Route path="/examfinal" element={<ExamFinalized />}></Route>{" "}
+            {/**Incomplete */}
+            <Route path="/scope" element={<Scope />}></Route>{" "}
+            {/**Radhul is working on this */}
+            <Route path="/feedback" element={<FeedbackPage />}></Route>
             <Route path="*" element={<ErrorPage />} />
           </Routes>
         </BrowserRouter>

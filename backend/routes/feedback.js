@@ -32,7 +32,11 @@ router.route("/").post(async (req, res) => {
 });
 
 router.route("/add").post(async (req, res) => {
-  const { userId, newTopics, newProbability } = req?.body;
+  const {
+    userId = "65e5959fe25265c481c71f1c",
+    newTopics,
+    newProbability,
+  } = req?.body;
 
   if (!userId) return res.status(400).json({ Alert: "User ID required!" });
 
@@ -41,17 +45,16 @@ router.route("/add").post(async (req, res) => {
     if (!theData) {
       return res.status(404).json({ Alert: `${userId} not found!` });
     } else {
-      await theData.topicProbabilities.set({
-        topics: newTopics,
-        probability: newProbability,
-      });
+      await theData.topicProbabilities.topics.push(newTopics);
+      await theData.topicProbabilities.probability.push(newProbability);
       await theData.save();
       res.status(200).json({ Alert: "Added new resources!" });
     }
   } catch (err) {
-    console.error(err);
+    console.error(err.message);
     res.status(500).json({ Alert: "Internal Server Error" });
   }
 });
+
 
 module.exports = router;

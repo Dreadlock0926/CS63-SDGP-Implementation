@@ -21,6 +21,7 @@ const FeedbackPage = () => {
     i: 0,
     d: 0,
   });
+
   const [probabilitiesSet, setProbabilitiesSet] = useState(false);
 
   const fetchData = async () => {
@@ -34,7 +35,10 @@ const FeedbackPage = () => {
         setCorrectAnswers([...correctAnswers, responseData.correctAnswers]);
         setWrongAnswers([...wrongAnswers, responseData.wrongAnswers]);
         setExamQuestions([...examQuestions, responseData.examQuestions]);
-        setAvailableQuestions([...availableQuestions, responseData.availableQuestions]);
+        setAvailableQuestions([
+          ...availableQuestions,
+          responseData.availableQuestions,
+        ]);
         setQuestionsList([...questionsList, responseData.questionsList]);
       }
     } catch (err) {
@@ -48,6 +52,21 @@ const FeedbackPage = () => {
   useEffect(() => {
     fetchData();
   }, []);
+
+  async function sendUpdates(e) {
+    e.preventDefault();
+    try {
+      const outcome = await Axios.post(`${BASE}/add`, {
+        newTopics: Object.keys(topicProbabilities),
+        newProbability: Object.values(topicProbabilities),
+      });
+      if(outcome.status===200){
+        alert("Update sent!")
+      }
+    } catch (err) {
+      console.error(err);
+    }
+  }
 
   useEffect(() => {
     console.log("User Data:", userData);
@@ -86,9 +105,12 @@ const FeedbackPage = () => {
 
   const getQuestionsOnProbability = async () => {
     try {
-      const response = await Axios.post("http://localhost:8000/getQuestion/getAllQuestions", {
-        moduleID: "p1",
-      });
+      const response = await Axios.post(
+        "http://localhost:8000/getQuestion/getAllQuestions",
+        {
+          moduleID: "p1",
+        }
+      );
       if (response.status === 200) {
         const responseData = response.data;
         setQuestionsList(responseData);
@@ -120,7 +142,10 @@ const FeedbackPage = () => {
       for (const question of available) {
         let chance = Math.random();
         for (const topic in topicProbabilities) {
-          if (question.split("_")[1] === topic && !tempExamQuestions.includes(question)) {
+          if (
+            question.split("_")[1] === topic &&
+            !tempExamQuestions.includes(question)
+          ) {
             if (topicProbabilities[topic] >= chance) {
               if (tempExamQuestions.length === 10) {
                 break;
@@ -158,6 +183,7 @@ const FeedbackPage = () => {
         Pure Mathematics I
       </div>
       <div className="module">Probability & Statistics I</div>
+      <button onClick={sendUpdates}>Update Stats!</button>
       <p>{status}</p>
     </div>
   );
