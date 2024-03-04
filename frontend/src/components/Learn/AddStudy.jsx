@@ -33,8 +33,10 @@ const AddStudy = () => {
       userForm.append("subtopic",data.subtopic);
       userForm.append("photo",data.photo);
       userForm.append("url",data.url);
-      console.log(userForm);
-      const resources = await Axios.post("http://localhost:8000/resources", userForm, {headers: {"Content-Type": "multipart/form-data"}});
+      // console.log(userForm);
+      const resources = await Axios.post("http://localhost:8000/resources", data );
+      // {headers: {"Content-Type": "multipart/form-data"}
+      //if we need images to be sent we need to use forms , rn the form is not sending the data properly!
       //there's a problem here
    
       if (resources.status === 201) {
