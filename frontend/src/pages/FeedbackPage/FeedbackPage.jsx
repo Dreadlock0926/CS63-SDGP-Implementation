@@ -7,10 +7,11 @@ import { UserContext } from "../../App";
 
 const FeedbackPage = () => {
   const BASE = "http://localhost:8000/feedbacks";
-  const { setStatus, user } = useContext(UserContext);
+  const { setStatus, user, status } = useContext(UserContext);
   const [userData, setUserData] = useState([]);
   const [correctAnswers, setCorrectAnswers] = useState([]);
   const [wrongAnswers, setWrongAnswers] = useState([]);
+  const [topicsTaken, setTopicsTaken] = useState([]);
 
   const [topicProbabilities, setTopicProbabilities] = useState({
     q: 0,
@@ -34,18 +35,10 @@ const FeedbackPage = () => {
         setWrongAnswers([...wrongAnswers, responseData.wrongAnswers]);
 
         // Extract topics and probabilities from responseData
-        const { topics, probability } = responseData.topicProbabilities;
-
-        // Create an object to hold the new topic probabilities
-        let newTopicProbabilities = {};
-
-        // Iterate over topics and set the state for each topic
-        for (let i = 0; i < topics.length; i++) {
-          newTopicProbabilities[topics[i]] = probability[i];
-        }
-
-        // Update the topicProbabilities state with the new values
-        setTopicProbabilities(newTopicProbabilities);
+        setTopicProbabilities({
+          topics: responseData.topics,
+          probability: responseData.probability,
+        });
       }
     } catch (err) {
       console.error(err);
@@ -170,18 +163,27 @@ const FeedbackPage = () => {
   async function sendUpdates(e) {
     e.preventDefault();
     try {
-      const outcome = await Axios.post(`${BASE}/add`, {
-        
-        newTopics: Object.keys(topicProbabilities),
-        newProbability: Object.values(topicProbabilities),
-        correctAnswers,
-        wrongAnswers,
-      });
-      if (outcome.response.status === 200) {
+      // Constructing data to send
+      const requestData = {
+        newTopics: topicProbabilities.topics,
+        newProbability: topicProbabilities.probability,
+        correctAnswers: correctAnswers,
+        wrongAnswers: wrongAnswers,
+      };
+
+      // Sending data to the server
+      const response = await Axios.post(`${BASE}/add`, requestData);
+
+      // Handling response
+      if (response.status === 200) {
         alert("Update sent!");
+        console.log(response);
       }
     } catch (err) {
       console.error(err);
+      if (err.response && err.response.status === 404) {
+        setStatus("Not found!");
+      }
     }
   }
 
@@ -196,6 +198,7 @@ const FeedbackPage = () => {
       </div>
       <div className="module">Probability & Statistics I</div>
       <button onClick={sendUpdates}>Update Stats!</button>
+      <br />
       <p>{status}</p>
     </div>
   );

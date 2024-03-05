@@ -31,13 +31,11 @@ const userSchema = new mongoose.Schema({
     type: Array,
     default: [],
   }, // Array to hold exam history
-  topicProbabilities: {
-    topics: {
-      type: Array,
-      default: [],
-    },
-    probability: { type: [Number], default: [] },
+  topics: {
+    type: Array,
+    default: [],
   },
+  probability: { type: [Array], default: [] },
   photo: {
     type: String,
     default:

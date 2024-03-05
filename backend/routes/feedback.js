@@ -21,13 +21,12 @@ router.route("/").post(async (req, res) => {
 
 router.route("/add").post(async (req, res) => {
   const {
-    userId = "65e5959fe25265c481c71f1c",
+    userId = "65e5ee3fa014a87ba21c66d2",
     newTopics,
     newProbability,
     correctAnswers,
     wrongAnswers,
   } = req?.body;
-  console.log(req.body);
 
   if (!userId) return res.status(400).json({ Alert: "User ID required!" });
 
@@ -36,16 +35,18 @@ router.route("/add").post(async (req, res) => {
     if (!theData) {
       return res.status(404).json({ Alert: `${userId} not found!` });
     } else {
-      theData.topicProbabilities.push({
-        topics: newTopics,
-        probability: newProbability,
-      });
+      // theData.topicProbabilities.push({
+      //   topics: newTopics,
+      //   probability: newProbability,
+      // });
 
-      theData.correctAnswers.push(correctAnswers);
-      theData.wrongAnswers.push(wrongAnswers);
+      theData.topics.push([...newTopics]);
+      theData.probability.push([...newProbability]);
+      theData.correctAnswers.push([...correctAnswers]);
+      theData.wrongAnswers.push([...wrongAnswers]);
 
       await theData.save();
-      res.status(200).json({ Alert: "Added new resources!" });
+      res.status(200).json({ Alert: theData });
     }
   } catch (err) {
     console.error(err.message);

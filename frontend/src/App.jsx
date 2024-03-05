@@ -15,6 +15,7 @@ function App() {
   const [loading, setLoading] = useState(false);
   const [outcome, setOutcome] = useState([]);
   const [marks, setMarks] = useState(0);
+  const [status, setStatus] = useState("");
 
   const userData = {
     loading,
@@ -23,6 +24,8 @@ function App() {
     setOutcome,
     marks,
     setMarks,
+    status,
+    setStatus,
   };
 
   return (
