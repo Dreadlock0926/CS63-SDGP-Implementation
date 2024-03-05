@@ -1,6 +1,8 @@
 import "./ExamPage.css"
 import QuestionComponent from "../../components/QuestionComponent/QuestionComponent"
 import Axios from 'axios';
+import { Suspense } from 'react';
+import { ClipLoader } from 'react-spinners';
 import { useEffect, useState } from "react";
 import "//unpkg.com/mathlive";
 
@@ -44,13 +46,14 @@ function ExamPageContent() {
             <QuestionComponent question={question} mqNum={mqNum}/>
             <div onClick={spawnWorkingArea} className="working-panel"></div>
             {
-                    workingVisible &&
-                    <math-field 
-                    placeholder="Workings..."
-                    onInput={evt => setAnswer(evt.target.value)} 
-                    style={{width: 275 + 'px', height: 200 + 'px',marginBlock: 20 + 'px', width: 60 + '%'}}>{answer}
+                workingVisible &&
+                <math-field 
+                placeholder="Workings..."
+                onInput={evt => setAnswer(evt.target.value)} 
+                style={{width: 275 + 'px', height: 200 + 'px',marginBlock: 20 + 'px', width: 60 + '%'}}>{answer}
                     </math-field>
                 }
+
         </div>
         )
     }
@@ -122,10 +125,12 @@ function ExamPageContent() {
 function ExamPage() {
 
     return (
+        <Suspense fallback={<ClipLoader loading={true}/>}>
         <div className="container">
             <ExamPageContent />
             <InfoPanel />
         </div>
+        </Suspense>
     )
 }
 
