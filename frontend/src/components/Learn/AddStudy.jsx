@@ -3,12 +3,15 @@ import { useContext, useRef, useState } from "react";
 import { AddMaterial } from "../Api/Api";
 import Axios from "axios";
 import { UserContext } from "../../App";
+import { useNavigation } from "react-router-dom";
+
 import Loading from "../Loading";
 // import { RingLoader } from "react-spinners/RingLoader";
 import "./Add.css";
 
 const AddStudy = () => {
-  const { loading, setLoading, status, setStatus } = useContext(UserContext);
+  const { loading, setLoading, status, setStatus,navigator } = useContext(UserContext);
+ 
   const [data, setData] = useState({
     topic: "Pure Mathematics I",
     title: "",
@@ -31,7 +34,7 @@ const AddStudy = () => {
       userForm.append("title",data.title);
       userForm.append("about",data.about);
       userForm.append("subtopic",data.subtopic);
-      userForm.append("photo",data.photo);
+      userForm.append("image",data.photo);
       userForm.append("url",data.url);
       // console.log(userForm);
       const resources = await Axios.post("http://localhost:8000/resources", data );
@@ -39,14 +42,18 @@ const AddStudy = () => {
       //if we need images to be sent we need to use forms , rn the form is not sending the data properly!
       //there's a problem here
    
-      if (resources.status === 201) {
+      if (resources.data.status === 201) {
         setStatus("Added Resource!");
         setTimeout(() => {
           setStatus("");
         }, 2000);
+        navigator("/resources");
       }
     } catch (err) {
       console.error(err);
+      if(err.data && err.data.status===409){
+        setStatus(`${data.title} Already exists!`)
+      }
     } finally {
       setLoading(false);
       setData({ topic: "Pure Mathematics I", title: "", about: "", subtopic: "", url: "" });

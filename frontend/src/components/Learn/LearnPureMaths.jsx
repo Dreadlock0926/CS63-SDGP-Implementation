@@ -1,41 +1,45 @@
-/* eslint-disable react-hooks/exhaustive-deps */
 import Axios from "axios";
 import { useEffect, useState } from "react";
 import "./Pure.css";
-import { Container, Typography, Card, CardContent, Link } from "@mui/material";
+import {
+  Container,
+  Typography,
+  Card,
+  CardContent,
+  Link,
+  Button,
+} from "@mui/material";
 
+const LearningPureMaths = () => {
+  const [resources, setResources] = useState([]);
 
-const LearningPureMaths = () => { 
-
- 
-
-  const [resource,setResources] = useState([])
-
-  async function PureMathsRelated(){
-    try{
-      const {data} = await Axios.post("http://localhost:8000/resources/topic",{topic:"Pure Mathematics I"}); 
-      setResources(data)
-      console.log(data);
-    }catch(err){
+  async function PureMathsRelated() {
+    try {
+      const { data } = await Axios.post(
+        "http://localhost:8000/resources/topic",
+        { topic: "Pure Mathematics I" }
+      );
+      setResources(data);
+    } catch (err) {
       console.error(err);
     }
   }
 
-  useEffect(()=>{
+  useEffect(() => {
     PureMathsRelated();
-  },[])
-
-
-
+  }, []);
 
   return (
     <Container maxWidth="md" sx={{ textAlign: "center", marginTop: "5%" }}>
       <Typography variant="h3" gutterBottom>
         Pure Maths Materials
       </Typography>
-      {resource && resource.length ? (
-        resource.map((resource) => (
-          <Card key={resource._id} sx={{ margin: "20px", padding: "20px", boxShadow: 4 }}>
+      {resources && resources.length ? (
+        resources.map((resource) => (
+          <Card
+            key={resource._id}
+            sx={{ margin: "20px", padding: "20px", boxShadow: 4 }}
+          >
             <CardContent>
               <Typography variant="h4" gutterBottom>
                 {resource.title}
@@ -46,19 +50,31 @@ const LearningPureMaths = () => {
               <Typography variant="body2" color="textSecondary">
                 {resource.subtopic}
               </Typography>
-              <img src={resource.image ? resource.image : ""} height={500}/>
-              <br/>
-              <Link href={resource.url} color="primary" underline="hover">
-                {resource.url!=="" ? "Click Here to Learn More!" : ""}
-              </Link>
+              {resource.image && (
+                <img src={resource.image} alt={resource.title} height={200} />
+              )}
+              <br />
+              {resource.url && (
+                <Link
+                  href={resource.url}
+                  color="primary"
+                  underline="hover"
+                  sx={{ mr: 1 }}
+                >
+                  Click Here to Learn More!
+                </Link>
+              )}
+              <Button variant="contained" color="primary" href={resource.url}>
+                Go to Resource
+              </Button>
             </CardContent>
           </Card>
         ))
-      ) : (
+      ) : ( 
         <Typography variant="h4">No Pure Maths resources found!</Typography>
       )}
     </Container>
   );
-}
+};
 
-export default LearningPureMaths
+export default LearningPureMaths;

@@ -1,72 +1,31 @@
-/* Style for the container of the Learn component */
-
-.container {
- 
-  display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); /* Responsive grid layout */
-  gap: 20px; /* Gap between grid items */
+.learn-container {
+  font-family: "poppins";
+  margin: 5% ;
 }
 
-/* Style for loading message */
-.loading-message {
-  text-align: center;
-  font-size: 20px;
-  color: #333; /* Dark gray color */
-}
-
-/* Style for no materials message */
-.no-materials-message {
+.header {
   text-align: center;
 }
 
-/* Style for login message */
-.login-message {
-  text-align: center;
-  font-size: 18px;
-  color: #333; /* Dark gray color */
-}
-
-/* Style for links */
-.link {
-  display: block;
-  text-align: center;
-  margin-top: 20px;
-  text-decoration: none;
-  background-color: #007bff; /* Blue color for the background */
-  color: #fff; /* White color for the text */
-  padding: 10px 20px;
-  border-radius: 5px;
-  transition: background-color 0.3s ease; /* Smooth transition effect */
-}
-
-/* Hover effect for links */
-.link:hover {
-  background-color: #0056b3; /* Darker blue color on hover */
-}
-
-/* Style for h1 */
-h1 {
-  text-align: center;
-  color: #333; /* Dark gray color */
-}
-
-/* Style for links to different learning sections */
-.learn-links {
+.subjects-container {
   display: flex;
   justify-content: center;
-  margin-top: 20px;
 }
 
-/* Style for individual learning links */
-.learn-link {
-  margin-right: 20px;
-  font-size: 18px;
-  color: #007bff; /* Blue color for the text */
+.subject-link {
   text-decoration: none;
-  transition: color 0.3s ease; /* Smooth transition effect */
+  color: inherit;
 }
 
-/* Hover effect for individual learning links */
-.learn-link:hover {
-  color: #0056b3; /* Darker blue color on hover */
+.subject {
+  border: 1px solid #ccc;
+  border-radius: 5px;
+  padding: 20px;
+  margin: 20px;
+  text-align: center;
+}
+
+.add-resources-btn {
+  display: block;
+  margin: 20px auto;
 }
