@@ -154,7 +154,7 @@ router.route("/upvotes/:id").put(async (req, res) => {
 
 router.route("/nerds/:id").put(async (req, res) => {
   const id = req?.params?.id;
-  const { userID = "65e443cfcd871e196b006f9c", theTotalUpvotes } = req?.body;
+  const { userID = "65e82c4ae84d64fde8049ce4", theTotalUpvotes } = req?.body;
 
   console.log(`Payload ${id} and ${userID} , ${theTotalUpvotes}`);
   if (!id || !userID)
@@ -167,18 +167,20 @@ router.route("/nerds/:id").put(async (req, res) => {
       const updated = await userModel.findByIdAndUpdate(userID, {
         $inc: { nerdPoints: 5 },
       });
-      const updatedQuestion = await forumModel.updateOne(
-        { _id: id },
-        { $inc: { "answers.noOfUpvotes": 1 } }
-      );
 
-      res
-        .status(200)
-        .json([
-          { forum: exists },
-          { user: updated },
-          { forumQuestion: updatedQuestion },
-        ]);
+      // Check if the 'answers' array exists in the forum question
+      if (!exists.answers || !exists.answers.noOfUpvotes) {
+        // If not, create it and set the initial value to 1
+        exists.answers = { noOfUpvotes: 1 };
+      } else {
+        // If it exists, increment the 'noOfUpvotes' field by 1
+        exists.answers.noOfUpvotes++;
+      }
+
+      // Save the updated forum question
+      await exists.save();
+
+      res.status(200).json([{ forum: exists }, { user: updated }]);
     }
   } catch (error) {
     console.error("Error occurred:", error);
