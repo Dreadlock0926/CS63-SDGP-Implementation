@@ -1,6 +1,7 @@
 import { useContext, useEffect, useState } from "react";
 import { UserContext } from "../../App";
 import { Link } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import Axios from "axios";
 
 
@@ -8,6 +9,7 @@ const CreateForum = () => {
   const [forum, setForum] = useState({ question: "", topic: "Pure Mathematics I", rating: 1 });
   const [errorMessage, setErrorMessage] = useState("");
   const [successMessage, setSuccessMessage] = useState("");
+  const navigator = useNavigate()
 
   const handleChange = (e) => {
     setForum({ ...forum, [e.target.name]: e.target.value });
@@ -20,6 +22,9 @@ const CreateForum = () => {
       if (response.status === 201) {
         setSuccessMessage("Question added successfully!");
         setForum({ question: "", answer: "", topic: "Pure Mathematics I", rating: 1 }); // Clear the form after successful submission
+        setTimeout(()=>{
+          navigator("/forum")
+        },500)
       }
     } catch (err) {
       if (err.response && err.response.status === 409) {

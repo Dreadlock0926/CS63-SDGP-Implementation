@@ -9,20 +9,25 @@ const forumSchema = mongoose.Schema(
       type: String,
       trim: true,
     },
-    answers: {
-      type: Array,
-      default: [],
-      index: {
-        type: Object,
-        default: {},
-        text: {
-          type: String,
-        },
-        answeredBy: {
-          type: String,
+    answers: [
+      {
+        default: [],
+        index: {
+          type: Object,
+          default: {},
+          text: {
+            type: String,
+          },
+          answeredBy: {
+            type: String,
+          },
+          noOfUpvotes: {
+            type: Number,
+            default: 0,
+          },
         },
       },
-    },
+    ],
 
     topic: {
       type: String,
