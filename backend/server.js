@@ -31,14 +31,16 @@ app.get("/", (req, res) => {
   res.status(200).send("<h1>Hey docker!</h1>");
 });
 
+const sessionConfig = session({
+  secret: "somerandomasskey123",
+  resave: true,
+  saveUninitialized: false,
+  cookie: { maxAge:60000 ,secure: true,httpOnly:true},
+})
+
 app.set("trust proxy", 1); // trust first proxy
 app.use(
-  session({
-    secret: "somerandomasskey123",
-    resave: true,
-    saveUninitialized: false,
-    cookie: { secure: true,httpOnly:true },
-  })
+    sessionConfig
 );
 app.use(morgan("dev"));
 app.use(testingLog);
