@@ -29,15 +29,12 @@ const Forum = () => {
   const [theTotalUpvotes, setTheTotalUpvotes] = useState(0);
   const EndPoint = "http://localhost:8000/forum";
 
-  useEffect(() => {
-    forumData();
-  }, [down]); // Added "down" to dependency array to trigger a re-fetch when topic selection changes
-
   const forumData = async () => {
     try {
       setLoading(true);
       const response = await Axios.get(EndPoint);
       setData(response.data);
+      console.log("inital data", response.data);
     } catch (error) {
       console.error("Error fetching forum data:", error);
       setStatus("Error fetching forum data");
@@ -45,6 +42,9 @@ const Forum = () => {
       setLoading(false);
     }
   };
+  useEffect(() => {
+    forumData();
+  }, [down]);
 
   const increaseVotes = async (id) => {
     try {
@@ -62,9 +62,6 @@ const Forum = () => {
       } else {
         setStatus("Error while upvoting");
       }
-      setTimeout(() => {
-        navigator("/forum");
-      }, 2000);
     } catch (error) {
       console.error("Error while upvoting:", error);
     } finally {
@@ -144,7 +141,7 @@ const Forum = () => {
       const response = await Axios.delete(`${EndPoint}/${id}`);
       if (response.status === 200) {
         setData((prev) => prev.filter((comment) => comment._id !== id));
-        forumData(); // Assuming this function refreshes the forum data after deleting the comment
+        forumData();
       }
     } catch (error) {
       console.error("Error deleting comment:", error);
