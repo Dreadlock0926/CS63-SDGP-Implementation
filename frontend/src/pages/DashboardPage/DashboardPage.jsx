@@ -76,26 +76,44 @@ function DashboardStatistics({
 // Dashboard Courses Tab
 function DashboardCourses() {
   const {
+    loading,
+    setLoading: setLoading,
+    value,
+    setValue: setValue,
     data,
     setData,
-    user,
-    setVoxalpoints,
-    setHours,
     voxalPoints,
-    setProgress,
+    setVoxalpoints,
+    hours,
+    setHours,
     progress,
-    totalMathsmarks,
-    settotalMathsmarks,
-    username,
-    password,
-    mathLesson,
-    statlLesson,
-    mathLearnedProgress,
+    setProgress,
+    statValue,
+    setstatValue,
+    course,
+    setCourse,
+    ongoingCourse,
+    setongoingCourses,
+    user,
+    setUser,
+    hoursLearned,
+    setHoursLearned,
+    completeCourse,
+    setCompleteCourse,
     statLearnedProgress,
-    testedProgress,
-    pureLearnedProgress,
-testedStatProgress,
-  testedPureProgress
+    setStatLearnedProgress,
+    pureMathLearnedProgress,
+    setPureMathLearnedProgress,
+    mathLesson,
+    setMathLesson,
+    statlLesson,
+    setStatLesson,
+    status,
+    setStatus,
+    testedPureProgress,
+    setPureTestedProgress,
+    testedStatProgress,
+    setStatTestedProgress,
   } = useContext(UserContext);
 
   return (
@@ -114,12 +132,12 @@ testedStatProgress,
                 <div className="prog-bar">
                   <div style={{ width: 100, height: 100 }}>
                     <CircularProgressbar
-                      value={mathLearnedProgress}
-                      text={`${mathLearnedProgress}%`}
+                      value={pureMathLearnedProgress}
+                      text={`${pureMathLearnedProgress}%`}
                       styles={{
                         path: {
                           stroke: `rgba(62, 152, 199, ${
-                            mathLearnedProgress / 100
+                            pureMathLearnedProgress / 100
                           })`,
                         },
                       }}
@@ -130,12 +148,12 @@ testedStatProgress,
                 <div className="prog-bar">
                   <div style={{ width: 100, height: 100 }}>
                     <CircularProgressbar
-                      value={testedProgress}
-                      text={`${testedProgress}%`}
+                      value={testedPureProgress}
+                      text={`${testedPureProgress}%`}
                       styles={{
                         path: {
                           stroke: `rgba(62, 152, 199, ${
-                           testedProgress / 100
+                            testedPureProgress / 100
                           })`,
                         },
                         // Customize the text color and style as needed
@@ -170,19 +188,19 @@ testedStatProgress,
                 <div className="prog-bar">
                   <div style={{ width: 100, height: 100 }}>
                     <CircularProgressbar
-                      value={statLearnedProgress}
-                      text={`${statLearnedProgress}%`}
+                      value={testedStatProgress}
+                      text={`${testedStatProgress}%`}
                       styles={{
                         path: {
                           stroke: `rgba(62, 152, 199, ${
-                            statLearnedProgress / 100
+                            testedStatProgress / 100
                           })`,
                         },
                         // Customize the text color and style as needed
                       }}
                     />
+                    <p className="prog-bar-text">Tested Progress</p>
                   </div>
-                  <p className="prog-bar-text">Tested Progress</p>
                 </div>
               </div>
             </div>
@@ -196,15 +214,16 @@ testedStatProgress,
 function DashboardActivity() {
   const { data } = useContext(UserContext);
 
-  if (!data || !data.PureMathematics || !data.Statistics) {
-    // Handle the case where data is not ready. This could be a loading state or a null state.
-    return <div>Loading...</div>; // or any other fallback UI
-  }
-
-  const transformedData = [
-    { subject: "Pure Mathematics", score: data.PureMathematics?.[0] ?? 0 },
-    { subject: "Statistics", score: data.Statistics?.[0] ?? 0 },
-  ];
+  // Check if data is null before accessing its properties
+  const transformedData = data
+    ? [
+        {
+          subject: "Pure Mathematics",
+          score: data.PureMathematics?.score ?? 0,
+        },
+        { subject: "Statistics", score: data.Statistics?.score ?? 0 },
+      ]
+    : [];
 
   return (
     <div className="dashboard-activity">
@@ -224,34 +243,45 @@ function DashboardActivity() {
 // Dashboard Final Display Page
 function DashboardPage() {
   const {
+    loading,
+    setLoading: setLoading,
+    value,
+    setValue: setValue,
     data,
     setData,
-    user,
-    setVoxalpoints,
-    setHours,
     voxalPoints,
-    setProgress,
+    setVoxalpoints,
+    hours,
+    setHours,
     progress,
-    totalMathsmarks,
-    settotalMathsmarks,
-
+    setProgress,
+    statValue,
+    setstatValue,
+    course,
+    setCourse,
     ongoingCourse,
     setongoingCourses,
+    user,
+    setUser,
     hoursLearned,
     setHoursLearned,
     completeCourse,
     setCompleteCourse,
-    mathLearnedProgress,
-    setMathLearnedProgress,
     statLearnedProgress,
     setStatLearnedProgress,
+    pureMathLearnedProgress,
+    setPureMathLearnedProgress,
     mathLesson,
     setMathLesson,
+    statlLesson,
     setStatLesson,
+    status,
+    setStatus,
     testedPureProgress,
     setPureTestedProgress,
     testedStatProgress,
     setStatTestedProgress,
+    isAuthenticated,
   } = useContext(UserContext);
 
   useEffect(() => {
@@ -262,12 +292,13 @@ function DashboardPage() {
           user
         );
 
-        console.log("Fetched data: ", response);
         setVoxalpoints(response.data.voxalPoints);
         setHoursLearned(response.data.hoursLearned);
         setCompleteCourse(response.data.completeCourse);
         setongoingCourses(response.data.ongoingCourses);
-        setMathLearnedProgress(response.data.PureMathematics.learnedProgress);
+        setPureMathLearnedProgress(
+          response.data.PureMathematics.learnedProgress
+        );
         setStatLearnedProgress(response.data.Statistics.learnedProgress);
         setMathLesson(response.data.PureMathematics.lesson);
         setStatLesson(response.data.Statistics.lesson);

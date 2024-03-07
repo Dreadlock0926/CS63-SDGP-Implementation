@@ -22,17 +22,17 @@ function App() {
   const [statValue, setstatValue] = useState([]);
   const [course, setCourse] = useState(0);
   const [ongoingCourse, setongoingCourses] = useState(0);
-  const [user,setUser] = useState({username:"",password:""})
-  const [completeCourse,setCompleteCourse] = useState(0);
-  const [hoursLearned,setHoursLearned] = useState(0);
-  const [pureMathLearnedProgress,setPureMathLearnedProgress] = useState(0);
-  const [statLearnedProgress,setStatLearnedProgress] = useState(0);
-  const [mathLesson,setMathLesson] = useState(0);
-  const [statlLesson,setStatLesson] = useState(0);
-  const [status,setStatus]  = useState('')
-  const [testedPureProgress,setPureTestedProgress] = useState(0)
-  const [testedStatProgress,setStatTestedProgress] = useState(0)
-
+  const [user, setUser] = useState({ username: "", password: "" });
+  const [completeCourse, setCompleteCourse] = useState(0);
+  const [hoursLearned, setHoursLearned] = useState(0);
+  const [pureMathLearnedProgress, setPureMathLearnedProgress] = useState(0);
+  const [statLearnedProgress, setStatLearnedProgress] = useState(0);
+  const [mathLesson, setMathLesson] = useState(0);
+  const [statlLesson, setStatLesson] = useState(0);
+  const [status, setStatus] = useState("");
+  const [testedPureProgress, setPureTestedProgress] = useState(0);
+  const [testedStatProgress, setStatTestedProgress] = useState(0);
+  const [isAuthenticated, setIsAuthenticated] = useState(false);
 
   // Structuring the context value explicitly
   const contextValue = {
@@ -45,6 +45,8 @@ function App() {
     voxalPoints,
     setVoxalpoints,
     hours,
+    isAuthenticated,
+    setIsAuthenticated,
     setHours,
     progress,
     setProgress,
@@ -54,26 +56,29 @@ function App() {
     setCourse,
     ongoingCourse,
     setongoingCourses,
-    user,setUser,
+    user,
+    setUser,
     hoursLearned,
     setHoursLearned,
     completeCourse,
     setCompleteCourse,
     statLearnedProgress,
     setStatLearnedProgress,
-    pureMathLearnedProgress,setPureMathLearnedProgress,
+    pureMathLearnedProgress,
+    setPureMathLearnedProgress,
     mathLesson,
     setMathLesson,
     statlLesson,
     setStatLesson,
-    status,setStatus,
-    testedPureProgress,setPureTestedProgress,
-    testedStatProgress,setStatTestedProgress
-    
+    status,
+    setStatus,
+    testedPureProgress,
+    setPureTestedProgress,
+    testedStatProgress,
+    setStatTestedProgress,
   };
 
   return (
-    
     <UserContext.Provider value={contextValue}>
       <BrowserRouter>
         <Routes>
