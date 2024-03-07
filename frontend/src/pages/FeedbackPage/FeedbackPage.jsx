@@ -136,6 +136,10 @@ const FeedbackPage = () => {
         console.log(examQuestions);
     }, [examQuestions])
 
+    useEffect(() => {
+        console.log(topicProbabilities);
+    }, [topicProbabilities])
+
     return (
         <>
             <div className="modules-container">

@@ -48,7 +48,7 @@ function ExamPageContent() {
                     <math-field 
                     placeholder="Workings..."
                     onInput={evt => setAnswer(evt.target.value)} 
-                    style={{width: 275 + 'px', height: 200 + 'px',marginBlock: 20 + 'px', width: 60 + '%'}}>{answer}
+                    style={{width: 275 + 'px', height: 200 + 'px',marginBlock: 20 + 'px'}}>{answer}
                     </math-field>
                 }
         </div>
