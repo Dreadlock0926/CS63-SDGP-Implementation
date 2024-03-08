@@ -12,7 +12,6 @@ const mongoose = require("mongoose");
 const port = process.env.PORT;
 const cluster = process.env.CLUSTER;
 const session = require("express-session");
-const feedbackRoute = require("./routes/feedbacks")
 const examResources = require("./routes/exams")
 const { join } = require("path");
 
