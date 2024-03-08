@@ -32,6 +32,7 @@ const ExamFinalized = () => {
 
   let correctAnswers = [];
   let wrongAnswersIndex = [];
+
   let wrongQuestions = [];
 
   let marksArray = [];
@@ -47,7 +48,6 @@ const ExamFinalized = () => {
 
     correctAnswers = [];
     JSON.parse(examData).forEach((question) => {
-      console.log("This is the question:", question);
       question.answersGrid.forEach((answer) => {
         if (answer !== "") {
           correctAnswers.push(answer);
@@ -57,7 +57,6 @@ const ExamFinalized = () => {
     console.log("These are the correct answers:", correctAnswers);
     compareAnswers();
     addWrongAnswers();
-    QuestionIDs();
   };
 
   async function QuestionIDs() {
@@ -140,7 +139,7 @@ const ExamFinalized = () => {
           <div>
             {JSON.parse(examData).map((question, index) => {
               return (
-                <div className="details" key={question._id || index}>
+                <div>
                   <QuestionComponent
                     key={question.questionID}
                     question={question}
@@ -150,7 +149,6 @@ const ExamFinalized = () => {
               );
             })}
           </div>
-          <button onClick={getAnswers}>log answers</button>
         </div>
       ) : (
         <div>

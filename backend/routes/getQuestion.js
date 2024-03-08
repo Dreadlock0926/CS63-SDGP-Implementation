@@ -24,6 +24,22 @@ router.route("/").post(async (req, res) => {
 
 })
 
+router.route("/getAllQuestions").post(async (req, res) => {
+
+  let { moduleID } = req?.body;
+
+  if (!moduleID) return res.status(400).json({Alert: "The module ID is missing!"});
+  let regExp = new RegExp("^" + moduleID)
+  const moduleData = await questionModel.find({questionID: regExp}, {questionID:1, _id:0});
+
+  if (!moduleData) {
+    res.status(400).json({Alert: "The question data is not matching records."});
+  } else {
+    res.status(200).json(moduleData);
+  }
+
+});
+
 router.route("/:id").post(async (req, res) => {
   try {
     const id = req?.params?.id;
