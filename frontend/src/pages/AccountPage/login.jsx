@@ -11,7 +11,7 @@ const Login = () => {
   const BASE = "http://localhost:8000/login";
 
   const navigator = useNavigate();
-  const { user, loading, setLoading, setIsAuthenticated,IsAuthenticated, setUser,setData } =
+  const { user, loading, setLoading, setIsAuthenticated,IsAuthenticated, setUser,setData,data } =
     useContext(UserContext); //there's a problem here (context)
   const [issue, setIssue] = useState("");
 
@@ -49,7 +49,7 @@ const Login = () => {
       <div className="container">
         <img alt="avatar" className="avItem2" src="./images/avatar.png" />
         <h1 style={{ textAlign: "center" }}>
-          Hi {user.Session.username} your logged in!
+          Hi {data.username} your logged in!
         </h1>
       </div>
     </div>
