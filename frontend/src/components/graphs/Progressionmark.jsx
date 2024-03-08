@@ -7,8 +7,8 @@ import { UserContext } from "../../App";
 import "./Progressionmark.css";
 
 function Progressionmark() {
-  const { value, setValue } = useContext(UserContext);
-  const { statValue, setstatValue, user} = useContext(UserContext);
+  const { value, setValue,user , statValue, setstatValue} = useContext(UserContext);
+
 
   const [totalMark, setTotalMark] = useState(0); // Use a state variable to store the total marks
   const [totalStatMarks,setTotalStatMarks] = useState(0);
@@ -56,21 +56,16 @@ function Progressionmark() {
     }
   }
   
-  
+    
   
   
   useEffect(() => {
     const fetchData = async () => {
       try {
-        
-        const response = await axios.post("http://localhost:8000/registration/login",user);
-        
-        
-        console.log("Fetched data: ", response);
-        setValue(response); // Assuming this updates your component state correctly
+      
   
         // Now call calculation with the fetched data
-        calculation(response.data);
+        calculation(user);
       } catch (error) {
         console.error("Error fetching data:", error);
       }

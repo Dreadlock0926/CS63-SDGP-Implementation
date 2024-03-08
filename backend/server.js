@@ -9,7 +9,9 @@ const session = require("express-session");
 const helmet = require("helmet");
 const { join } = require("path");
 const progression = require("./routes/progression");
-const registration = require("./routes/registration");
+
+const login = require("./routes/login");
+const register = require("./routes/register");
 const cookieParser = require("cookie-parser");
 
 async function authenticated(req, res, next) {
@@ -30,7 +32,6 @@ app.use(express.urlencoded()); //allow access from anywhere for now!
 app.use(helmet());
 app.use(express.json());
 
-
 app.get("/", (req, res) => {
   res.status(200).send("<h1>Hey docker!</h1>");
 });
@@ -42,14 +43,13 @@ app.use(
     secret: "keyboard cat",
     resave: false,
     saveUninitialized: false,
-    cookie: { maxAge:60000*60 },
+    cookie: { maxAge: 60000 * 60 },
   })
 );
 
-
-app.use("/progression",progression);
-app.use("/registration",registration);
-
+app.use("/login", login);
+app.use("/register", register);
+app.use("/progression", progression);
 
 app.use("*", (req, res) => {
   //leave this below all the other routes cuz this is the LAST RESORT JUST INCASE THE requested url is neither of the existing routes

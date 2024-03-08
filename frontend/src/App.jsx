@@ -2,20 +2,19 @@
 import { useState, createContext } from "react";
 import { BrowserRouter, Routes, Route } from "react-router-dom";
 import Home from "./pages/HomePage/home";
-import UnknownPage from "./components/Error404/Unknown";
+import UnknownPage from "./components/Error404/ErrorPage";
 import Progressionmark from "./components/graphs/Progressionmark";
 import DashboardPage from "./pages/DashboardPage/DashboardPage";
-import Login from "./components/graphs/login";
-import regstration from "./components/graphs/Regstration";
-import Regstration from "./components/graphs/Regstration";
-import Authenticate from "./components/graphs/Authenticate";
+import Login from "./pages/AccountPage/login";
+import Register from "./pages/AccountPage/register";
+import Authenticate from "./pages/AccountPage/Authenticate";
 
 export const UserContext = createContext();
 
 function App() {
   const [loading, setLoading] = useState(false);
   const [value, setValue] = useState([]);
-  const [data, setData] = useState(null);
+  const [data, setData] = useState([]);
   const [voxalPoints, setVoxalpoints] = useState(0);
   const [hours, setHours] = useState(0);
   const [progress, setProgress] = useState([]);
@@ -86,7 +85,7 @@ function App() {
           <Route path="/progression" element={<Progressionmark />} />
           <Route path="/dashboard" element={<DashboardPage />} />
           <Route path="/login" element={<Login />} />
-          <Route path="/registration" element={<Regstration />} />
+          <Route path="/registration" element={<Register />} />
           <Route path="/authenticate" element={<Authenticate />} />
           <Route path="*" element={<UnknownPage />} />
         </Routes>

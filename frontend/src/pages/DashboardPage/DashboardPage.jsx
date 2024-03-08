@@ -287,23 +287,18 @@ function DashboardPage() {
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const response = await Axios.post(
-          "http://localhost:8000/registration/login",
-          user
-        );
+        setVoxalpoints(data.voxalPoints);
+        setHoursLearned(data.hoursLearned);
+        setCompleteCourse(data.completeCourse);
+        setongoingCourses(data.ongoingCourses);
+        setPureMathLearnedProgress(data.PureMathematics.learnedProgress);
+        setStatLearnedProgress(data.Statistics.learnedProgress);
+        setMathLesson(data.PureMathematics.lesson);
+        setStatLesson(data.Statistics.lesson);
+        setPureTestedProgress(data.PureMathematics.testedProgress);
+        setStatTestedProgress(data.Statistics.testedProgress);
 
-        setVoxalpoints(response.data.voxalPoints);
-        setHoursLearned(response.data.hoursLearned);
-        setCompleteCourse(response.data.completeCourse);
-        setongoingCourses(response.data.ongoingCourses);
-        setPureMathLearnedProgress(
-          response.data.PureMathematics.learnedProgress
-        );
-        setStatLearnedProgress(response.data.Statistics.learnedProgress);
-        setMathLesson(response.data.PureMathematics.lesson);
-        setStatLesson(response.data.Statistics.lesson);
-        setPureTestedProgress(response.data.PureMathematics.testedProgress);
-        setStatTestedProgress(response.data.Statistics.testedProgress);
+        console.log(data.voxalPoints);
       } catch (error) {
         console.error("Error fetching data:", error);
       }
