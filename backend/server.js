@@ -40,7 +40,7 @@ app.use("/addQuestion", addQuestion);
 app.use("/getQuestionsOnTopic", getQuestionsOnTopic);
 app.use("/getQuestion", getQuestion);
 app.use("/exam",examResources);
-app.use("/feedbacks",feedbackRoute)
+
 
 app.use("*", (req, res) => {
   //leave this below all the other routes cuz this is the LAST RESORT JUST INCASE THE requested url is neither of the existing routes
