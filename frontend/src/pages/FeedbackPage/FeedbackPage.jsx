@@ -1,3 +1,5 @@
+/* eslint-disable react-hooks/exhaustive-deps */
+/* eslint-disable no-unused-vars */
 import { useRef, useState } from "react";
 import { useEffect } from "react";
 import Axios from "axios";
