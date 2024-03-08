@@ -57,7 +57,8 @@ function ExamPageContent() {
 
     const [questions, setQuestions] = useState([]);
     const [correctAnswers, setCorrectAnswers] = useState([]);
-    const [writtenAnswers, setWrittenAnswers] = useState([]);
+
+    let writtenAnswers = [];
 
     useEffect(() => {
         console.log(correctAnswers);
@@ -105,7 +106,7 @@ function ExamPageContent() {
 
     const submitAnswers = () => {
         const writtenAnswerContainer = document.querySelectorAll("math-field");
-        setWrittenAnswers(Array.from(writtenAnswerContainer).map((answer) => answer.value));
+        writtenAnswers = (Array.from(writtenAnswerContainer).map((answer) => answer.value));
         console.log(writtenAnswers);
     }
 
