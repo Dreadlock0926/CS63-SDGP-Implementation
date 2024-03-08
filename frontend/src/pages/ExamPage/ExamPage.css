@@ -1,0 +1,102 @@
+.timer {
+    margin-block: 40px;
+    width: 100px;
+    height: 100px;
+    border-radius: 100px;
+    background-color: green;
+}
+
+.exam-info-header, .timer-text {
+    font-weight: bold;
+    font-size: 1.5rem;
+    text-align: center;
+}
+
+.exam-info-header {
+    margin-bottom: 40px;
+}
+
+.subject-info, .exam-meta-info {
+    display: flex;
+    justify-content: space-between;
+    margin-block: 15px;
+}
+
+.timer-container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.info-panel {
+    width: 450px;
+    padding: 20px;
+    margin-right: 100px;
+    border-radius: 25px 0px 25px 0px;
+    position: sticky;
+    top: 150px;
+    height: 450px;
+    background-color: white;
+}
+
+.mf {
+    margin-right: 500px;
+}
+
+.exam-info {
+    margin-top: 40px;
+}
+
+.questions-remaining {
+    text-align: center;
+    font-size: 1.25rem;
+}
+
+.subject-tag, .exam-type {
+    font-weight: bold;
+}
+
+.container {
+    display: flex;
+}
+
+.exam-page {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.working-panel {
+    border-radius: 0px 0px 5px 5px;
+    background-color: green;
+    width: 50px;
+    height: 25px;
+    margin-top: -20px;
+}
+
+.working-panel:hover {
+    cursor: pointer;
+}
+
+.question-on-page {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    position: relative;
+}
+
+.exam-page {
+    display: flex;
+    flex-direction: column;
+}
+
+.submit {
+    background-color: green;
+    color: white;
+    border: 0px;
+    padding: 10px;
+    border-radius: 50px;
+    margin-block: 70px;
+    font-size: 1.25rem;
+}

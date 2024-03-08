@@ -8,6 +8,8 @@ import ExamQuestionTest from "./pages/TestPages/ExamQuestionTest";
 import Scope from "./pages/TestPages/Scope";
 import ExamFinalized from "./pages/TestPages/ExamFinal";
 import PastPaperScope from "./pages/PastPaperPage/pastPaperScope";
+import FeedbackPage from "./pages/FeedbackPage/FeedbackPage";
+import ExamPage from "./pages/ExamPage/ExamPage";
 
 export const UserContext = createContext();
 
@@ -34,12 +36,15 @@ function App() {
             <Route path="login" element={<Login />} />
             <Route path="add-questions" element={<AddQuestionsPage />} />
             <Route path="exam-test-page" element={<ExamQuestionTest />} />
-            <Route path="/examfinal" element={<ExamFinalized />}></Route>{" "}
             {/**Incomplete */}
             <Route path="/scope" element={<Scope />}></Route>{" "}
             {/**Radhul is working on this */}
             <Route path="/pp-scope" element={<PastPaperScope />}></Route>{" "}
-            {/**Radhul is working on this */}
+            <Route path="add-questions" element={<AddQuestionsPage />} />
+            <Route path="exam" element={<ExamPage />} />
+            <Route path="/examfinal" element={<ExamFinalized />}></Route>{" "}
+            {/**Incomplete */}
+            <Route path="/feedback" element={<FeedbackPage />}></Route>
             <Route path="*" element={<ErrorPage />} />
           </Routes>
         </BrowserRouter>

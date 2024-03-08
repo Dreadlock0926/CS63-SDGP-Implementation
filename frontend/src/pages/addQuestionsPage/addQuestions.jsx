@@ -5,6 +5,7 @@ import { useRef, useState } from "react";
 import { useEffect } from "react";
 import Axios from "axios";
 import { Image } from "cloudinary-react";
+import "//unpkg.com/mathlive";
 
 function QuestionSourcePanel({
   setQuestionSource,
@@ -394,6 +395,8 @@ function QuestionFinalPanel() {
         });
       })
       .catch((err) => console.log(err));
+
+      window.location.reload(false);
   };
 
   return (
@@ -417,9 +420,18 @@ function QuestionFinalPanel() {
 }
 
 function AddQuestionsPage() {
+
+  const [latex, setLatex] = useState("");
+  const handleLatexChange = (event) => {
+    console.log(event.target.value)
+    setLatex(event.target.value);
+  }
+
   return (
     <>
       <NavBar />
+      <math-field onInput={evt => setLatex(evt.target.value)} className="answer-input" placeholder="Type LaTeX..."></math-field>
+      <div className="latex-render">{latex}</div>
       <QuestionFinalPanel />
     </>
   );
