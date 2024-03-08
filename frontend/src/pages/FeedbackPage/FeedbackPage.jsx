@@ -1,11 +1,17 @@
 /* eslint-disable react-hooks/exhaustive-deps */
 /* eslint-disable no-unused-vars */
-import { useRef, useState } from "react";
-import { useEffect } from "react";
+import { useContext, useEffect, useState } from "react";
+import { UserContext } from "../../App";
 import Axios from "axios";
 import "./FeedbackPage.css";
 
 const FeedbackPage = () => {
+
+    const {
+        user
+    } = useContext(UserContext);
+
+    console.log(user);
 
     //Get correct answers from the UserData
     const [correctAnswers, setCorrectAnswers] = useState(["p1_q_3_w_2022_2", "p1_f_11_s_2015_2", "p1_f_1_w_2015_2", "p1_cg_1_w_2022_2", 'p1_i_9_w_2015_2', 'p1_i_10_w_2015_2', 'p1_d_5_s_2015_1','p1_d_2_s_2015_1']);
