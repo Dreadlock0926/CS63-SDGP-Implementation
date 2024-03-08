@@ -11,8 +11,16 @@ const Login = () => {
   const BASE = "http://localhost:8000/login";
 
   const navigator = useNavigate();
-  const { user, loading, setLoading, setIsAuthenticated,IsAuthenticated, setUser,setData,data } =
-    useContext(UserContext); //there's a problem here (context)
+  const {
+    user,
+    loading,
+    setLoading,
+    setIsAuthenticated,
+    IsAuthenticated,
+    setUser,
+    setData,
+    data,
+  } = useContext(UserContext); //there's a problem here (context)
   const [issue, setIssue] = useState("");
 
   const handleChange = (e) => {
@@ -29,15 +37,17 @@ const Login = () => {
         console.log(response.data);
         setData(response.data);
         setIsAuthenticated(true);
+
+        sessionStorage.setItem("loggedUser", JSON.stringify(response.data));
         navigator("/");
       }
     } catch (error) {
       console.error(error);
-    //   if (error.response.status === 401) {
-    //     setIssue("Wrong Password, Please try again!");
-    //   } else if (error.response.status === 404) {
-    //     setIssue("Invalid Username, Please Check Again!");
-    //   }
+      //   if (error.response.status === 401) {
+      //     setIssue("Wrong Password, Please try again!");
+      //   } else if (error.response.status === 404) {
+      //     setIssue("Invalid Username, Please Check Again!");
+      //   }
     } finally {
       setLoading(false);
     }

@@ -7,113 +7,114 @@ import { UserContext } from "../../App";
 import "./Progressionmark.css";
 
 function Progressionmark() {
-  const { value, setValue,user , statValue, setstatValue} = useContext(UserContext);
-
+  const { loggedInUser, setLoggedInUser } = useContext(UserContext);
 
   const [totalMark, setTotalMark] = useState(0); // Use a state variable to store the total marks
-  const [totalStatMarks,setTotalStatMarks] = useState(0);
+  const [totalStatMarks, setTotalStatMarks] = useState(0);
   const [average, setAverage] = useState(0);
   const [chartData, setChartData] = useState([]);
 
   const apiUrl = "http://localhost:8000/progression/get";
 
   function calculation(data) {
-
     const mathsMarks = data.testHistory.Maths;
     const statMarks = data.testHistory.Statistics;
 
-    if(mathsMarks.length>=statMarks.length){
-      const transFormData = mathsMarks.map((mark,index)=>({
+    if (mathsMarks.length >= statMarks.length) {
+      const transFormData = mathsMarks.map((mark, index) => ({
         testNumber: index + 1, // Or any other identifier for the X-axis
         Maths: mark,
         Statistics: statMarks[index] || 0,
-      }))
-    setChartData(transFormData);
-
-    }else{
-      const transFormData = statMarks.map((mark,index)=>({
-         testNumber: index + 1, // Or any other identifier for the X-axis
-         Statistics: mark,
-         Maths: mathsMarks[index] || 0,
-    }))
-    setChartData(transFormData);
+      }));
+      setChartData(transFormData);
+    } else {
+      const transFormData = statMarks.map((mark, index) => ({
+        testNumber: index + 1, // Or any other identifier for the X-axis
+        Statistics: mark,
+        Maths: mathsMarks[index] || 0,
+      }));
+      setChartData(transFormData);
     }
 
     // Assuming `data` is the object containing the `testHistory` and other properties
     if (data && data.testHistory && data.testHistory.Maths) {
-      const totalMathsMarks = data.testHistory.Maths.reduce((acc, currentMark) => acc + currentMark, 0);
-      const averageMathsMarks =  Math.round(totalMathsMarks / data.testHistory.Maths.length);
+      const totalMathsMarks = data.testHistory.Maths.reduce(
+        (acc, currentMark) => acc + currentMark,
+        0
+      );
+      const averageMathsMarks = Math.round(
+        totalMathsMarks / data.testHistory.Maths.length
+      );
       setTotalMark(totalMathsMarks); // Update the total marks state with the total for Maths
       setAverage(averageMathsMarks); // Update the average marks state with the average for Maths
-      console.log("Total Maths marks: " + totalMathsMarks + ", Average Maths marks: " + averageMathsMarks);
+      console.log(
+        "Total Maths marks: " +
+          totalMathsMarks +
+          ", Average Maths marks: " +
+          averageMathsMarks
+      );
     }
 
-    if(data&&data.testHistory && data.testHistory.Statistics){
-      const totalStatMathMarks = data.testHistory.Statistics.reduce((acc,currentMark)=>acc+currentMark,0);
-      const averageStatMarks = Math.round(totalStatMathMarks/data.testHistory.Statistics.length);
+    if (data && data.testHistory && data.testHistory.Statistics) {
+      const totalStatMathMarks = data.testHistory.Statistics.reduce(
+        (acc, currentMark) => acc + currentMark,
+        0
+      );
+      const averageStatMarks = Math.round(
+        totalStatMathMarks / data.testHistory.Statistics.length
+      );
       setTotalStatMarks(averageStatMarks);
-
     }
-  }
-  
-    
-  
-  
-  useEffect(() => {
-    const fetchData = async () => {
-      try {
-      
-  
-        // Now call calculation with the fetched data
-        calculation(user);
-      } catch (error) {
-        console.error("Error fetching data:", error);
-      }
-    };
-  
-    fetchData();
-  }, [user]); // Include apiUrl as a dependency
 
-  const renderLineChart = (
-    <>
-      <LineChart
-        width={500}
-        height={350}
-        data={chartData}
-        margin={{ top: 5, right: 20, bottom: 5, left: 0 }}
-      >
-        <Line
-          type="monotone"
-          dataKey="Maths"
-          stroke="#8884d8"
-        />
-        <Line
-          type="monotone"
-          dataKey="Statistics"
-          stroke="#8884d8"
-        />
-        <CartesianGrid stroke="#ccc" strokeDasharray="5 5" />
-        <XAxis dataKey="testNumber" />
-        <YAxis />
-      </LineChart>
-    </>
-  );
+    const renderLineChart = (
+      <>
+        <LineChart
+          width={500}
+          height={350}
+          data={chartData}
+          margin={{ top: 5, right: 20, bottom: 5, left: 0 }}
+        >
+          <Line type="monotone" dataKey="Maths" stroke="#8884d8" />
+          <Line type="monotone" dataKey="Statistics" stroke="#8884d8" />
+          <CartesianGrid stroke="#ccc" strokeDasharray="5 5" />
+          <XAxis dataKey="testNumber" />
+          <YAxis />
+        </LineChart>
+      </>
+    );
 
-  return (
-    <div className="progress-container">
-      {/* <h1>Student progression tracker</h1> */}
-      {/* <p>Total Marks: {totalMark}</p> */}
-      <div className="avg-mark-container">
-        <p>Average Mathematics Mark</p>
-        <h2>{average}</h2><br />
-        <p>Average Statistics Mark</p>
-        <h2>{totalStatMarks}</h2>
+    return (
+      <div>
+        {loggedInUser ? (
+          <div className="progress-container">
+            {/* <h1>Student progression tracker</h1> */}
+            {/* <p>Total Marks: {totalMark}</p> */}
+            <div className="avg-mark-container">
+              <p>Average Mathematics Mark</p>
+              <h2>{average}</h2>
+              <br />
+              <p>Average Statistics Mark</p>
+              <h2>{totalStatMarks}</h2>
+            </div>
 
+            <div>{renderLineChart}</div>
+          </div>
+        ) : (
+          <div>
+            <p>Loading...</p>
+          </div>
+        )}
       </div>
+    );
+  }
 
-      <div>{renderLineChart}</div>
-    </div>
-  );
+  useEffect(() => {
+    setLoggedInUser(JSON.parse(sessionStorage.getItem("loggedUser")).data);
+  }, []); // Include apiUrl as a dependency
+
+  useEffect(() => {
+    calculation(loggedInUser);
+  }, [loggedInUser]); // Run calculation whenever loggedInUser changes
 }
 
 export default Progressionmark;

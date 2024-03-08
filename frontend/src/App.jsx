@@ -33,8 +33,33 @@ function App() {
   const [testedStatProgress, setStatTestedProgress] = useState(0);
   const [isAuthenticated, setIsAuthenticated] = useState(false);
 
+  const [loggedInUser, setLoggedInUser] = useState({
+    username: "", // Assuming username is required
+    password: "", // Assuming password is required (not used in this example)
+    marks: 0,
+    testHistory: {
+      Maths: [0], // Assuming Maths is an array of marks
+      Statistics: [0], // Assuming Statistics is an array of marks
+    },
+    testnumber: 0,
+    voxalPoints: 0,
+    hoursLearned: 0,
+    ongoingCourses: 0,
+    completeCourse: 0,
+    PureMathematics: {
+      learnedProgress: 0,
+      lesson: 0,
+    },
+    Statistics: {
+      learnedProgress: 0,
+      lesson: 0,
+    },
+  });
+
   // Structuring the context value explicitly
   const contextValue = {
+    loggedInUser,
+    setLoggedInUser,
     loading,
     setLoading: setLoading,
     value,

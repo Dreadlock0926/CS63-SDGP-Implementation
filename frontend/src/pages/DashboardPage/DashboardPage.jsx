@@ -75,45 +75,23 @@ function DashboardStatistics({
 
 // Dashboard Courses Tab
 function DashboardCourses() {
+  const { loggedInUser, setLoggedInUser } = useContext(UserContext);
+
+  useEffect(() => {
+    setLoggedInUser(JSON.parse(sessionStorage.getItem("loggedUser")).data);
+  }, []);
+
+  useEffect(() => {
+    console.log(loggedInUser);
+  }, [loggedInUser]);
+
   const {
-    loading,
-    setLoading: setLoading,
-    value,
-    setValue: setValue,
-    data,
-    setData,
-    voxalPoints,
-    setVoxalpoints,
-    hours,
-    setHours,
-    progress,
-    setProgress,
-    statValue,
-    setstatValue,
-    course,
-    setCourse,
-    ongoingCourse,
-    setongoingCourses,
-    user,
-    setUser,
-    hoursLearned,
-    setHoursLearned,
-    completeCourse,
-    setCompleteCourse,
     statLearnedProgress,
-    setStatLearnedProgress,
     pureMathLearnedProgress,
-    setPureMathLearnedProgress,
     mathLesson,
-    setMathLesson,
     statlLesson,
-    setStatLesson,
-    status,
-    setStatus,
     testedPureProgress,
-    setPureTestedProgress,
     testedStatProgress,
-    setStatTestedProgress,
   } = useContext(UserContext);
 
   return (
@@ -127,17 +105,19 @@ function DashboardCourses() {
           <div className="courses-tab">
             <div className="course-card">
               <div className="course-title">Pure Mathematics I</div>
-              <div className="course-lessons">{mathLesson} lessons</div>
+              <div className="course-lessons">
+                {loggedInUser.PureMathematics.lesson} lessons
+              </div>
               <div className="course-progress-tab">
                 <div className="prog-bar">
                   <div style={{ width: 100, height: 100 }}>
                     <CircularProgressbar
-                      value={pureMathLearnedProgress}
-                      text={`${pureMathLearnedProgress}%`}
+                      value={loggedInUser.PureMathematics.learnedProgress}
+                      text={`${loggedInUser.PureMathematics.learnedProgress}%`}
                       styles={{
                         path: {
                           stroke: `rgba(62, 152, 199, ${
-                            pureMathLearnedProgress / 100
+                            loggedInUser.PureMathematics.learnedProgress / 100
                           })`,
                         },
                       }}
@@ -148,12 +128,12 @@ function DashboardCourses() {
                 <div className="prog-bar">
                   <div style={{ width: 100, height: 100 }}>
                     <CircularProgressbar
-                      value={testedPureProgress}
-                      text={`${testedPureProgress}%`}
+                      value={loggedInUser.PureMathematics.testedProgress}
+                      text={`${loggedInUser.PureMathematics.testedProgress}%`}
                       styles={{
                         path: {
                           stroke: `rgba(62, 152, 199, ${
-                            testedPureProgress / 100
+                            loggedInUser.PureMathematics.testedProgress / 100
                           })`,
                         },
                         // Customize the text color and style as needed
@@ -166,17 +146,19 @@ function DashboardCourses() {
             </div>
             <div className="course-card">
               <div className="course-title">Statistics</div>
-              <div className="course-lessons">{statlLesson} lessons</div>
+              <div className="course-lessons">
+                {loggedInUser.Statistics.learnedProgress} lessons
+              </div>
               <div className="course-progress-tab">
                 <div className="prog-bar">
                   <div style={{ width: 100, height: 100 }}>
                     <CircularProgressbar
-                      value={statLearnedProgress}
-                      text={`${statLearnedProgress}%`}
+                      value={loggedInUser.Statistics.learnedProgress}
+                      text={`${loggedInUser.Statistics.learnedProgress}%`}
                       styles={{
                         path: {
                           stroke: `rgba(62, 152, 199, ${
-                            statLearnedProgress / 100
+                            loggedInUser.Statistics.learnedProgress / 100
                           })`,
                         },
                         // Customize the text color and style as needed
@@ -188,12 +170,12 @@ function DashboardCourses() {
                 <div className="prog-bar">
                   <div style={{ width: 100, height: 100 }}>
                     <CircularProgressbar
-                      value={testedStatProgress}
-                      text={`${testedStatProgress}%`}
+                      value={loggedInUser.Statistics.testedProgress}
+                      text={`${loggedInUser.Statistics.testedProgress}%`}
                       styles={{
                         path: {
                           stroke: `rgba(62, 152, 199, ${
-                            testedStatProgress / 100
+                            loggedInUser.Statistics.testedProgress / 100
                           })`,
                         },
                         // Customize the text color and style as needed
@@ -213,15 +195,16 @@ function DashboardCourses() {
 
 function DashboardActivity() {
   const { data } = useContext(UserContext);
+  const { loggedInUser, setLoggedInUser } = useContext(UserContext);
 
   // Check if data is null before accessing its properties
-  const transformedData = data
+  const transformedData = loggedInUser
     ? [
         {
           subject: "Pure Mathematics",
-          score: data.PureMathematics?.score ?? 0,
+          score: loggedInUser.PureMathematics?.score ?? 0,
         },
-        { subject: "Statistics", score: data.Statistics?.score ?? 0 },
+        { subject: "Statistics", score: loggedInUser.Statistics?.score ?? 0 },
       ]
     : [];
 
@@ -242,6 +225,8 @@ function DashboardActivity() {
 
 // Dashboard Final Display Page
 function DashboardPage() {
+  const { loggedInUser, setLoggedInUser } = useContext(UserContext);
+
   const {
     loading,
     setLoading: setLoading,
@@ -287,18 +272,20 @@ function DashboardPage() {
   useEffect(() => {
     const fetchData = async () => {
       try {
-        setVoxalpoints(data.voxalPoints);
-        setHoursLearned(data.hoursLearned);
-        setCompleteCourse(data.completeCourse);
-        setongoingCourses(data.ongoingCourses);
-        setPureMathLearnedProgress(data.PureMathematics.learnedProgress);
-        setStatLearnedProgress(data.Statistics.learnedProgress);
-        setMathLesson(data.PureMathematics.lesson);
-        setStatLesson(data.Statistics.lesson);
-        setPureTestedProgress(data.PureMathematics.testedProgress);
-        setStatTestedProgress(data.Statistics.testedProgress);
+        setVoxalpoints(loggedInUser.voxalPoints);
+        setHoursLearned(loggedInUser.hoursLearned);
+        setCompleteCourse(loggedInUser.completeCourse);
+        setongoingCourses(loggedInUser.ongoingCourses);
+        setPureMathLearnedProgress(
+          loggedInUser.PureMathematics.learnedProgress
+        );
+        setStatLearnedProgress(loggedInUser.Statistics.learnedProgress);
+        setMathLesson(loggedInUser.PureMathematics.lesson);
+        setStatLesson(loggedInUser.Statistics.lesson);
+        setPureTestedProgress(loggedInUser.PureMathematics.testedProgress);
+        setStatTestedProgress(loggedInUser.Statistics.testedProgress);
 
-        console.log(data.voxalPoints);
+        console.log(loggedInUser.voxalPoints);
       } catch (error) {
         console.error("Error fetching data:", error);
       }
@@ -314,10 +301,10 @@ function DashboardPage() {
         <div className="dashboard-main">
           <DashboardGraph />
           <DashboardStatistics
-            voxal={voxalPoints}
-            ongoingCourses={ongoingCourse}
-            completedCourses={completeCourse}
-            hoursLearned={hoursLearned}
+            voxal={loggedInUser.voxalPoints}
+            ongoingCourses={loggedInUser.ongoingCourses}
+            completedCourses={loggedInUser.completeCourse}
+            hoursLearned={loggedInUser.hoursLearned}
           />
           <DashboardCourses />
           <DashboardActivity />
