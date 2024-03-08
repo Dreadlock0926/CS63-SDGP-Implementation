@@ -261,7 +261,7 @@ function DashboardPage() {
     setCourse,
     ongoingCourse,
     setongoingCourses,
-    user,
+
     setUser,
     hoursLearned,
     setHoursLearned,
@@ -284,28 +284,32 @@ function DashboardPage() {
     isAuthenticated,
   } = useContext(UserContext);
 
-  useEffect(() => {
-    const fetchData = async () => {
-      try {
-        setVoxalpoints(data.voxalPoints);
-        setHoursLearned(data.hoursLearned);
-        setCompleteCourse(data.completeCourse);
-        setongoingCourses(data.ongoingCourses);
-        setPureMathLearnedProgress(data.PureMathematics.learnedProgress);
-        setStatLearnedProgress(data.Statistics.learnedProgress);
-        setMathLesson(data.PureMathematics.lesson);
-        setStatLesson(data.Statistics.lesson);
-        setPureTestedProgress(data.PureMathematics.testedProgress);
-        setStatTestedProgress(data.Statistics.testedProgress);
 
-        console.log(data.voxalPoints);
-      } catch (error) {
-        console.error("Error fetching data:", error);
-      }
-    };
+  const fetchData = async () => {
+    try {
+      console.log(data);
+      setVoxalpoints(data.voxalPoints);
+      setHoursLearned(data.hoursLearned);
+      setCompleteCourse(data.completeCourse);
+      setongoingCourses(data.ongoingCourses);
+      setPureMathLearnedProgress(data.PureMathematics.learnedProgress);
+      setStatLearnedProgress(data.Statistics.learnedProgress);
+      setMathLesson(data.PureMathematics.lesson);
+      setStatLesson(data.Statistics.lesson);
+      setPureTestedProgress(data.PureMathematics.testedProgress);
+      setStatTestedProgress(data.Statistics.testedProgress);
 
-    fetchData();
-  }, [user]);
+      console.log(data.voxalPoints);
+    } catch (error) {
+      console.error("Error fetching data:", error);
+    }
+
+  };
+
+  fetchData();
+
+
+
 
   return (
     <>

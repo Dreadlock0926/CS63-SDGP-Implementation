@@ -1,5 +1,5 @@
 /* eslint-disable no-unused-vars */
-import { useContext, useState } from "react";
+import { useContext, useEffect, useState } from "react";
 import Axios from "axios";
 import { UserContext } from "../../App";
 import { useNavigate, Link } from "react-router-dom";
@@ -11,9 +11,18 @@ const Login = () => {
   const BASE = "http://localhost:8000/login";
 
   const navigator = useNavigate();
-  const { user, loading, setLoading, setIsAuthenticated,IsAuthenticated, setUser,setData,data } =
-    useContext(UserContext); //there's a problem here (context)
-  const [issue, setIssue] = useState("");
+  const {
+    user,
+    loading,
+    setLoading,
+    setIsAuthenticated,
+    IsAuthenticated,
+    setUser,
+    setData,
+    data,
+    status,
+    setStatus,
+  } = useContext(UserContext); //there's a problem here (context)
 
   const handleChange = (e) => {
     setUser({ ...user, [e.target.name]: e.target.value });
@@ -26,22 +35,28 @@ const Login = () => {
       const response = await Axios.post(BASE, user);
 
       if (response.status === 200) {
+        setStatus(`${user.username} Logged in!`);
         console.log(response.data);
-        setData(response.data);
+        setData(response.data); //PROBLEM HERE
         setIsAuthenticated(true);
+      
         navigator("/");
       }
     } catch (error) {
       console.error(error);
-    //   if (error.response.status === 401) {
-    //     setIssue("Wrong Password, Please try again!");
-    //   } else if (error.response.status === 404) {
-    //     setIssue("Invalid Username, Please Check Again!");
-    //   }
+      if (error.response && error.response.status === 401) {
+        setStatus("Wrong password");
+      } else if (error.response && error.response.status === 400) {
+        setStatus("Wrong username!");
+      }
     } finally {
       setLoading(false);
     }
   }
+
+  useEffect(()=>{
+    console.log(`The global state = ${JSON.stringify(data)}`);
+  },[data])
 
   return IsAuthenticated ? (
     <div className="backgroundContainer">
@@ -73,7 +88,7 @@ const Login = () => {
           </p>
           <form onSubmit={Login} className="forms">
             <div className="inputLabelGrp">
-              <p>{issue}</p>
+              <h1>{status}</h1>
               <label htmlFor="username">Your username</label>
               <input
                 onChange={handleChange}
