@@ -1,9 +1,8 @@
 import "./ExamPage.css"
 import QuestionComponent from "../../components/QuestionComponent/QuestionComponent"
 import Axios from 'axios';
-import { Suspense } from 'react';
-import { ClipLoader } from 'react-spinners';
 import { useEffect, useState } from "react";
+import { ClipLoader } from 'react-spinners';
 import "//unpkg.com/mathlive";
 
 function InfoPanel() {
@@ -61,11 +60,12 @@ function ExamPageContent() {
     const [questions, setQuestions] = useState([]);
     const [correctAnswers, setCorrectAnswers] = useState([]);
     const [writtenAnswers, setWrittenAnswers] = useState([]);
-
+    const [isLoading, setIsLoading] = useState(true);
+    
     useEffect(() => {
         console.log(correctAnswers);
     }, [correctAnswers])
-
+    
     const getQuestion = async () => {
 
         const questionArray = [];
@@ -93,12 +93,14 @@ function ExamPageContent() {
         
             } catch (err) {
                 console.log(err);
+                setIsLoading(false);
             }
 
         }
 
         setQuestions(questionArray);
         setCorrectAnswers(answerArray);
+        setIsLoading(false);
 
     }
 
@@ -114,23 +116,30 @@ function ExamPageContent() {
 
     return (
         <>
-            <div className="exam-page">
-                <div className="questions-container">{questions}</div>
-                <button onClick={submitAnswers} className="submit">Submit Answers</button>
+        <div className="exam-page">
+            {isLoading ? (
+            <div className="clipLoaderContainer">
+                <ClipLoader color="#1fa3d5" loading={true} />
             </div>
+            ) : (
+            <>
+                <div className="questions-container">{questions}</div>
+                <button onClick={submitAnswers} className="submit">
+                Submit Answers
+                </button>
+                <InfoPanel />
+            </>
+            )}
+        </div>
         </>
-    )
+      );
 }
 
 function ExamPage() {
-
     return (
-        <Suspense fallback={<ClipLoader loading={true}/>}>
         <div className="container">
             <ExamPageContent />
-            <InfoPanel />
         </div>
-        </Suspense>
     )
 }
 
