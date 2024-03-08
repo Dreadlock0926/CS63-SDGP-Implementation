@@ -4,7 +4,7 @@ import { Link } from "react-router-dom";
 import { CountdownCircleTimer } from "react-countdown-circle-timer";
 import QuestionComponent from "../../components/QuestionComponent/QuestionComponent";
 import Axios from "axios";
-import "./ExamFinal.css";
+// import "./ExamFinal.css";
 import ExamCountDown from "./ExamCount-Down";
 // import { UserContext } from "../../App";
 

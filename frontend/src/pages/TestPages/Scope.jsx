@@ -99,7 +99,7 @@ const Scope = () => {
         const examJSON = JSON.stringify(response.data);
         sessionStorage.setItem("examData", examJSON);
 
-        window.location.href = "/examfinal";
+        window.location.href = "/exam";
       } catch (error) {}
     }
   };
