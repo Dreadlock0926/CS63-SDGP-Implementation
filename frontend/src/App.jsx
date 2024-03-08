@@ -1,14 +1,14 @@
-import  { useState, createContext } from "react";
+import { useState, createContext } from "react";
 import { BrowserRouter, Routes, Route } from "react-router-dom";
 import Home from "./pages/HomePage/home";
+import Login from "./pages/LoginPage/login";
 import AddQuestionsPage from "./pages/addQuestionsPage/addQuestions";
 import ErrorPage from "./components/Error404/ErrorPage";
+import ExamQuestionTest from "./pages/TestPages/ExamQuestionTest";
 import Scope from "./pages/TestPages/Scope";
 import ExamFinalized from "./pages/TestPages/ExamFinal";
 import FeedbackPage from "./pages/FeedbackPage/FeedbackPage";
 import ExamPage from "./pages/ExamPage/ExamPage";
-import Login from "./pages/AccountPage/login";
-import Register from "./pages/AccountPage/register";
 
 export const UserContext = createContext();
 
@@ -28,7 +28,6 @@ function App() {
           <Routes>
             <Route path="/" element={<Home />} />
             <Route path="login" element={<Login />} />
-            <Route path="register" element={<Register />} />
             <Route path="add-questions" element={<AddQuestionsPage />}/>
             <Route path="exam" element={<ExamPage />}/>
             <Route path="/examfinal" element={<ExamFinalized/>}></Route> {/**Incomplete */}
