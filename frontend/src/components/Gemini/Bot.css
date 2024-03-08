@@ -1,0 +1,13 @@
+
+.dabot{
+    border:12px solid black;
+    cursor: pointer;
+    margin:1%;
+}
+
+.askMe{
+    display:flex;
+    justify-content : space-around;
+}
+
+

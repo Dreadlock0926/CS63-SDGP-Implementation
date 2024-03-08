@@ -15,6 +15,19 @@ const session = require("express-session");
 const feedbackRoute = require("./routes/feedbacks")
 const examResources = require("./routes/exams")
 const { join } = require("path");
+const morgan = require("morgan");
+const gemini = require("./routes/gemini")
+
+function testingLog(req,res,next){ //remove in a while
+  if(req.session.user){ //user is logged in
+    console.log(`Session Exists! ${req?.session?.user}`)
+  
+  }else{ 
+    console.log("User Not Logged in!") //session is not being created properly!
+  
+  }
+  next();
+}
 
 app.use(express.json());
 app.use(cors({ origin: "*" })); //allow access from anywhere for now!
@@ -23,23 +36,27 @@ app.get("/", (req, res) => {
   res.status(200).send("<h1>Hey docker!</h1>");
 });
 
+const sessionConfig = session({
+  secret: "somerandomasskey123",
+  resave: true,
+  saveUninitialized: false,
+  cookie: { maxAge:60000 ,secure: true,httpOnly:true},
+})
+
 app.set("trust proxy", 1); // trust first proxy
 app.use(
-  session({
-    secret: "keyboard cat",
-    resave: false,
-    saveUninitialized: false,
-    cookie: { secure: true },
-  })
+    sessionConfig
 );
-
+app.use(morgan("dev"));
+app.use(testingLog);
 app.use("/home", home);
-app.use("/register", register);
 app.use("/login", login);
 app.use("/addQuestion", addQuestion);
 app.use("/getQuestionsOnTopic", getQuestionsOnTopic);
 app.use("/getQuestion", getQuestion);
 app.use("/exam",examResources);
+app.use("/register", register);
+app.use("/gemini",gemini)
 
 
 app.use("*", (req, res) => {

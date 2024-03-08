@@ -27,7 +27,7 @@
     height: 38px;
   }
   
-  /* Login & Signup button container */
+  /* Login & Register button container */
   .logContainer {
     margin-left: auto;
   }
@@ -50,8 +50,8 @@
     transition: 0.5s;
   }
   
-  /* Signup button */
-  .signupBtn {
+  /* Register button */
+  .registerBtn {
     padding: 12px;
     text-decoration: none;
     background-color: black;
@@ -60,8 +60,8 @@
     transition: 0.5s;
   }
   
-  /* Signup button hover effects */
-  .signupBtn:hover {
+  /* Register button hover effects */
+  .registerBtn:hover {
     background-color: white;
     color: black;
     transition: 0.5s;
