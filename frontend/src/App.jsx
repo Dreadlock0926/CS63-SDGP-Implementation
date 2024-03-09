@@ -8,6 +8,7 @@ import DashboardPage from "./pages/DashboardPage/DashboardPage";
 import Login from "./pages/AccountPage/login";
 import Register from "./pages/AccountPage/register";
 import Authenticate from "./pages/AccountPage/Authenticate";
+import Courses from "./components/Courses/Courses";
 
 export const UserContext = createContext();
 
@@ -111,6 +112,7 @@ function App() {
           <Route path="/dashboard" element={<DashboardPage />} />
           <Route path="/login" element={<Login />} />
           <Route path="/registration" element={<Register />} />
+          <Route path="/courses" element={<Courses />} />
           <Route path="/authenticate" element={<Authenticate />} />
           <Route path="*" element={<UnknownPage />} />
         </Routes>
