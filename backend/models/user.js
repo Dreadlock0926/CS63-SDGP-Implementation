@@ -15,7 +15,7 @@ const topicProbabilitiesSchema = new mongoose.Schema({
 
 const examHistory = new mongoose.Schema({
   examInfo: {
-    type: mongoose.Schema.Types.ObjectId,
+    type: [mongoose.Schema.Types.ObjectId],
     ref: "exams",
     required: true,
   },
