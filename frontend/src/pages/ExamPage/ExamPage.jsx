@@ -10,8 +10,9 @@ function InfoPanel() {
     <div className="info-panel">
       <div className="timer-container">
         <div className="timer-text">Time Remaining</div>
-        <ExamCountDown examType={"p1"} />
-        <div className="timer"></div>
+        <div className="timer">
+            <ExamCountDown examType={"p1"} />
+        </div>
       </div>
       <div className="questions-remaining">9 out of 11 Questions Answered</div>
       <div className="exam-info">
