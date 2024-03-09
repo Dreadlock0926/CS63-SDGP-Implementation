@@ -11,11 +11,11 @@ router.route("/").post(async (req, res) => {
   const validityUser = await userModel.findOne({ username });
 
   if (!validityUser) {
-    const passwordAuth = bcrypt.hashSync(password, 10);
+    // const passwordAuth = bcrypt.hashSync(password, 10);
 
-    await userModel.create({ username, password: passwordAuth });
+    await userModel.create({ username, password });
 
-    return res.status(200).json({ Alert: `${username} Registered!` });
+    return res.status(201).json({ Alert: `${username} Registered!` });
   } else {
     return res.status(409).json({ Alert: ` ${username} Already Exists!` });
   }

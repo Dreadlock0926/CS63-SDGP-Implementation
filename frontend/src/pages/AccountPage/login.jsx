@@ -43,11 +43,11 @@ const Login = () => {
       }
     } catch (error) {
       console.error(error);
-      //   if (error.response.status === 401) {
-      //     setIssue("Wrong Password, Please try again!");
-      //   } else if (error.response.status === 404) {
-      //     setIssue("Invalid Username, Please Check Again!");
-      //   }
+        if (error.response.status === 401) {
+          setIssue("Wrong Password, Please try again!");
+        } else if (error.response.status === 404) {
+          setIssue("Invalid Username, Please Try Again!");
+        }
     } finally {
       setLoading(false);
     }
@@ -77,7 +77,7 @@ const Login = () => {
           <p className="containerTitle">Login</p>
           <p className="containerText">
             Dont have an account?&nbsp;
-            <Link to="/register" style={{ color: "black" }}>
+            <Link to="/registration" style={{ color: "black" }}>
               Register
             </Link>
           </p>

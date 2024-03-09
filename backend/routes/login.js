@@ -12,7 +12,7 @@ router.route("/").post(async (req, res) => {
   const validityUser = await userModel.findOne({ username });
 
   if (!validityUser) {
-    return res.status(400).json({ Alert: "Invalid Username" });
+    return res.status(404).json({ Alert: "Invalid Username" });
   } else {
     // const passwordMatch = bcrypt.compareSync(password, validityUser.password);
     // if (!passwordMatch) {
