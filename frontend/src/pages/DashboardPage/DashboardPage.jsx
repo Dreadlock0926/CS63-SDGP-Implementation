@@ -246,7 +246,7 @@ function DashboardPage() {
     setCourse,
     ongoingCourse,
     setongoingCourses,
-
+    user,
     setUser,
     hoursLearned,
     setHoursLearned,
@@ -291,10 +291,8 @@ function DashboardPage() {
       }
     };
 
-  fetchData();
-
-
-
+    fetchData();
+  }, [user]);
 
   return (
     <>
