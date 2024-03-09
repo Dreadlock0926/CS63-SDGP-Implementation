@@ -31,7 +31,7 @@ const Register = () => {
         setStatus(`${user.username} Already Taken!`);
       } else {
         setStatus(
-          "An error occurred while registering. Please try again later."
+          `An error occurred while registering. Please try again later. ${err.response.status}`
         );
       }
       console.error(err);

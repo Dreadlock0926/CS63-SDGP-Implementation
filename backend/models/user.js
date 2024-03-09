@@ -1,31 +1,37 @@
+const examModel = require("./exam");
+const examTopicSchema = require("./examTopic");
 const mongoose = require("mongoose");
 
-const examSchema = new mongoose.Schema({
-  examType: { type: String, required: true },
-
-  examQuestions: { type: Array, required: true },
-
-  userRef: {
-    type: mongoose.Schema.Types.ObjectId,
-    ref: "users",
+const topicProbabilitiesSchema = new mongoose.Schema({
+  moduleType: {
+    type: String,
     required: true,
   },
+  topicProbabilities: {
+    type: [examTopicSchema],
+    default: [],
+  },
+});
 
-  userAnswers: {
+const examHistory = new mongoose.Schema({
+  examInfo: {
+    type: [examModel],
+    default: [],
+  },
+
+  userCorrectAnswers: {
     type: [String],
     default: [],
   },
 
-  examModule: {
-    type: String,
+  userWrongAnswers: {
+    type: [String],
+    default: [],
   },
 
-  examTopic: {
-    type: String,
-  },
-
-  mark: {
-    type: Number,
+  topicProbabilitiesForModules: {
+    type: [topicProbabilitiesSchema],
+    default: [],
   },
 });
 
@@ -53,7 +59,7 @@ const progressionSchema = new mongoose.Schema({
   },
 
   examHistory: {
-    type: [examSchema],
+    type: [examHistory],
     default: [],
   },
 
