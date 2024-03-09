@@ -29,7 +29,7 @@ function InfoPanel() {
     );
 }
 
-function ExamPageContent() {
+function ExamPageContent({setIsLoadingInfo}) {
 
     function QuestionOnPage({question, mqNum}) {
 
@@ -94,6 +94,7 @@ function ExamPageContent() {
             } catch (err) {
                 console.log(err);
                 setIsLoading(false);
+                setIsLoadingInfo(false);
             }
 
         }
@@ -101,6 +102,7 @@ function ExamPageContent() {
         setQuestions(questionArray);
         setCorrectAnswers(answerArray);
         setIsLoading(false);
+        setIsLoadingInfo(false);
 
     }
 
@@ -118,8 +120,8 @@ function ExamPageContent() {
         <>
         <div className="exam-page">
             {isLoading ? (
-            <div className="clipLoaderContainer">
-                <ClipLoader color="#1fa3d5" loading={true} />
+            <div className="loader-container">
+                <ClipLoader size={450} color="#1fa3d5" loading={true} />
             </div>
             ) : (
             <>
@@ -127,7 +129,6 @@ function ExamPageContent() {
                 <button onClick={submitAnswers} className="submit">
                 Submit Answers
                 </button>
-                <InfoPanel />
             </>
             )}
         </div>
@@ -136,9 +137,16 @@ function ExamPageContent() {
 }
 
 function ExamPage() {
+    const [isLoadingInfo, setIsLoadingInfo] = useState(true);
+
+    useEffect(() => {
+        console.log(isLoadingInfo);
+    }, [isLoadingInfo])
+
     return (
         <div className="container">
-            <ExamPageContent />
+            <ExamPageContent setIsLoadingInfo={setIsLoadingInfo} />
+            {!isLoadingInfo && <InfoPanel />}
         </div>
     )
 }
