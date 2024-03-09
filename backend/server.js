@@ -9,6 +9,7 @@ const session = require("express-session");
 const helmet = require("helmet");
 const { join } = require("path");
 const progression = require("./routes/progression");
+const gemini = require("./routes/gemini");
 
 const login = require("./routes/login");
 const register = require("./routes/register");
@@ -49,6 +50,7 @@ app.use(
 
 app.use("/login", login);
 app.use("/register", register);
+app.use("/gemini", gemini);
 app.use("/progression", progression);
 
 app.use("*", (req, res) => {
