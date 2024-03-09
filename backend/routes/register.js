@@ -13,7 +13,18 @@ router.route("/").post(async (req, res) => {
   if (!validityUser) {
     // const passwordAuth = bcrypt.hashSync(password, 10);
 
-    await userModel.create({ username, password });
+    const initialCourses = [
+      { courseName: "PureMathematics" },
+      { courseName: "Statistics" },
+    ];
+
+    await userModel.create({
+      username,
+      password, // Assuming you have a hashed password
+      progress: {
+        courses: initialCourses,
+      },
+    });
 
     return res.status(201).json({ Alert: `${username} Registered!` });
   } else {
