@@ -1,4 +1,3 @@
-const examModel = require("./exam");
 const examTopicSchema = require("./examTopic");
 const mongoose = require("mongoose");
 
@@ -38,6 +37,11 @@ const examHistory = new mongoose.Schema({
 
 const courseSchema = new mongoose.Schema({
   courseName: {
+    type: String,
+    required: true,
+  },
+
+  couseDescription: {
     type: String,
     required: true,
   },
