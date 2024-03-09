@@ -33,25 +33,23 @@ router.route("/").post(async (req, res) => {
 });
 
 router.route("/getQuestionsForExam").post(async (req, res) => {
-  const { topics } = req?.body;
+  const { topic } = req?.body; // Update to use 'topic' instead of 'topics'
 
-  console.log("topics", topics);
+  console.log("topic", topic);
 
-  if (!topics || !Array.isArray(topics)) {
-    return res
-      .status(400)
-      .json({ message: "Invalid or missing topics query parameter" });
+  if (!topic) {
+    return res.status(400).json({ message: "Missing topic query parameter" });
   }
 
   try {
     const questions = await questionModel.find({
-      questionTopic: { $in: topics }, // Efficiently match against multiple topics
+      questionTopic: topic, // Directly compare with the single topic string
     });
 
     if (!questions || questions.length === 0) {
       return res
         .status(404)
-        .json({ message: "No questions found for the specified topics" });
+        .json({ message: "No questions found for the specified topic" });
     }
 
     res.json(questions);

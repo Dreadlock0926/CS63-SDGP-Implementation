@@ -44,13 +44,13 @@ router.route("/getQuestionInfo").post(async (req, res) => {
 
   if (source !== "Default") {
     if (!source)
-      return res.status(400).json({ Alert: "The source is missing!" });
+      return res.status(400).json({ message: "The source is missing!" });
     const sourceData = await topicsModel.findOne({ source });
 
     if (!sourceData) {
       res
         .status(400)
-        .json({ Alert: "The source data is not matching records." });
+        .json({ message: "The source data is not matching records." });
     } else {
       res.status(200).json(sourceData);
     }

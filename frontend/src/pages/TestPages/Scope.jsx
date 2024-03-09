@@ -1,10 +1,8 @@
 /* eslint-disable no-unused-vars */
 import { useEffect, useReducer, useState } from "react";
 import Axios from "axios";
-import "./Scope.css";
 
 const Scope = () => {
-  const [selectAllTopics, setSelectAllTopics] = useState(false);
   const [questions, setQuestions] = useState({});
 
   const reducer = (state, action) => {
@@ -26,7 +24,7 @@ const Scope = () => {
     modules: [],
     topics: [],
     selectedModule: "Pure Mathematics I",
-    selectedTopic: [],
+    selectedTopic: "",
   };
 
   const [state, dispatch] = useReducer(reducer, initialState);
@@ -41,6 +39,7 @@ const Scope = () => {
       );
 
       dispatch({ type: "FETCH_TOPICS", payload: response.data.topics });
+      dispatch({ type: "SELECT_TOPIC", payload: response.data.topics[0] });
     } catch (error) {}
   };
 
@@ -62,20 +61,16 @@ const Scope = () => {
   }, []);
 
   const handleTopicChange = (event) => {
-    setSelectAllTopics(false);
+    dispatch({ type: "SELECT_TOPIC", payload: event.target.value });
 
-    const { checked } = event.target;
-    const newSelectedTopics = checked
-      ? [...state.selectedTopic, event.target.value]
-      : state.selectedTopic.filter((topic) => topic !== event.target.value);
-
-    dispatch({ type: "SELECT_TOPIC", payload: newSelectedTopics });
+    setQuestions({});
   };
 
   const handleModuleChange = (event) => {
-    setSelectAllTopics(false);
-    dispatch({ type: "SELECT_TOPIC", payload: [] });
+    dispatch({ type: "SELECT_TOPIC", payload: state.topics[0] });
     dispatch({ type: "SELECT_MODULE", payload: event.target.value });
+
+    setQuestions({});
     getTopics(event.target.value);
   };
 
@@ -85,11 +80,10 @@ const Scope = () => {
       return;
     } else {
       try {
-        console.log("state.selectedTopic", state.selectedTopic);
         const response = await Axios.post(
           "http://localhost:8000/getQuestionsOnTopic/getQuestionsForExam",
           {
-            topics: state.selectedTopic,
+            topic: state.selectedTopic,
           }
         );
 
@@ -120,37 +114,19 @@ const Scope = () => {
             ))}
           </select>
 
-          <button
-            onClick={() => {
-              if (!selectAllTopics) {
-                dispatch({ type: "SELECT_TOPIC", payload: state.topics });
-                setSelectAllTopics(true);
-              } else {
-                dispatch({ type: "SELECT_TOPIC", payload: [] });
-                setSelectAllTopics(false);
-              }
-            }}
+          <select
+            name="topicsDropdown"
+            onChange={handleTopicChange}
+            value={state.selectedTopic}
           >
-            {selectAllTopics ? "De-select All" : "Select All"}
-          </button>
-
-          <ul className="topicsCheckbox">
             {state.topics.map((topic, i) => (
-              <li key={i}>
-                <input
-                  type="checkbox"
-                  name="topic"
-                  value={topic}
-                  checked={
-                    false || state.selectedTopic.includes(topic) ? true : false
-                  }
-                  onChange={handleTopicChange}
-                />
+              <option key={i} value={topic}>
                 {topic}
-              </li>
+              </option>
             ))}
-          </ul>
-          <p>Selected Topic: {state.selectedTopic.join(", ")}</p>
+          </select>
+
+          <p>Selected Topic: {state.selectedTopic}</p>
           <p>Selected Module: {state.selectedModule}</p>
           <button onClick={retrieveQuestions}>Get Questions</button>
 
