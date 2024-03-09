@@ -15,8 +15,9 @@ const topicProbabilitiesSchema = new mongoose.Schema({
 
 const examHistory = new mongoose.Schema({
   examInfo: {
-    type: [examModel],
-    default: [],
+    type: mongoose.Schema.Types.ObjectId,
+    ref: "exams",
+    required: true,
   },
 
   userCorrectAnswers: {
