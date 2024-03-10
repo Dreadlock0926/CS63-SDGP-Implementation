@@ -34,7 +34,6 @@ const Login = () => {
       const response = await Axios.post(BASE, user);
 
       if (response.status === 200) {
-        console.log(response.data);
         setData(response.data);
         setIsAuthenticated(true);
 
@@ -43,11 +42,11 @@ const Login = () => {
       }
     } catch (error) {
       console.error(error);
-        if (error.response.status === 401) {
-          setIssue("Wrong Password, Please try again!");
-        } else if (error.response.status === 404) {
-          setIssue("Invalid Username, Please Try Again!");
-        }
+      if (error.response.status === 401) {
+        setIssue("Wrong Password, Please try again!");
+      } else if (error.response.status === 404) {
+        setIssue("Invalid Username, Please Try Again!");
+      }
     } finally {
       setLoading(false);
     }

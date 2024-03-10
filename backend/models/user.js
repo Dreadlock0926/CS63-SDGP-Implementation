@@ -43,7 +43,7 @@ const courseSchema = new mongoose.Schema({
 
   couseDescription: {
     type: String,
-    required: true,
+    default: "No Description",
   },
 
   noOfLessons: {

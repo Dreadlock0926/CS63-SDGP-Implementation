@@ -8,7 +8,7 @@ import DashboardPage from "./pages/DashboardPage/DashboardPage";
 import Login from "./pages/AccountPage/login";
 import Register from "./pages/AccountPage/register";
 import Authenticate from "./pages/AccountPage/Authenticate";
-import Courses from "./components/Courses/Courses";
+import SelectCourses from "./components/Courses/SelectCourses";
 
 export const UserContext = createContext();
 
@@ -36,24 +36,15 @@ function App() {
 
   const [loggedInUser, setLoggedInUser] = useState({
     username: "", // Assuming username is required
-    password: "", // Assuming password is required (not used in this example)
-    marks: 0,
-    testHistory: {
-      Maths: [0], // Assuming Maths is an array of marks
-      Statistics: [0], // Assuming Statistics is an array of marks
-    },
-    testnumber: 0,
-    voxalPoints: 0,
-    hoursLearned: 0,
-    ongoingCourses: 0,
-    completeCourse: 0,
-    PureMathematics: {
-      learnedProgress: 0,
-      lesson: 0,
-    },
-    Statistics: {
-      learnedProgress: 0,
-      lesson: 0,
+    password: "", // Assuming password is required (not shown for security)
+    progress: {
+      marks: 0,
+      examHistory: [],
+      voxalPoints: 0,
+      hoursLearned: 0,
+      ongoingCourses: 0,
+      completeCourse: 0,
+      courses: [],
     },
   });
 
@@ -112,7 +103,7 @@ function App() {
           <Route path="/dashboard" element={<DashboardPage />} />
           <Route path="/login" element={<Login />} />
           <Route path="/registration" element={<Register />} />
-          <Route path="/courses" element={<Courses />} />
+          <Route path="/select-courses" element={<SelectCourses />} />
           <Route path="/authenticate" element={<Authenticate />} />
           <Route path="*" element={<UnknownPage />} />
         </Routes>

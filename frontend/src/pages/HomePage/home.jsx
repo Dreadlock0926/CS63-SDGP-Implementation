@@ -13,7 +13,9 @@ function Home() {
   useEffect(() => {
     if (sessionStorage.getItem("loggedUser")) {
       setIsAuthenticated(true);
-      setUser(JSON.parse(sessionStorage.getItem("loggedUser")));
+      setUser(JSON.parse(sessionStorage.getItem("loggedUser")).data);
+
+      console.log(user);
     }
   }, [isAuthenticated]);
 
