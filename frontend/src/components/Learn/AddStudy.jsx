@@ -10,15 +10,17 @@ import Loading from "../Loading";
 import "./Add.css";
 
 const AddStudy = () => {
-  const { loading, setLoading, status, setStatus,navigator } = useContext(UserContext);
- 
+  const { loading, setLoading, status, setStatus, navigator } =
+    useContext(UserContext);
+  const BASE = "http://localhost:8000/resources";
+
   const [data, setData] = useState({
     topic: "Pure Mathematics I",
     title: "",
     about: "",
     subtopic: "",
-    photo:null,
-    url: ""
+    photo: null,
+    url: "",
   });
 
   const theDrop = useRef();
@@ -27,21 +29,21 @@ const AddStudy = () => {
     e.preventDefault();
     try {
       setLoading(true);
-     
+
       console.log(data);
       const userForm = new FormData();
-      userForm.append("topic",data.topic);
-      userForm.append("title",data.title);
-      userForm.append("about",data.about);
-      userForm.append("subtopic",data.subtopic);
-      userForm.append("image",data.photo);
-      userForm.append("url",data.url);
+      userForm.append("topic", data.topic);
+      userForm.append("title", data.title);
+      userForm.append("about", data.about);
+      userForm.append("subtopic", data.subtopic);
+      userForm.append("image", data.photo);
+      userForm.append("url", data.url);
       // console.log(userForm);
-      const resources = await Axios.post("http://localhost:8000/resources", data );
+      const resources = await Axios.post(BASE, data);
       // {headers: {"Content-Type": "multipart/form-data"}
       //if we need images to be sent we need to use forms , rn the form is not sending the data properly!
       //there's a problem here
-   
+
       if (resources.data.status === 201) {
         setStatus("Added Resource!");
         setTimeout(() => {
@@ -51,12 +53,18 @@ const AddStudy = () => {
       }
     } catch (err) {
       console.error(err);
-      if(err.data && err.data.status===409){
-        setStatus(`${data.title} Already exists!`)
+      if (err.data && err.data.status === 409) {
+        setStatus(`${data.title} Already exists!`);
       }
     } finally {
       setLoading(false);
-      setData({ topic: "Pure Mathematics I", title: "", about: "", subtopic: "", url: "" });
+      setData({
+        topic: "Pure Mathematics I",
+        title: "",
+        about: "",
+        subtopic: "",
+        url: "",
+      });
       // theDrop.current.value = "Pure Mathematics I";
     }
   };
@@ -69,19 +77,24 @@ const AddStudy = () => {
     setData({ ...data, topic: e.target.value });
   };
 
-  const handleFile = (e)=>{
-    setData({...data,[e.target.name]:e.target.file[0]})
-  }
+  const handleFile = (e) => {
+    setData({ ...data, [e.target.name]: e.target.file[0] });
+  };
 
   return (
     <>
       {loading ? (
-        <Loading/>
+        <Loading />
       ) : (
         <div className="addQues">
           <h1>Adding Learning Resources 📚🐳</h1>
           <form onSubmit={addMaterial}>
-            <select onChange={handleDrop} name="topic" ref={theDrop} value={data.topic}>
+            <select
+              onChange={handleDrop}
+              name="topic"
+              ref={theDrop}
+              value={data.topic}
+            >
               <option value="Pure Mathematics I">Pure Math 1</option>
               <option value="Probability And Statistics">Statistics</option>
             </select>
@@ -99,11 +112,12 @@ const AddStudy = () => {
               placeholder="Enter about"
               type="text"
             ></input>
-             {/* <input
+            {/* <input
               onChange={handleFile}
               type="file"
               name="photo"
-            ></input> */} {/**UNCOMMENT IF YALL WANNA UPLOAD IMAGES LUL */}
+            ></input> */}{" "}
+            {/**UNCOMMENT IF YALL WANNA UPLOAD IMAGES LUL */}
             <input
               onChange={handleChange}
               name="subtopic"

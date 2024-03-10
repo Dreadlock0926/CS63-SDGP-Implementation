@@ -1,6 +1,7 @@
 const express = require("express");
 const router = express.Router();
 const learningModel = require("../models/learningResources");
+const topicsModel = require("../models/topics");
 //needs to be put in a controller
 //logic here must be changed
 //we need multer if photo uploads are needed
@@ -8,8 +9,8 @@ const learningModel = require("../models/learningResources");
 router
   .route("/")
   .post(async (req, res) => {
-    const { topic, title, about, subtopic,url } = req?.body;
-    const {file:image} = req;  //if uploading images is a must
+    const { topic, title, about, subtopic, url } = req?.body;
+    const { file: image } = req; //if uploading images is a must
 
     //we could implement images (cloudinary possibly) logic here if y'all want!
 
@@ -20,80 +21,87 @@ router
     }
 
     try {
-    const titleExists = await learningModel.findOne({title});
-    if(!titleExists){
-      await learningModel.create({ topic, title, about,photo:image, subtopic , url}); 
-      return res
-        .status(201)
-        .json({ Alert: "Added Learning Resource to Learn" });
-    }else{
-      res.status(409).json({Alert:`${title} Already Exists!`})
-    }
-    
+      const titleExists = await learningModel.findOne({ title });
+      if (!titleExists) {
+        await learningModel.create({
+          topic,
+          title,
+          about,
+          photo: image,
+          subtopic,
+          url,
+        });
+        return res
+          .status(201)
+          .json({ Alert: "Added Learning Resource to Learn" });
+      } else {
+        res.status(409).json({ Alert: `${title} Already Exists!` });
+      }
     } catch (error) {
       console.error(error);
       return res.status(500).json({ Alert: "Internal Server Error" });
     }
-  }).get(async (req,res)=>{
-    try{
+  })
+  .get(async (req, res) => {
+    try {
       const data = await learningModel.find();
-      res.status(200).json(data); 
-    }catch(err){
+      res.status(200).json(data);
+    } catch (err) {
       console.error(err);
     }
   });
 
-  router.route("/topic").post(async (req,res)=>{
-    const topic = req?.body?.topic;
-    if(!topic){
-      const everything = await learningModel.find();
-      if(everything && everything.length>0){
-              res.status(200).json(everything)
-      }else{
-        res.status(203).json({Alert:"No Resources found in general"})
-      }
-
-    }else if(topic==="Pure Mathematics I"){
-      const pureMath = await learningModel.find({topic:"Pure Mathematics I"});
-      if(pureMath && pureMath.length > 0 ){
-        res.status(200).json(pureMath)
-      }else{
-        res.status(203).json({Alert:"No Pure Mathematics Resources found!"})
-      }
-    }else if(topic==="Probability And Statistics"){
-      const Statistics = await learningModel.find({topic:"Probability And Statistics"});
-      if(Statistics && Statistics.length > 0 ){
-        res.status(200).json(Statistics)
-      }else{
-        res.status(203).json({Alert:"No Statstics Resources found!"})
-      }
+router.route("/topic").post(async (req, res) => {
+  const topic = req?.body?.topic;
+  if (!topic) {
+    const everything = await learningModel.find();
+    if (everything && everything.length > 0) {
+      res.status(200).json(everything);
+    } else {
+      res.status(203).json({ Alert: "No Resources found in general" });
     }
-  })
-
-  router.route("/topic/id").post(async (req,res)=>{
-    const id = req?.params?.id;
-    const topic = req?.body?.topic;
-    if(!topic || !id){
-      res.status(400).json({Alert:"Topic and ID is required!"})
-
-    }else if(topic==="Pure Mathematics I"){
-      const pureMath = await learningModel.find({topic:"Pure Mathematics I"});
-      if(pureMath && pureMath.length > 0 ){
-        res.status(200).json(pureMath)
-      }else{
-        res.status(203).json({Alert:"No Pure Mathematics Resources found!"})
-      }
-    }else if(topic==="Probability And Statistics"){
-      const Statistics = await learningModel.find({topic:"Probability And Statistics"});
-      if(Statistics && Statistics.length > 0 ){
-        res.status(200).json(Statistics)
-      }else{
-        res.status(203).json({Alert:"No Statstics Resources found!"})
-      }
+  } else if (topic === "Pure Mathematics I") {
+    const pureMath = await learningModel.find({ topic: "Pure Mathematics I" });
+    if (pureMath && pureMath.length > 0) {
+      res.status(200).json(pureMath);
+    } else {
+      res.status(203).json({ Alert: "No Pure Mathematics Resources found!" });
     }
-  })
+  } else if (topic === "Probability And Statistics") {
+    const Statistics = await learningModel.find({
+      topic: "Probability And Statistics",
+    });
+    if (Statistics && Statistics.length > 0) {
+      res.status(200).json(Statistics);
+    } else {
+      res.status(203).json({ Alert: "No Statstics Resources found!" });
+    }
+  }
+});
 
-
+router.route("/topic/:id").post(async (req, res) => {
+  const id = req?.params?.id;
+  const topic = req?.body?.topic;
+  if (!topic || !id) {
+    res.status(400).json({ Alert: "Topic and ID is required!" });
+  } else if (topic === "Pure Mathematics I") {
+    const pureMath = await learningModel.find({ topic: "Pure Mathematics I" });
+    if (pureMath && pureMath.length > 0) {
+      res.status(200).json(pureMath);
+    } else {
+      res.status(203).json({ Alert: "No Pure Mathematics Resources found!" });
+    }
+  } else if (topic === "Probability And Statistics") {
+    const Statistics = await learningModel.find({
+      topic: "Probability And Statistics",
+    });
+    if (Statistics && Statistics.length > 0) {
+      res.status(200).json(Statistics);
+    } else {
+      res.status(203).json({ Alert: "No Statstics Resources found!" });
+    }
+  }
+});
 
 router
   .route("/:id")
@@ -135,5 +143,19 @@ router
       }
     }
   });
+
+router.route("/topic/learned").get(async (req, res) => {
+  try {
+    const theTopics = await topicsModel.find();
+    if (theTopics && theTopics.length) {
+      res.status(200).json(theTopics);
+    } else {
+      res.status(404).json({ Alert: "No results found!" });
+    }
+  } catch (err) {
+    console.error(err);
+    return res.status(500).json({ Alert: err });
+  }
+});
 
 module.exports = router;

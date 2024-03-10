@@ -1,5 +1,6 @@
 import Axios from "axios";
 import { useEffect, useState } from "react";
+import { useParams } from "react-router-dom";
 import "./Pure.css";
 import {
   Container,
@@ -11,29 +12,49 @@ import {
 } from "@mui/material";
 
 const LearningPureMaths = () => {
+  const BASE = "http://localhost:8000/resources/topic";
   const [resources, setResources] = useState([]);
+  const [theTopics, setTheTopics] = useState([]);
+  const [status, setStatus] = useState("");
+  const { id } = useParams();
 
   async function PureMathsRelated() {
     try {
-      const { data } = await Axios.post(
-        "http://localhost:8000/resources/topic",
-        { topic: "Pure Mathematics I" }
-      );
+      const { data } = await Axios.post(`${BASE}/${id}`, {
+        topic: "Pure Mathematics I",
+      });
       setResources(data);
     } catch (err) {
       console.error(err);
     }
   }
 
+  async function getTopics() {
+    try {
+      const theTopics = await Axios.get(`${BASE}/learned`);
+      if (theTopics.data.status === 200) {
+        setTheTopics(theTopics.data);
+      }
+    } catch (err) {
+      console.error(err);
+      if (err.data.status === 404) {
+        setStatus("No resources found!");
+      }
+    }
+  }
+
   useEffect(() => {
     PureMathsRelated();
+    getTopics();
+    console.log(JSON.stringify(theTopics));
   }, []);
 
   return (
     <Container maxWidth="md" sx={{ textAlign: "center", marginTop: "5%" }}>
       <Typography variant="h3" gutterBottom>
-        Pure Maths Materials
+        Pure Maths I
       </Typography>
+      <div>{theTopics && theTopics.length? JSON.stringify(theTopics) : "No topics found!"}</div>
       {resources && resources.length ? (
         resources.map((resource) => (
           <Card
@@ -68,9 +89,10 @@ const LearningPureMaths = () => {
                 Go to Resource
               </Button>
             </CardContent>
+            <p>{status}</p>
           </Card>
         ))
-      ) : ( 
+      ) : (
         <Typography variant="h4">No Pure Maths resources found!</Typography>
       )}
     </Container>

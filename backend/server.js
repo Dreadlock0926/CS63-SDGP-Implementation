@@ -13,7 +13,7 @@ const morgan = require("morgan");
 
 
 app.use(cors({ origin: "*" }));  //allow access from anywhere for now!
-app.use(morgan("combined"));
+app.use(morgan("dev"));
 app.use(express.urlencoded());
 app.use(helmet());
 app.use(express.json());
