@@ -14,7 +14,6 @@ import {
 const All = ({
   x,
   theKey,
-  key,
   nerdPointsIncrement,
   increaseVotes,
   downVote,
@@ -28,7 +27,7 @@ const All = ({
       <Typography variant="h4">{x.question}</Typography>
       <Typography variant="body1">{x.description}</Typography>
       <Typography variant="h4">Responses:</Typography>
-      {x?.answers && x.answers.length ? (
+      {x?.answers ? (
         x.answers.map((answer, index) => (
           <div key={index} style={{ marginBottom: "10px" }}>
             <Typography variant="h6">{answer.text}</Typography>
