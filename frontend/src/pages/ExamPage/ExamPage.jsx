@@ -61,9 +61,9 @@ function ExamPageContent({setIsLoadingInfo}) {
 
     const [questions, setQuestions] = useState([]);
     const [correctAnswers, setCorrectAnswers] = useState([]);
-    const [writtenAnswers, setWrittenAnswers] = useState([]);
     const [isLoading, setIsLoading] = useState(true);
-    
+    let writtenAnswers = [];
+
     useEffect(() => {
         console.log(correctAnswers);
     }, [correctAnswers])
