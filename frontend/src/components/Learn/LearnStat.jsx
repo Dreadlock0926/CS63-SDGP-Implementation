@@ -6,20 +6,38 @@ import { Link } from "react-router-dom";
 
 
 const LearningStatistics = () => {
-
+  const BASE = "http://localhost:8000/resources/topic";
   const [resource,setResources] = useState([])
+  const [theTopics, setTheTopics] = useState([]);
+  const [status, setStatus] = useState("");
 
   async function StatRelated(){
     try{
-      const response = await Axios.post("http://localhost:8000/resources/topic",{topic:"Probability And Statistics"}); //might have to change these routes
+      const response = await Axios.post(BASE,{topic:"Probability And Statistics"}); //might have to change these routes
       setResources(response.data)
     }catch(err){
       console.error(err);
     }
   }
 
+  async function getTopics() {
+    try {
+      const theTopics = await Axios.get(`${BASE}/learned`);
+      if (theTopics.data.status === 200) {
+        setTheTopics(theTopics.data);
+      }
+    } catch (err) {
+      console.error(err);
+      if (err.data.status === 404) {
+        setStatus("No resources found!");
+      }
+    }
+  }
+
+
   useEffect(()=>{
     StatRelated();
+    getTopics();
   },[])
 
 

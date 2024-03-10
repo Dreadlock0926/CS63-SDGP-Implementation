@@ -116,7 +116,7 @@ const AddStudy = () => {
               onChange={handleFile}
               type="file"
               name="photo"
-            ></input> */}{" "}
+            ></input> */}
             {/**UNCOMMENT IF YALL WANNA UPLOAD IMAGES LUL */}
             <input
               onChange={handleChange}

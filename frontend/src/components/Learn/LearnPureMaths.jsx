@@ -54,7 +54,25 @@ const LearningPureMaths = () => {
       <Typography variant="h3" gutterBottom>
         Pure Maths I
       </Typography>
-      <div>{theTopics && theTopics.length? JSON.stringify(theTopics) : "No topics found!"}</div>
+      <div className="pure-container">
+        {theTopics && theTopics.length ? (
+          <div className="learned">
+            <h1>Learned</h1>
+            <p>{theTopics.topics}</p>
+          </div>
+        ) : (
+          "No topics found!"
+        )}
+        <br />
+        {theTopics && theTopics.length ? (
+          <div className="tested">
+            <h1>Tested</h1>
+            <p>{theTopics.topics}</p>
+          </div>
+        ) : (
+          "No tests found!"
+        )}
+      </div>
       {resources && resources.length ? (
         resources.map((resource) => (
           <Card
