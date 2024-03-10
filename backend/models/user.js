@@ -43,7 +43,7 @@ const courseSchema = new mongoose.Schema({
 
   couseDescription: {
     type: String,
-    required: true,
+    default: "",
   },
 
   noOfLessons: {
@@ -64,8 +64,8 @@ const progressionSchema = new mongoose.Schema({
   },
 
   examHistory: {
-    type: [examHistory],
-    default: [],
+    type: examHistory,
+    default: {},
   },
 
   voxalPoints: {

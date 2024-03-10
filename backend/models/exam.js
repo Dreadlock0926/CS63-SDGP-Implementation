@@ -18,6 +18,7 @@ const examSchema = new mongoose.Schema({
 
   examModule: {
     type: String,
+    required: true,
   },
 
   examTopic: {
