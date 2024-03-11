@@ -56,7 +56,7 @@ const Login = () => {
   return IsAuthenticated ? (
     <div className="backgroundContainer">
       <img alt="background" className="bgImg2" src="./images/background2.png" />
-      <div className="container">
+      <div className="a-container">
         <img alt="avatar" className="avItem2" src="./images/avatar.png" />
         <h1 style={{ textAlign: "center" }}>
           Hi {data.username} your logged in!
@@ -72,7 +72,7 @@ const Login = () => {
           className="bgImg2"
           src="./images/background2.png"
         />
-        <div className="container">
+        <div className="a-container">
           <img alt="avatar" className="avItem2" src="./images/avatar.png" />
           <p className="containerTitle">Login</p>
           <p className="containerText">
@@ -86,6 +86,7 @@ const Login = () => {
               <p>{issue}</p>
               <label htmlFor="username">Your username</label>
               <input
+                className="input-btn"
                 onChange={handleChange}
                 type="text"
                 id="username"
@@ -96,6 +97,7 @@ const Login = () => {
             <div className="inputLabelGrp">
               <label htmlFor="password">Your password</label>
               <input
+                className="input-btn"
                 onChange={handleChange}
                 type="password"
                 id="password"

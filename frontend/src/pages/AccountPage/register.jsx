@@ -54,7 +54,7 @@ const Register = () => {
           className="bgImg2"
           src="./images/background2.png"
         />
-        <div className="container">
+        <div className="a-container">
           <img alt="avatar" className="avItem2" src="./images/avatar.png" />
           <p className="containerTitle">Register</p>
           <p className="containerText">
@@ -68,6 +68,7 @@ const Register = () => {
               <p>{status}</p>
               <label htmlFor="username">Your username</label>
               <input
+                className="input-btn"
                 type="text"
                 id="username"
                 name="username"
@@ -79,6 +80,7 @@ const Register = () => {
             <div className="inputLabelGrp">
               <label htmlFor="password">Your password</label>
               <input
+                className="input-btn"
                 type="password"
                 id="password"
                 name="password"

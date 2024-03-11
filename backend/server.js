@@ -13,6 +13,10 @@ const gemini = require("./routes/gemini");
 const exam = require("./routes/exam");
 const login = require("./routes/login");
 const register = require("./routes/register");
+const addQuestion = require("./routes/addQuestion");
+const getQuestion = require("./routes/getQuestion")
+const getQuestionsOnTopic = require("./routes/getQuestionsOnTopic")
+const examResources = require("./routes/exams")
 const cookieParser = require("cookie-parser");
 
 async function authenticated(req, res, next) {
@@ -52,7 +56,10 @@ app.use("/login", login);
 app.use("/register", register);
 app.use("/gemini", gemini);
 app.use("/progression", progression);
-app.use("/exam", exam);
+app.use("/addQuestion", addQuestion);
+app.use("/getQuestionsOnTopic", getQuestionsOnTopic);
+app.use("/getQuestion", getQuestion);
+app.use("/exam",examResources);
 
 app.use("*", (req, res) => {
   //leave this below all the other routes cuz this is the LAST RESORT JUST INCASE THE requested url is neither of the existing routes

@@ -150,7 +150,7 @@ function ExamPage() {
     }, [isLoadingInfo])
 
     return (
-        <div className="container">
+        <div className="exams-container">
             <ExamPageContent setIsLoadingInfo={setIsLoadingInfo} />
             {!isLoadingInfo && <InfoPanel />}
         </div>

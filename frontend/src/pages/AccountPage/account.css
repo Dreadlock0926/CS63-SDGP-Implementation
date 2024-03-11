@@ -1,4 +1,4 @@
-.container {
+.a-container {
     position: absolute;
     top: 40%;
     left: 50%;
@@ -19,6 +19,8 @@
   }
   
   .forms {
+    display: flex;
+    flex-direction: column;
     padding: 30px;
   }
   
@@ -44,9 +46,8 @@
     color: #666666;
   }
   
-  input[type="email"],
-  input[type="password"],
-  input[type="text"] {
+
+  .input-btn {
     width: 100%;
     padding: 14px 8px;
     margin-top: 4px;

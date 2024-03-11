@@ -8,10 +8,13 @@ import "./FeedbackPage.css";
 const FeedbackPage = () => {
 
     const {
-        user
+        loggedInUser,
+        setLoggedInUser
     } = useContext(UserContext);
 
-    console.log(user);
+    useEffect(() => {
+        setLoggedInUser(JSON.parse(sessionStorage.getItem("loggedUser")).data);
+      }, []);
 
     //Get correct answers from the UserData
     const [correctAnswers, setCorrectAnswers] = useState(["p1_q_3_w_2022_2", "p1_f_11_s_2015_2", "p1_f_1_w_2015_2", "p1_cg_1_w_2022_2", 'p1_i_9_w_2015_2', 'p1_i_10_w_2015_2', 'p1_d_5_s_2015_1','p1_d_2_s_2015_1']);
@@ -83,6 +86,7 @@ const FeedbackPage = () => {
             console.log(error);
           })
 
+    console.log(loggedInUser);
     }
 
     const getAvailableQuestions = (questionsList) => {
