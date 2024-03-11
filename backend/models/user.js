@@ -104,6 +104,10 @@ const userSchema = new mongoose.Schema(
       type: progressionSchema,
       default: {},
     },
+    theTopics:{
+      type:Array,
+      default:[],
+    }
   },
   {
     timestamps: true,

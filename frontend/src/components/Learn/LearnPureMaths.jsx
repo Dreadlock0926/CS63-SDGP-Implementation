@@ -1,3 +1,4 @@
+/* eslint-disable react-hooks/exhaustive-deps */
 import Axios from "axios";
 import { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
@@ -31,10 +32,12 @@ const LearningPureMaths = () => {
 
   async function getTopics() {
     try {
-      const theTopics = await Axios.get(`${BASE}/learned`);
-      if (theTopics.data.status === 200) {
-        setTheTopics(theTopics.data);
-      }
+      const theTopics = await Axios.post(`${BASE}/learned`,{theTopic:"Pure Mathematics I"});
+      // if (theTopics.data.status === 200) {
+
+      // }
+      setTheTopics(theTopics.data);
+      console.log(theTopics.data);
     } catch (err) {
       console.error(err);
       if (err.data.status === 404) {
@@ -46,7 +49,6 @@ const LearningPureMaths = () => {
   useEffect(() => {
     PureMathsRelated();
     getTopics();
-    console.log(JSON.stringify(theTopics));
   }, []);
 
   return (
@@ -55,22 +57,17 @@ const LearningPureMaths = () => {
         Pure Maths I
       </Typography>
       <div className="pure-container">
+        <br />
         {theTopics && theTopics.length ? (
-          <div className="learned">
-            <h1>Learned</h1>
-            <p>{theTopics.topics}</p>
+          <div>
+            {theTopics.map((topic) =>
+              topic.topics.map((subtopic, index) => (
+                <Link key={subtopic._id || index}>{subtopic}</Link>
+              ))
+            )}
           </div>
         ) : (
           "No topics found!"
-        )}
-        <br />
-        {theTopics && theTopics.length ? (
-          <div className="tested">
-            <h1>Tested</h1>
-            <p>{theTopics.topics}</p>
-          </div>
-        ) : (
-          "No tests found!"
         )}
       </div>
       {resources && resources.length ? (

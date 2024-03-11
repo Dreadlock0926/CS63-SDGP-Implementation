@@ -10,8 +10,8 @@ import NotLogged from "../NotLogged";
 import "./Learn.css";
 
 const Learn = () => {
-  const { loading, setLoading, logged } = useContext(UserContext);
-
+  const { loading, setLoading, logged, theTopic, setTheTopic } =
+    useContext(UserContext);
 
   return logged ? (
     <div className="learn-container">
@@ -19,13 +19,21 @@ const Learn = () => {
         <h1>Learning Resources</h1>
       </header>
       <div className="subjects-container">
-        <Link to="/learning-pure" className="subject-link">
+        <Link
+          to="/learnprint"
+          className="subject-link"
+          onClick={()=>{if(theTopic!==""){setTheTopic("")}setTheTopic("Pure")}}
+        >
           <div className="subject">
             <h2>Pure Mathematics 1</h2>
             <p>Explore pure mathematics topics</p>
           </div>
         </Link>
-        <Link to="/learning-stat" className="subject-link">
+        <Link
+          to="/learnprint"
+          className="subject-link"
+          onClick={()=>{if(theTopic!==""){setTheTopic("")}setTheTopic("Stat")}}
+        >
           <div className="subject">
             <h2>Statistics</h2>
             <p>Discover statistical concepts and methods</p>

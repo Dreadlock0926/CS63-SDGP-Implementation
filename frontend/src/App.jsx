@@ -6,6 +6,7 @@ import Learn from "./components/Learn/Learn";
 import AddStudy from "./components/Learn/AddStudy";
 import LearningPureMaths from "./components/Learn/LearnPureMaths";
 import LearningStatistics from "./components/Learn/LearnStat";
+import LearnBlueprint from "./components/Learn/LearnBlueprint";
 
 export const UserContext = createContext();
 
@@ -15,6 +16,7 @@ function App() {
   const [user, setUser] = useState("");
   const [status, setStatus] = useState("");
   const [response, setResponse] = useState("");
+  const [theTopic, setTheTopic] = useState("");
 
   // const navigator = useNavigation();
 
@@ -30,6 +32,8 @@ function App() {
     setStatus,
     response,
     setResponse,
+    theTopic,
+    setTheTopic,
   };
 
   return (
@@ -41,6 +45,7 @@ function App() {
             <Route path="/resources" element={<Learn />} />
             <Route path="/addresources" element={<AddStudy />} />
             <Route path="learning-pure" element={<LearningPureMaths />}></Route>
+            <Route path="/learnprint" element={<LearnBlueprint/>}></Route>
             <Route
               path="learning-pure/:id"
               element={<LearningPureMaths />}

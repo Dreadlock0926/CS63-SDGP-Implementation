@@ -4,51 +4,68 @@ import { useEffect, useState } from "react";
 import { Container, Typography, Card, CardContent } from "@mui/material";
 import { Link } from "react-router-dom";
 
-
 const LearningStatistics = () => {
   const BASE = "http://localhost:8000/resources/topic";
-  const [resource,setResources] = useState([])
+  const [resource, setResources] = useState([]);
   const [theTopics, setTheTopics] = useState([]);
   const [status, setStatus] = useState("");
 
-  async function StatRelated(){
-    try{
-      const response = await Axios.post(BASE,{topic:"Probability And Statistics"}); //might have to change these routes
-      setResources(response.data)
-    }catch(err){
+  async function StatRelated() {
+    try {
+      const response = await Axios.post(BASE, {
+        topic: "Probability And Statistics",
+      }); //might have to change these routes
+      setResources(response.data);
+    } catch (err) {
       console.error(err);
     }
   }
 
   async function getTopics() {
     try {
-      const theTopics = await Axios.get(`${BASE}/learned`);
-      if (theTopics.data.status === 200) {
-        setTheTopics(theTopics.data);
-      }
+      const theTopics = await Axios.post(`${BASE}/learned`,{theTopic:"Probability and Statistics I"});
+      // if (theTopics.data.status === 200) {
+       
+      // }
+      setTheTopics(theTopics.data);
     } catch (err) {
-      console.error(err);
+      console.log(err);
       if (err.data.status === 404) {
         setStatus("No resources found!");
       }
     }
   }
 
-
-  useEffect(()=>{
+  useEffect(() => {
     StatRelated();
     getTopics();
-  },[])
-
+  }, []);
 
   return (
     <Container sx={{ textAlign: "center", marginTop: "5%" }}>
       <Typography variant="h3" gutterBottom>
         Statistics
       </Typography>
+      <div className="pure-container">
+        <br />
+        {theTopics && theTopics.length ? (
+          <div>
+            {theTopics.map((topic) =>
+              topic.topics.map((subtopic, index) => (
+                <h1 key={subtopic._id || index}>{subtopic}</h1>
+              ))
+            )}
+          </div>
+        ) : (
+          "No topics found!"
+        )}
+      </div>
       {resource && resource.length ? (
         resource.map((resource) => (
-          <Card key={resource._id} sx={{ margin: "5%", padding: "5%", boxShadow: 4 }}>
+          <Card
+            key={resource._id}
+            sx={{ margin: "5%", padding: "5%", boxShadow: 4 }}
+          >
             <CardContent>
               <Typography variant="h4" gutterBottom>
                 {resource.title}
@@ -59,10 +76,11 @@ const LearningStatistics = () => {
               <Typography variant="body2" color="textSecondary">
                 {resource.subtopic}
               </Typography>
-              <Link href={resource.url } color="primary" underline="hover">
-              {resource.url!=="" ? "Click Here to Learn More!" : ""}
+              <Link href={resource.url} color="primary" underline="hover">
+                {resource.url !== "" ? "Click Here to Learn More!" : ""}
               </Link>
             </CardContent>
+            <p>{status}</p>
           </Card>
         ))
       ) : (
@@ -70,6 +88,6 @@ const LearningStatistics = () => {
       )}
     </Container>
   );
-}
+};
 
 export default LearningStatistics;

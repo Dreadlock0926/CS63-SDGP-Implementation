@@ -51,6 +51,23 @@ router
     }
   });
 
+router.route("/topic/learned").post(async (req, res) => {
+  const { theTopic } = req?.body;
+
+  try {
+    const theTopics = await topicsModel.find({ source: theTopic });
+
+    if (theTopics && theTopics.length) {
+      res.status(200).json(theTopics);
+    } else {
+      res.status(404).json({ Alert: "No results found!" });
+    }
+  } catch (err) {
+    console.error(err);
+    return res.status(500).json({ Alert: err });
+  }
+});
+
 router.route("/topic").post(async (req, res) => {
   const topic = req?.body?.topic;
   if (!topic) {
@@ -143,19 +160,5 @@ router
       }
     }
   });
-
-router.route("/topic/learned").get(async (req, res) => {
-  try {
-    const theTopics = await topicsModel.find();
-    if (theTopics && theTopics.length) {
-      res.status(200).json(theTopics);
-    } else {
-      res.status(404).json({ Alert: "No results found!" });
-    }
-  } catch (err) {
-    console.error(err);
-    return res.status(500).json({ Alert: err });
-  }
-});
 
 module.exports = router;
