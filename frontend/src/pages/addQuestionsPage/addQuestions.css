@@ -1,0 +1,143 @@
+.panel-container {
+    width: 100%;
+}
+
+.question-final-panel {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    background-color: rgb(4, 128, 50);
+    color: aliceblue;
+    width: 40%;
+    border-radius: 25px;
+    padding: 20px;
+}
+
+.question-source-container {
+    display: flex;
+    flex-direction: column;
+}
+
+form {
+    display: flex;
+    justify-content: space-between;
+    margin-bottom: 20px;
+}
+
+label {
+    display: flex;
+    flex-direction: column;
+}
+
+input, select {
+    height: 25px;
+}
+
+.qs-input {
+    width: 100%;
+}
+
+.qn-input {
+    width: 30%;
+}
+
+.qy-input {
+    width: 70%;
+}
+
+.qv-input {
+    width: 20%;
+}
+
+p {
+    font-size: 1.25rem;
+}
+
+.qs-pa {
+    font-size: 1rem;
+}
+
+.qp-switch {
+    width: 40px;
+    height: 15px;
+    background-color: rgb(3, 97, 37);
+    border-radius: 50px;
+    display: flex;
+    align-items: center;
+    justify-content: flex-start;
+    padding: 5px;
+}
+
+.qp-sphere {
+    width: 12px;
+    height: 12px;
+    background-color: white;
+    border-radius: 50px;
+}
+
+.question-specifier {
+    width: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+}
+
+.qa-main-text {
+    align-self: flex-start;
+}
+
+.add-sub-question-btn {
+    padding-block: 5px;
+    font-size: 1.15rem;
+    color: rgb(3, 97, 37);
+    margin-top: 20px;
+}
+
+.qgu-unit {
+    display: flex;
+    align-items: flex-start;
+    margin-bottom: 25px;
+}
+
+.input-grid {
+    width: 100%;
+}
+
+.input-grid > * {
+    width: 100%;
+    margin-top: 17px;
+    margin-left: 30px;
+}
+
+.qgu-answer {
+    display: flex;
+    justify-content: space-between;
+}
+
+.qa-framework {
+    width: 100%;
+    align-self: flex-start;
+    height: 300px;
+    overflow-x: hidden;
+    overflow-y: scroll;
+}
+
+.qgu-answer-input {
+    width: 80%;
+    margin-right: 20px;
+}
+
+.qgu-answer-type {
+    width: 80%;
+}
+
+.final-add-btn {
+    margin-top: 20px;
+    padding: 20px;
+    padding-inline: 40px;
+    border: 0px;
+    font-size: 1.25rem;
+    color: aliceblue;
+    border-radius: 5px;
+    background-color: rgb(2, 71, 27);
+}
