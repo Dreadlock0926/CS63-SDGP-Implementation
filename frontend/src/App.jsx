@@ -17,6 +17,9 @@ import FeedbackPage from "./pages/FeedbackPage/FeedbackPage";
 import ExamPage from "./pages/ExamPage/ExamPage";
 
 
+import Forum from "./components/Forum/Forum" 
+import CreateForum from "./components/Forum/CreateForum"
+
 export const UserContext = createContext();
 
 function App() {
@@ -121,6 +124,8 @@ function App() {
           <Route path="/registration" element={<Register />} />
           <Route path="/authenticate" element={<Authenticate />} />
           <Route path="add-questions" element={<AddQuestionsPage />}/>
+          <Route path="/forum" element={<Forum/>}/>
+          <Route path="/add-forum" element={<CreateForum/>}/>
           <Route path="exam" element={<ExamPage />}/>
           <Route path="/examfinal" element={<ExamFinalized/>}></Route> {/**Incomplete */}
           <Route path="/scope" element={<Scope/>}></Route> {/**Radhul is working on this */}

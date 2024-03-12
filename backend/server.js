@@ -20,6 +20,7 @@ const getTopics = require("./routes/getTopics");
 const examResources = require("./routes/exams")
 const user = require("./routes/user");
 const cookieParser = require("cookie-parser");
+const forum = require("./routes/forum");
 
 async function authenticated(req, res, next) {
   if (req?.session?.user) {
@@ -64,6 +65,10 @@ app.use("/getQuestion", getQuestion);
 app.use("/getTopics", getTopics);
 app.use("/exam",examResources);
 app.use("/user", user);
+app.use("/forum",forum)
+
+// app.use(authenticated); //uncomment during final authentication tests 🔓
+// app.use("/forum", forum);
 
 app.use("*", (req, res) => {
   //leave this below all the other routes cuz this is the LAST RESORT JUST INCASE THE requested url is neither of the existing routes
