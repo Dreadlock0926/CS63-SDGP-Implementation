@@ -19,4 +19,21 @@ router.route("/save-exam-ref").post(async (req, res) => {
   }
 });
 
+router.route("/updateModuleProbabilities").post(async (req, res) => {
+  const { username, topicProbabilities } = req?.body;
+
+  if (!username || !topicProbabilities) {
+    return res.status(400).json({ Alert: "Username or Topic Probabilities Missing!" });
+  }
+
+  const validUser = await userModel.updateOne(
+    { username: username },
+    { $set: { topicProbabilities: topicProbabilities } }
+  );
+
+  if (validUser) {
+    res.status(201).json([{ Alert: "Module Probabilities updated!" }]);
+  }
+});
+
 module.exports = router;

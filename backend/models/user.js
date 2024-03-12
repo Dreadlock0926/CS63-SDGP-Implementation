@@ -93,17 +93,19 @@ const progressionSchema = new mongoose.Schema({
 
 const userSchema = new mongoose.Schema(
   {
-    username: {
-      type: String,
-      required: true,
-      unique: true,
-    },
+    username: { type: String, required: true, unique: true},
     password: { type: String, required: true },
-
-    progress: {
-      type: progressionSchema,
-      default: {},
-    },
+    voxelPoints: {type: Number, default: 0},
+    courses: {type: Array},
+    completedCourses: {type: Array},
+    topicProbabilities: {type: Object},
+    correctQuestions: {type: Array},
+    wrongQuestions: {type: Array},
+    feedbackExams: {type: Array}
+    // progress: {
+    //   type: progressionSchema,
+    //   default: {},
+    // },
   },
   {
     timestamps: true,

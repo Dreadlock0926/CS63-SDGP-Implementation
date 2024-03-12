@@ -4,6 +4,7 @@ import { useContext, useEffect, useState } from "react";
 import { UserContext } from "../../App";
 import Axios from "axios";
 import "./FeedbackPage.css";
+import initializeProbabilities from "./initializeProbabilities";
 
 const FeedbackPage = () => {
 
@@ -40,6 +41,9 @@ const FeedbackPage = () => {
         "d":0
     });
 
+    //Module Probabilities
+    const [moduleProbabilities, setModuleProbabilities] = useState({});
+
     //Calculate Probabilities
     const calculateProbabilities = () => {
 
@@ -72,8 +76,37 @@ const FeedbackPage = () => {
     
     }
 
+    useEffect(() => {
+
+        async function updateModuleProbability() {
+            await Axios.post("http://localhost:8000/user/updateModuleProbabilities", {
+                username: loggedInUser.username,
+                topicProbabilities: moduleProbabilities
+            })
+            .then(function (response) {
+                console.log(response);
+            })
+            .catch(function (error) {
+                console.log(error);
+              })
+        }
+
+        if (moduleProbabilities != {}) {
+            updateModuleProbability();
+        }
+
+    }, [moduleProbabilities])
+
     //Get questions based on probabilities
     const getQuestionsOnProbability = async () => {
+
+        await initializeProbabilities(loggedInUser)
+        .then((result) => {
+            setModuleProbabilities(result);
+        })
+        .catch((error) => {
+            console.log(error);
+        })
 
         await Axios.post("http://localhost:8000/getQuestion/getAllQuestions", {
             moduleID: "p1"
@@ -86,7 +119,7 @@ const FeedbackPage = () => {
             console.log(error);
           })
 
-    console.log(loggedInUser);
+    console.log(loggedInUser.courses);
     }
 
     const getAvailableQuestions = (questionsList) => {
