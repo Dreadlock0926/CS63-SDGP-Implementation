@@ -10,10 +10,10 @@ import NotLogged from "../NotLogged";
 import "./Learn.css";
 
 const Learn = () => {
-  const { loading, setLoading, logged, theTopic, setTheTopic } =
+  const { loading, logged, theTopic, setTheTopic } =
     useContext(UserContext);
 
-  return logged ? (
+  return logged && !loading ? (
     <div className="learn-container">
       <header className="header">
         <h1>Learning Resources</h1>

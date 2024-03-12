@@ -6,23 +6,21 @@ import Axios from "axios";
 import { useHover } from "@uidotdev/usehooks";
 
 const LearningResource = () => {
-  const { loading, setLoading, status, setStatus } = useContext(UserContext);
+  const { loading, setLoading, status, setStatus, user } =
+    useContext(UserContext);
   const BASE = "http://localhost:8000/resources/progress/updates";
   const [ref, hovering] = useHover();
-
-  const [counter, setCounter] = useState(0);
   const [theProgressVal, setTheProgressVal] = useState(0);
   const [lessons, setLessons] = useState([]);
 
   let theProgressGiven = 0;
-
   async function getNumberOfLessonForProgress() {
     try {
       setLoading(true);
-      const { data } = await Axios.get(BASE);
+      const { data } = await Axios.get(BASE, { userId: user.id });
       if (data.status === 200) {
         setLessons(data);
-        theProgressGiven =  lessons.topics.length/100;
+        theProgressGiven = data.topics.length / 100;
         console.log(theProgressGiven);
         setTheProgressVal(theProgressGiven);
       } else if (data.status === 404) {
@@ -40,14 +38,12 @@ const LearningResource = () => {
   async function updateProgress() {
     try {
       setLoading(true);
-      const { data } = await Axios.post(
-        BASE,
-        { userId: "65e5ee3fa014a87ba21c66d3" },
-        { theProgressVal }
-      ); //backend route must increase progress
-
+      const { data } = await Axios.post(BASE, {
+        userId: user.id,
+        theProgressVal,
+      });
       if (data.status === 201) {
-        alert("Updated Progress");
+        setStatus("Updated Progress");
       }
     } catch (err) {
       console.error(err);
@@ -63,22 +59,21 @@ const LearningResource = () => {
   useEffect(() => {
     if (hovering) {
       alert("Hovering!");
-      setCounter((prev) => prev + 1);
-      // updateProgress(); //this will be run to update user progress
+      setTheProgressVal((prev) => (prev += theProgressGiven));
+      updateProgress();
+      JSON.stringify(lessons);
     }
-
-    console.log(`Your value is ${counter}`);
   }, [hovering]);
 
   return (
     !loading && (
       <div>
-        <h1>learning Resources</h1>
+        <h1>Learning Resources</h1>
         <div className="end" ref={ref}>
-          <h1>The bottom part!</h1>
+          <h1>The end!</h1>
         </div>
-        <p>{counter}</p>
         <h1>{status}</h1>
+        <p>{theProgressVal}</p>
       </div>
     )
   );

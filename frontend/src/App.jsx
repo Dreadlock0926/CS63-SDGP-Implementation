@@ -4,8 +4,6 @@ import { BrowserRouter, Routes, Route, useNavigation } from "react-router-dom";
 import UnknownPage from "./components/Unknown";
 import Learn from "./components/Learn/Learn";
 import AddStudy from "./components/Learn/AddStudy";
-import LearningPureMaths from "./components/Learn/LearnPureMaths";
-import LearningStatistics from "./components/Learn/LearnStat";
 import LearnBlueprint from "./components/Learn/LearnBlueprint";
 import LearningResource from "./components/Learn/LearningResource";
 
@@ -44,22 +42,9 @@ function App() {
         <UserContext.Provider value={userContextValue}>
           <Routes>
             <Route path="/resources" element={<Learn />} />
-            <Route path="/materials" element={<LearningResource/>}></Route>
+            <Route path="/materials" element={<LearningResource />}></Route>
             <Route path="/addresources" element={<AddStudy />} />
-            <Route path="learning-pure" element={<LearningPureMaths />}></Route>
-            <Route path="/learnprint" element={<LearnBlueprint/>}></Route>
-            <Route
-              path="learning-pure/:id"
-              element={<LearningPureMaths />}
-            ></Route>
-            <Route
-              path="learning-stat"
-              element={<LearningStatistics />}
-            ></Route>
-            <Route
-              path="learning-stat/:id"
-              element={<LearningStatistics />}
-            ></Route>
+            <Route path="/learnprint" element={<LearnBlueprint />}></Route>
             <Route path="*" element={<UnknownPage />} />
           </Routes>
         </UserContext.Provider>
