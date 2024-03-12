@@ -22,7 +22,7 @@ const LearningResource = () => {
       const { data } = await Axios.get(BASE);
       if (data.status === 200) {
         setLessons(data);
-        theProgressGiven = 100 / lessons.topics.length;
+        theProgressGiven =  lessons.topics.length/100;
         console.log(theProgressGiven);
         setTheProgressVal(theProgressGiven);
       } else if (data.status === 404) {

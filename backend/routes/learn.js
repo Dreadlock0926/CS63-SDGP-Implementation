@@ -95,30 +95,37 @@ router.route("/topic").post(async (req, res) => {
   }
 });
 
-router.route("/progress/updates").post(async (req, res) => { //this is not in the schema for the given userId = 65e5ee3fa014a87ba21c66d3
-  const { userId, theProgressVal=50 } = req?.body;
-  const userExists = await userModel.findById(userId);
-  if (!userExists) return res.status(404).json({ Alert: "Invalid user!" });
+router
+  .route("/progress/updates")
+  .post(async (req, res) => {
+    //this is not in the schema for the given userId = 65e5ee3fa014a87ba21c66d3
+    const { userId, theProgressVal = 50 } = req?.body;
+    const userExists = await userModel.findById(userId);
+    if (!userExists) return res.status(404).json({ Alert: "Invalid user!" });
 
-  const updated = await userExists.updateOne({ progress: theProgressVal });
+    const updated = await userExists.updateOne({
+      progress: { $inc: theProgressVal },
+    });
 
-  if (!updated) {
-    res.status(400).json({ Alert: "Error while updating!" });
-  } else {
-    res.status(200).json({ Alert: "Updated!" });
-  }
-}).get(async (req,res)=>{
-  try{
-    const theData = await userModel.findOne({theTopics});
-    if(theData && theData.length){
-      res.status(200).json(theData);
-    }else{
-      res.status(404).json({Alert:"No data found!"})
+    if (!updated) {
+      res.status(400).json({ Alert: "Error while updating!" });
+    } else {
+      res.status(200).json({ Alert: "Updated!" });
     }
-  }catch(err){
-    console.error(err);
-  }
-});
+  })
+  .get(async (req, res) => {
+    try {
+      const { userId } = req?.body;
+      const theData = await userModel.findById(userId);
+      if (theData && theData.length) {
+        res.status(200).json(theData);
+      } else {
+        res.status(404).json({ Alert: "No data found!" });
+      }
+    } catch (err) {
+      console.error(err);
+    }
+  });
 
 router.route("/topic/:id").post(async (req, res) => {
   const id = req?.params?.id;
