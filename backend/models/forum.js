@@ -18,50 +18,28 @@ const forumQuestionSchema = mongoose.Schema(
   {
     question: {
       type: String,
+      required: true,
       trim: true,
     },
     answer: {
       type: [forumAnswerSchema],
       default: [],
-
-    },  
-
-    description: {
-      type: String,
-      trim: true,
     },
-    answers: {
-      type:Array,
-      default: [],
-      index: {
-        type: Object,
-        default: {},
-        text: {
-          type: String,
-        },
-        answeredBy: {
-          type: String,
-        },
-        noOfUpvotes: {
-          type: Number,
-          default: 0,
-        },
-      },
-    },
-
     topic: {
       type: String,
       default: "",
     },
-    rating: { type: Number, default: 0, min: 0 },
+    rating: {
+      type: Number,
+      default: 0,
+    },
     by: {
-      type: String,
+      type: mongoose.Schema.ObjectId,
       ref: "users", //referencing to the users collection to make a connection!
     },
   },
 
   { timestamps: true }
-
 );
 const forumQuestionModel = mongoose.model("forums", forumQuestionSchema);
 const forumAnswerModel = mongoose.model("forumsAnswers", forumAnswerSchema);
