@@ -44,7 +44,7 @@ function App() {
         <UserContext.Provider value={userContextValue}>
           <Routes>
             <Route path="/resources" element={<Learn />} />
-            <Route path="/material" element={<LearningResource/>}></Route>
+            <Route path="/materials" element={<LearningResource/>}></Route>
             <Route path="/addresources" element={<AddStudy />} />
             <Route path="learning-pure" element={<LearningPureMaths />}></Route>
             <Route path="/learnprint" element={<LearnBlueprint/>}></Route>

@@ -2,6 +2,7 @@ const express = require("express");
 const router = express.Router();
 const learningModel = require("../models/learningResources");
 const topicsModel = require("../models/topics");
+const userModel = require("../models/user");
 //needs to be put in a controller
 //logic here must be changed
 //we need multer if photo uploads are needed
@@ -31,9 +32,7 @@ router
           subtopic,
           url,
         });
-      res
-          .status(201)
-          .json({ Alert: "Added Learning Resource to Learn" });
+        res.status(201).json({ Alert: "Added Learning Resource to Learn" });
       } else {
         res.status(409).json({ Alert: `${title} Already Exists!` });
       }
@@ -93,6 +92,31 @@ router.route("/topic").post(async (req, res) => {
     } else {
       res.status(203).json({ Alert: "No Statstics Resources found!" });
     }
+  }
+});
+
+router.route("/progress/updates").post(async (req, res) => { //this is not in the schema for the given userId = 65e5ee3fa014a87ba21c66d3
+  const { userId, theProgressVal=50 } = req?.body;
+  const userExists = await userModel.findById(userId);
+  if (!userExists) return res.status(404).json({ Alert: "Invalid user!" });
+
+  const updated = await userExists.updateOne({ progress: theProgressVal });
+
+  if (!updated) {
+    res.status(400).json({ Alert: "Error while updating!" });
+  } else {
+    res.status(200).json({ Alert: "Updated!" });
+  }
+}).get(async (req,res)=>{
+  try{
+    const theData = await userModel.findOne({theTopics});
+    if(theData && theData.length){
+      res.status(200).json(theData);
+    }else{
+      res.status(404).json({Alert:"No data found!"})
+    }
+  }catch(err){
+    console.error(err);
   }
 });
 

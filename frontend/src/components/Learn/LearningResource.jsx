@@ -1,27 +1,54 @@
 /* eslint-disable no-unused-vars */
 /* eslint-disable react-hooks/exhaustive-deps */
-import { useContext, useEffect, useRef } from "react";
+import { useContext, useEffect, useRef, useState } from "react";
 import { UserContext } from "../../App";
 import Axios from "axios";
 import { useHover } from "@uidotdev/usehooks";
 
 const LearningResource = () => {
-  const { loading, setLoading } = useContext(UserContext);
-  const BASE =
-    "http://localhost:8000/resources/topic/learned";
-    const [ref, hovering] = useHover();
+  const { loading, setLoading, status, setStatus } = useContext(UserContext);
+  const BASE = "http://localhost:8000/resources/progress/updates";
+  const [ref, hovering] = useHover();
 
-    let theIncrement = 0;
+  const [counter, setCounter] = useState(0);
+  const [theProgressVal, setTheProgressVal] = useState(0);
+  const [lessons, setLessons] = useState([]);
+
+  let theProgressGiven = 0;
+
+  async function getNumberOfLessonForProgress() {
+    try {
+      setLoading(true);
+      const { data } = await Axios.get(BASE);
+      if (data.status === 200) {
+        setLessons(data);
+        theProgressGiven = 100 / lessons.topics.length;
+        console.log(theProgressGiven);
+        setTheProgressVal(theProgressGiven);
+      } else if (data.status === 404) {
+        setStatus("No results found!");
+      } else {
+        setStatus("Error while processing data!");
+      }
+    } catch (err) {
+      console.error(err);
+    } finally {
+      setLoading(false);
+    }
+  }
 
   async function updateProgress() {
     try {
       setLoading(true);
-      const { data } = await Axios.post(BASE); //backend route must increase progress
+      const { data } = await Axios.post(
+        BASE,
+        { userId: "65e5ee3fa014a87ba21c66d3" },
+        { theProgressVal }
+      ); //backend route must increase progress
 
-      if (data.status === 200) {
-        alert("Nice!");
+      if (data.status === 201) {
+        alert("Updated Progress");
       }
-   
     } catch (err) {
       console.error(err);
     } finally {
@@ -30,14 +57,18 @@ const LearningResource = () => {
   }
 
   useEffect(() => {
-    if(hovering){
-        alert("Hovering!")
-        theIncrement++;
-        // updateProgress();
+    getNumberOfLessonForProgress();
+  }, []);
+
+  useEffect(() => {
+    if (hovering) {
+      alert("Hovering!");
+      setCounter((prev) => prev + 1);
+      // updateProgress(); //this will be run to update user progress
     }
 
-    console.log(`Your value is ${theIncrement}`);
-  }, [hovering,theIncrement]);
+    console.log(`Your value is ${counter}`);
+  }, [hovering]);
 
   return (
     !loading && (
@@ -46,7 +77,8 @@ const LearningResource = () => {
         <div className="end" ref={ref}>
           <h1>The bottom part!</h1>
         </div>
-        <p>{theIncrement}</p>
+        <p>{counter}</p>
+        <h1>{status}</h1>
       </div>
     )
   );

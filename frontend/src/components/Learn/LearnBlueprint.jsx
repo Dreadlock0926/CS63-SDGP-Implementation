@@ -68,7 +68,7 @@ const LearnBlueprint = () => {
                 <React.Fragment key={item._id || index}>
                   {item.topics.map((topic, topicIndex) => (
                     <tr key={`${item._id || index}-${topicIndex}`}>
-                      <td>{topic}</td>
+                      <td>{topic}</td> {/**The topic names */}
                       <td>
                         {item.learnedProgress.map((progress, progressIndex) => (
                           <div
@@ -76,15 +76,21 @@ const LearnBlueprint = () => {
                               item._id || index
                             }-learned-${progressIndex}`}
                           >
-                            <Link to={progress.url}>{progress.percentage}</Link>
+                            <Link to={progress.url}>{progress.percentage}</Link>{" "}
+                            {/**The topic percentages */}
                           </div>
                         ))}
                       </td>
                       <td>
                         {item.tested.map((test, testIndex) => (
                           <div key={`${item._id || index}-tested-${testIndex}`}>
-                            <Link to={test.url}>
-                              {test.state ? "Tested" : "Not Tested"}
+                            <Link
+                              to={test.testedExams.map((x) => {
+                                return x;
+                              })}
+                            >
+                              {test.state ? "Tested" : "Not Tested"}{" "}
+                              {/**has he done it? */}
                             </Link>
                           </div>
                         ))}
