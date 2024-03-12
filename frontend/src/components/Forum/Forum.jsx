@@ -203,11 +203,8 @@ const Forum = () => {
           )
         ) : down === 1 ? (
           data && data.length ? (
-  
             data.map((x) =>
-            
               x.topic === "Pure Mathematics I" ? (
-                
                 <PureMath
                   key={x._id}
                   x={x}
@@ -220,7 +217,9 @@ const Forum = () => {
                   answers={answer}
                   setAnswer={setAnswer}
                 />
-              ) : ""
+              ) : (
+                ""
+              )
             )
           ) : (
             "No Pure Math Questions have been posted yet"

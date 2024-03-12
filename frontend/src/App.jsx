@@ -4,24 +4,26 @@ import Home from "./pages/HomePage/home";
 import Login from "./pages/LoginPage/login";
 import AddQuestionsPage from "./pages/addQuestionsPage/addQuestions";
 import ErrorPage from "./components/Error404/ErrorPage";
-import Forum from "./components/Forum/Forum" 
-import CreateForum from "./components/Forum/CreateForum"
+import Forum from "./components/Forum/Forum";
+import CreateForum from "./components/Forum/CreateForum";
 
 export const UserContext = createContext();
 
 function App() {
   const [loading, setLoading] = useState(false);
   const [logged, setLogged] = useState(true);
-  const [user,setUser] = useState("Guest");
-  const [status,setStatus] = useState("")
+  const [user, setUser] = useState("Guest");
+  const [status, setStatus] = useState("");
   const userData = {
-    loading:loading,
-    status,setStatus,
-    setLoading:setLoading,
-    logged:logged,
-    setLogged:setLogged,
-    user,setUser
-  }
+    loading: loading,
+    status,
+    setStatus,
+    setLoading: setLoading,
+    logged: logged,
+    setLogged: setLogged,
+    user,
+    setUser,
+  };
 
   return (
     <>
@@ -29,11 +31,11 @@ function App() {
         <UserContext.Provider value={userData}>
           <Routes>
             <Route path="/" element={<Home />} />
-            <Route path="login" element={<Login />} /> 
+            <Route path="login" element={<Login />} />
             <Route path="add-questions" element={<AddQuestionsPage />} />
             <Route path="/forum" element={<Forum />} />
-           <Route path="/addforum" element={<CreateForum />} />
-           <Route path="*" element={<ErrorPage />} />
+            <Route path="/addforum" element={<CreateForum />} />
+            <Route path="*" element={<ErrorPage />} />
           </Routes>
         </UserContext.Provider>
       </BrowserRouter>

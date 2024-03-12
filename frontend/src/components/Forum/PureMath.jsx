@@ -34,6 +34,11 @@ const PureMath = ({
             <Typography variant="body1">
               Posted By: {answer.answeredBy}
             </Typography>
+            <Typography variant="body1">
+              {answer.noOfUpvotes
+                ? ` Number of votes: ${answer.noOfUpvotes}`
+                : "No upvotes!"}
+            </Typography>
             <Button
               onClick={() => nerdPointsIncrement(x._id)}
               variant="contained"
