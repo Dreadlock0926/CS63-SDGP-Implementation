@@ -7,6 +7,7 @@ import AddStudy from "./components/Learn/AddStudy";
 import LearningPureMaths from "./components/Learn/LearnPureMaths";
 import LearningStatistics from "./components/Learn/LearnStat";
 import LearnBlueprint from "./components/Learn/LearnBlueprint";
+import LearningResource from "./components/Learn/LearningResource";
 
 export const UserContext = createContext();
 
@@ -43,6 +44,7 @@ function App() {
         <UserContext.Provider value={userContextValue}>
           <Routes>
             <Route path="/resources" element={<Learn />} />
+            <Route path="/material" element={<LearningResource/>}></Route>
             <Route path="/addresources" element={<AddStudy />} />
             <Route path="learning-pure" element={<LearningPureMaths />}></Route>
             <Route path="/learnprint" element={<LearnBlueprint/>}></Route>

@@ -31,7 +31,7 @@ router
           subtopic,
           url,
         });
-        return res
+      res
           .status(201)
           .json({ Alert: "Added Learning Resource to Learn" });
       } else {

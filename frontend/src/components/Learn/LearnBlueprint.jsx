@@ -1,21 +1,22 @@
-/* eslint-disable react-hooks/exhaustive-deps */
-/* eslint-disable no-unused-vars */
-import { useContext, useEffect, useState } from "react";
+import React, { useContext, useEffect, useState } from "react";
 import { UserContext } from "../../App";
 import { Link, useNavigate } from "react-router-dom";
-import { Container, Typography, Card, CardContent } from "@mui/material";
+import { Container, Typography } from "@mui/material";
 import Axios from "axios";
 
 const LearnBlueprint = () => {
-  const { theTopic, status, setStatus } = useContext(UserContext);
+  const { theTopic } = useContext(UserContext);
   const [topicRelated, setTopicRelated] = useState([]);
+  const [loading, setLoading] = useState(false);
+  const [status, setStatus] = useState("");
   const navigator = useNavigate();
 
   const BASE = "http://localhost:8000/resources/topic/learned";
 
   async function fetchData(topic) {
     try {
-      const response = await Axios.post(`${BASE}/learned`, { theTopic: topic });
+      setLoading(true);
+      const response = await Axios.post(`${BASE}`, { theTopic: topic });
       setTopicRelated(response.data);
     } catch (error) {
       console.error(error);
@@ -24,62 +25,80 @@ const LearnBlueprint = () => {
       } else {
         setStatus("Error occurred while fetching resources.");
       }
+    } finally {
+      setLoading(false);
     }
   }
 
   useEffect(() => {
-    if (theTopic === "Pure") {
-      fetchData("Pure Mathematics I");
-    } else if (theTopic === "Stat") {
-      fetchData("Probability and Statistics I");
-    } else {
-      navigator("/resources");
-    }
-  }, []);
+    const fetchTopicData = async () => {
+      if (theTopic === "Pure") {
+        await fetchData("Pure Mathematics I");
+      } else if (theTopic === "Stat") {
+        await fetchData("Probability and Statistics I");
+      } else {
+        navigator("/resources");
+      }
+    };
+
+    fetchTopicData();
+  }, [theTopic]);
 
   return (
-    <>
-      <div className="container">
-        <h1>
-          {theTopic === "Pure"
-            ? "Pure Mathematics I"
-            : theTopic
-            ? "Probability And Statistics"
-            : navigator("/resources")}
-        </h1>
-        <table style={{ width: "100%" }}>
-          <thead>
-            <tr>
-              <th>Topic</th>
-              <th>Learned Progress</th>
-              <th>Tested</th>
-            </tr>
-          </thead>
-          <tbody>
-            {[
-              { name: "Topic 1", learnedProgress: "80%", tested: true },
-              { name: "Topic 2", learnedProgress: "60%", tested: false },
-              { name: "Topic 3", learnedProgress: "90%", tested: true },
-            ].map((topic, index) => (
-              <tr key={index}>
-                <td>
-                  <div style={{ textAlign: "center" }}>{topic.name}</div>
-                </td>
-                <td>
-                  <div style={{ textAlign: "center" }}>
-                    {topic.learnedProgress}
-                  </div>
-                </td>
-                <td style={{ textAlign: "center" }}>
-                  <div>{topic.tested ? "Yes" : "No"}</div>
-                </td>
+    <Container>
+      {loading ? (
+        <Typography variant="h4">Loading...</Typography>
+      ) : (
+        <>
+          <Typography variant="h3">
+            {theTopic === "Pure"
+              ? "Pure Mathematics I"
+              : "Probability And Statistics"}
+          </Typography>
+          <table style={{ width: "100%", textAlign: "center" }}>
+            <thead>
+              <tr>
+                <th>Topic</th>
+                <th>Learned Progress</th>
+                <th>Tested</th>
               </tr>
-            ))}
-          </tbody>
-        </table>
-        {/* <p>{status}</p> */}
-      </div>
-    </>
+            </thead>
+            <tbody>
+              {topicRelated.map((item, index) => (
+                <React.Fragment key={item._id || index}>
+                  {item.topics.map((topic, topicIndex) => (
+                    <tr key={`${item._id || index}-${topicIndex}`}>
+                      <td>{topic}</td>
+                      <td>
+                        {item.learnedProgress.map((progress, progressIndex) => (
+                          <div
+                            key={`${
+                              item._id || index
+                            }-learned-${progressIndex}`}
+                          >
+                            <Link to={progress.url}>{progress.percentage}</Link>
+                          </div>
+                        ))}
+                      </td>
+                      <td>
+                        {item.tested.map((test, testIndex) => (
+                          <div key={`${item._id || index}-tested-${testIndex}`}>
+                            <Link to={test.url}>
+                              {test.state ? "Tested" : "Not Tested"}
+                            </Link>
+                          </div>
+                        ))}
+                      </td>
+                    </tr>
+                  ))}
+                </React.Fragment>
+              ))}
+            </tbody>
+          </table>
+          <Typography variant="body1">{status}</Typography>
+        </>
+      )}
+    </Container>
   );
 };
 
