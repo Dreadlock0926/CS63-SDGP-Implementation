@@ -14,6 +14,7 @@ const FeedbackPage = () => {
     } = useContext(UserContext);
 
     useEffect(() => {
+        console.log(JSON.parse(sessionStorage.getItem("loggedUser")).data);
         setLoggedInUser(JSON.parse(sessionStorage.getItem("loggedUser")).data);
       }, []);
 
@@ -35,7 +36,7 @@ const FeedbackPage = () => {
     const [topicProbabilities, setTopicProbabilities] = useState({
         "q":0,
         "f":0,
-        "cg":0,
+        "cg":-1,
         "cm":-1,
         "i":0,
         "d":0
@@ -45,37 +46,52 @@ const FeedbackPage = () => {
     const [moduleProbabilities, setModuleProbabilities] = useState({});
 
     //Calculate Probabilities
-    const calculateProbabilities = () => {
+    const calculateProbabilities = async (moduleID) => {
+        setProbabilitiesSet(false);
 
-        let topicProbabilitiesClone = {...topicProbabilities};
+        const calculator = (probList) => {
 
-        Object.keys(topicProbabilities).forEach(key => {
-            if (topicProbabilities[key] !== -1) {
+            let topicProbabilitiesClone = {...probList};
 
-                let numCorrect = 0;
-                let numWrong = 0;
-                correctAnswers.forEach(ans => {
-                    if (ans.split("_")[1] === key) {
-                        numCorrect += 1;
+            Object.keys(probList).forEach(key => {
+                if (probList[key] !== -1) {
+    
+                    let numCorrect = 0;
+                    let numWrong = 0;
+                    correctAnswers.forEach(ans => {
+                        if (ans.split("_")[1] === key && ans.split("_")[0] === moduleID) {
+                            numCorrect += 1;
+                        }
+                    })
+                    wrongAnswers.forEach(ans => {
+                        if (ans.split("_")[1] === key && ans.split("_")[0] === moduleID) {
+                            numWrong += 1;
+                        }
+                    })
+                    let probability = Math.round(numWrong/(numWrong+numCorrect) * 10)/10;
+                    if (probability === 0) {
+                        probability = 0.1;
+                    } else if (probability === 1) {
+                        probability = 0.9;
                     }
-                })
-                wrongAnswers.forEach(ans => {
-                    if (ans.split("_")[1] === key) {
-                        numWrong += 1;
-                    }
-                })
-                let probability = Math.round(numWrong/(numWrong+numCorrect) * 10)/10;
-                if (probability === 0) {
-                    probability = 0.1;
-                } else if (probability === 1) {
-                    probability = 0.9;
-                }
-                topicProbabilitiesClone[key] = probability;
-            }   
-        });
+                    topicProbabilitiesClone[key] = probability;
+                }   
+            });
+    
+            setTopicProbabilities(topicProbabilitiesClone);
+            setProbabilitiesSet(true);
 
-        setTopicProbabilities(topicProbabilitiesClone);
-        setProbabilitiesSet(true);
+        }
+
+        await Axios.post("http://localhost:8000/getTopics/getModuleProbs", {
+            username:loggedInUser.username
+        })
+        .then(function (response) {
+            calculator(response.data[moduleID]);
+        })
+        .catch(function (error) {
+            console.log(error);
+        })
     
     }
 
@@ -95,17 +111,19 @@ const FeedbackPage = () => {
               })
         }
 
-        if (!moduleProbabilities) {
-            updateModuleProbability();
-        }
+        updateModuleProbability();
+        
 
     }, [moduleProbabilities])
 
     //Get questions based on probabilities
-    const getQuestionsOnProbability = async () => {
+    const getQuestionsOnProbability = async (moduleID) => {
+
+        console.log(loggedInUser);
 
             await initializeProbabilities(loggedInUser)
             .then((result) => {
+                console.log(result);
                 setModuleProbabilities(result);
             })
             .catch((error) => {
@@ -113,11 +131,11 @@ const FeedbackPage = () => {
             })
 
         await Axios.post("http://localhost:8000/getQuestion/getAllQuestions", {
-            moduleID: "p1"
+            moduleID: moduleID
         })
         .then(function (response) {
             setQuestionsList(response.data);
-            calculateProbabilities();
+            calculateProbabilities(moduleID);
         })
         .catch(function (error) {
             console.log(error);
@@ -127,6 +145,7 @@ const FeedbackPage = () => {
     }
 
     const getAvailableQuestions = (questionsList) => {
+        setAvailableQuestions([]);
 
         //Checks if the ID is already in the Exam Questions list or if the user has already done the question before
         for (const question in questionsList) {
@@ -150,6 +169,8 @@ const FeedbackPage = () => {
         for (const i in availableQuestions) {
             for (const topic in topicProbabilities) {
                 if (availableQuestions[i].split("_")[1] === topic && topicProbabilities[topic] > 0) {
+                    console.log(availableQuestions);
+                    console.log(numOfQuestions);
                     numOfQuestions += 1;
                 }
             }
@@ -164,6 +185,8 @@ const FeedbackPage = () => {
         let tempExamQuestions = [];
 
         while (tempExamQuestions.length < iterable) {
+
+            console.log("number of questions: " + numOfQuestions);
 
             for (const i in availableQuestions) {
                 let chance = Math.random();
@@ -192,12 +215,12 @@ const FeedbackPage = () => {
     }
 
     useEffect(() => {
-        if (availableQuestions.length < 11) {
-            setExamQuestions(availableQuestions);
-        } else {
-            matchProbabilities(availableQuestions);
-        }
+        matchProbabilities(availableQuestions);
     }, [availableQuestions])
+
+    useEffect(() => {
+        console.log(examQuestions)
+    }, [examQuestions])
 
     useEffect(() => {
         if (probabilitiesSet) {
@@ -206,8 +229,8 @@ const FeedbackPage = () => {
     }, [probabilitiesSet])
 
     useEffect(() => {
-        console.log(examQuestions);
-    }, [examQuestions])
+        console.log(questionsList);
+    }, [questionsList])
 
     useEffect(() => {
         console.log(topicProbabilities);
@@ -216,8 +239,8 @@ const FeedbackPage = () => {
     return (
         <>
             <div className="modules-container">
-                <div className="module" onClick={getQuestionsOnProbability}>Pure Mathematics I</div>
-                <div className="module">Probability & Statistics I</div>
+                <div className="module" onClick={() => getQuestionsOnProbability("p1")}>Pure Mathematics I</div>
+                <div className="module" onClick={() => getQuestionsOnProbability("s1")}>Probability & Statistics I</div>
             </div>
         </>
     );
