@@ -36,7 +36,7 @@ const FeedbackPage = () => {
         "q":0,
         "f":0,
         "cg":0,
-        "cm":0,
+        "cm":-1,
         "i":0,
         "d":0
     });
@@ -50,25 +50,28 @@ const FeedbackPage = () => {
         let topicProbabilitiesClone = {...topicProbabilities};
 
         Object.keys(topicProbabilities).forEach(key => {
-            let numCorrect = 0;
-            let numWrong = 0;
-            correctAnswers.forEach(ans => {
-                if (ans.split("_")[1] === key) {
-                    numCorrect += 1;
+            if (topicProbabilities[key] !== -1) {
+
+                let numCorrect = 0;
+                let numWrong = 0;
+                correctAnswers.forEach(ans => {
+                    if (ans.split("_")[1] === key) {
+                        numCorrect += 1;
+                    }
+                })
+                wrongAnswers.forEach(ans => {
+                    if (ans.split("_")[1] === key) {
+                        numWrong += 1;
+                    }
+                })
+                let probability = Math.round(numWrong/(numWrong+numCorrect) * 10)/10;
+                if (probability === 0) {
+                    probability = 0.1;
+                } else if (probability === 1) {
+                    probability = 0.9;
                 }
-            })
-            wrongAnswers.forEach(ans => {
-                if (ans.split("_")[1] === key) {
-                    numWrong += 1;
-                }
-            })
-            let probability = Math.round(numWrong/(numWrong+numCorrect) * 10)/10;
-            if (probability === 0) {
-                probability = 0.1;
-            } else if (probability === 1) {
-                probability = 0.9;
-            }
-            topicProbabilitiesClone[key] = probability;
+                topicProbabilitiesClone[key] = probability;
+            }   
         });
 
         setTopicProbabilities(topicProbabilitiesClone);
@@ -76,6 +79,7 @@ const FeedbackPage = () => {
     
     }
 
+    // Update the module probabilities
     useEffect(() => {
 
         async function updateModuleProbability() {
@@ -91,7 +95,7 @@ const FeedbackPage = () => {
               })
         }
 
-        if (moduleProbabilities != {}) {
+        if (!moduleProbabilities) {
             updateModuleProbability();
         }
 
@@ -100,13 +104,13 @@ const FeedbackPage = () => {
     //Get questions based on probabilities
     const getQuestionsOnProbability = async () => {
 
-        await initializeProbabilities(loggedInUser)
-        .then((result) => {
-            setModuleProbabilities(result);
-        })
-        .catch((error) => {
-            console.log(error);
-        })
+            await initializeProbabilities(loggedInUser)
+            .then((result) => {
+                setModuleProbabilities(result);
+            })
+            .catch((error) => {
+                console.log(error);
+            })
 
         await Axios.post("http://localhost:8000/getQuestion/getAllQuestions", {
             moduleID: "p1"
@@ -140,19 +144,43 @@ const FeedbackPage = () => {
 
     const matchProbabilities = (availableQuestions) => {
 
+        let numOfQuestions = 0;
+        let iterable = 0;
+
+        for (const i in availableQuestions) {
+            for (const topic in topicProbabilities) {
+                if (availableQuestions[i].split("_")[1] === topic && topicProbabilities[topic] > 0) {
+                    numOfQuestions += 1;
+                }
+            }
+        }
+
+        if (numOfQuestions < 10) {
+            iterable = numOfQuestions;
+        } else {
+            iterable = 10;
+        }
+
         let tempExamQuestions = [];
-        while (tempExamQuestions.length < 10) {
+
+        while (tempExamQuestions.length < iterable) {
 
             for (const i in availableQuestions) {
                 let chance = Math.random();
                 for (const topic in topicProbabilities) {
-                    if (availableQuestions[i].split("_")[1] === topic && !tempExamQuestions.includes(availableQuestions[i])) {
-                        if (topicProbabilities[topic] >= chance) {
-                            if (tempExamQuestions.length === 10) {
-                                break;
+                    
+                    if (topicProbabilities[topic] > 0) {
+
+                        if (availableQuestions[i].split("_")[1] === topic && !tempExamQuestions.includes(availableQuestions[i])) {
+
+                            if (topicProbabilities[topic] >= chance) {
+                                if (tempExamQuestions.length === 10) {
+                                    break;
+                                }
+                                tempExamQuestions.push(availableQuestions[i]);
                             }
-                            tempExamQuestions.push(availableQuestions[i]);
                         }
+
                     }
                 }
     
