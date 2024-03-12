@@ -12,94 +12,29 @@ import Authenticate from "./pages/AccountPage/Authenticate";
 export const UserContext = createContext();
 
 function App() {
+  const [data, setData] = useState([]);
   const [loading, setLoading] = useState(false);
   const [value, setValue] = useState([]);
-  const [data, setData] = useState([]);
-  const [voxalPoints, setVoxalpoints] = useState(0);
-  const [hours, setHours] = useState(0);
-  const [progress, setProgress] = useState([]);
-  const [statValue, setstatValue] = useState([]);
-  const [course, setCourse] = useState(0);
-  const [ongoingCourse, setongoingCourses] = useState(0);
-  const [user, setUser] = useState({ username: "", password: "" });
-  const [completeCourse, setCompleteCourse] = useState(0);
-  const [hoursLearned, setHoursLearned] = useState(0);
-  const [pureMathLearnedProgress, setPureMathLearnedProgress] = useState(0);
-  const [statLearnedProgress, setStatLearnedProgress] = useState(0);
-  const [mathLesson, setMathLesson] = useState(0);
-  const [statlLesson, setStatLesson] = useState(0);
-  const [status, setStatus] = useState("");
-  const [testedPureProgress, setPureTestedProgress] = useState(0);
-  const [testedStatProgress, setStatTestedProgress] = useState(0);
   const [isAuthenticated, setIsAuthenticated] = useState(false);
 
-  const [loggedInUser, setLoggedInUser] = useState({
-    username: "", // Assuming username is required
-    password: "", // Assuming password is required (not used in this example)
-    marks: 0,
-    testHistory: {
-      Maths: [0], // Assuming Maths is an array of marks
-      Statistics: [0], // Assuming Statistics is an array of marks
-    },
-    testnumber: 0,
-    voxalPoints: 0,
-    hoursLearned: 0,
-    ongoingCourses: 0,
-    completeCourse: 0,
-    PureMathematics: {
-      learnedProgress: 0,
-      lesson: 0,
-    },
-    Statistics: {
-      learnedProgress: 0,
-      lesson: 0,
-    },
-  });
+  const [loggedInUser, setLoggedInUser] = useState({});
+
+  const [userExams, setUserExams] = useState([{}]);
 
   // Structuring the context value explicitly
   const contextValue = {
-    loggedInUser,
-    setLoggedInUser,
     loading,
-    setLoading: setLoading,
+    setLoading,
     value,
     setValue: setValue,
     data,
     setData,
-    voxalPoints,
-    setVoxalpoints,
-    hours,
+    loggedInUser,
+    setLoggedInUser,
     isAuthenticated,
     setIsAuthenticated,
-    setHours,
-    progress,
-    setProgress,
-    statValue,
-    setstatValue,
-    course,
-    setCourse,
-    ongoingCourse,
-    setongoingCourses,
-    user,
-    setUser,
-    hoursLearned,
-    setHoursLearned,
-    completeCourse,
-    setCompleteCourse,
-    statLearnedProgress,
-    setStatLearnedProgress,
-    pureMathLearnedProgress,
-    setPureMathLearnedProgress,
-    mathLesson,
-    setMathLesson,
-    statlLesson,
-    setStatLesson,
-    status,
-    setStatus,
-    testedPureProgress,
-    setPureTestedProgress,
-    testedStatProgress,
-    setStatTestedProgress,
+    userExams,
+    setUserExams,
   };
 
   return (

@@ -10,6 +10,15 @@ import { UserContext } from "../../App";
 import { CircularProgressbar } from "react-circular-progressbar";
 import Axios from "axios";
 
+function getExams(userRef) {
+  Axios.get(`http://localhost:8000/progression/get-exams/${userRef}`).then(
+    (response) => {
+      console.log(response.data);
+      return response.data;
+    }
+  );
+}
+
 // Dashboard Header Tab
 function DashboardHeader() {
   return (
@@ -77,14 +86,6 @@ function DashboardStatistics({
 function DashboardCourses() {
   const { loggedInUser, setLoggedInUser } = useContext(UserContext);
 
-  useEffect(() => {
-    setLoggedInUser(JSON.parse(sessionStorage.getItem("loggedUser")).data);
-  }, []);
-
-  useEffect(() => {
-    console.log(loggedInUser);
-  }, [loggedInUser]);
-
   const {
     statLearnedProgress,
     pureMathLearnedProgress,
@@ -105,9 +106,7 @@ function DashboardCourses() {
           <div className="courses-tab">
             <div className="course-card">
               <div className="course-title">Pure Mathematics I</div>
-              <div className="course-lessons">
-                {loggedInUser.PureMathematics.lesson} lessons
-              </div>
+              <div className="course-lessons">{2} lessons</div>
               <div className="course-progress-tab">
                 <div className="prog-bar">
                   <div style={{ width: 100, height: 100 }}>
@@ -153,7 +152,7 @@ function DashboardCourses() {
                 <div className="prog-bar">
                   <div style={{ width: 100, height: 100 }}>
                     <CircularProgressbar
-                      value={loggedInUser.Statistics.learnedProgress}
+                      value={2}
                       text={`${loggedInUser.Statistics.learnedProgress}%`}
                       styles={{
                         path: {
@@ -225,91 +224,51 @@ function DashboardActivity() {
 
 // Dashboard Final Display Page
 function DashboardPage() {
-  const { loggedInUser, setLoggedInUser } = useContext(UserContext);
+  const { loggedInUser, setLoggedInUser, userExams, setUserExams } =
+    useContext(UserContext);
 
-  const {
-    loading,
-    setLoading: setLoading,
-    value,
-    setValue: setValue,
-    data,
-    setData,
-    voxalPoints,
-    setVoxalpoints,
-    hours,
-    setHours,
-    progress,
-    setProgress,
-    statValue,
-    setstatValue,
-    course,
-    setCourse,
-    ongoingCourse,
-    setongoingCourses,
-    user,
-    setUser,
-    hoursLearned,
-    setHoursLearned,
-    completeCourse,
-    setCompleteCourse,
-    statLearnedProgress,
-    setStatLearnedProgress,
-    pureMathLearnedProgress,
-    setPureMathLearnedProgress,
-    mathLesson,
-    setMathLesson,
-    statlLesson,
-    setStatLesson,
-    status,
-    setStatus,
-    testedPureProgress,
-    setPureTestedProgress,
-    testedStatProgress,
-    setStatTestedProgress,
-    isAuthenticated,
-  } = useContext(UserContext);
+  const retrieveUserFromStorage = () => {
+    const storedUser = window.sessionStorage.getItem("loggedUser");
+
+    if (storedUser) {
+      setLoggedInUser(JSON.parse(storedUser).data);
+
+      console.log(JSON.parse(storedUser).data);
+    } else {
+      console.log("No user found");
+    }
+  };
 
   useEffect(() => {
-    const fetchData = async () => {
-      try {
-        setVoxalpoints(loggedInUser.voxalPoints);
-        setHoursLearned(loggedInUser.hoursLearned);
-        setCompleteCourse(loggedInUser.completeCourse);
-        setongoingCourses(loggedInUser.ongoingCourses);
-        setPureMathLearnedProgress(
-          loggedInUser.PureMathematics.learnedProgress
-        );
-        setStatLearnedProgress(loggedInUser.Statistics.learnedProgress);
-        setMathLesson(loggedInUser.PureMathematics.lesson);
-        setStatLesson(loggedInUser.Statistics.lesson);
-        setPureTestedProgress(loggedInUser.PureMathematics.testedProgress);
-        setStatTestedProgress(loggedInUser.Statistics.testedProgress);
+    retrieveUserFromStorage();
+  }, []);
 
-        console.log(loggedInUser.voxalPoints);
-      } catch (error) {
-        console.error("Error fetching data:", error);
-      }
-    };
-
-    fetchData();
-  }, [user]);
+  useEffect(() => {
+    if (loggedInUser && Object.keys(loggedInUser).length > 0) {
+      setUserExams(getExams(loggedInUser._id));
+    }
+  }, [loggedInUser]);
 
   return (
     <>
-      <div className="dashboard-complete-container">
-        <DashboardHeader />
-        <div className="dashboard-main">
-          <DashboardGraph />
-          <DashboardStatistics
-            voxal={loggedInUser.voxalPoints}
-            ongoingCourses={loggedInUser.ongoingCourses}
-            completedCourses={loggedInUser.completeCourse}
-            hoursLearned={loggedInUser.hoursLearned}
-          />
-          <DashboardCourses />
-          <DashboardActivity />
+      {loggedInUser && Object.keys(loggedInUser).length > 0 && userExams ? (
+        <div className="dashboard-complete-container">
+          <DashboardHeader />
+          <div className="dashboard-main">
+            <DashboardGraph />
+            <DashboardStatistics
+              voxal={loggedInUser.voxalPoints}
+              ongoingCourses={loggedInUser.ongoingCourses}
+              completedCourses={loggedInUser.completeCourse}
+              hoursLearned={loggedInUser.hoursLearned}
+            />
+            <DashboardCourses />
+            <DashboardActivity />
+          </div>
         </div>
-      </div>
+      ) : (
+        <p>Loading user data...</p>
+      )}
     </>
   );
 }

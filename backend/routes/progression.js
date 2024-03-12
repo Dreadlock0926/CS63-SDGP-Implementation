@@ -1,35 +1,64 @@
-const express = require('express');
+const express = require("express");
 const router = express.Router();
 const progressionModel = require("../models/user");
+const examModel = require("../models/exam");
 
 router.route("/patch").patch(async (req, res) => {
-  if(!req.session.user) return res.sendStatus(401);
+  if (!req.session.user) return res.sendStatus(401);
   const username = req.session.user.username;
   const password = req.session.user.password;
 
-  const { marks, testHistory, testnumber,voxalPoints,hoursLearned,ongoingCourses,completeCourse,PureMathematics,Statistics } = req?.body;
+  const {
+    marks,
+    testHistory,
+    testnumber,
+    voxalPoints,
+    hoursLearned,
+    ongoingCourses,
+    completeCourse,
+    PureMathematics,
+    Statistics,
+  } = req?.body;
 
-  if (!marks || !testHistory || !testnumber||!testnumber||!voxalPoints||!hoursLearned||!ongoingCourses||!completeCourse||!PureMathematics||!Statistics) {
+  if (
+    !marks ||
+    !testHistory ||
+    !testnumber ||
+    !testnumber ||
+    !voxalPoints ||
+    !hoursLearned ||
+    !ongoingCourses ||
+    !completeCourse ||
+    !PureMathematics ||
+    !Statistics
+  ) {
     return res.status(400).json({ Alert: "Please provide correct data!" });
   }
   console.log(req.body);
   try {
-    const progressionData = (await progressionModel.updateOne({username:username,password:password},{$set:{
-      marks, 
-      testHistory, 
-      testnumber,
-      voxalPoints,
-      hoursLearned,
-      ongoingCourses,
-      completeCourse,
-      PureMathematics,
-      Statistics,
-
-    }},{ new: true })); //check this
+    const progressionData = await progressionModel.updateOne(
+      { username: username, password: password },
+      {
+        $set: {
+          marks,
+          testHistory,
+          testnumber,
+          voxalPoints,
+          hoursLearned,
+          ongoingCourses,
+          completeCourse,
+          PureMathematics,
+          Statistics,
+        },
+      },
+      { new: true }
+    ); //check this
     console.log(progressionData);
 
     if (!progressionData) {
-      return res.status(400).json({ Alert: "It has not been stored in the database!" });
+      return res
+        .status(400)
+        .json({ Alert: "It has not been stored in the database!" });
     }
 
     return res.status(200).send("You have successfully saved the data");
@@ -40,32 +69,41 @@ router.route("/patch").patch(async (req, res) => {
 });
 
 router.route("/get").post(async (req, res) => {
-
-  try{
+  try {
     // if(!req.session.user) return res.sendStatus(401);
     // const username = req.session.user.username;
     // const password = req.session.user.password;
-    
+
     // const userData = await progressionModel.find({_id:req?.session?.user?._id}).populate("users");
     // if(!req.session.user)return res.sendStatus(401);
     const username = req.body.username1;
     const password = req.body.password1;
-  
-    console.log("The user name is "+username);
-    console.log("The password is"+password);
 
-    const userData = await progressionModel.findOne({username,password});
-    
-      if(! userData){
-        return res.status(203).json({Alert:"No resources found!"})
-       
-      }
-      return res.send(userData);
+    console.log("The user name is " + username);
+    console.log("The password is" + password);
 
-  }catch(err){
+    const userData = await progressionModel.findOne({ username, password });
+
+    if (!userData) {
+      return res.status(203).json({ Alert: "No resources found!" });
+    }
+    return res.send(userData);
+  } catch (err) {
     console.error(err);
   }
+});
 
+router.get("/get-exams/:userRef", async (req, res) => {
+  try {
+    const userRef = req.params.userRef;
+
+    const exams = await examModel.find({ userRef });
+
+    res.json(exams);
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ error: "Failed to retrieve exams" });
+  }
 });
 
 module.exports = router;
