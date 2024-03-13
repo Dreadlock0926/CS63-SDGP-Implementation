@@ -19,6 +19,7 @@ const LearnBlueprint = () => {
       setLoading(true);
       const response = await Axios.post(`${BASE}`, { theTopic: topic });
       setTopicRelated(response.data);
+      console.log(response.data);
     } catch (error) {
       console.error(error);
       if (error.response && error.response.status === 404) {
@@ -36,7 +37,7 @@ const LearnBlueprint = () => {
       if (theTopic === "Pure") {
         await fetchData("Pure Mathematics I");
       } else if (theTopic === "Stat") {
-        await fetchData("Probability and Statistics I");
+        await fetchData("Probability and Statistics");
       } else {
         navigator("/resources");
       }
@@ -67,36 +68,13 @@ const LearnBlueprint = () => {
             <tbody>
               {topicRelated.map((item, index) => (
                 <React.Fragment key={item._id || index}>
-                  {item.topics.map((topic, topicIndex) => (
-                    <tr key={`${item._id || index}-${topicIndex}`}>
-                      <td>{topic}</td> {/**The topic names */}
-                      <td>
-                        {item.learnedProgress.map((progress, progressIndex) => (
-                          <div
-                            key={`${
-                              item._id || index
-                            }-learned-${progressIndex}`}
-                          >
-                            <Link to={progress.url}>{progress.percentage}</Link>{" "}
-                            {/**The topic percentages */}
-                          </div>
-                        ))}
-                      </td>
-                      <td>
-                        {item.tested.map((test, testIndex) => (
-                          <div key={`${item._id || index}-tested-${testIndex}`}>
-                            <Link
-                              to={test.testedExams.map((x) => {
-                                return x;
-                              })}
-                            >
-                              {test.state ? "Tested" : "Not Tested"}{" "}
-                              {/**has he done it? */}
-                            </Link>
-                          </div>
-                        ))}
-                      </td>
-                    </tr>
+                  <p>{item.topic}</p>
+                  {item.lessonPages.map((index) => (
+                    <div className="lessonPages" key={index}>
+                      <Link to={`/materials/${index}`}>
+                        {index !== 0 ? `${item.topic} -> ${index}` : ""}
+                      </Link>
+                    </div>
                   ))}
                 </React.Fragment>
               ))}

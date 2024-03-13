@@ -3,6 +3,7 @@ const router = express.Router();
 const learningModel = require("../models/learningResources");
 const topicsModel = require("../models/topics");
 const userModel = require("../models/user");
+
 //needs to be put in a controller
 //logic here must be changed
 //we need multer if photo uploads are needed
@@ -54,8 +55,7 @@ router.route("/topic/learned").post(async (req, res) => {
   const { theTopic } = req?.body;
 
   try {
-    const theTopics = await topicsModel.find({ source: theTopic });
-
+    const theTopics = await learningModel.find({ source: theTopic });
     if (theTopics && theTopics.length) {
       res.status(200).json(theTopics);
     } else {
@@ -191,5 +191,21 @@ router
       }
     }
   });
+
+router.route("/test").post(async (req, res) => {
+  const { source, topic, lessonPages } = req?.body;
+
+  if (!source || !topic || !lessonPages)
+    return res
+      .status(400)
+      .json({ Alert: "Source/Topic/Learned Pages REQUIRED" });
+
+  const created = await learningModel.create({ source, topic, lessonPages });
+  if (!created) {
+    return res.status(500).json({ Alert: "Error while creating!" });
+  } else {
+    res.status(201).json({ Alert: "Created!" });
+  }
+});
 
 module.exports = router;

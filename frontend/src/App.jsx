@@ -43,6 +43,7 @@ function App() {
           <Routes>
             <Route path="/resources" element={<Learn />} />
             <Route path="/materials" element={<LearningResource />}></Route>
+            <Route path="/materials/:index" element={<LearningResource />}></Route>
             <Route path="/addresources" element={<AddStudy />} />
             <Route path="/learnprint" element={<LearnBlueprint />}></Route>
             <Route path="*" element={<UnknownPage />} />

@@ -4,14 +4,16 @@ import { useContext, useEffect, useRef, useState } from "react";
 import { UserContext } from "../../App";
 import Axios from "axios";
 import { useHover } from "@uidotdev/usehooks";
+import { Link,useParams } from "react-router-dom";
 
-const LearningResource = () => {
+const LearningResource = (props) => {
   const { loading, setLoading, status, setStatus, user } =
     useContext(UserContext);
   const BASE = "http://localhost:8000/resources/progress/updates";
   const [ref, hovering] = useHover();
   const [theProgressVal, setTheProgressVal] = useState(0);
   const [lessons, setLessons] = useState([]);
+  const {index} = useParams();
 
   let theProgressGiven = 0;
   async function getNumberOfLessonForProgress() {
@@ -56,22 +58,29 @@ const LearningResource = () => {
     getNumberOfLessonForProgress();
   }, []);
 
-  useEffect(() => {
-    if (hovering) {
-      alert("Hovering!");
-      setTheProgressVal((prev) => (prev += theProgressGiven));
-      updateProgress();
-      JSON.stringify(lessons);
-    }
-  }, [hovering]);
+  // useEffect(() => {
+  //   if (hovering) {
+  //     alert("Hovering")
+  //     setTheProgressVal((prev) => (prev += theProgressGiven));
+  //     updateProgress();
+  //     JSON.stringify(lessons);
+  //   }
+  // }, [hovering]);
+
+  async function CompletedLesson() {
+    setTheProgressVal((prev) => (prev += theProgressGiven));
+    updateProgress();
+  }
 
   return (
-    !loading && (
-      <div>
-        <h1>Learning Resources</h1>
-        <div className="end" ref={ref}>
+    (
+      <div style={{height:"4000px"}}>
+        <h1>Learning Resources</h1>    
+        {/* <div className="end" ref={ref}>
           <h1>The end!</h1>
-        </div>
+        </div> */}
+        <Link to={index} onClick={()=>{alert(index)}}>The URL</Link>
+        <Link to="/nextpage">Next Page!</Link>
         <h1>{status}</h1>
         <p>{theProgressVal}</p>
       </div>

@@ -1,19 +1,18 @@
 const mongoose = require("mongoose");
 
-const learningResourcesSchema = mongoose.Schema({
-  topic: { type: String },
-  title: { type: [String] },
-  body:{type:[String]},
-  about: { type: String },
-  subtopic: { type: String },
-  url: { type: [String], default: "", trim: true },
-  lesson:{
-    type:[Array]
+const learningResourcesSchema = new mongoose.Schema(
+  {
+    source: { type: String },
+    topic: {
+      type: String,
+    },
+    lessonPages: {
+      type: [String],
+      default: [],
+    },
   },
-  photo: { type: String, trim: true },
-  addedBy: { type: String, ref: "users" },
-  topicKey: { type: String, ref: "topics" }, // Reference to the topic key in topicsModel
-});
+  { timestamps: true }
+);
 
 const learningModel = mongoose.model("resources", learningResourcesSchema);
 
