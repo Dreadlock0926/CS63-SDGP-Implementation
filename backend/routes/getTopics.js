@@ -36,7 +36,7 @@ router.route("/getModuleProbs").post(async (req, res) => {
 
   } else {
 
-    res.status(200).json(probData.topicProbabilities);
+    res.status(200).json(probData);
 
   }
 });

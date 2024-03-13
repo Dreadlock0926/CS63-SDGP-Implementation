@@ -19,13 +19,16 @@ const FeedbackPage = () => {
       }, []);
 
     //Get correct answers from the UserData
-    const [correctAnswers, setCorrectAnswers] = useState(["p1_q_3_w_2022_2", "p1_f_11_s_2015_2", "p1_f_1_w_2015_2", "p1_cg_1_w_2022_2", 'p1_i_9_w_2015_2', 'p1_i_10_w_2015_2', 'p1_d_5_s_2015_1','p1_d_2_s_2015_1']);
+    const [correctAnswers, setCorrectAnswers] = useState([]);
     // Get wrong answers from the UserData
-    const [wrongAnswers, setWrongAnswers] = useState(["p1_f_8_w_2015_2", "p1_cg_7_s_2015_2", "p1_cg_6_w_2015_2", 'p1_cm_6_w_2016_2', 'p1_cm_2_s_2015_2', 'p1_cm_6_s_2015_2', 'p1_cm_5_w_2015_2', 'p1_i_1_s_2015_2', 'p1_i_10_s_2015_2', 'p1_d_4_s_2015_2', 'p1_d_3_w_2015_2']);
+    const [wrongAnswers, setWrongAnswers] = useState([]);
     // The questions for the feedback exam
     const [examQuestions, setExamQuestions] = useState([]);
     //Variable tells if the probabilities are set
     const [probabilitiesSet, setProbabilitiesSet] = useState(false);
+
+    //Current module
+    const [moduleID, setModuleID] = useState("");
 
     //Available questions list
     const [availableQuestions, setAvailableQuestions] = useState([]);
@@ -33,14 +36,10 @@ const FeedbackPage = () => {
     const [questionsList, setQuestionsList] = useState([]);
 
     //Topic probabilities
-    const [topicProbabilities, setTopicProbabilities] = useState({
-        "q":0,
-        "f":0,
-        "cg":-1,
-        "cm":-1,
-        "i":0,
-        "d":0
-    });
+    const [topicProbabilities, setTopicProbabilities] = useState(null);
+
+    //Topic probabilities clone
+    const [topicProbabilitiesCloned, setTopicProbabilitiesCloned] = useState(null);
 
     //Module Probabilities
     const [moduleProbabilities, setModuleProbabilities] = useState({});
@@ -49,45 +48,13 @@ const FeedbackPage = () => {
     const calculateProbabilities = async (moduleID) => {
         setProbabilitiesSet(false);
 
-        const calculator = (probList) => {
-
-            let topicProbabilitiesClone = {...probList};
-
-            Object.keys(probList).forEach(key => {
-                if (probList[key] !== -1) {
-    
-                    let numCorrect = 0;
-                    let numWrong = 0;
-                    correctAnswers.forEach(ans => {
-                        if (ans.split("_")[1] === key && ans.split("_")[0] === moduleID) {
-                            numCorrect += 1;
-                        }
-                    })
-                    wrongAnswers.forEach(ans => {
-                        if (ans.split("_")[1] === key && ans.split("_")[0] === moduleID) {
-                            numWrong += 1;
-                        }
-                    })
-                    let probability = Math.round(numWrong/(numWrong+numCorrect) * 10)/10;
-                    if (probability === 0) {
-                        probability = 0.1;
-                    } else if (probability === 1) {
-                        probability = 0.9;
-                    }
-                    topicProbabilitiesClone[key] = probability;
-                }   
-            });
-    
-            setTopicProbabilities(topicProbabilitiesClone);
-            setProbabilitiesSet(true);
-
-        }
-
         await Axios.post("http://localhost:8000/getTopics/getModuleProbs", {
             username:loggedInUser.username
         })
         .then(function (response) {
-            calculator(response.data[moduleID]);
+            setCorrectAnswers(response.data.correctQuestions);
+            setWrongAnswers(response.data.wrongQuestions);
+            setTopicProbabilitiesCloned(response.data.topicProbabilities[moduleID]);
         })
         .catch(function (error) {
             console.log(error);
@@ -111,13 +78,15 @@ const FeedbackPage = () => {
               })
         }
 
-        updateModuleProbability();
-        
+        if (!loggedInUser.topicProbabilities) {
+            updateModuleProbability();
+        }
 
     }, [moduleProbabilities])
 
     //Get questions based on probabilities
     const getQuestionsOnProbability = async (moduleID) => {
+        setModuleID(moduleID);
 
         console.log(loggedInUser);
 
@@ -169,8 +138,6 @@ const FeedbackPage = () => {
         for (const i in availableQuestions) {
             for (const topic in topicProbabilities) {
                 if (availableQuestions[i].split("_")[1] === topic && topicProbabilities[topic] > 0) {
-                    console.log(availableQuestions);
-                    console.log(numOfQuestions);
                     numOfQuestions += 1;
                 }
             }
@@ -185,8 +152,6 @@ const FeedbackPage = () => {
         let tempExamQuestions = [];
 
         while (tempExamQuestions.length < iterable) {
-
-            console.log("number of questions: " + numOfQuestions);
 
             for (const i in availableQuestions) {
                 let chance = Math.random();
@@ -232,8 +197,54 @@ const FeedbackPage = () => {
         console.log(questionsList);
     }, [questionsList])
 
+    const calculator = (probList) => {
+
+        console.log("prob: ");
+        console.log(probList);
+        console.log(correctAnswers);
+        console.log(wrongAnswers);
+
+        let topicProbabilitiesClone = {...probList};
+
+        Object.keys(probList).forEach(key => {
+            if (probList[key] !== -1) {
+
+                let numCorrect = 0;
+                let numWrong = 0;
+                correctAnswers.forEach(ans => {
+                    if (ans.split("_")[1] === key && ans.split("_")[0] === moduleID) {
+                        numCorrect += 1;
+                    }
+                })
+                wrongAnswers.forEach(ans => {
+                    if (ans.split("_")[1] === key && ans.split("_")[0] === moduleID) {
+                        numWrong += 1;
+                    }
+                })
+                let probability = Math.round(numWrong/(numWrong+numCorrect) * 10)/10;
+                if (probability === 0) {
+                    probability = 0.1;
+                } else if (probability === 1) {
+                    probability = 0.9;
+                }
+                topicProbabilitiesClone[key] = probability;
+            }   
+        });
+
+        setTopicProbabilities(topicProbabilitiesClone);
+        setProbabilitiesSet(true);
+
+    }
+
     useEffect(() => {
-        console.log(topicProbabilities);
+        if (topicProbabilitiesCloned) {
+            calculator(topicProbabilitiesCloned);
+        }
+    }, [topicProbabilitiesCloned]);
+
+    useEffect(() => {
+        console.log("The topic probabilities are: ")
+        console.log(topicProbabilities)
     }, [topicProbabilities])
 
     return (
