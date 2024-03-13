@@ -14,11 +14,12 @@ const exam = require("./routes/exam");
 const login = require("./routes/login");
 const register = require("./routes/register");
 const addQuestion = require("./routes/addQuestion");
-const getQuestion = require("./routes/getQuestion")
-const getQuestionsOnTopic = require("./routes/getQuestionsOnTopic")
+const getQuestion = require("./routes/getQuestion");
+const getQuestionsOnTopic = require("./routes/getQuestionsOnTopic");
 const getTopics = require("./routes/getTopics");
-const examResources = require("./routes/exams")
+const examResources = require("./routes/exams");
 const user = require("./routes/user");
+const course = require("./routes/courses");
 const cookieParser = require("cookie-parser");
 
 async function authenticated(req, res, next) {
@@ -62,7 +63,8 @@ app.use("/addQuestion", addQuestion);
 app.use("/getQuestionsOnTopic", getQuestionsOnTopic);
 app.use("/getQuestion", getQuestion);
 app.use("/getTopics", getTopics);
-app.use("/exam",examResources);
+app.use("/exam", examResources);
+app.use("/course", course);
 app.use("/user", user);
 
 app.use("*", (req, res) => {

@@ -15,7 +15,7 @@ import Scope from "./pages/TestPages/Scope";
 import ExamFinalized from "./pages/TestPages/ExamFinal";
 import FeedbackPage from "./pages/FeedbackPage/FeedbackPage";
 import ExamPage from "./pages/ExamPage/ExamPage";
-
+import SelectCourses from "./pages/SelectCoursesPage/SelectCourses";
 
 export const UserContext = createContext();
 
@@ -41,28 +41,7 @@ function App() {
   const [testedStatProgress, setStatTestedProgress] = useState(0);
   const [isAuthenticated, setIsAuthenticated] = useState(false);
 
-  const [loggedInUser, setLoggedInUser] = useState({
-    username: "", // Assuming username is required
-    password: "", // Assuming password is required (not used in this example)
-    marks: 0,
-    testHistory: {
-      Maths: [0], // Assuming Maths is an array of marks
-      Statistics: [0], // Assuming Statistics is an array of marks
-    },
-    testnumber: 0,
-    voxalPoints: 0,
-    hoursLearned: 0,
-    ongoingCourses: 0,
-    completeCourse: 0,
-    PureMathematics: {
-      learnedProgress: 0,
-      lesson: 0,
-    },
-    Statistics: {
-      learnedProgress: 0,
-      lesson: 0,
-    },
-  });
+  const [loggedInUser, setLoggedInUser] = useState({});
 
   // Structuring the context value explicitly
   const contextValue = {
@@ -120,11 +99,14 @@ function App() {
           <Route path="/login" element={<Login />} />
           <Route path="/registration" element={<Register />} />
           <Route path="/authenticate" element={<Authenticate />} />
-          <Route path="add-questions" element={<AddQuestionsPage />}/>
-          <Route path="exam" element={<ExamPage />}/>
-          <Route path="/examfinal" element={<ExamFinalized/>}></Route> {/**Incomplete */}
-          <Route path="/scope" element={<Scope/>}></Route> {/**Radhul is working on this */}
-          <Route path="/feedback" element={<FeedbackPage/>}></Route>
+          <Route path="add-questions" element={<AddQuestionsPage />} />
+          <Route path="/select-course" element={<SelectCourses />} />
+          <Route path="exam" element={<ExamPage />} />
+          <Route path="/examfinal" element={<ExamFinalized />}></Route>{" "}
+          {/**Incomplete */}
+          <Route path="/scope" element={<Scope />}></Route>{" "}
+          {/**Radhul is working on this */}
+          <Route path="/feedback" element={<FeedbackPage />}></Route>
           <Route path="*" element={<UnknownPage />} />
         </Routes>
       </BrowserRouter>
