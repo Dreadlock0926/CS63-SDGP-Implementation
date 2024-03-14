@@ -22,12 +22,14 @@ const Statistics = ({
   AnsweringQuestions,
   answer,
   setAnswer,
+  toggle,
+  setToggle,
 }) => {
   return (
     <div key={theKey} className="card" style={{ marginBottom: "20px" }}>
-      <Typography variant="h4">{x.topic}</Typography>
-      <Typography variant="body2">{x.description}</Typography>
       <Typography variant="h4">{x.question}</Typography>
+      <Typography variant="body1">{x.description}</Typography>
+      <Typography variant="h4">Responses:</Typography>
       {x?.answers ? (
         x.answers.map((answer, index) => (
           <div key={index} style={{ marginBottom: "10px" }}>
@@ -59,21 +61,31 @@ const Statistics = ({
       <Button onClick={() => increaseVotes(x._id)}>Upvote</Button>
       <Button onClick={() => downVote(x._id)}>DownVote</Button>
       <Button onClick={() => DeleteComment(x._id)}>Delete</Button>
-      <form
-        onSubmit={(e) => {
-          e.preventDefault();
-          AnsweringQuestions(x._id, answer);
+      <Button
+        onClick={() => {
+          setToggle(!toggle);
         }}
       >
-        <Input
-          onChange={(e) => {
-            setAnswer(e.target.value);
+        Answer!
+      </Button>
+      {toggle ? (
+        <form
+          className="replyForm"
+          onSubmit={(e) => {
+            e.preventDefault();
+            AnsweringQuestions(x._id, answer);
           }}
-          placeholder="Answer..."
-          type="text"
-        />
-        <Button type="submit">Answer</Button>
-      </form>
+        >
+          <Input
+            onChange={(e) => setAnswer(e.target.value)}
+            placeholder="Answer..."
+            type="text"
+          />
+          <Button type="submit">Answer</Button>
+        </form>
+      ) : (
+        ""
+      )}
     </div>
   );
 };

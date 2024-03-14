@@ -13,6 +13,7 @@ const session = require("express-session");
 const { join } = require("path");
 const forum = require("./routes/forum");
 
+
 app.use(express.json());
 app.use(cors()); //allow access from anywhere for now!
 
@@ -35,6 +36,7 @@ app.use("/register", register);
 app.use("/login", login);
 app.use("/addQuestion", addQuestion);
 app.use("/forum",forum)
+
 
 // app.use(authenticated); //uncomment during final authentication tests 🔓
 // app.use("/forum", forum);

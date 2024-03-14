@@ -66,6 +66,20 @@ router
     }
   });
 
+router.route("/search").post(async (req, res) => {
+  const { search } = req?.body;
+  try {
+    const matches = await forumModel.find({ question: search });
+    if (matches && matches.length) {
+      res.status(200).json(matches);
+    } else {
+      res.status(404).json({ Alert: "No results found!" });
+    }
+  } catch (err) {
+    console.error(err);
+  }
+});
+
 router
   .route("/:id")
   .put(async (req, res) => {

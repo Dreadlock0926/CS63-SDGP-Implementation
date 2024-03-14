@@ -10,6 +10,7 @@ import {
   Select,
   Typography,
 } from "@mui/material";
+import { useState } from "react";
 
 const All = ({
   x,
@@ -21,7 +22,9 @@ const All = ({
   AnsweringQuestions,
   answer,
   setAnswer,
+  toggle,setToggle,
 }) => {
+  
   return (
     <div key={theKey} className="card" style={{ marginBottom: "20px" }}>
       <Typography variant="h4">{x.question}</Typography>
@@ -35,7 +38,9 @@ const All = ({
               Posted By: {answer.answeredBy}
             </Typography>
             <Typography variant="body1">
-             {answer.noOfUpvotes ? ` Number of votes: ${answer.noOfUpvotes}` : "No upvotes!"}
+              {answer.noOfUpvotes
+                ? ` Number of votes: ${answer.noOfUpvotes}`
+                : "No upvotes!"}
             </Typography>
             <Button
               onClick={() => nerdPointsIncrement(x._id)}
@@ -55,21 +60,26 @@ const All = ({
       </Typography>
       <Button onClick={() => increaseVotes(x._id)}>Upvote</Button>
       <Button onClick={() => downVote(x._id)}>DownVote</Button>
-      <Button onClick={() => DeleteComment(x._id)}>Delete</Button>
-      <form
-        className="replyForm"
-        onSubmit={(e) => {
-          e.preventDefault();
-          AnsweringQuestions(x._id, answer);
-        }}
-      >
-        <Input
-          onChange={(e) => setAnswer(e.target.value)}
-          placeholder="Answer..."
-          type="text"
-        />
-        <Button type="submit">Answer</Button>
-      </form>
+      {/* <Button onClick={() => DeleteComment(x._id)}>Delete</Button> */}
+      <Button onClick={()=>{setToggle(!toggle)}}>Answer!</Button>
+      {toggle ? (
+        <form
+          className="replyForm"
+          onSubmit={(e) => {
+            e.preventDefault();
+            AnsweringQuestions(x._id, answer);
+          }}
+        >
+          <Input
+            onChange={(e) => setAnswer(e.target.value)}
+            placeholder="Answer..."
+            type="text"
+          />
+          <Button type="submit">Answer</Button>
+        </form>
+      ) : (
+        ""
+      )}
     </div>
   );
 };

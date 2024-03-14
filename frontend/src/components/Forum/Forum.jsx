@@ -26,8 +26,12 @@ const Forum = () => {
   const [answer, setAnswer] = useState("");
   const [down, setDown] = useState(0);
   const navigator = useNavigate();
+  const [search, setSearch] = useState("");
+  const [toggle, setToggle] = useState(false);
   const [theTotalUpvotes, setTheTotalUpvotes] = useState(0);
   const EndPoint = "http://localhost:8000/forum";
+
+  let searchClicked = 0;
 
   useEffect(() => {
     forumData();
@@ -151,6 +155,23 @@ const Forum = () => {
     }
   };
 
+  const searchUp = async (e) => {
+    e.preventDefault();
+    try {
+      const theData = await Axios.post(`${EndPoint}/search`, { search });
+      if (theData.data.status === 200) {
+        setData([]);
+        setData(theData);
+      }
+      console.log(theData.data);
+    } catch (err) {
+      if (err.response.status === 404) {
+        setStatus("No results found");
+      }
+      console.error(err);
+    }
+  };
+
   return logged ? (
     <div className="main">
       <div
@@ -167,6 +188,20 @@ const Forum = () => {
         </Typography>
         <br />
         <br />
+        <form onSubmit={searchUp}>
+          <input
+            onChange={(e) => {
+              setSearch(e.target.value);
+            }}
+            placeholder="Search here..."
+            type="text"
+            minLength={5}
+          ></input>
+          <button type="submit" disabled={loading}>
+            Search...
+          </button>
+        </form>
+        <p>{status}</p>
         <FormControl style={{ marginBottom: "20px" }}>
           <InputLabel>Select Topic</InputLabel>
           <br />
@@ -196,6 +231,8 @@ const Forum = () => {
                 AnsweringQuestions={AnsweringQuestions}
                 answer={answer}
                 setAnswer={setAnswer}
+                toggle={toggle}
+                setToggle={setToggle}
               />
             ))
           ) : (
@@ -216,6 +253,8 @@ const Forum = () => {
                   AnsweringQuestions={AnsweringQuestions}
                   answers={answer}
                   setAnswer={setAnswer}
+                  toggle={toggle}
+                  setToggle={setToggle}
                 />
               ) : (
                 ""
@@ -239,6 +278,8 @@ const Forum = () => {
                   AnsweringQuestions={AnsweringQuestions}
                   answer={answer}
                   setAnswer={setAnswer}
+                  toggle={toggle}
+                  setToggle={setToggle}
                 />
               ) : null
             )
@@ -253,7 +294,7 @@ const Forum = () => {
   ) : (
     <div>
       <Typography variant="h1">
-        Please <Link to="/login">login</Link> to continue to the forum{" "}
+        Please <Link to="/login">login</Link> to continue to the forum
       </Typography>
     </div>
   );
