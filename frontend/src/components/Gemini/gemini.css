@@ -1,0 +1,113 @@
+
+.dabot{
+    border:12px solid black;
+    cursor: pointer;
+    margin:1%;
+}
+
+.formContainer{
+    display:flex;
+    justify-content : space-around;
+}
+
+
+/* Fade in & out animation */
+@keyframes fadeIn {
+    0% {
+      opacity: 0;
+    }
+    100% {
+      opacity: 1;
+    }
+  }
+
+  /* Container for the Button and the Image inside */
+.botBtn {
+    position: fixed;
+    right: 0;
+    bottom: 0;
+    padding: 20px;
+}
+
+/* Search text field style */
+.botInput {
+    border: 2px solid transparent;
+    width: 15em;
+    height: 2.5em;
+    padding-left: 0.8em;
+    outline: none;
+    overflow: hidden;
+    background-color: #F3F3F3;
+    border-radius: 10px;
+    transition: all 0.5s;
+}
+
+/* Hover and focus effects for the text field */
+.botInput:hover, .botInput:focus {
+    border: 2px solid #4a9dec;
+    box-shadow: 0px 0px 0px 7px rgb(74, 157, 236, 20%);
+    background-color: white;
+}
+
+/* Styles for the search button */
+.searchButton {
+    border: 2px solid transparent;
+    padding: 10px;
+    outline: none;
+    background-color: white;
+    border-radius: 10px;
+    transition: all 0.5s;
+}
+
+/* Hover effects for the search button */
+.searchButton:hover {
+    transition: all 0.2s;
+    transform: scale(1.1);
+    cursor: pointer;
+    border: 2px solid #4a9dec;
+    box-shadow: 0px 0px 0px 7px rgb(74, 157, 236, 20%);
+    background-color: white;
+}
+
+/* Button to open the Modal */
+.modalBtn {
+    height: 55px;
+    width: 55px;
+    border: none;
+    border-radius: 10px;
+    background-color: white;
+    transition: 0.2s;
+}
+.modalBtn:hover {
+    transition: 0.2s;
+    transform: scale(1.1);
+    cursor: pointer;
+    border: 2px solid #4a9dec;
+    box-shadow: 0px 0px 0px 7px rgb(74, 157, 236, 20%);
+    background-color: white;
+}
+
+/* Modal Container */
+.modal {
+    animation: fadeIn 0.2s;
+    box-shadow: rgba(17, 17, 26, 0.1) 0px 4px 16px, rgba(17, 17, 26, 0.1) 0px 8px 24px, rgba(17, 17, 26, 0.1) 0px 16px 56px;
+    margin: 15% auto;
+    width: 40%;
+    padding: 20px;
+    border-radius: 12px;
+}
+
+.closeModal {
+    text-decoration: none;
+    border: none;
+    background-color: white;
+    color: #666666;
+    font-size: 16px;
+    transition: 0.5s;
+}
+
+.closeModal:hover {
+    color: #068C1F;
+    transition: 0.5s;
+    cursor: pointer;
+}

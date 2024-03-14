@@ -4,14 +4,13 @@ import Home from "./pages/HomePage/home";
 import Login from "./pages/AccountPage/login";
 import Register from "./pages/AccountPage/register";
 import ErrorPage from "./components/Error404/ErrorPage";
-import Gemini from "./components/Gemini/Gemini";
 import ModalTest from "./pages/ModalTest";
 
 export const UserContext = createContext();
 
 function App() {
   const [loading, setLoading] = useState(false);
-  const [logged, setLogged] = useState(false);
+  const [logged, setLogged] = useState(true);
   const [status, setStatus] = useState("");
   const [user,setUser] = useState("")
 
@@ -30,7 +29,6 @@ function App() {
     <>
       <UserContext.Provider value={userContextValue}>
         <BrowserRouter>
-          <Gemini />
           <Routes>
             <Route path="/" element={<Home />} />
             <Route path="login" element={<Login />} />
