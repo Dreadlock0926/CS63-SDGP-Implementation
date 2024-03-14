@@ -62,7 +62,7 @@ app.use("/addQuestion", addQuestion);
 app.use("/getQuestionsOnTopic", getQuestionsOnTopic);
 app.use("/getQuestion", getQuestion);
 app.use("/getTopics", getTopics);
-app.use("/exam",examResources);
+app.use("/exam", exam);
 app.use("/user", user);
 
 app.use("*", (req, res) => {
