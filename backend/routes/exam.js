@@ -3,10 +3,10 @@ const router = express.Router();
 const examModel = require("../models/exam");
 const userModel = require("../models/user"); // Import the userModel
 
-router.route("/save-exam").post(async (req, res) => {
-  const { examType, examQuestions, userRef, mark, examModule } = req?.body;
+router.route("/saveExam").post(async (req, res) => {
+  const { examType, examQuestions, userRef, examModule, examTopic } = req?.body;
 
-  if (!examType || !examQuestions || !userRef || !mark || !examModule) {
+  if (!examType || !examQuestions || !userRef || !examModule || !examTopic) {
     return res.status(400).json({ Alert: "Exam Details Missing!" });
   }
 
@@ -15,14 +15,15 @@ router.route("/save-exam").post(async (req, res) => {
     examQuestions,
     userRef,
     examModule,
-    mark,
+    examTopic,
   });
 
   if (validityExam) {
     // Update user's examInfo after successful exam creation
     try {
+      // let examTypeFormatted = `${examType}Exams`
       const updatedUser = await userModel.findByIdAndUpdate(userRef, {
-        $push: { "progress.examHistory.examInfo": validityExam._id }, // Push exam object Id
+        $push: { "feedbackExams": validityExam._id }, // Push exam object Id
       });
 
       if (updatedUser) {
