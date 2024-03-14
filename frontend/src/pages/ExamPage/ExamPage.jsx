@@ -6,7 +6,8 @@ import { ClipLoader } from 'react-spinners';
 import "//unpkg.com/mathlive";
 import ExamCountDown from "../TestPages/ExamCount-Down";
 
-function InfoPanel() {
+function InfoPanel({ examType, examSubject, numQuestions }) {
+
   return (
     <div className="info-panel">
       <div className="timer-container">
@@ -15,23 +16,23 @@ function InfoPanel() {
             <ExamCountDown examType={"s1"} />
         </div>
       </div>
-      <div className="questions-remaining">9 out of 11 Questions Answered</div>
+      <div className="questions-remaining">0 out of {numQuestions} Questions Answered</div>
       <div className="exam-info">
         <div className="exam-info-header">Exam Information</div>
         <div className="subject-info">
           <div className="subject-tag">Subject:</div>
-          <div className="subject-name">Pure Mathematics I</div>
+          <div className="subject-name">{examSubject}</div>
         </div>
         <div className="exam-meta-info">
           <div className="exam-type">Exam Type:</div>
-          <div className="exam-name">Feedback Exam</div>
+          <div className="exam-name">{examType} Exam</div>
         </div>
       </div>
     </div>
   );
 }
 
-function ExamPageContent({setIsLoadingInfo}) {
+function ExamPageContent({setIsLoadingInfo, setExamType, setExamSubject, setNumQuestions}) {
 
     function QuestionOnPage({question, mqNum}) {
 
@@ -103,6 +104,7 @@ function ExamPageContent({setIsLoadingInfo}) {
     
             }
     
+            setNumQuestions(questionArray.length);
             setQuestions(questionArray);
             setCorrectAnswers(answerArray);
             setIsLoading(false);
@@ -118,7 +120,7 @@ function ExamPageContent({setIsLoadingInfo}) {
 
     }, [questionsList])
     
-    const getQuestion = async ( setQuestionsList ) => {
+    const getQuestion = async ( setQuestionsList, setExamType, setExamSubject ) => {
 
         // const questionsList = ["p1_s_2_w_2022_2","p1_cg_1_w_2022_2","s1_p_3_w_2022_2", "p1_s_2_w_2022_2","p1_cg_1_w_2022_2","s1_p_3_w_2022_2"];
 
@@ -127,6 +129,8 @@ function ExamPageContent({setIsLoadingInfo}) {
                 "examRef": "65f34e27421397a390df401b"
             });
 
+            setExamType(response.data.examType);
+            setExamSubject(response.data.examModule);
             setQuestionsList(response.data.examQuestions)
 
         } catch (err) {
@@ -136,7 +140,7 @@ function ExamPageContent({setIsLoadingInfo}) {
     }
 
     useEffect(()=>{
-        getQuestion(setQuestionsList);
+        getQuestion(setQuestionsList, setExamType, setExamSubject);
     },[])
 
     const submitAnswers = () => {
@@ -167,6 +171,9 @@ function ExamPageContent({setIsLoadingInfo}) {
 
 function ExamPage() {
     const [isLoadingInfo, setIsLoadingInfo] = useState(true);
+    const [examType, setExamType] = useState("");
+    const [examSubject, setExamSubject] = useState("");
+    const [numQuestions, setNumQuestions] = useState(0);
 
     useEffect(() => {
         console.log(isLoadingInfo);
@@ -174,8 +181,8 @@ function ExamPage() {
 
     return (
         <div className="exams-container">
-            <ExamPageContent setIsLoadingInfo={setIsLoadingInfo} />
-            {!isLoadingInfo && <InfoPanel />}
+            <ExamPageContent setIsLoadingInfo={setIsLoadingInfo} setExamType={setExamType} setExamSubject={setExamSubject} setNumQuestions={setNumQuestions} />
+            {!isLoadingInfo && <InfoPanel examType={examType} examSubject={examSubject} numQuestions={numQuestions} />}
         </div>
     )
 }
