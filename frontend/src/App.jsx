@@ -16,6 +16,7 @@ import ExamFinalized from "./pages/TestPages/ExamFinal";
 import FeedbackPage from "./pages/FeedbackPage/FeedbackPage";
 import ExamPage from "./pages/ExamPage/ExamPage";
 import SelectCourses from "./pages/SelectCoursesPage/SelectCourses";
+import SpecificCourse from "./pages/SelectCoursesPage/SpecificCourse";
 
 export const UserContext = createContext();
 
@@ -101,10 +102,11 @@ function App() {
           <Route path="/authenticate" element={<Authenticate />} />
           <Route path="add-questions" element={<AddQuestionsPage />} />
           <Route path="/select-course" element={<SelectCourses />} />
+          <Route path="/select-course/:theTopic" element={<SpecificCourse />} />
           <Route path="exam" element={<ExamPage />} />
-          <Route path="/examfinal" element={<ExamFinalized />}></Route>{" "}
+          <Route path="/examfinal" element={<ExamFinalized />}></Route>
           {/**Incomplete */}
-          <Route path="/scope" element={<Scope />}></Route>{" "}
+          <Route path="/scope" element={<Scope />}></Route>
           {/**Radhul is working on this */}
           <Route path="/feedback" element={<FeedbackPage />}></Route>
           <Route path="*" element={<UnknownPage />} />

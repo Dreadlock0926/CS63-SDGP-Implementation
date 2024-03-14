@@ -3,6 +3,7 @@ import "./CourseComponent.css";
 import initializeProbabilities from "../FeedbackPage/initializeProbabilities";
 import updateLoggedUser from "./updateLoggedUser";
 import Axios from "axios";
+import { Link } from "react-router-dom";
 
 const handleClick = async (courseToAdd) => {
   let loggedInUser = JSON.parse(sessionStorage.getItem("loggedUser")).data;
@@ -62,7 +63,9 @@ const CourseComponent = (course) => {
       <div className="topicsContainer">
         <ul className="topicTagField">
           {course.course.topics.map((topic, i) => (
-            <li key={i}>{topic}</li>
+            <Link to={topic} key={i}>
+              <li key={i}>{topic}</li>
+            </Link>
           ))}
         </ul>
       </div>
