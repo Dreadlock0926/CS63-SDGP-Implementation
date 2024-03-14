@@ -215,7 +215,7 @@ router.route("/search/:id").post(async (req, res) => {
   if (!id) return res.status(400).json({ Alert: "No ID" });
 
   try {
-    const exists = await learningModel.findById(parseInt(id));
+    const exists = await learningModel.findOne({lessonPages:parseInt(id)});
 
     if (exists) {
       res.status(200).json(exists);

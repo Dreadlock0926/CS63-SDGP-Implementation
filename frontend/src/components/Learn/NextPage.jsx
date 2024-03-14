@@ -27,9 +27,9 @@ const NextPage = () => {
 
   async function IncrementProgress() {
     try {
-      const outcome = await Axios.put(`${BASE}/progress/updates`, {
+      const outcome = await Axios.put(`${BASE}/resources/progress/updates`, {
         progress: theProgressVal,
-        userId: user.id,
+        userId: "65f2a146a0acea296a663650",
       });
       if (outcome.data.status === 200) {
         alert("Incremented!");
@@ -43,14 +43,14 @@ const NextPage = () => {
     <div>
       <h1>The Next Page!</h1>
       <p>{id}</p>
-      <Link to={`/nextpage/${Number(id) + 1}`} onClick={IncrementProgress}>
-        Next Page!
-      </Link>
       <div>
         {material && material.length
           ? JSON.stringify(material)
           : "No results found!"}
       </div>
+      <Link to={`/nextpage/${Number(id) + 1}`} onClick={IncrementProgress}>
+        Next Page!
+      </Link>
       <br />
       <Link to={"/first"}>First!</Link>
     </div>
