@@ -12,7 +12,7 @@ function InfoPanel() {
       <div className="timer-container">
         <div className="timer-text">Time Remaining</div>
         <div className="timer">
-            <ExamCountDown examType={"p1"} />
+            <ExamCountDown examType={"s1"} />
         </div>
       </div>
       <div className="questions-remaining">9 out of 11 Questions Answered</div>
@@ -51,7 +51,7 @@ function ExamPageContent({setIsLoadingInfo}) {
                 <math-field 
                 placeholder="Workings..."
                 onInput={evt => setAnswer(evt.target.value)} 
-                style={{width: 275 + 'px', height: 200 + 'px',marginBlock: 20 + 'px', width: 60 + '%'}}>{answer}
+                style={{height: 200 + 'px',marginBlock: 20 + 'px', width: 60 + '%'}}>{answer}
                     </math-field>
                 }
 
@@ -61,55 +61,82 @@ function ExamPageContent({setIsLoadingInfo}) {
 
     const [questions, setQuestions] = useState([]);
     const [correctAnswers, setCorrectAnswers] = useState([]);
+    const [questionsList, setQuestionsList] = useState([]);
     const [isLoading, setIsLoading] = useState(true);
     let writtenAnswers = [];
 
     useEffect(() => {
         console.log(correctAnswers);
     }, [correctAnswers])
-    
-    const getQuestion = async () => {
+
+    useEffect(() => {
 
         const questionArray = [];
         const answerArray = [];
-        const questionsList = ["p1_s_2_w_2022_2","p1_cg_1_w_2022_2","s1_p_3_w_2022_2", "p1_s_2_w_2022_2","p1_cg_1_w_2022_2","s1_p_3_w_2022_2"];
 
-        for (let i = 0; i < questionsList.length; i++) {
+        const receiveQuestions = async () => {
 
-            try {
-                const response = await Axios.post('http://localhost:8000/getQuestion', {
-                    "questionID": questionsList[i]
-                });
-        
-                const questionData = response.data;
+            for (let i = 0; i < questionsList.length; i++) {
 
-                questionData.answersGrid.forEach(answer => {
-                    if (answer !== "") {
-                        answerArray.push(answer);
-                    }
-                }) 
-
-                questionArray.push(
-                    <QuestionOnPage key={i} question={questionData} mqNum={i+1}/>
-                );
-        
-            } catch (err) {
-                console.log(err);
-                setIsLoading(false);
-                setIsLoadingInfo(false);
+                try {
+                    const response = await Axios.post('http://localhost:8000/getQuestion', {
+                        "questionID": questionsList[i]
+                    });
+            
+                    const questionData = response.data;
+    
+                    questionData.answersGrid.forEach(answer => {
+                        if (answer !== "") {
+                            answerArray.push(answer);
+                        }
+                    }) 
+    
+                    questionArray.push(
+                        <QuestionOnPage key={i} question={questionData} mqNum={i+1}/>
+                    );
+            
+                } catch (err) {
+                    console.log(err);
+                    setIsLoading(false);
+                    setIsLoadingInfo(false);
+                }
+    
             }
+    
+            setQuestions(questionArray);
+            setCorrectAnswers(answerArray);
+            setIsLoading(false);
+            setIsLoadingInfo(false);
 
         }
 
-        setQuestions(questionArray);
-        setCorrectAnswers(answerArray);
-        setIsLoading(false);
-        setIsLoadingInfo(false);
+        if (questionsList.length > 0) {
+    
+            receiveQuestions();
+
+        }
+
+    }, [questionsList])
+    
+    const getQuestion = async ( setQuestionsList ) => {
+
+        // const questionsList = ["p1_s_2_w_2022_2","p1_cg_1_w_2022_2","s1_p_3_w_2022_2", "p1_s_2_w_2022_2","p1_cg_1_w_2022_2","s1_p_3_w_2022_2"];
+
+        try {
+            const response = await Axios.post('http://localhost:8000/exam/getExam', {
+                "examRef": "65f34e27421397a390df401b"
+            });
+
+            setQuestionsList(response.data.examQuestions)
+
+        } catch (err) {
+            console.log(err);
+        }
 
     }
 
     useEffect(()=>{
-        getQuestion();
+        getQuestion(setQuestionsList);
     },[])
 
     const submitAnswers = () => {
@@ -117,10 +144,6 @@ function ExamPageContent({setIsLoadingInfo}) {
         writtenAnswers = (Array.from(writtenAnswerContainer).map((answer) => answer.value));
         console.log(writtenAnswers);
     }
-    
-    const spawnWorkingArea = () => {
-      setWorkingVisible(!workingVisible);
-    };
 
     return (
         <>
