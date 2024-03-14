@@ -3,7 +3,7 @@ import { useContext, useRef, useState } from "react";
 import { AddMaterial } from "../Api/Api";
 import Axios from "axios";
 import { UserContext } from "../../App";
-import { useNavigation } from "react-router-dom";
+import { useNavigation,useParams } from "react-router-dom";
 
 import Loading from "../Loading";
 // import { RingLoader } from "react-spinners/RingLoader";
@@ -24,6 +24,7 @@ const AddStudy = () => {
   });
 
   const theDrop = useRef();
+  const {id} = useParams();
 
   const addMaterial = async (e) => {
     e.preventDefault();
@@ -132,6 +133,7 @@ const AddStudy = () => {
             ></input>
             <button type="submit">Add Resource</button>
           </form>
+          <h1>Your id {id}</h1>
           <p>{status}</p>
         </div>
       )}

@@ -125,6 +125,22 @@ router
     } catch (err) {
       console.error(err);
     }
+  })
+  .put(async (req, res) => {
+    const { userId, progress } = req?.body;
+    const userExists = await userModel.findById(userId);
+    if (!userExists) {
+      res.status(404).json({ Alert: "User not found!" });
+    } else {
+      const userProgress = await userExists.updateOne({
+        learnedProgress: { $inc: progress },
+      });
+      if (userProgress) {
+        res.status(200).json({ Alert: "Updated Progress!" });
+      } else {
+        res.status(400).json({ Alert: "Couldn't update!" });
+      }
+    }
   });
 
 router.route("/topic/:id").post(async (req, res) => {
@@ -191,6 +207,26 @@ router
       }
     }
   });
+
+router.route("/search/:id").post(async (req, res) => {
+  const id = req?.params?.id;
+
+  console.log(id);
+  if (!id) return res.status(400).json({ Alert: "No ID" });
+
+  try {
+    const exists = await learningModel.findById(parseInt(id));
+
+    if (exists) {
+      res.status(200).json(exists);
+    } else {
+      res.status(404).json({ Alert: "No Data!" });
+    }
+  } catch (err) {
+    console.error(err.message);
+    res.status(500).json({ Error: err.message });
+  }
+});
 
 router.route("/test").post(async (req, res) => {
   const { source, topic, lessonPages } = req?.body;

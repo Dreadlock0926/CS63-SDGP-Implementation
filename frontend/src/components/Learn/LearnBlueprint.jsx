@@ -1,3 +1,4 @@
+/* eslint-disable no-unused-vars */
 /* eslint-disable react-hooks/exhaustive-deps */
 import React, { useContext, useEffect, useState } from "react";
 import { UserContext } from "../../App";
@@ -71,7 +72,7 @@ const LearnBlueprint = () => {
                   <p>{item.topic}</p>
                   {item.lessonPages.map((index) => (
                     <div className="lessonPages" key={index}>
-                      <Link to={`/materials/${index}`}>
+                      <Link to={`/nextpage/${0}`}>
                         {index !== 0 ? `${item.topic} -> ${index}` : ""}
                       </Link>
                     </div>

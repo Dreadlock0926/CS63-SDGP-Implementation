@@ -4,16 +4,22 @@ import { useContext, useEffect, useRef, useState } from "react";
 import { UserContext } from "../../App";
 import Axios from "axios";
 import { useHover } from "@uidotdev/usehooks";
-import { Link,useParams } from "react-router-dom";
+import { Link, useParams } from "react-router-dom";
 
 const LearningResource = (props) => {
-  const { loading, setLoading, status, setStatus, user } =
-    useContext(UserContext);
+  const {
+    loading,
+    setLoading,
+    status,
+    setStatus,
+    user,
+    theProgressVal,
+    setTheProgressVal,
+  } = useContext(UserContext);
   const BASE = "http://localhost:8000/resources/progress/updates";
   const [ref, hovering] = useHover();
-  const [theProgressVal, setTheProgressVal] = useState(0);
   const [lessons, setLessons] = useState([]);
-  const {index} = useParams();
+  const { index } = useParams();
 
   let theProgressGiven = 0;
   async function getNumberOfLessonForProgress() {
@@ -22,6 +28,9 @@ const LearningResource = (props) => {
       const { data } = await Axios.get(BASE, { userId: user.id });
       if (data.status === 200) {
         setLessons(data);
+        if (theProgressVal !== "") {
+          setTheProgressVal("");
+        }
         theProgressGiven = data.topics.length / 100;
         console.log(theProgressGiven);
         setTheProgressVal(theProgressGiven);
@@ -68,23 +77,28 @@ const LearningResource = (props) => {
   // }, [hovering]);
 
   async function CompletedLesson() {
-    setTheProgressVal((prev) => (prev += theProgressGiven));
-    updateProgress();
+    try {
+      setTheProgressVal((prev) => (prev += theProgressGiven));
+      updateProgress();
+    } catch (err) {
+      console.error(err);
+    }
   }
 
   return (
-    (
-      <div style={{height:"4000px"}}>
-        <h1>Learning Resources</h1>    
-        {/* <div className="end" ref={ref}>
+    <div style={{ height: "4000px" }}>
+      <h1>Learning Resources</h1>
+      {/* <div className="end" ref={ref}>
           <h1>The end!</h1>
         </div> */}
-        <Link to={index} onClick={()=>{alert(index)}}>The URL</Link>
-        <Link to="/nextpage">Next Page!</Link>
-        <h1>{status}</h1>
-        <p>{theProgressVal}</p>
-      </div>
-    )
+
+      <p>Your index {index ? index : "Nothing!"}</p>
+      <Link to={`/nextpage/${1}`} onClick={CompletedLesson}>
+        Next Page!
+      </Link>
+      <h1>Status {status ? status : "No status"}</h1>
+      <p>Progress {theProgressVal ? theProgressVal : "No progress"}</p>
+    </div>
   );
 };
 
