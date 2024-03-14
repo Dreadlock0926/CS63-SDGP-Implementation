@@ -40,4 +40,20 @@ router.route("/saveExam").post(async (req, res) => {
   }
 });
 
+router.route("/getExam").post(async (req, res) => {
+  const { examRef } = req?.body;
+
+  if (!examRef) {
+    return res.status(400).json({ Alert: "The exam reference ID is missing." });
+  }
+
+  const examData = await examModel.findById(examRef);
+
+  if (!examData) {
+    res.status(400).json({Alert: "The question data is not matching records."});
+  } else {
+    res.status(200).json(examData);
+  }
+})
+
 module.exports = router;
