@@ -18,42 +18,38 @@ const handleClick = async (courseToAdd) => {
     );
     console.log(response);
 
-    const responseUser = await updateLoggedUser(loggedInUser._id).then(
-      async (result) => {
+    await updateLoggedUser(loggedInUser._id).then(async (result) => {
+      console.log(result);
+      sessionStorage.setItem("loggedUser", JSON.stringify({ data: result }));
+
+      console.log(sessionStorage.getItem("loggedUser"));
+
+      loggedInUser = result;
+
+      await initializeProbabilities(loggedInUser).then((result) => {
         console.log(result);
-        sessionStorage.setItem("loggedUser", JSON.stringify({ data: result }));
 
-        console.log(sessionStorage.getItem("loggedUser"));
+        async function updateModuleProbability() {
+          await Axios.post(
+            "http://localhost:8000/user/updateModuleProbabilities",
+            {
+              username: loggedInUser.username,
+              topicProbabilities: result,
+            }
+          )
+            .then(function (response) {
+              console.log(response);
+            })
+            .catch(function (error) {
+              console.log(error);
+            });
+        }
 
-        loggedInUser = result;
+        updateModuleProbability();
+      });
 
-        await initializeProbabilities(loggedInUser).then((result) => {
-          console.log(result);
-
-          async function updateModuleProbability() {
-            await Axios.post(
-              "http://localhost:8000/user/updateModuleProbabilities",
-              {
-                username: loggedInUser.username,
-                topicProbabilities: result,
-              }
-            )
-              .then(function (response) {
-                console.log(response);
-              })
-              .catch(function (error) {
-                console.log(error);
-              });
-          }
-
-          if (!loggedInUser.topicProbabilities) {
-            updateModuleProbability();
-          }
-        });
-
-        window.location.href = "/select-course";
-      }
-    );
+      window.location.href = "/select-course";
+    });
   } catch (error) {
     console.error(error);
   }
@@ -62,9 +58,8 @@ const handleClick = async (courseToAdd) => {
 const CourseComponent = (course) => {
   return (
     <div className="courseContainer">
-      <h3>Course : {course.course.source}</h3>
+      <h2>{course.course.source}</h2>
       <div className="topicsContainer">
-        <p>Topics</p>
         <ul className="topicTagField">
           {course.course.topics.map((topic, i) => (
             <li key={i}>{topic}</li>

@@ -6,7 +6,9 @@ import CourseComponent from "./CourseComponent";
 
 const SelectCourses = () => {
   const { loggedInUser, setLoggedInUser } = useContext(UserContext);
-  const [courses, setCourses] = useState([]);
+
+  const [userStartedCourses, setUserStartedCourses] = useState([]);
+  const [userNotStartedCourses, setNotStartedCourses] = useState([]);
 
   const retrieveCourses = async (userCourses) => {
     try {
@@ -16,7 +18,11 @@ const SelectCourses = () => {
           courses: userCourses,
         }
       );
-      setCourses(response.data);
+
+      console.log(response.data);
+
+      setUserStartedCourses(response.data.userInProgress);
+      setNotStartedCourses(response.data.userNotStarted);
     } catch (error) {
       console.error(error);
       // Handle errors appropriately, e.g., display an error message to the user
@@ -39,12 +45,31 @@ const SelectCourses = () => {
     <div>
       <h1>Select Courses</h1>
       <p>Welcome {loggedInUser.username}</p>
-      {courses && courses.length > 0 ? (
+      {userStartedCourses ? (
         <div>
-          <h1>Available Courses</h1>
-          {courses.map((course, i) => (
-            <CourseComponent course={course} key={i} />
-          ))}
+          <h1>Courses In Progress</h1>
+          {userStartedCourses.length == 0 ? (
+            <p>No Courses Started!!</p>
+          ) : (
+            userStartedCourses.map((course, i) => (
+              <CourseComponent course={course} key={i} />
+            ))
+          )}
+        </div>
+      ) : (
+        <p>Loading Course</p>
+      )}
+
+      {userNotStartedCourses ? (
+        <div>
+          <h1>Not Started Courses</h1>
+          {userNotStartedCourses.length == 0 ? (
+            <p>All Courses Started!!</p>
+          ) : (
+            userNotStartedCourses.map((course, i) => (
+              <CourseComponent course={course} key={i} />
+            ))
+          )}
         </div>
       ) : (
         <p>Loading Course</p>

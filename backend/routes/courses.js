@@ -19,12 +19,22 @@ router.post("/getModules", async (req, res) => {
     const topics = await topicsModel.aggregate([
       {
         $match: {
-          sourceKey: { $nin: courses }, // Exclude topics with matching topicKeys
+          $or: [
+            { sourceKey: { $nin: courses } }, // Exclude topics not in courses (userNotStarted)
+            { sourceKey: { $in: courses } }, // Include topics in courses (userInProgress)
+          ],
         },
       },
     ]);
 
-    res.json(topics); // Send filtered topics as JSON
+    const userInProgress = topics.filter((topic) =>
+      courses.includes(topic.sourceKey)
+    ); // Filter topics in progress
+    const userNotStarted = topics.filter(
+      (topic) => !courses.includes(topic.sourceKey)
+    ); // Filter topics not started
+
+    res.json({ userInProgress, userNotStarted }); // Send categorized topics
   } catch (error) {
     console.error(error);
     res.status(500).json({ message: "Error fetching topics" });
