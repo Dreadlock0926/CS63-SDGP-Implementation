@@ -29,6 +29,7 @@
     transform: scale(1.1);
     box-shadow: rgba(0, 0, 0, 0.24) 0px 3px 8px;
     border-radius: 10px;
+    cursor: pointer;
 }
 
 /* Modal Container */
@@ -53,4 +54,5 @@
 .closeModal:hover {
     color: #068C1F;
     transition: 0.5s;
+    cursor: pointer;
 }
