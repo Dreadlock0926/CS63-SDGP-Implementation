@@ -15,39 +15,6 @@ const handleClick = async (courseRef, courseKey) => {
         console.log(result);
       }
     );
-
-    // await updateLoggedUser(loggedInUser._id).then(async (result) => {
-    //   console.log(result);
-    //   sessionStorage.setItem("loggedUser", JSON.stringify({ data: result }));
-
-    //   console.log(sessionStorage.getItem("loggedUser"));
-
-    //   loggedInUser = result;
-
-    //   await initializeProbabilities(loggedInUser).then((result) => {
-    //     console.log(result);
-
-    // async function updateModuleProbability() {
-    //   await Axios.post(
-    //     "http://localhost:8000/user/updateModuleProbabilities",
-    //     {
-    //       username: loggedInUser.username,
-    //       topicProbabilities: result,
-    //     }
-    //   )
-    //     .then(function (response) {
-    //       console.log(response);
-    //     })
-    //     .catch(function (error) {
-    //       console.log(error);
-    //     });
-    // }
-
-    // updateModuleProbability();
-    // });
-
-    // window.location.href = "/select-course";
-    // });
   } catch (error) {
     console.error(error);
   }
