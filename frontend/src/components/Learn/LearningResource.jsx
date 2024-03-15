@@ -6,6 +6,7 @@ import Axios from "axios";
 import { useHover } from "@uidotdev/usehooks";
 import { Link, useParams } from "react-router-dom";
 
+
 const LearningResource = (props) => {
   const {
     loading,
@@ -67,14 +68,14 @@ const LearningResource = (props) => {
     getNumberOfLessonForProgress();
   }, []);
 
-  // useEffect(() => {
-  //   if (hovering) {
-  //     alert("Hovering")
-  //     setTheProgressVal((prev) => (prev += theProgressGiven));
-  //     updateProgress();
-  //     JSON.stringify(lessons);
-  //   }
-  // }, [hovering]);
+  useEffect(() => {
+    if (hovering) {
+      alert("Hovering")
+      setTheProgressVal((prev) => (prev += theProgressGiven));
+      updateProgress();
+      JSON.stringify(lessons);
+    }
+  }, [hovering]);
 
   async function CompletedLesson() {
     try {
@@ -98,6 +99,7 @@ const LearningResource = (props) => {
       </Link>
       <h1>Status {status ? status : "No status"}</h1>
       <p>Progress {theProgressVal ? theProgressVal : "No progress"}</p>
+      <div className="end" ref={ref} >The End!</div>
     </div>
   );
 };

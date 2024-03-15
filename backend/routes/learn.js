@@ -96,14 +96,26 @@ router.route("/topic").post(async (req, res) => {
 });
 
 router.route("/users").post(async (req, res) => {
-  const { userId } = req?.body;
+  const { userId = "65f0ccaf0c85f1e4364bb3e6" } = req?.body;
   if (!userId) return res.status(400).json({ Alert: "UserID required" });
 
   const exists = await userModel.findById(userId);
+  console.log(exists);
   if (exists) {
-    res.status(200).json(exists);
-  } else {
-    res.status(404).json({ Alert: "No data found!" });
+    const integrationByParts = exists?.lessons?.integration?.integrationByParts;
+    console.log(integrationByParts);
+
+    if (integrationByParts) {
+      const updated = await userModel.updateOne(
+        { _id: userId },
+        { integrationByParts: true }
+      );
+      console.log("Integration by parts found and updated.");
+      res.status(200).json(updated);
+    } else {
+      console.log("Integration by parts not found.");
+      res.status(404).json({ Alert: "No data found!" });
+    }
   }
 });
 
@@ -111,12 +123,12 @@ router
   .route("/progress/updates")
   .post(async (req, res) => {
     //this is not in the schema for the given userId = 65e5ee3fa014a87ba21c66d3
-    const { userId, theProgressVal = 50 } = req?.body;
+    const { userId, progress = 50 } = req?.body;
     const userExists = await userModel.findById(userId);
     if (!userExists) return res.status(404).json({ Alert: "Invalid user!" });
 
     const updated = await userExists.updateOne({
-      progress: { $inc: theProgressVal },
+      progress: { $inc: progress },
     });
 
     if (!updated) {

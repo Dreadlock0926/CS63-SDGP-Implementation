@@ -1,14 +1,31 @@
 /* eslint-disable react-hooks/exhaustive-deps */
 /* eslint-disable no-unused-vars */
-import { Link, useParams } from "react-router-dom";
+import { Link, useParams,useNavigate } from "react-router-dom";
 import Axios from "axios";
 import { useContext, useEffect, useState } from "react";
 import { UserContext } from "../../App";
+import { useHover } from "@uidotdev/usehooks";
 
 const NextPage = () => {
   const { id } = useParams();
+  const [ref, hovering] = useHover();
+  const navigator = useNavigate();
   const [material, setMaterial] = useState([]);
-  const { BASE, theProgressVal, specificTopic,status,setStatus } = useContext(UserContext);
+  const {
+    BASE,
+    theProgressVal,
+    specificTopic,
+    status,
+    setStatus,
+    setLessons,
+    setLoading,
+    setTheProgressVal,
+    user,
+  } = useContext(UserContext);
+
+  useEffect(()=>{
+    console.log(specificTopic);
+  },[specificTopic])
 
   async function getTheLesson() {
     try {
@@ -18,12 +35,13 @@ const NextPage = () => {
       if (response.data.status === 200) {
         setMaterial(response.data);
       }
-      console.log(`The topic is ${specificTopic}`)
+      console.log(`The topic is ${specificTopic}`);
     } catch (err) {
-      // if(err.response.status===404){
-      //   alert("End of lesson!")
-      // }
-      console.error(err);
+      if(err.response.status===404){
+        alert(`Congrats you have completed ${specificTopic}!`)
+        navigator("/resources")
+      }
+      console.error(err.data.status);
     } finally {
       console.log(material);
     }
@@ -33,10 +51,36 @@ const NextPage = () => {
     getTheLesson();
   }, [id]);
 
+  let theProgressGiven = 0;
+  async function getNumberOfLessonForProgress() {
+    try {
+      setLoading(true);
+      const { data } = await Axios.get(BASE, { userId: user.id });
+      if (data.status === 200) {
+        setLessons(data);
+        if (theProgressVal !== "") {
+          setTheProgressVal("");
+        }
+        theProgressGiven = data.topics.length / 100;
+        console.log(theProgressGiven);
+        setTheProgressVal(theProgressGiven);
+      }
+    } catch (err) {
+      console.error(err);
+      if (err.data.status === 404) {
+        setStatus("No results found!");
+      } else {
+        setStatus("Error while processing data!");
+      }
+    } finally {
+      setLoading(false);
+    }
+  }
+
   async function IncrementProgress() {
     try {
       const outcome = await Axios.put(`${BASE}/resources/progress/updates`, {
-        progress: theProgressVal, //global state which has the dynamic progress assigned to it
+        progress: theProgressVal,
         userId: "65f2a146a0acea296a663650", //user.id
       });
       if (outcome.data.status === 200) {
@@ -46,6 +90,18 @@ const NextPage = () => {
       console.error(err.message);
     }
   }
+
+  useEffect(() => {
+    getNumberOfLessonForProgress();
+  }, []);
+
+  useEffect(() => {
+    if (hovering) {
+      alert("Hovering");
+      setTheProgressVal((prev) => (prev += theProgressGiven));
+      IncrementProgress();
+    }
+  }, [hovering]);
 
   return (
     <div>
@@ -58,7 +114,9 @@ const NextPage = () => {
       <Link to={`/nextpage/${Number(id) + 1}`} onClick={IncrementProgress}>
         Next Page!
       </Link>
+      {/* <div className="abovend" ref={ref}>The End</div>
       <br />
+      <div className="ending">The End</div> */}
     </div>
   );
 };

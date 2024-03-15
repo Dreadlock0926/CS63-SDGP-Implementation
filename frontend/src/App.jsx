@@ -9,6 +9,7 @@ import LearningResource from "./components/Learn/LearningResource";
 import First from "./components/Learn/TestPages/First";
 import Second from "./components/Learn/TestPages/Second";
 import NextPage from "./components/Learn/NextPage";
+import Anything from "./components/Learn/Anything";
 
 export const UserContext = createContext();
 
@@ -60,6 +61,7 @@ function App() {
             ></Route>
             <Route path="/addresources" element={<AddStudy />} />
             <Route path="/nextpage/:id" element={<NextPage />} />
+            <Route path="/anything" element={<Anything />} />
             <Route path="/:lesson" element={<First />} />
             <Route path="/second" element={<Second />} />
             <Route path="/learnprint" element={<LearnBlueprint />}></Route>
