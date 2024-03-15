@@ -15,6 +15,8 @@ function App() {
   const [logged, setLogged] = useState(true);
   const [user, setUser] = useState("Guest");
   const [status, setStatus] = useState("");
+  const [searched, setSearched] = useState([]);
+  const [transfer, setTransfer] = useState(0);
   const userData = {
     loading: loading,
     status,
@@ -24,6 +26,10 @@ function App() {
     setLogged: setLogged,
     user,
     setUser,
+    searched,
+    setSearched,
+    transfer,
+    setTransfer,
   };
 
   return (

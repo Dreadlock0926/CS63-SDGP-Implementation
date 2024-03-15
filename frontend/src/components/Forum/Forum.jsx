@@ -20,10 +20,9 @@ import PureMath from "./PureMath";
 import Statistics from "./Statistics";
 
 const Forum = () => {
-  const { loading, setLoading, status, setStatus, logged, user } =
+  const { loading, setLoading, status, setStatus, logged, user,searched,setSearched,transfer,setTransfer } =
     useContext(UserContext);
   const [data, setData] = useState([]);
-  const [searched, setSearched] = useState([]);
   const [answer, setAnswer] = useState("");
   const [down, setDown] = useState(0);
   const navigator = useNavigate();
@@ -166,12 +165,14 @@ const Forum = () => {
     e.preventDefault();
     try {
       const theData = await Axios.post(`${EndPoint}/search`, { search });
-      if (theData.data.status === 200) {
-        console.log(`tSearched ${theData.data}`);
-        setSearched(theData.data);
-        navigator("/forumsearch");
-      }
-      console.log(theData.data);
+      // if (theData.data.status === 200) {
+       
+      // }
+      console.log(` ${theData.data}`);
+      setSearched(theData.data);
+      console.log(`Searched ${JSON.stringify(searched)}`);
+      setTransfer(1);
+      navigator("/forumsearch");
     } catch (err) {
       if (err.response.status === 404) {
         setStatus("No results found");
