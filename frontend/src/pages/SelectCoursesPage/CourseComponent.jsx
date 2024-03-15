@@ -1,9 +1,6 @@
 import React from "react";
 import "./CourseComponent.css";
-import initializeProbabilities from "../FeedbackPage/initializeProbabilities";
-import updateLoggedUser from "./updateLoggedUser";
 import updateCourses from "./updateCourses";
-import Axios from "axios";
 import { Link } from "react-router-dom";
 
 const handleClick = async (courseRef, courseKey) => {

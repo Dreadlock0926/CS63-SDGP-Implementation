@@ -26,10 +26,7 @@ const updateCourses = async (userId, courseRef, courseKey) => {
     { userId, courseToAdd: course }
   );
 
-  await updateLoggedUser(userId).then((updatedUser) => {
-    const userForStorage = { data: updatedUser }; // Wrap user object in data property
-    sessionStorage.setItem("loggedUser", JSON.stringify(userForStorage));
-  });
+  await updateLoggedUser(userId).then(() => {});
 
   // No need to parse JSON again
   const loggedInUser = JSON.parse(sessionStorage.getItem("loggedUser")).data;
