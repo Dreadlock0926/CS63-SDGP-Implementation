@@ -191,10 +191,18 @@ function ExamPageContent({setIsLoadingInfo, setExamType, setExamSubject, setNumQ
         const writtenAnswerContainer = document.querySelectorAll("math-field");
         writtenAnswers = (Array.from(writtenAnswerContainer).map((answer) => answer.value));
 
+        let correctIndexesContainer = [];
+
         for (let i = 0; i < writtenAnswers.length; i++) {
-            if (!correctIndex.includes(i) && writtenAnswers[i]===correctAnswers[i]) {
-                setCorrectIndexes(prev => [...prev, i].sort());
+            if (!correctIndexesContainer.includes(i) && writtenAnswers[i]===correctAnswers[i]) {
+                correctIndexesContainer.push(i);
             }
+        }
+        
+
+        if (correctIndexesContainer.length > 0) {
+        } else {
+            setCorrectIndexes([]);
         }
     
         console.log(writtenAnswers);
