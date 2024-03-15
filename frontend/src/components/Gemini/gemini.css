@@ -1,25 +1,17 @@
-
-.dabot{
-    border:12px solid black;
-    cursor: pointer;
-    margin:1%;
-}
-
-.formContainer{
-    display:flex;
-    justify-content : space-around;
-}
-
-
 /* Fade in & out animation */
 @keyframes fadeIn {
     0% {
-      opacity: 0;
+        opacity: 0;
     }
     100% {
-      opacity: 1;
+        opacity: 1;
     }
-  }
+}
+
+/* Holds the searchBtn, input field & the bot response. */
+.formContainer{
+    margin: 10px;
+}
 
   /* Container for the Button and the Image inside */
 .botBtn {
@@ -76,7 +68,7 @@
     border: none;
     border-radius: 10px;
     background-color: white;
-    transition: 0.2s;
+    transition: all 0.2s;
 }
 .modalBtn:hover {
     transition: 0.2s;
@@ -103,7 +95,7 @@
     background-color: white;
     color: #666666;
     font-size: 16px;
-    transition: 0.5s;
+    transition: all 0.5s;
 }
 
 .closeModal:hover {

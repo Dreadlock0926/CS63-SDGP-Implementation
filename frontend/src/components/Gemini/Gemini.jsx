@@ -9,7 +9,11 @@ function Gemini() {
   const [loading, setLoading] = useState(false);
   const [data, setData] = useState([]);
   const [search, setSearch] = useState("");
-  const [menu, setMenu] = useState(false);
+  const [modal, setModal] = useState(false);
+
+  const toggleModal = () => {
+    setModal(!modal)
+  }
 
   const endPoint = "http://localhost:8000/gemini";
 
@@ -35,12 +39,15 @@ function Gemini() {
   return logged ? (
     <div className="botContainer">
       <div className="botBtn">
-        <button className="modalBtn" onClick={() => setMenu(prev => !prev)}>
+        <button className="modalBtn" onClick={toggleModal}>
           <img style={{width:"40px", height:"40px"}} src='./images/chatbot.png' alt='chatbot-icon' />
         </button>
       </div>
 
-      {menu && (
+      {modal && (
+      <div className="modal">
+        <h2>Gemini Chatbot</h2>
+        <hr />
         <form onSubmit={GatherData} className="formContainer">
           <input
             className="botInput"
@@ -65,6 +72,9 @@ function Gemini() {
             </h2>
           )}
         </form>
+        <hr />
+        <button onClick={toggleModal} className='closeModal'>Close</button>
+        </div>
         )}
     </div>
   ) : (
