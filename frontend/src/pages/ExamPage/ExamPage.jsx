@@ -32,7 +32,7 @@ function InfoPanel({ examType, examSubject, numQuestions }) {
   );
 }
 
-function ExamPageContent({setIsLoadingInfo, setExamType, setExamSubject, setNumQuestions, setCorrectIndexes, correctIndex}) {
+function ExamPageContent({setIsLoadingInfo, setExamType, setExamSubject, setNumQuestions, setCorrectIndexes, correctIndex, setMark}) {
 
     function QuestionOnPage({question, mqNum}) {
 
@@ -143,6 +143,25 @@ function ExamPageContent({setIsLoadingInfo, setExamType, setExamSubject, setNumQ
         getQuestion(setQuestionsList, setExamType, setExamSubject);
     },[])
 
+    useEffect(() => {
+        let markCount = 0;
+        let mark = 0;
+
+        for (let i = 0; i < questions.length; i++) {
+            let markGrid = questions[i].props.question.marksGrid;
+            for (let j = 0; j < markGrid.length; j++) {
+                if (markGrid[j] !== "") {
+                    markCount++;
+                    if (correctIndex.includes(markCount)) {
+                        mark += parseInt(markGrid[j]);
+                    }
+                }
+            }
+        }
+
+        setMark(mark);
+    }, [correctIndex])
+
     const submitAnswers = () => {
         const writtenAnswerContainer = document.querySelectorAll("math-field");
         writtenAnswers = (Array.from(writtenAnswerContainer).map((answer) => answer.value));
@@ -152,7 +171,7 @@ function ExamPageContent({setIsLoadingInfo, setExamType, setExamSubject, setNumQ
                 setCorrectIndexes(prev => [...prev, i].sort());
             }
         }
-
+    
         console.log(writtenAnswers);
     }
 
@@ -183,6 +202,12 @@ function ExamPage() {
     const [numQuestions, setNumQuestions] = useState(0);
 
     const [correctIndex, setCorrectIndexes] = useState([]);
+    const [mark, setMark] = useState(0);
+
+    useEffect(() => {
+        console.log("The users marks are:")
+        console.log(mark);
+    }, [mark])
 
     useEffect(() => {
         console.log("the correct indexes are: ")
@@ -193,7 +218,8 @@ function ExamPage() {
         <div className="exams-container">
             <ExamPageContent setIsLoadingInfo={setIsLoadingInfo} setExamType={setExamType} 
             setExamSubject={setExamSubject} setNumQuestions={setNumQuestions}
-            setCorrectIndexes={setCorrectIndexes} correctIndex={correctIndex} />
+            setCorrectIndexes={setCorrectIndexes} correctIndex={correctIndex}
+            setMark={setMark} />
             {!isLoadingInfo && <InfoPanel examType={examType} examSubject={examSubject} numQuestions={numQuestions} />}
         </div>
     )
