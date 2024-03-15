@@ -32,7 +32,7 @@ function InfoPanel({ examType, examSubject, numQuestions }) {
   );
 }
 
-function ExamPageContent({setIsLoadingInfo, setExamType, setExamSubject, setNumQuestions}) {
+function ExamPageContent({setIsLoadingInfo, setExamType, setExamSubject, setNumQuestions, setCorrectIndexes, correctIndex}) {
 
     function QuestionOnPage({question, mqNum}) {
 
@@ -146,6 +146,13 @@ function ExamPageContent({setIsLoadingInfo, setExamType, setExamSubject, setNumQ
     const submitAnswers = () => {
         const writtenAnswerContainer = document.querySelectorAll("math-field");
         writtenAnswers = (Array.from(writtenAnswerContainer).map((answer) => answer.value));
+
+        for (let i = 0; i < writtenAnswers.length; i++) {
+            if (!correctIndex.includes(i) && writtenAnswers[i]===correctAnswers[i]) {
+                setCorrectIndexes(prev => [...prev, i].sort());
+            }
+        }
+
         console.log(writtenAnswers);
     }
 
@@ -175,13 +182,18 @@ function ExamPage() {
     const [examSubject, setExamSubject] = useState("");
     const [numQuestions, setNumQuestions] = useState(0);
 
+    const [correctIndex, setCorrectIndexes] = useState([]);
+
     useEffect(() => {
-        console.log(isLoadingInfo);
-    }, [isLoadingInfo])
+        console.log("the correct indexes are: ")
+        console.log(correctIndex);
+    }, [correctIndex])
 
     return (
         <div className="exams-container">
-            <ExamPageContent setIsLoadingInfo={setIsLoadingInfo} setExamType={setExamType} setExamSubject={setExamSubject} setNumQuestions={setNumQuestions} />
+            <ExamPageContent setIsLoadingInfo={setIsLoadingInfo} setExamType={setExamType} 
+            setExamSubject={setExamSubject} setNumQuestions={setNumQuestions}
+            setCorrectIndexes={setCorrectIndexes} correctIndex={correctIndex} />
             {!isLoadingInfo && <InfoPanel examType={examType} examSubject={examSubject} numQuestions={numQuestions} />}
         </div>
     )
