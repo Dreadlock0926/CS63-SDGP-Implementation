@@ -66,7 +66,7 @@ const Statistics = ({
           setToggle(!toggle);
         }}
       >
-        Answer!
+        {toggle ? "Close" : "Answer"}
       </Button>
       {toggle ? (
         <form

@@ -23,6 +23,7 @@ const Forum = () => {
   const { loading, setLoading, status, setStatus, logged, user } =
     useContext(UserContext);
   const [data, setData] = useState([]);
+  const [searched, setSearched] = useState([]);
   const [answer, setAnswer] = useState("");
   const [down, setDown] = useState(0);
   const navigator = useNavigate();
@@ -37,6 +38,10 @@ const Forum = () => {
     forumData();
   }, [down]); // Added "down" to dependency array to trigger a re-fetch when topic selection changes
 
+  useEffect(() => {
+    console.log(data);
+  }, [data]);
+
   const forumData = async () => {
     try {
       setLoading(true);
@@ -49,6 +54,8 @@ const Forum = () => {
       setLoading(false);
     }
   };
+
+  let upvoting = 0;
 
   const increaseVotes = async (id) => {
     try {
@@ -160,8 +167,9 @@ const Forum = () => {
     try {
       const theData = await Axios.post(`${EndPoint}/search`, { search });
       if (theData.data.status === 200) {
-        setData([]);
-        setData(theData);
+        console.log(`tSearched ${theData.data}`);
+        setSearched(theData.data);
+        navigator("/forumsearch");
       }
       console.log(theData.data);
     } catch (err) {

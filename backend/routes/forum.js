@@ -69,8 +69,11 @@ router
 router.route("/search").post(async (req, res) => {
   const { search } = req?.body;
   try {
-    const matches = await forumModel.find({ question: search });
-    if (matches && matches.length) {
+    const regex = new RegExp(search, "i"); // 'i' flag for case-insensitive search
+    const matches = await forumModel.find({ question: regex });
+
+    console.log(matches);
+    if (matches) {
       res.status(200).json(matches);
     } else {
       res.status(404).json({ Alert: "No results found!" });
