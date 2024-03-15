@@ -34,7 +34,7 @@ const LearningResource = (props) => {
         }
         theProgressGiven = data.topics.length / 100;
         console.log(theProgressGiven);
-        setTheProgressVal(theProgressGiven);
+        setTheProgressVal(theProgressGiven); //global state
       } else if (data.status === 404) {
         setStatus("No results found!");
       } else {

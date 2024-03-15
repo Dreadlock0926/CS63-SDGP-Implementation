@@ -1,6 +1,6 @@
 /* eslint-disable react-hooks/exhaustive-deps */
 /* eslint-disable no-unused-vars */
-import { Link, useParams,useNavigate } from "react-router-dom";
+import { Link, useParams, useNavigate } from "react-router-dom";
 import Axios from "axios";
 import { useContext, useEffect, useState } from "react";
 import { UserContext } from "../../App";
@@ -23,23 +23,28 @@ const NextPage = () => {
     user,
   } = useContext(UserContext);
 
-  useEffect(()=>{
+  useEffect(() => {
     console.log(specificTopic);
-  },[specificTopic])
+  }, [specificTopic]);
 
   async function getTheLesson() {
     try {
-      const response = await Axios.post(`${BASE}/resources/search/${id}`, {
-        specificTopic,
-      });
-      if (response.data.status === 200) {
-        setMaterial(response.data);
-      }
+      const response = await Axios.post(
+        `${BASE}/resources/search/${parseInt(id)}`,
+        {
+          specificTopic,
+        }
+      );
+      console.log(response.data);
+      // if (response.data.status === 200) {
+      //   setMaterial(response.data);
+      // }
+      setMaterial(response.data);
       console.log(`The topic is ${specificTopic}`);
     } catch (err) {
-      if(err.response.status===404){
-        alert(`Congrats you have completed ${specificTopic}!`)
-        navigator("/resources")
+      if (err.data.status === 404) { //this needs to be done properly
+        alert(`Congrats you have completed ${specificTopic}!`);
+        navigator("/resources");
       }
       console.error(err.data.status);
     } finally {
@@ -81,7 +86,7 @@ const NextPage = () => {
     try {
       const outcome = await Axios.put(`${BASE}/resources/progress/updates`, {
         progress: theProgressVal,
-        userId: "65f2a146a0acea296a663650", //user.id
+        userId: "65f0d2e556224d60ec899964", //user.id
       });
       if (outcome.data.status === 200) {
         alert("Incremented!");
@@ -103,9 +108,9 @@ const NextPage = () => {
     }
   }, [hovering]);
 
-  return (
+  return material ? (
     <div>
-      <h1>The Next Page!</h1>
+      <h1>{specificTopic}</h1>
       <div>
         {material && material.length
           ? JSON.stringify(material)
@@ -118,6 +123,8 @@ const NextPage = () => {
       <br />
       <div className="ending">The End</div> */}
     </div>
+  ) : (
+    <h1>You have reached the end of the course , congrats 🥳</h1>
   );
 };
 

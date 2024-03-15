@@ -1,37 +1,74 @@
-const mongoose = require("mongoose");
+const mongoose = require('mongoose');
 
-const learningSchema = new mongoose.Schema(
-  {
-    source: { type: String },
-    topic: {
-      type: String,
-    },
-    lessonPages: {
-      type: [String],
-      default: [],
-    },
+const userSchema = new mongoose.Schema({
+  username: {
+    type: String,
+    required: true
   },
-  { timestamps: true }
-);
-
-const userSchema = new mongoose.Schema(
-  {
-    username: { type: String, required: true, unique: true },
-    password: { type: String, required: true },
-    voxelPoints: { type: Number, default: 0 },
-    courses: { type: Array },
-    completedCourses: { type: Array },
-    topicProbabilities: { type: Object },
-    correctQuestions: { type: Array },
-    wrongQuestions: { type: Array },
-    feedbackExams: { type: Array },
-    learning: { type: [learningSchema] },
-    lesson: { ObjectId: { type: String }, type: [Boolean], default: [] },
+  password: {
+    type: String,
+    required: true
   },
-  {
-    timestamps: true,
-  }
-);
+  voxelPoints: {
+    type: Number,
+    default: 0
+  },
+  courses: [{
+    type: String,
+    enum: ['p1', 's1'] // Assuming these are the possible course codes
+  }],
+  completedCourses: [{
+    type: String
+  }],
+  correctQuestions: [{
+    type: String
+  }],
+  wrongQuestions: [{
+    type: String
+  }],
+  feedbackExams: [{
+    type: mongoose.Schema.Types.ObjectId,
+    ref: 'Exam' // Assuming Exam is another schema/model
+  }],
+  topicalExams: [{
+    type: mongoose.Schema.Types.ObjectId,
+    ref: 'Exam' // Assuming Exam is another schema/model
+  }],
+  createdAt: {
+    type: Date,
+    default: Date.now
+  },
+  updatedAt: {
+    type: Date,
+    default: Date.now
+  },
+  topicProbabilities: {
+    p1: {
+      q: Number,
+      f: Number,
+      cg: Number,
+      cm: Number,
+      t: Number,
+      s: Number,
+      d: Number,
+      i: Number
+    },
+    s1: {
+      rod: Number,
+      pac: Number,
+      p: Number,
+      drv: Number,
+      tnd: Number
+    }
+  },
+  lessons: {
+    integration: {
+      integrationArea: Boolean,
+      integrationByParts: Boolean,
+      substitutionIntegration: Boolean
+    }
+  },
+  learning: [String] // Assuming this should be an array of strings
+});
 
-const userModel = mongoose.model("users", userSchema);
-module.exports = userModel;
+module.exports = mongoose.model('users', userSchema);

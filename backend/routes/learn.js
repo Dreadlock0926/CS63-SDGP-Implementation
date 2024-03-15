@@ -96,45 +96,65 @@ router.route("/topic").post(async (req, res) => {
 });
 
 router.route("/users").post(async (req, res) => {
-  const { userId = "65f0ccaf0c85f1e4364bb3e6" } = req?.body;
+  const { userId = "65f0d2e556224d60ec899964" } = req.body;
+
   if (!userId) return res.status(400).json({ Alert: "UserID required" });
 
-  const exists = await userModel.findById(userId);
-  console.log(exists);
-  if (exists) {
+  try {
+    // Find the user by ID
+    const exists = await userModel.findById(userId);
+
+    if (!exists) {
+      console.log("User not found.");
+      return res.status(404).json({ Alert: "User not found." });
+    }
+
+    // Check if integrationByParts exists
     const integrationByParts = exists?.lessons?.integration?.integrationByParts;
-    console.log(integrationByParts);
 
     if (integrationByParts) {
-      const updated = await userModel.updateOne(
+      // Update integrationByParts field
+      await userModel.updateOne(
         { _id: userId },
-        { integrationByParts: true }
+        { $set: { "lessons.integration.integrationByParts": true } }
       );
-      console.log("Integration by parts found and updated.");
-      res.status(200).json(updated);
+      return res
+        .status(200)
+        .json({ message: "Integration by parts found and updated." });
     } else {
-      console.log("Integration by parts not found.");
-      res.status(404).json({ Alert: "No data found!" });
+      return res.status(404).json({ Alert: "Integration by parts not found." });
     }
+  } catch (error) {
+    console.error("Error:", error.message);
+    return res.status(500).json({ Alert: "Internal server error." });
   }
 });
 
 router
   .route("/progress/updates")
   .post(async (req, res) => {
-    //this is not in the schema for the given userId = 65e5ee3fa014a87ba21c66d3
-    const { userId, progress = 50 } = req?.body;
-    const userExists = await userModel.findById(userId);
-    if (!userExists) return res.status(404).json({ Alert: "Invalid user!" });
+    const { userId = "65f0d2e556224d60ec899964", progress = 50 } = req.body;
 
-    const updated = await userExists.updateOne({
-      progress: { $inc: progress },
-    });
+    try {
+      const userExists = await userModel.findById(userId);
+      if (!userExists) return res.status(404).json({ Alert: "Invalid user!" });
 
-    if (!updated) {
-      res.status(400).json({ Alert: "Error while updating!" });
-    } else {
+      // Check if the progress field exists in the user document
+      if (!userExists.progress) {
+        userExists.progress = 0; // Initialize progress if it doesn't exist
+      }
+
+      // Increment the progress field by the specified amount
+      userExists.progress += progress;
+
+      // Save the updated user document
+      await userExists.save();
+
+      // Send response indicating successful update
       res.status(200).json({ Alert: "Updated!" });
+    } catch (error) {
+      console.error("Error:", error.message);
+      res.status(500).json({ Alert: "Internal server error." });
     }
   })
   .get(async (req, res) => {
@@ -241,17 +261,34 @@ router.route("/search/:id").post(async (req, res) => {
 
   try {
     const exists = await learningModel.findOne({ topic: specificTopic });
-
     console.log(exists);
-    if (exists && exists.lessonPages.includes(id)) {
-      const theSpecificTopic = exists;
-      res.status(200).json(theSpecificTopic);
+
+    if (exists) {
+      // Convert id to a number
+      const pageNumber = parseInt(id);
+
+      // Check if pageNumber is a valid number
+      if (
+        !isNaN(pageNumber) &&
+        pageNumber >= 0 &&
+        pageNumber < exists.lessonPages.length
+      ) {
+        // Return the lesson page at the specified index
+        return res.status(200).json(exists.lessonPages[pageNumber]);
+      } else {
+        // Return a 404 error if the index is out of range
+        return res
+          .status(404)
+          .json({ Alert: "Lesson page index out of range." });
+      }
     } else {
-      res.status(404).json({ Alert: "No Data!" });
+      // Return a 404 error if the topic is not found
+      return res.status(404).json({ Alert: "Specified topic not found." });
     }
   } catch (err) {
+    // Handle any errors that occur during the process
     console.error(err.message);
-    res.status(500).json({ Error: err.message });
+    return res.status(500).json({ Error: err.message });
   }
 });
 
