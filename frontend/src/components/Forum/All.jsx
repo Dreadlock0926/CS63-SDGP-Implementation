@@ -10,7 +10,8 @@ import {
   Select,
   Typography,
 } from "@mui/material";
-import { useState } from "react";
+import { useContext, useState } from "react";
+import { UserContext } from "../../App";
 
 const All = ({
   x,
@@ -22,16 +23,16 @@ const All = ({
   AnsweringQuestions,
   answer,
   setAnswer,
-  toggle,setToggle,
+  toggle,
+  setToggle,
 }) => {
-  
   return (
     <div key={theKey} className="card" style={{ marginBottom: "20px" }}>
       <Typography variant="h4">{x.question}</Typography>
       <Typography variant="body1">{x.description}</Typography>
-      <Typography variant="h4">Responses:</Typography>
+      <Typography variant="h4">Responses</Typography>
       {x?.answers ? (
-        x.answers.map((answer, index) => (
+        x.answers.map((answer, index) => (  
           <div key={index} style={{ marginBottom: "10px" }}>
             <Typography variant="h6">{answer.text}</Typography>
             <Typography variant="body1">
@@ -61,7 +62,13 @@ const All = ({
       <Button onClick={() => increaseVotes(x._id)}>Upvote</Button>
       <Button onClick={() => downVote(x._id)}>DownVote</Button>
       {/* <Button onClick={() => DeleteComment(x._id)}>Delete</Button> */}
-      <Button onClick={()=>{setToggle(!toggle)}}>{toggle ? "Close" :"Answer"}</Button>
+      <Button
+        onClick={() => {
+          setToggle(!toggle);
+        }}
+      >
+        {toggle ? "Close" : "Answer"}
+      </Button>
       {toggle ? (
         <form
           className="replyForm"

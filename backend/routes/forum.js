@@ -132,34 +132,38 @@ router
 router.route("/upvotes/:id").put(async (req, res) => {
   const id = req?.params?.id;
   const userId = req.body.userId;
+
   if (!id) {
     return res.status(400).json({ Alert: "No ID" });
   }
+
   try {
     const verify = await forumModel.findByIdAndUpdate(
       id,
       { $inc: { rating: 1 } },
       { new: true }
     );
-    const nerdPointsUpdate = await userModel.findByIdAndUpdate(
-      { _id: userId },
-      { $inc: { nerdPoints: 5 } }
-    ); //increment points by 1
-    if (!nerdPointsUpdate) {
-      res.status(400).json({
-        Alert: "Error while updating nerd points , perhaps user not logged in?",
-      });
-    } else {
-      res.status(200).json({
-        Alert: `Nerd Points Updated For The User ${nerdPointsUpdate}!`,
-      });
-    }
+
     if (!verify) {
       return res
         .status(404)
-        .json({ Alert: `${id} brings an invalid question!` });
+        .json({ Alert: `${id} is an invalid question ID!` });
     }
+
+    const upvotedByUpdate = await userModel.findByIdAndUpdate(
+      { _id: userId },
+      { $inc: { nerdPoints: 5 }, $push: { upvotedBy: id } },
+      { new: true }
+    );
+
+    if (!upvotedByUpdate) {
+      return res.status(400).json({
+        Alert: "Error while updating nerd points, perhaps user not logged in?",
+      });
+    }
+
     res.status(200).json({
+      Alert: `Nerd Points Updated For The User ${userId}!`,
       Votes: `Upvotes updated to ${verify.rating}! Data ${JSON.stringify(
         verify
       )}`,

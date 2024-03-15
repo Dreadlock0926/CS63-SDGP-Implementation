@@ -13,10 +13,13 @@ export const UserContext = createContext();
 function App() {
   const [loading, setLoading] = useState(false);
   const [logged, setLogged] = useState(true);
+  const [search, setSearch] = useState("");
   const [user, setUser] = useState("Guest");
   const [status, setStatus] = useState("");
   const [searched, setSearched] = useState([]);
   const [transfer, setTransfer] = useState(0);
+  const [toggle, setToggle] = useState(false);
+  let upvoting = 0;
   const userData = {
     loading: loading,
     status,
@@ -28,8 +31,13 @@ function App() {
     setUser,
     searched,
     setSearched,
+    search,
+    setSearch,
     transfer,
     setTransfer,
+    upvoting,
+    toggle,
+    setToggle,
   };
 
   return (

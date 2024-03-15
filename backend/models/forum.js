@@ -27,6 +27,10 @@ const forumSchema = mongoose.Schema(
         },
       },
     },
+    upvotedBy:{
+      type:[String],
+      default:[]
+    },
 
     topic: {
       type: String,

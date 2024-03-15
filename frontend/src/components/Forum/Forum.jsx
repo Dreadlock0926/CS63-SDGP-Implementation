@@ -20,18 +20,29 @@ import PureMath from "./PureMath";
 import Statistics from "./Statistics";
 
 const Forum = () => {
-  const { loading, setLoading, status, setStatus, logged, user,searched,setSearched,transfer,setTransfer } =
-    useContext(UserContext);
+  const {
+    loading,
+    setLoading,
+    status,
+    setStatus,
+    logged,
+    user,
+    searched,
+    setSearched,
+    transfer,
+    setTransfer,
+    search,
+    setSearch,
+    upvoting,
+  } = useContext(UserContext);
   const [data, setData] = useState([]);
   const [answer, setAnswer] = useState("");
   const [down, setDown] = useState(0);
   const navigator = useNavigate();
-  const [search, setSearch] = useState("");
+
   const [toggle, setToggle] = useState(false);
   const [theTotalUpvotes, setTheTotalUpvotes] = useState(0);
   const EndPoint = "http://localhost:8000/forum";
-
-  let searchClicked = 0;
 
   useEffect(() => {
     forumData();
@@ -54,24 +65,23 @@ const Forum = () => {
     }
   };
 
-  let upvoting = 0;
-
   const increaseVotes = async (id) => {
     try {
       setLoading(true);
       const response = await Axios.put(`${EndPoint}/upvotes/${id}`, {
         userId: user.id,
       });
-      if (response.data.status === 200) {
-        setStatus("Upvoted");
-        setData((prevData) =>
-          prevData.map((item) =>
-            item._id === id ? { ...item, rating: item.rating + 1 } : item
-          )
-        );
-      } else {
-        setStatus("Error while upvoting");
-      }
+      // if (response.data.status === 200) {
+
+      // } else {
+      //   setStatus("Error while upvoting");
+      // }
+      setStatus("Upvoted");
+      setData((prevData) =>
+        prevData.map((item) =>
+          item._id === id ? { ...item, rating: item.rating + 1 } : item
+        )
+      );
       setTimeout(() => {
         navigator("/forum");
       }, 2000);
@@ -85,10 +95,10 @@ const Forum = () => {
   const nerdPointsIncrement = async (id) => {
     try {
       const response = await Axios.put(`${EndPoint}/nerds/${id}`, {
-        userID: user.id,
+        userID: "65e43aa4a2304a41b4d37e2c",
         theTotalUpvotes,
       });
-      if (response.status === 200) {
+      if (response.data.status === 200) {
         alert("Nerd points updated!");
         console.log(response.data);
       } else {
@@ -166,7 +176,7 @@ const Forum = () => {
     try {
       const theData = await Axios.post(`${EndPoint}/search`, { search });
       // if (theData.data.status === 200) {
-       
+
       // }
       console.log(` ${theData.data}`);
       setSearched(theData.data);
@@ -204,13 +214,11 @@ const Forum = () => {
             }}
             placeholder="Search here..."
             type="text"
-            minLength={5}
           ></input>
           <button type="submit" disabled={loading}>
             Search...
           </button>
         </form>
-        <p>{status}</p>
         <FormControl style={{ marginBottom: "20px" }}>
           <InputLabel>Select Topic</InputLabel>
           <br />
@@ -224,6 +232,7 @@ const Forum = () => {
             <MenuItem value={2}>Statistics</MenuItem>
           </Select>
         </FormControl>
+        <p>{status}</p>
         {loading ? (
           <Typography variant="h5">Loading...</Typography>
         ) : down === 0 ? (
