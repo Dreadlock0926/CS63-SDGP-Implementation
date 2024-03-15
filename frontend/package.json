@@ -16,6 +16,7 @@
     "better-react-mathjax": "^2.0.3",
     "bootstrap": "^5.3.2",
     "cloudinary-react": "^1.8.1",
+    "mongoose": "^8.2.1",
     "react": "^18.2.0",
     "react-circular-progressbar": "^2.1.0",
     "react-countdown-circle-timer": "^3.2.1",

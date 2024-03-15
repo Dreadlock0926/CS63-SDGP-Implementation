@@ -36,8 +36,8 @@ const SelectCourses = () => {
   useEffect(() => {
     if (Object.keys(loggedInUser).length > 0) {
       console.log(loggedInUser);
-      console.log(loggedInUser.courses);
-      retrieveCourses(loggedInUser.courses);
+      console.log(loggedInUser.courses.map(({ courseKey }) => courseKey));
+      retrieveCourses(loggedInUser.courses.map(({ courseKey }) => courseKey));
     }
   }, [loggedInUser]);
   // Your code here

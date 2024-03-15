@@ -62,4 +62,21 @@ router.post("/updateCourse", async (req, res) => {
   }
 });
 
+router.post("/getTopicKeys", async (req, res) => {
+  const { sourceKey } = req.body;
+
+  try {
+    const topic = await topicsModel.findOne({ sourceKey });
+
+    if (!topic) {
+      return res.status(404).json({ message: "Topic not found" });
+    }
+
+    res.json({ topicKeys: topic.topicKeys || [] }); // Send empty array if topicKeys is not present
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ message: "Internal Server Error" });
+  }
+});
+
 module.exports = router;
