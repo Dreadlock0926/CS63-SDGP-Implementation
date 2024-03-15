@@ -95,6 +95,19 @@ router.route("/topic").post(async (req, res) => {
   }
 });
 
+
+router.route("/users").post(async (req,res)=>{
+  const {userId} = req?.body
+  if(!userId) return res.status(400).json({Alert:"UserID required"});
+
+  const exists = await userModel.findById(userId);
+  if(exists){
+    res.status(200).json(exists);
+  }else{
+    res.status(404).json({Alert:"No data found!"})
+  }
+})
+
 router
   .route("/progress/updates")
   .post(async (req, res) => {

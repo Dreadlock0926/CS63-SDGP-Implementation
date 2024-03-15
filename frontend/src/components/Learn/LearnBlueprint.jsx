@@ -7,20 +7,25 @@ import { Container, Typography } from "@mui/material";
 import Axios from "axios";
 
 const LearnBlueprint = () => {
-  const { theTopic } = useContext(UserContext);
+  const { theTopic, BASE, user } = useContext(UserContext);
   const [topicRelated, setTopicRelated] = useState([]);
+  const [userData, setUserData] = useState([]);
   const [loading, setLoading] = useState(false);
   const [status, setStatus] = useState("");
   const navigator = useNavigate();
 
-  const BASE = "http://localhost:8000/resources/topic/learned";
-
   async function fetchData(topic) {
     try {
       setLoading(true);
-      const response = await Axios.post(`${BASE}`, { theTopic: topic });
+      const response = await Axios.post(`${BASE}/resources/topic/learned`, {
+        theTopic: topic,
+      });
       setTopicRelated(response.data);
       console.log(response.data);
+      const theUser = await Axios.post(`${BASE}/resources/users`, {
+        userId: "65f2a146a0acea296a663650", //user.id
+      });
+      setUserData(theUser.data);
     } catch (error) {
       console.error(error);
       if (error.response && error.response.status === 404) {
@@ -80,6 +85,9 @@ const LearnBlueprint = () => {
                 </React.Fragment>
               ))}
             </tbody>
+            <div>
+              {userData && userData.length ? JSON.stringify(userData) : "No data found"}
+            </div>
           </table>
           <Typography variant="body1">{status}</Typography>
         </>

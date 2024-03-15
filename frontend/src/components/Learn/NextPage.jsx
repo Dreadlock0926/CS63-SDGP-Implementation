@@ -29,7 +29,7 @@ const NextPage = () => {
     try {
       const outcome = await Axios.put(`${BASE}/resources/progress/updates`, {
         progress: theProgressVal,
-        userId: "65f2a146a0acea296a663650",
+        userId: "65f2a146a0acea296a663650", //user.id
       });
       if (outcome.data.status === 200) {
         alert("Incremented!");
