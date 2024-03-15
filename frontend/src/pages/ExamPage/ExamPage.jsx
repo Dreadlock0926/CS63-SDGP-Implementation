@@ -32,7 +32,8 @@ function InfoPanel({ examType, examSubject, numQuestions }) {
   );
 }
 
-function ExamPageContent({setIsLoadingInfo, setExamType, setExamSubject, setNumQuestions, setCorrectIndexes, correctIndex, setMark}) {
+function ExamPageContent({setIsLoadingInfo, setExamType, setExamSubject, setNumQuestions, setCorrectIndexes, correctIndex, setMark, 
+    setCorrectQuestions, setWrongQuestions, correctQuestions, wrongQuestions}) {
 
     function QuestionOnPage({question, mqNum}) {
 
@@ -144,8 +145,26 @@ function ExamPageContent({setIsLoadingInfo, setExamType, setExamSubject, setNumQ
     },[])
 
     useEffect(() => {
-        let markCount = 0;
+
+        let correctQuestionsContainer = [];
+
+        if (wrongQuestions.length > 0) {
+            for (let i = 0; i < questions.length; i++) {
+                if (!wrongQuestions.includes(questions[i].props.question.questionID)) {
+                    correctQuestionsContainer.push(questions[i].props.question.questionID)
+                }
+            }
+        }
+
+        setCorrectQuestions(correctQuestionsContainer);
+
+    }, [wrongQuestions])
+
+    useEffect(() => {
+        let markCount = -1;
         let mark = 0;
+
+        let wrongQuestionsOrigin = [];
 
         for (let i = 0; i < questions.length; i++) {
             let markGrid = questions[i].props.question.marksGrid;
@@ -154,10 +173,16 @@ function ExamPageContent({setIsLoadingInfo, setExamType, setExamSubject, setNumQ
                     markCount++;
                     if (correctIndex.includes(markCount)) {
                         mark += parseInt(markGrid[j]);
+                    } else {
+                        if (!wrongQuestionsOrigin.includes(questions[i].props.question.questionID)) {
+                            wrongQuestionsOrigin.push(questions[i].props.question.questionID);
+                        }
                     }
                 }
             }
         }
+
+        setWrongQuestions(wrongQuestionsOrigin);
 
         setMark(mark);
     }, [correctIndex])
@@ -202,6 +227,8 @@ function ExamPage() {
     const [numQuestions, setNumQuestions] = useState(0);
 
     const [correctIndex, setCorrectIndexes] = useState([]);
+    const [correctQuestions, setCorrectQuestions] = useState([]);
+    const [wrongQuestions, setWrongQuestions] = useState([]);
     const [mark, setMark] = useState(0);
 
     useEffect(() => {
@@ -214,12 +241,26 @@ function ExamPage() {
         console.log(correctIndex);
     }, [correctIndex])
 
+    useEffect(() => {
+        console.log("Correct questions: ")
+        console.log(correctQuestions);
+    }, [correctQuestions]);
+
+    useEffect(() => {
+        console.log("Wrong questions: ")
+        console.log(wrongQuestions);
+    }, [wrongQuestions])
+
     return (
         <div className="exams-container">
-            <ExamPageContent setIsLoadingInfo={setIsLoadingInfo} setExamType={setExamType} 
+            <ExamPageContent 
+            setIsLoadingInfo={setIsLoadingInfo} setExamType={setExamType} 
             setExamSubject={setExamSubject} setNumQuestions={setNumQuestions}
             setCorrectIndexes={setCorrectIndexes} correctIndex={correctIndex}
-            setMark={setMark} />
+            setCorrectQuestions={setCorrectQuestions} setWrongQuestions={setWrongQuestions} 
+            correctQuestions={correctQuestions} wrongQuestions={wrongQuestions}
+            setMark={setMark} 
+            />
             {!isLoadingInfo && <InfoPanel examType={examType} examSubject={examSubject} numQuestions={numQuestions} />}
         </div>
     )
