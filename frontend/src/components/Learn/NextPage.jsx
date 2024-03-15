@@ -6,18 +6,26 @@ import { useContext, useEffect, useState } from "react";
 import { UserContext } from "../../App";
 
 const NextPage = () => {
-  const { id, user } = useParams();
+  const { id } = useParams();
   const [material, setMaterial] = useState([]);
-  const { BASE, theProgressVal } = useContext(UserContext);
+  const { BASE, theProgressVal, specificTopic,status,setStatus } = useContext(UserContext);
 
   async function getTheLesson() {
     try {
-      const response = await Axios.post(`${BASE}/resources/search/${id}`);
+      const response = await Axios.post(`${BASE}/resources/search/${id}`, {
+        specificTopic,
+      });
       if (response.data.status === 200) {
         setMaterial(response.data);
       }
+      console.log(`The topic is ${specificTopic}`)
     } catch (err) {
+      // if(err.response.status===404){
+      //   alert("End of lesson!")
+      // }
       console.error(err);
+    } finally {
+      console.log(material);
     }
   }
 
@@ -28,7 +36,7 @@ const NextPage = () => {
   async function IncrementProgress() {
     try {
       const outcome = await Axios.put(`${BASE}/resources/progress/updates`, {
-        progress: theProgressVal,
+        progress: theProgressVal, //global state which has the dynamic progress assigned to it
         userId: "65f2a146a0acea296a663650", //user.id
       });
       if (outcome.data.status === 200) {
@@ -42,7 +50,6 @@ const NextPage = () => {
   return (
     <div>
       <h1>The Next Page!</h1>
-      <p>{id}</p>
       <div>
         {material && material.length
           ? JSON.stringify(material)
@@ -52,7 +59,6 @@ const NextPage = () => {
         Next Page!
       </Link>
       <br />
-      <Link to={"/first"}>First!</Link>
     </div>
   );
 };

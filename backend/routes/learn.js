@@ -95,18 +95,17 @@ router.route("/topic").post(async (req, res) => {
   }
 });
 
-
-router.route("/users").post(async (req,res)=>{
-  const {userId} = req?.body
-  if(!userId) return res.status(400).json({Alert:"UserID required"});
+router.route("/users").post(async (req, res) => {
+  const { userId } = req?.body;
+  if (!userId) return res.status(400).json({ Alert: "UserID required" });
 
   const exists = await userModel.findById(userId);
-  if(exists){
+  if (exists) {
     res.status(200).json(exists);
-  }else{
-    res.status(404).json({Alert:"No data found!"})
+  } else {
+    res.status(404).json({ Alert: "No data found!" });
   }
-})
+});
 
 router
   .route("/progress/updates")
@@ -223,15 +222,18 @@ router
 
 router.route("/search/:id").post(async (req, res) => {
   const id = req?.params?.id;
+  const specificTopic = req?.body?.specificTopic;
 
   console.log(id);
   if (!id) return res.status(400).json({ Alert: "No ID" });
 
   try {
-    const exists = await learningModel.findOne({lessonPages:parseInt(id)});
+    const exists = await learningModel.findOne({ topic: specificTopic });
 
-    if (exists) {
-      res.status(200).json(exists);
+    console.log(exists);
+    if (exists && exists.lessonPages.includes(id)) {
+      const theSpecificTopic = exists;
+      res.status(200).json(theSpecificTopic);
     } else {
       res.status(404).json({ Alert: "No Data!" });
     }

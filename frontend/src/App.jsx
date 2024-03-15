@@ -20,6 +20,7 @@ function App() {
   const [response, setResponse] = useState("");
   const [theTopic, setTheTopic] = useState("");
   const [theProgressVal, setTheProgressVal] = useState(0);
+  const [specificTopic, setSpecificTopic] = useState("");
   const BASE = "http://localhost:8000";
 
   // const navigator = useNavigation();
@@ -41,6 +42,8 @@ function App() {
     BASE,
     theProgressVal,
     setTheProgressVal,
+    specificTopic,
+    setSpecificTopic,
   };
 
   return (
@@ -57,7 +60,7 @@ function App() {
             ></Route>
             <Route path="/addresources" element={<AddStudy />} />
             <Route path="/nextpage/:id" element={<NextPage />} />
-            <Route path="/first" element={<First />} />
+            <Route path="/:lesson" element={<First />} />
             <Route path="/second" element={<Second />} />
             <Route path="/learnprint" element={<LearnBlueprint />}></Route>
             <Route path="*" element={<UnknownPage />} />

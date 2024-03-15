@@ -7,7 +7,7 @@ import { Container, Typography } from "@mui/material";
 import Axios from "axios";
 
 const LearnBlueprint = () => {
-  const { theTopic, BASE, user } = useContext(UserContext);
+  const { theTopic, BASE, user, setSpecificTopic } = useContext(UserContext);
   const [topicRelated, setTopicRelated] = useState([]);
   const [userData, setUserData] = useState([]);
   const [loading, setLoading] = useState(false);
@@ -75,6 +75,7 @@ const LearnBlueprint = () => {
               {topicRelated.map((item, index) => (
                 <React.Fragment key={item._id || index}>
                   <p>{item.topic}</p>
+                  {setSpecificTopic(item.topic)} 
                   {item.lessonPages.map((index) => (
                     <div className="lessonPages" key={index}>
                       <Link to={`/nextpage/${0}`}>
@@ -86,7 +87,9 @@ const LearnBlueprint = () => {
               ))}
             </tbody>
             <div>
-              {userData && userData.length ? JSON.stringify(userData) : "No data found"}
+              {userData && userData.length
+                ? JSON.stringify(userData)
+                : "No data found"}
             </div>
           </table>
           <Typography variant="body1">{status}</Typography>
