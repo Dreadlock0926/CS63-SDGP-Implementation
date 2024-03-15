@@ -95,27 +95,91 @@ router.route("/topic").post(async (req, res) => {
   }
 });
 
-router.route("/users").post(async (req, res) => {
-  const { userId = "65f0ccaf0c85f1e4364bb3e6" } = req?.body;
-  if (!userId) return res.status(400).json({ Alert: "UserID required" });
+router.route("/completeLesson").post(async (req, res) => {
+  try {
+    const {
+      userId = "65f471667a725acbb3ba057f",
+      lessonName = "substitutionIntegration",
+    } = req.body;
 
-  const exists = await userModel.findById(userId);
-  console.log(exists);
-  if (exists) {
-    const integrationByParts = exists?.lessons?.integration?.integrationByParts;
-    console.log(integrationByParts);
-
-    if (integrationByParts) {
-      const updated = await userModel.updateOne(
-        { _id: userId },
-        { integrationByParts: true }
-      );
-      console.log("Integration by parts found and updated.");
-      res.status(200).json(updated);
-    } else {
-      console.log("Integration by parts not found.");
-      res.status(404).json({ Alert: "No data found!" });
+    if (!userId || !lessonName) {
+      return res.status(400).json({ message: "Missing required fields" });
     }
+
+    const user = await userModel.findById(userId);
+
+    if (!user) {
+      return res.status(404).json({ message: "User not found" });
+    }
+
+    let lessonIndex = -1;
+    let topicIndex = 0;
+    for (topicIndex = 0; topicIndex < user.lesson.length; topicIndex++) {
+      const topicLessons = user.lesson[topicIndex].lessonProgress;
+      lessonIndex = topicLessons.findIndex(
+        (lesson) => lesson.lessonName === lessonName
+      );
+      if (lessonIndex !== -1) {
+        break; // Found the lesson, stop iterating
+      }
+    }
+
+    if (lessonIndex === -1) {
+      return res.status(400).json({ message: "Lesson not found" });
+    }
+
+    user.lesson[topicIndex].lessonProgress[lessonIndex].completed = true;
+
+    await user.save();
+
+    res.json({ message: "Lesson marked as completed successfully" });
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ message: "Internal server error" });
+  }
+});
+
+router.route("/create-user").post(async (req, res) => {
+  if (!req.session.user) {
+    //only someone who hasn't logged in can create an account
+    const { username = "nibba", password = "213" } = req?.body;
+    if (!username || !password)
+      return res.status(400).json({ Alert: "Username/Password Missing!" });
+
+    const validityUser = await userModel.findOne({ username });
+
+    const lesson1 = {
+      lessonName: "integrationArea",
+      completed: false,
+    };
+
+    const lesson2 = {
+      lessonName: "integrationByParts",
+      completed: false,
+    };
+
+    const lesson3 = {
+      lessonName: "substitutionIntegration",
+      completed: false,
+    };
+
+    const topicProgress = {
+      source: "p1",
+      topic: "integration",
+      lessonProgress: [lesson1, lesson2, lesson3],
+    };
+
+    if (!validityUser) {
+      // const passwordAuth = bcrypt.hashSync(password, Math.random());
+
+      await userModel.create({ username, password, lesson: [topicProgress] });
+
+      return res.status(201).json({ Alert: `${username} Registered!` });
+    } else {
+      return res.status(409).json({ Alert: ` ${username} Already Exists!` });
+    }
+  } else {
+    res.status(409).json({ Alert: "Please Logout to Register New Account!" });
   }
 });
 

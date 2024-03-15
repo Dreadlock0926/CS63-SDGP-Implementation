@@ -14,6 +14,23 @@ const learningSchema = new mongoose.Schema(
   { timestamps: true }
 );
 
+const lessonSpecificSchema = new mongoose.Schema({
+  lessonName: { type: String, default: "integrationArea" },
+  completed: { type: Boolean, default: false },
+});
+
+const topicProgressSchema = new mongoose.Schema({
+  source: { type: String, default: "p1" },
+  topic: {
+    type: String,
+    default: "integration",
+  },
+  lessonProgress: {
+    type: [lessonSpecificSchema],
+    required: true,
+  },
+});
+
 const userSchema = new mongoose.Schema(
   {
     username: { type: String, required: true, unique: true },
@@ -26,7 +43,7 @@ const userSchema = new mongoose.Schema(
     wrongQuestions: { type: Array },
     feedbackExams: { type: Array },
     learning: { type: [learningSchema] },
-    lesson: { ObjectId: { type: String }, type: [Boolean], default: [] },
+    lesson: { type: [topicProgressSchema], required: true },
   },
   {
     timestamps: true,
