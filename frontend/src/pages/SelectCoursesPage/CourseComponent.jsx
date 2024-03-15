@@ -8,7 +8,7 @@ import { Link } from "react-router-dom";
 
 const handleClick = async (courseRef, courseKey) => {
   let loggedInUser = JSON.parse(sessionStorage.getItem("loggedUser")).data;
-  console.log(loggedInUser);
+
   try {
     await updateCourses(loggedInUser._id, courseRef, courseKey).then(
       async (result) => {

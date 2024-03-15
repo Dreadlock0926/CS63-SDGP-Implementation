@@ -18,6 +18,8 @@ const courseSchema = new mongoose.Schema({
     required: true,
   },
 
+  noCompletedCourses: { type: Number, default: 0 },
+
   courseKey: { type: String, required: true },
 });
 
@@ -45,4 +47,3 @@ const userSchema = new mongoose.Schema(
 
 const userModel = mongoose.model("users", userSchema);
 module.exports = userModel;
-module.exports = userProgress;
