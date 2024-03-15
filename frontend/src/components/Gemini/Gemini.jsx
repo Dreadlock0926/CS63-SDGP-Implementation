@@ -1,7 +1,7 @@
 import { useContext, useState } from "react";
 import Axios from "axios";
 import { UserContext } from "../../App";
-import BarLoader from "react-spinners/BarLoader";
+import ScaleLoader from "react-spinners/ScaleLoader";
 import "./gemini.css"; 
 
 function Gemini() {
@@ -49,27 +49,24 @@ function Gemini() {
         <h2>Gemini Chatbot</h2>
         <hr />
         <form onSubmit={GatherData} className="formContainer">
+        <h2 className="botMessage" style={{ color: "black" }}>
+              {searchCounter === 0
+                ? "Hi, I'm Vexy, how may I help you today! 🤖👋🏻"
+                : "Anything else?"}
+            </h2>
           <input
             className="botInput"
             onChange={(e) => setSearch(e.target.value)}
-            placeholder="Enter your prompt here..."
+            placeholder="🔎 Enter your prompt here..."
           />
-          <button type="submit" disabled={loading} className="searchButton">
-            <img style={{width:"40px", height:"40px"}} src='./images/search.png' alt='chatbot-icon' />
-            {loading ? <BarLoader color="#4a9dec" /> : ""}
-          </button>
+            {loading ? <div className="loaderContainer"><ScaleLoader color="#4a9dec" /></div> : ""}
           {data && data.length ? (
             data.map((x, index) => (
               <div key={x.id || index} className="bot-response">
                 <p>{x.Data}</p>
               </div>
             ))
-          ) : (
-            <h2 className="bot-message" style={{ color: "black" }}>
-              {searchCounter === 0
-                ? "Hi, I'm Vexy, how may I help you today! 🤖👋🏻"
-                : "Anything else?"}
-            </h2>
+          ) : ( ""
           )}
         </form>
         <hr />

@@ -24,8 +24,8 @@
 /* Search text field style */
 .botInput {
     border: 2px solid transparent;
-    width: 15em;
-    height: 2.5em;
+    width: 55em;
+    height: 3em;
     padding-left: 0.8em;
     outline: none;
     overflow: hidden;
@@ -36,26 +36,6 @@
 
 /* Hover and focus effects for the text field */
 .botInput:hover, .botInput:focus {
-    border: 2px solid #4a9dec;
-    box-shadow: 0px 0px 0px 7px rgb(74, 157, 236, 20%);
-    background-color: white;
-}
-
-/* Styles for the search button */
-.searchButton {
-    border: 2px solid transparent;
-    padding: 10px;
-    outline: none;
-    background-color: white;
-    border-radius: 10px;
-    transition: all 0.5s;
-}
-
-/* Hover effects for the search button */
-.searchButton:hover {
-    transition: all 0.2s;
-    transform: scale(1.1);
-    cursor: pointer;
     border: 2px solid #4a9dec;
     box-shadow: 0px 0px 0px 7px rgb(74, 157, 236, 20%);
     background-color: white;
@@ -99,7 +79,20 @@
 }
 
 .closeModal:hover {
-    color: #068C1F;
+    color: #4a9dec;
     transition: 0.5s;
     cursor: pointer;
+}
+
+/* Bot Message */
+.botMessage {
+    margin: 5px;
+    margin-bottom: 20px;
+    font-weight: 100;
+}
+
+/* Loader CSS */
+.loaderContainer {
+    margin-top: 20px;
+    margin-left: 340px;
 }
