@@ -201,6 +201,7 @@ function ExamPageContent({setIsLoadingInfo, setExamType, setExamSubject, setNumQ
         
 
         if (correctIndexesContainer.length > 0) {
+            setCorrectIndexes(correctIndexesContainer);
         } else {
             setCorrectIndexes([]);
         }
