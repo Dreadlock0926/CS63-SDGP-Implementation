@@ -133,22 +133,14 @@ router.route("/users").post(async (req, res) => {
 router
   .route("/progress/updates")
   .post(async (req, res) => {
-    const { userId = "65f0d2e556224d60ec899964", progress = 50 } = req.body;
+    const { userId = "65f471667a725acbb3ba057f", progress = 50 } = req.body;
 
     try {
       const userExists = await userModel.findById(userId);
       if (!userExists) return res.status(404).json({ Alert: "Invalid user!" });
 
-      // Check if the progress field exists in the user document
-      if (!userExists.progress) {
-        userExists.progress = 0; // Initialize progress if it doesn't exist
-      }
-
-      // Increment the progress field by the specified amount
-      userExists.progress += progress;
-
-      // Save the updated user document
-      await userExists.save();
+      // Use findOneAndUpdate or findByIdAndUpdate to correctly update the user's progress
+      await userExists.updateOne(userId, { $inc: { progress } });
 
       // Send response indicating successful update
       res.status(200).json({ Alert: "Updated!" });

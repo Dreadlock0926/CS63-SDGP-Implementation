@@ -74,12 +74,12 @@ const LearnBlueprint = () => {
             <tbody>
               {topicRelated.map((item, index) => (
                 <React.Fragment key={item._id || index}>
-                  <p>{item.topic}</p>
+                  <p>{item.topic}</p> {/**Topic */}
                   {setSpecificTopic(item.topic)} 
                   {item.lessonPages.map((index) => (
                     <div className="lessonPages" key={index}>
                       <Link to={`/nextpage/${0}`}>
-                        {index !== 0 ? `${item.topic} -> ${index}` : ""}
+                        {`80%`}  {/**Percentage*/}
                       </Link>
                     </div>
                   ))}
