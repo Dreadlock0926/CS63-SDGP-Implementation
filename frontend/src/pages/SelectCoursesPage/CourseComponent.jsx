@@ -9,51 +9,52 @@ const handleClick = async (courseToAdd) => {
   let loggedInUser = JSON.parse(sessionStorage.getItem("loggedUser")).data;
   console.log(loggedInUser);
   console.log(courseToAdd);
-  try {
-    const response = await Axios.post(
-      "http://localhost:8000/course/updateCourse",
-      {
-        userId: loggedInUser._id,
-        courseToAdd: courseToAdd,
-      }
-    );
-    console.log(response);
 
-    await updateLoggedUser(loggedInUser._id).then(async (result) => {
-      console.log(result);
-      sessionStorage.setItem("loggedUser", JSON.stringify({ data: result }));
+  // try {
+  //   const response = await Axios.post(
+  //     "http://localhost:8000/course/updateCourse",
+  //     {
+  //       userId: loggedInUser._id,
+  //       courseToAdd: courseToAdd,
+  //     }
+  //   );
+  //   console.log(response);
 
-      console.log(sessionStorage.getItem("loggedUser"));
+  //   await updateLoggedUser(loggedInUser._id).then(async (result) => {
+  //     console.log(result);
+  //     sessionStorage.setItem("loggedUser", JSON.stringify({ data: result }));
 
-      loggedInUser = result;
+  //     console.log(sessionStorage.getItem("loggedUser"));
 
-      await initializeProbabilities(loggedInUser).then((result) => {
-        console.log(result);
+  //     loggedInUser = result;
 
-        async function updateModuleProbability() {
-          await Axios.post(
-            "http://localhost:8000/user/updateModuleProbabilities",
-            {
-              username: loggedInUser.username,
-              topicProbabilities: result,
-            }
-          )
-            .then(function (response) {
-              console.log(response);
-            })
-            .catch(function (error) {
-              console.log(error);
-            });
-        }
+  //     await initializeProbabilities(loggedInUser).then((result) => {
+  //       console.log(result);
 
-        updateModuleProbability();
-      });
+  //       async function updateModuleProbability() {
+  //         await Axios.post(
+  //           "http://localhost:8000/user/updateModuleProbabilities",
+  //           {
+  //             username: loggedInUser.username,
+  //             topicProbabilities: result,
+  //           }
+  //         )
+  //           .then(function (response) {
+  //             console.log(response);
+  //           })
+  //           .catch(function (error) {
+  //             console.log(error);
+  //           });
+  //       }
 
-      window.location.href = "/select-course";
-    });
-  } catch (error) {
-    console.error(error);
-  }
+  //       updateModuleProbability();
+  //     });
+
+  // window.location.href = "/select-course";
+  //   });
+  // } catch (error) {
+  //   console.error(error);
+  // }
 };
 
 const CourseComponent = (course) => {

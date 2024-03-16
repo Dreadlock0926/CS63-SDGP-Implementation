@@ -1,29 +1,15 @@
 const mongoose = require("mongoose");
 
-const learningSchema = new mongoose.Schema(
-  {
-    source: { type: String },
-    topic: {
-      type: String,
-    },
-    lessonPages: {
-      type: [String],
-      default: [],
-    },
-  },
-  { timestamps: true }
-);
-
 const lessonSpecificSchema = new mongoose.Schema({
-  lessonName: { type: String, default: "integrationArea" },
+  lessonName: { type: String, required: true },
   completed: { type: Boolean, default: false },
 });
 
 const topicProgressSchema = new mongoose.Schema({
-  source: { type: String, default: "p1" },
+  source: { type: String, required: true },
   topic: {
     type: String,
-    default: "integration",
+    required: true,
   },
   lessonProgress: {
     type: [lessonSpecificSchema],
@@ -42,7 +28,6 @@ const userSchema = new mongoose.Schema(
     correctQuestions: { type: Array },
     wrongQuestions: { type: Array },
     feedbackExams: { type: Array },
-    learning: { type: [learningSchema] },
     lesson: { type: [topicProgressSchema], required: true },
   },
   {
