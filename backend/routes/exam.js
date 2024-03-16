@@ -57,15 +57,33 @@ router.route("/getExam").post(async (req, res) => {
 })
 
 router.route("/updateExam").post(async (req, res) => {
-  const { examRef, marks, correctQuestions, wrongQuestions, userAnswers } = req?.body;
+  const { examRef, userRef, marks, correctQuestions, wrongQuestions, userAnswers } = req?.body;
 
   if (!examRef) {
     return res.status(400).json({ Alert: "The exam reference ID is missing." });
   }
 
+  if (!userRef) {
+    return res.status(400).json({ Alert: "The user reference ID is missing." });
+  }
+
   const examData = await examModel.findByIdAndUpdate(examRef, { mark: marks, userAnswers:userAnswers })
 
-  if (!examData) {
+  let userData;
+
+  if (correctQuestions.length > 0) {
+
+    userData = await userModel.findByIdAndUpdate(userRef, {$addToSet: { correctQuestions: correctQuestions }})
+
+  }
+
+  if (wrongQuestions.length > 0) {
+
+    userData = await userModel.findByIdAndUpdate(userRef, {$addToSet: { wrongQuestions: wrongQuestions }})
+
+  }
+
+  if (!examData || !userData) {
     res.status(400).json({Alert: "The exam data is not matching records."});
   } else {
     res.status(200).json(examData);
