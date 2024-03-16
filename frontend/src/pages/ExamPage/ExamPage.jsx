@@ -123,8 +123,6 @@ function ExamPageContent({setIsLoadingInfo, setExamType, setExamSubject, setNumQ
     
     const getQuestion = async ( setQuestionsList, setExamType, setExamSubject ) => {
 
-        // const questionsList = ["p1_s_2_w_2022_2","p1_cg_1_w_2022_2","s1_p_3_w_2022_2", "p1_s_2_w_2022_2","p1_cg_1_w_2022_2","s1_p_3_w_2022_2"];
-
         try {
             const response = await Axios.post('http://localhost:8000/exam/getExam', {
                 "examRef": examRef
@@ -303,7 +301,9 @@ function ExamPage() {
         console.log("The users written answers are: ")
         console.log(userWrittenAnswers);
         
-        postUserDetails();
+        if (submitButtonClicked) {
+            postUserDetails();
+        }
 
     }, [submitButtonClicked])
 
