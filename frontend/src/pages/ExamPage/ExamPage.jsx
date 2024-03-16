@@ -275,7 +275,10 @@ function ExamPage() {
         try {
             const response = await Axios.post('http://localhost:8000/exam/updateExam', {
                 "examRef": examRef,
+                "userRef": "65f0ccaf0c85f1e4364bb3e6",
                 "marks": mark,
+                "correctQuestions": correctQuestions,
+                "wrongQuestions": wrongQuestions,
                 "userAnswers": userWrittenAnswers
             });
         } catch (err) {

@@ -73,13 +73,15 @@ router.route("/updateExam").post(async (req, res) => {
 
   if (correctQuestions.length > 0) {
 
-    userData = await userModel.findByIdAndUpdate(userRef, {$addToSet: { correctQuestions: correctQuestions }})
+    userData = await userModel.findByIdAndUpdate(userRef, {$pullAll: {wrongQuestions: correctQuestions}})
+    userData = await userModel.findByIdAndUpdate(userRef, {$addToSet: { correctQuestions: {$each: correctQuestions} }})
 
   }
 
   if (wrongQuestions.length > 0) {
 
-    userData = await userModel.findByIdAndUpdate(userRef, {$addToSet: { wrongQuestions: wrongQuestions }})
+    userData = await userModel.findByIdAndUpdate(userRef, {$pullAll: {correctQuestions: wrongQuestions}})
+    userData = await userModel.findByIdAndUpdate(userRef, {$addToSet: { wrongQuestions: {$each: wrongQuestions} }})
 
   }
 
