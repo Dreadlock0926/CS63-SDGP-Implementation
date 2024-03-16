@@ -3,7 +3,7 @@
 import React, { useContext, useEffect, useState } from "react";
 import { UserContext } from "../../App";
 import { Link, useNavigate } from "react-router-dom";
-import { Container, Typography } from "@mui/material";
+import { Container, Typography } from "../muiComponents";
 import Axios from "axios";
 
 const LearnBlueprint = () => {
@@ -75,7 +75,7 @@ const LearnBlueprint = () => {
               {topicRelated.map((item, index) => (
                 <React.Fragment key={item._id || index}>
                   <p>{item.topic}</p>
-                  {setSpecificTopic(item.topic)} 
+                  {setSpecificTopic(item.topic)}
                   {item.lessonPages.map((index) => (
                     <div className="lessonPages" key={index}>
                       <Link to={`/nextpage/${0}`}>
