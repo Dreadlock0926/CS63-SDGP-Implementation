@@ -58,7 +58,7 @@ const PureMath = ({
       </Typography>
       <Button onClick={() => increaseVotes(x._id)}>Upvote</Button>
       <Button onClick={() => downVote(x._id)}>DownVote</Button>
-      <Button onClick={() => DeleteComment(x._id)}>Delete</Button>
+      {/* <Button onClick={() => DeleteComment(x._id)}>Delete</Button> */}
       <Button onClick={()=>{setToggle(!toggle)}}>{toggle ? "Close" :"Answer"}</Button>
       {toggle ? (
         <form

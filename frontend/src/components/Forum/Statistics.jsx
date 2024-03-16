@@ -60,7 +60,7 @@ const Statistics = ({
       </Typography>
       <Button onClick={() => increaseVotes(x._id)}>Upvote</Button>
       <Button onClick={() => downVote(x._id)}>DownVote</Button>
-      <Button onClick={() => DeleteComment(x._id)}>Delete</Button>
+      {/* <Button onClick={() => DeleteComment(x._id)}>Delete</Button> */}
       <Button
         onClick={() => {
           setToggle(!toggle);
@@ -73,6 +73,7 @@ const Statistics = ({
           className="replyForm"
           onSubmit={(e) => {
             e.preventDefault();
+            setToggle(false);
             AnsweringQuestions(x._id, answer);
           }}
         >

@@ -20,8 +20,10 @@ const ForumSearch = () => {
     setLoading,
     upvoting,
     user,
-    data,setData,
-    toggle,setToggle,
+    data,
+    setData,
+    toggle,
+    setToggle,
   } = useContext(UserContext);
   const EndPoint = "http://localhost:8000/forum";
 
@@ -76,6 +78,9 @@ const ForumSearch = () => {
 
   return transfer === 1 ? (
     <div className="container">
+      <h1 className="text-center mb-4" style={{ textAlign: "center" }}>
+        Forum Search
+      </h1>
       <form onSubmit={searchUp}>
         <input
           onChange={(e) => {
@@ -88,9 +93,7 @@ const ForumSearch = () => {
           Search...
         </button>
       </form>
-      <h1 className="text-center mb-4" style={{ textAlign: "center" }}>
-        Forum Search
-      </h1>
+
       {searched && searched.length ? (
         <div>
           {searched.map((x, index) => (
@@ -106,9 +109,14 @@ const ForumSearch = () => {
                 </Card.Body>
               </Card> */}
               <br />
-              <All key={x._id} theKey={x._id} x={x} toggle={toggle} setToggle={setToggle}
+              <All
+                key={x._id}
+                theKey={x._id}
+                x={x}
+                toggle={toggle}
+                setToggle={setToggle}
                 increaseVotes={increaseVotes}
-                />
+              />
             </div>
           ))}
         </div>
