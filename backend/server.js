@@ -11,6 +11,7 @@ const { join } = require("path");
 const register = require("./routes/register");
 const login = require("./routes/login");
 const examResources = require("./routes/exams");
+const courses = require("./routes/courses");
 const morgan = require("morgan");
 
 async function authenticated(req, res, next) {
@@ -50,6 +51,7 @@ app.use("/register", register);
 app.use("/login", login);
 // app.use(authenticated); //uncomment during final authentication tests 🔓
 app.use("/exam", examResources);
+app.use("/course", courses);
 
 app.use("*", (req, res) => {
   //leave this below all the other routes cuz this is the LAST RESORT JUST INCASE THE requested url is neither of the existing routes
