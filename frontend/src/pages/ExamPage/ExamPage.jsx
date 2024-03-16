@@ -33,7 +33,7 @@ function InfoPanel({ examType, examSubject, numQuestions }) {
 }
 
 function ExamPageContent({setIsLoadingInfo, setExamType, setExamSubject, setNumQuestions, setCorrectIndexes, correctIndex, setMark, 
-    setCorrectQuestions, setWrongQuestions, correctQuestions, wrongQuestions}) {
+    setCorrectQuestions, setWrongQuestions, correctQuestions, wrongQuestions, submitButtonClicked, setUserWrittenAnswers, examRef}) {
 
     function QuestionOnPage({question, mqNum}) {
 
@@ -127,7 +127,7 @@ function ExamPageContent({setIsLoadingInfo, setExamType, setExamSubject, setNumQ
 
         try {
             const response = await Axios.post('http://localhost:8000/exam/getExam', {
-                "examRef": "65f34e27421397a390df401b"
+                "examRef": examRef
             });
 
             setExamType(response.data.examType);
@@ -153,6 +153,10 @@ function ExamPageContent({setIsLoadingInfo, setExamType, setExamSubject, setNumQ
                 if (!wrongQuestions.includes(questions[i].props.question.questionID)) {
                     correctQuestionsContainer.push(questions[i].props.question.questionID)
                 }
+            }
+        } else {
+            for (let i = 0; i < questions.length; i++) {
+                correctQuestionsContainer.push(questions[i].props.question.questionID)
             }
         }
 
@@ -191,6 +195,8 @@ function ExamPageContent({setIsLoadingInfo, setExamType, setExamSubject, setNumQ
         const writtenAnswerContainer = document.querySelectorAll("math-field");
         writtenAnswers = (Array.from(writtenAnswerContainer).map((answer) => answer.value));
 
+        setUserWrittenAnswers(writtenAnswers);
+
         let correctIndexesContainer = [];
 
         for (let i = 0; i < writtenAnswers.length; i++) {
@@ -206,7 +212,6 @@ function ExamPageContent({setIsLoadingInfo, setExamType, setExamSubject, setNumQ
             setCorrectIndexes([]);
         }
     
-        console.log(writtenAnswers);
     }
 
     return (
@@ -219,7 +224,11 @@ function ExamPageContent({setIsLoadingInfo, setExamType, setExamSubject, setNumQ
             ) : (
             <>
                 <div className="questions-container">{questions}</div>
-                <button onClick={submitAnswers} className="submit">
+                <button onClick={() => {
+                    if (!submitButtonClicked) {
+                        submitAnswers()
+                    }
+                }} className="submit">
                 Submit Answers
                 </button>
             </>
@@ -230,6 +239,9 @@ function ExamPageContent({setIsLoadingInfo, setExamType, setExamSubject, setNumQ
 }
 
 function ExamPage() {
+
+    const [examRef, setExamRef] = useState("65f56c43c3cba926bcf895ee");
+
     const [isLoadingInfo, setIsLoadingInfo] = useState(true);
     const [examType, setExamType] = useState("");
     const [examSubject, setExamSubject] = useState("");
@@ -240,34 +252,71 @@ function ExamPage() {
     const [wrongQuestions, setWrongQuestions] = useState([]);
     const [mark, setMark] = useState(0);
 
-    useEffect(() => {
-        console.log("The users marks are:")
-        console.log(mark);
-    }, [mark])
+    const [userWrittenAnswers, setUserWrittenAnswers] = useState([]);
+
+    const [submitButtonClicked, setSubmitButtonClicked] = useState(false);
 
     useEffect(() => {
-        console.log("the correct indexes are: ")
-        console.log(correctIndex);
-    }, [correctIndex])
 
-    useEffect(() => {
-        console.log("Correct questions: ")
-        console.log(correctQuestions);
+        if (wrongQuestions.length > 0 || correctQuestions.length > 0) {
+            setSubmitButtonClicked(true);
+        }
+
     }, [correctQuestions]);
 
     useEffect(() => {
+
+        if (wrongQuestions.length > 0 || correctQuestions.length > 0) {
+            setSubmitButtonClicked(true);
+        }
+
+    }, [wrongQuestions])
+    
+    const postUserDetails = async () => {
+
+        try {
+            const response = await Axios.post('http://localhost:8000/exam/updateExam', {
+                "examRef": examRef,
+                "marks": mark,
+                "userAnswers": userWrittenAnswers
+            });
+        } catch (err) {
+            console.log(err);
+        }
+
+    }
+
+    useEffect(() => {
+        
+        console.log("The users marks are:")
+        console.log(mark);
+
+        console.log("the correct indexes are: ")
+        console.log(correctIndex);
+
+        console.log("Correct questions: ")
+        console.log(correctQuestions);
+
         console.log("Wrong questions: ")
         console.log(wrongQuestions);
-    }, [wrongQuestions])
+
+        console.log("The users written answers are: ")
+        console.log(userWrittenAnswers);
+        
+        postUserDetails();
+
+    }, [submitButtonClicked])
 
     return (
         <div className="exams-container">
             <ExamPageContent 
+            examRef={examRef}
             setIsLoadingInfo={setIsLoadingInfo} setExamType={setExamType} 
             setExamSubject={setExamSubject} setNumQuestions={setNumQuestions}
             setCorrectIndexes={setCorrectIndexes} correctIndex={correctIndex}
             setCorrectQuestions={setCorrectQuestions} setWrongQuestions={setWrongQuestions} 
             correctQuestions={correctQuestions} wrongQuestions={wrongQuestions}
+            submitButtonClicked={submitButtonClicked} setUserWrittenAnswers={setUserWrittenAnswers}
             setMark={setMark} 
             />
             {!isLoadingInfo && <InfoPanel examType={examType} examSubject={examSubject} numQuestions={numQuestions} />}
