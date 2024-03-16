@@ -20,8 +20,6 @@ const SelectCourses = () => {
         }
       );
 
-      console.log(response.data);
-
       setUserStartedCourses(response.data.userInProgress);
       setNotStartedCourses(response.data.userNotStarted);
     } catch (error) {
@@ -35,9 +33,13 @@ const SelectCourses = () => {
 
   useEffect(() => {
     if (Object.keys(loggedInUser).length > 0) {
-      console.log(loggedInUser);
-      console.log(loggedInUser.courses);
-      retrieveCourses(loggedInUser.courses);
+      const sourceKeys = [];
+
+      loggedInUser.lesson.forEach((lessonProgress) => {
+        sourceKeys.push(lessonProgress.source);
+      });
+
+      retrieveCourses(sourceKeys);
     }
   }, [loggedInUser]);
   // Your code here

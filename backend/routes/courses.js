@@ -12,6 +12,8 @@ const {
 router.post("/getModules", async (req, res) => {
   const { courses } = req.body;
 
+  console.log(courses);
+
   try {
     // Handle cases where courses is not an array
     if (!Array.isArray(courses)) {
@@ -46,29 +48,31 @@ router.post("/getModules", async (req, res) => {
   }
 });
 
-router.post("/updateCourse", async (req, res) => {
-  const { userId } = req.body;
-  const { courseToAdd } = req.body; // Replace 'courseToAdd' with actual data structure
-
+router.post("/getLessons", async (req, res) => {
   try {
-    // Find the user by ID
-    const user = await userModel.findByIdAndUpdate(userId, {
-      $push: { courses: courseToAdd }, // Use $push to append to the array
-    });
+    const { topic } = req.body; // Destructure topic from request body
 
-    if (!user) {
-      return res.status(404).json({ message: "User not found" });
+    if (!topic) {
+      return res.status(400).send("Missing required field: topic");
     }
 
-    res.json({ message: "Course appended successfully!" });
+    const foundTopic = await topicsModel.findOne({
+      sourceKey: topic,
+    }); // Find topic with matching topic
+
+    if (!foundTopic) {
+      return res.status(404).send("No lesson progress found for that topic");
+    }
+
+    res.json(foundTopic.topicLesson); // Send the topic lessons
   } catch (error) {
     console.error(error);
-    res.status(500).json({ message: "Error appending course" });
+    res.status(500).send("Internal server error");
   }
 });
 
 router.post("/updateTopics", async (req, res) => {
-  const { sourceKey, lessonTitleArr, topic } = req.body;
+  const { sourceKey, lessonTitleArr, topic, topicRef } = req.body;
 
   // Validate input (optional but recommended)
   if (!sourceKey || !lessonTitleArr || !topic) {
@@ -86,6 +90,7 @@ router.post("/updateTopics", async (req, res) => {
     const topicLessonAppend = {
       topic,
       lessons: lessonArr,
+      topicRef: topicRef,
     };
 
     updatedTopic.topicLesson.push(topicLessonAppend); // Append to the topicLesson array

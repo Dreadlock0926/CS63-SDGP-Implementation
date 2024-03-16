@@ -12,6 +12,9 @@ const register = require("./routes/register");
 const login = require("./routes/login");
 const examResources = require("./routes/exams");
 const courses = require("./routes/courses");
+const learn = require("./routes/learn");
+const user = require("./routes/user");
+const getTopics = require("./routes/getTopics");
 const morgan = require("morgan");
 
 async function authenticated(req, res, next) {
@@ -52,6 +55,9 @@ app.use("/login", login);
 // app.use(authenticated); //uncomment during final authentication tests 🔓
 app.use("/exam", examResources);
 app.use("/course", courses);
+app.use("/user", user);
+app.use("/learn", learn);
+app.use("/getTopics", getTopics);
 
 app.use("*", (req, res) => {
   //leave this below all the other routes cuz this is the LAST RESORT JUST INCASE THE requested url is neither of the existing routes

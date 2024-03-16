@@ -22,6 +22,8 @@ router.route("/save-exam-ref").post(async (req, res) => {
 router.route("/updateModuleProbabilities").post(async (req, res) => {
   const { username, topicProbabilities } = req?.body;
 
+  console.log(username, topicProbabilities);
+
   if (!username || !topicProbabilities) {
     return res
       .status(400)
@@ -52,6 +54,33 @@ router.post("/getUserById", async (req, res) => {
   } catch (error) {
     console.error(error);
     res.status(500).json({ message: "Internal server error." });
+  }
+});
+
+router.post("/intialiazeLessons", async (req, res) => {
+  try {
+    const { userId, newLessonProgress } = req.body; // Destructure user ID and new lesson progress
+
+    if (!userId || !newLessonProgress) {
+      return res
+        .status(400)
+        .send("Missing required fields: userId and newLessonProgress");
+    }
+
+    const userToUpdate = await userModel.findById(userId); // Find user by ID
+
+    if (!userToUpdate) {
+      return res.status(404).send("User not found");
+    }
+
+    userToUpdate.lesson.push(newLessonProgress); // Append new lesson progress
+
+    await userToUpdate.save(); // Save updated user document
+
+    res.json(userToUpdate); // Return the updated user
+  } catch (error) {
+    console.error(error);
+    res.status(500).send("Internal server error");
   }
 });
 

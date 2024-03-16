@@ -5,8 +5,7 @@ const lessonSpecificSchema = new mongoose.Schema({
   completed: { type: Boolean, default: false },
 });
 
-const topicProgressSchema = new mongoose.Schema({
-  source: { type: String, required: true },
+const topicLessonSchema = new mongoose.Schema({
   topic: {
     type: String,
     required: true,
@@ -17,18 +16,31 @@ const topicProgressSchema = new mongoose.Schema({
   },
 });
 
+const topicProgressSchema = new mongoose.Schema({
+  source: { type: String, required: true },
+  topicRef: {
+    type: mongoose.Schema.Types.ObjectId,
+    ref: "topics",
+    required: true,
+  },
+  topicLesson: {
+    type: [topicLessonSchema],
+    required: true,
+  },
+});
+
 const userSchema = new mongoose.Schema(
   {
     username: { type: String, required: true, unique: true },
     password: { type: String, required: true },
     voxelPoints: { type: Number, default: 0 },
-    courses: { type: Array },
     completedCourses: { type: Array },
     topicProbabilities: { type: Object },
     correctQuestions: { type: Array },
     wrongQuestions: { type: Array },
     feedbackExams: { type: Array },
-    lesson: { type: [topicProgressSchema], required: true },
+    lesson: { type: [topicProgressSchema], default: [] },
+    topicProbabilities: { type: Object, default: {} },
   },
   {
     timestamps: true,
