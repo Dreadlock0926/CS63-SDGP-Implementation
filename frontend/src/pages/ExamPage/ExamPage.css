@@ -28,7 +28,7 @@
 }
 
 .info-panel {
-    width: 30%;
+    width: 50%;
     padding: 20px;
     margin-right: 100px;
     border-radius: 25px 0px 25px 0px;
@@ -57,6 +57,9 @@
 
 .exams-container {
     display: flex;
+    width: 100vw;
+    height: 100vh;
+    overflow: hidden;
 }
 
 .exam-page {
@@ -93,11 +96,19 @@
 .submit {
     background-color: green;
     color: white;
-    border: 0px;
+    border: 1px solid green;
     padding: 10px;
     border-radius: 50px;
     margin-block: 70px;
     font-size: 1.25rem;
+    transition: 0.3s;
+}
+
+.submit:hover {
+    border: 1px solid green;
+    background-color: white;
+    color: green;
+    cursor: pointer;
 }
 
 .questions-container {
@@ -110,4 +121,24 @@
     align-items: center;
     width: 100vw;
     height: 100vh;
+}
+
+.popup-container {
+    backdrop-filter: blur(5px);
+    position: absolute;
+    height: 100vh;
+    width: 100vw;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.popup {
+    background-color: green;
+    border-radius: 25px;
+    height: 500px;
+    width: 500px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
 }

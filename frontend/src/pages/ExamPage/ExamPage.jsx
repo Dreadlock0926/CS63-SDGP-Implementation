@@ -32,6 +32,17 @@ function InfoPanel({ examType, examSubject, numQuestions }) {
   );
 }
 
+function PopUp() {
+
+    return (
+        <div className="popup-container">
+            <div className="popup">
+                <button>Click Me!</button>
+            </div>
+        </div>
+    )
+}
+
 function ExamPageContent({setIsLoadingInfo, setExamType, setExamSubject, setNumQuestions, setCorrectIndexes, correctIndex, setMark, 
     setCorrectQuestions, setWrongQuestions, correctQuestions, wrongQuestions, submitButtonClicked, setUserWrittenAnswers, examRef, 
     userRef, setUserRef}) {
@@ -240,7 +251,13 @@ function ExamPageContent({setIsLoadingInfo, setExamType, setExamSubject, setNumQ
 
 function ExamPage() {
 
-    const [examRef, setExamRef] = useState("65f34e27421397a390df401b");
+    window.addEventListener("beforeunload", (ev) => 
+        {  
+            ev.preventDefault();
+            return ev.returnValue = 'Are you sure you want to close?';
+        });
+
+    const [examRef, setExamRef] = useState("65f600bcfa9e45b41d790ded");
     const [userRef, setUserRef] = useState("");
 
     const [isLoadingInfo, setIsLoadingInfo] = useState(true);
@@ -327,6 +344,7 @@ function ExamPage() {
             setMark={setMark} 
             />
             {!isLoadingInfo && <InfoPanel examType={examType} examSubject={examSubject} numQuestions={numQuestions} />}
+            <PopUp />
         </div>
     )
 }
