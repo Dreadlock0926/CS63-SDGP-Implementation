@@ -33,7 +33,8 @@ function InfoPanel({ examType, examSubject, numQuestions }) {
 }
 
 function ExamPageContent({setIsLoadingInfo, setExamType, setExamSubject, setNumQuestions, setCorrectIndexes, correctIndex, setMark, 
-    setCorrectQuestions, setWrongQuestions, correctQuestions, wrongQuestions, submitButtonClicked, setUserWrittenAnswers, examRef}) {
+    setCorrectQuestions, setWrongQuestions, correctQuestions, wrongQuestions, submitButtonClicked, setUserWrittenAnswers, examRef, 
+    userRef, setUserRef}) {
 
     function QuestionOnPage({question, mqNum}) {
 
@@ -128,6 +129,7 @@ function ExamPageContent({setIsLoadingInfo, setExamType, setExamSubject, setNumQ
                 "examRef": examRef
             });
 
+            setUserRef(response.data.userRef)
             setExamType(response.data.examType);
             setExamSubject(response.data.examModule);
             setQuestionsList(response.data.examQuestions)
@@ -238,7 +240,8 @@ function ExamPageContent({setIsLoadingInfo, setExamType, setExamSubject, setNumQ
 
 function ExamPage() {
 
-    const [examRef, setExamRef] = useState("65f56c43c3cba926bcf895ee");
+    const [examRef, setExamRef] = useState("65f34e27421397a390df401b");
+    const [userRef, setUserRef] = useState("");
 
     const [isLoadingInfo, setIsLoadingInfo] = useState(true);
     const [examType, setExamType] = useState("");
@@ -275,7 +278,7 @@ function ExamPage() {
         try {
             const response = await Axios.post('http://localhost:8000/exam/updateExam', {
                 "examRef": examRef,
-                "userRef": "65f0ccaf0c85f1e4364bb3e6",
+                "userRef": userRef,
                 "marks": mark,
                 "correctQuestions": correctQuestions,
                 "wrongQuestions": wrongQuestions,
@@ -320,6 +323,7 @@ function ExamPage() {
             setCorrectQuestions={setCorrectQuestions} setWrongQuestions={setWrongQuestions} 
             correctQuestions={correctQuestions} wrongQuestions={wrongQuestions}
             submitButtonClicked={submitButtonClicked} setUserWrittenAnswers={setUserWrittenAnswers}
+            setUserRef={setUserRef} userRef={userRef}
             setMark={setMark} 
             />
             {!isLoadingInfo && <InfoPanel examType={examType} examSubject={examSubject} numQuestions={numQuestions} />}
