@@ -7,8 +7,8 @@ import { Container, Typography } from "@mui/material";
 import Axios from "axios";
 
 const LearnBlueprint = () => {
-  const { theTopic, BASE, user, setSpecificTopic } = useContext(UserContext);
-  const [topicRelated, setTopicRelated] = useState([]);
+  const { theTopic, BASE, user, setSpecificTopic,topicRelated, setTopicRelated} = useContext(UserContext);
+
   const [userData, setUserData] = useState([]);
   const [loading, setLoading] = useState(false);
   const [status, setStatus] = useState("");
@@ -22,10 +22,11 @@ const LearnBlueprint = () => {
       });
       setTopicRelated(response.data);
       console.log(response.data);
-      const theUser = await Axios.post(`${BASE}/resources/users`, {
-        userId: "65f2a146a0acea296a663650", //user.id
+      const theUser = await Axios.post(`${BASE}/resources/testing-user`, {
+        userId: "65f471667a725acbb3ba057f", //user.id
       });
       setUserData(theUser.data);
+      console.log(theUser.data);
     } catch (error) {
       console.error(error);
       if (error.response && error.response.status === 404) {
@@ -72,26 +73,30 @@ const LearnBlueprint = () => {
               </tr>
             </thead>
             <tbody>
-              {topicRelated.map((item, index) => (
-                <React.Fragment key={item._id || index}>
-                  <p>{item.topic}</p>
-                  {setSpecificTopic(item.topic)} 
-                  {item.lessonPages.map((index) => (
-                    <div className="lessonPages" key={index}>
-                      <Link to={`/nextpage/${0}`}>
-                        {index !== 0 ? `${item.topic} -> ${index}` : ""}
-                      </Link>
-                    </div>
-                  ))}
-                </React.Fragment>
-              ))}
+              {/* {userData.map((x) => {
+                <div key={x._id}>
+                  <h1>{x.completionPercentage}</h1>
+                </div>;
+              })} */}
+              <Link to={"/learnclicked"}>{JSON.stringify(userData)}</Link> {/**User Data */}
+              <br/>
+      
             </tbody>
-            <div>
-              {userData && userData.length
-                ? JSON.stringify(userData)
-                : "No data found"}
-            </div>
           </table>
+          <div>
+            {userData && userData.length ? (
+              userData.map((x, index) => (
+                <div key={x._id || index}>
+                  <p>{x.completionPercentage}</p>
+                </div>
+              ))
+            ) : (
+              <p>No data found</p>
+            )}
+            {/* <Link>{`${JSON.stringify(
+              userData.completionPercentage
+            )} Complete!`}</Link> */}
+          </div>
           <Typography variant="body1">{status}</Typography>
         </>
       )}

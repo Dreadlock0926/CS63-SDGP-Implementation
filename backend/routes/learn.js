@@ -139,6 +139,72 @@ router.route("/completeLesson").post(async (req, res) => {
   }
 });
 
+router.route("/testing-user").post(async (req, res) => {
+  try {
+    const { userId = "65f471667a725acbb3ba057f" } = req?.body;
+    const userExists = await userModel.findById(userId);
+
+    if (userExists) {
+      let trueCounter = 0;
+      const lessonProgress = userExists?.lesson[0]?.lessonProgress || [];
+
+      const theLesson = userExists?.lesson[0];
+
+      lessonProgress.forEach((progress) => {
+        if (progress.completed === true) {
+          trueCounter++;
+        }
+      });
+
+      const totalLessons = lessonProgress.length;
+      const completionPercentage = (trueCounter / totalLessons) * 100;
+
+      console.log(
+        `Completion percentage: ${Math.round(completionPercentage)}%`
+      );
+
+      if (trueCounter > 0) {
+        res.status(200).json({
+          completedLessons: trueCounter,
+          totalLessons,
+          completionPercentage: `${Math.round(completionPercentage)}%`,
+          theLesson,
+        });
+      } else {
+        res.status(404).json({ Alert: "No completed lessons found!" });
+      }
+    } else {
+      res.status(404).json({ Alert: "User not found!" });
+    }
+  } catch (error) {
+    res.status(500).json({ error: error.message });
+  }
+});
+
+router.route("/false-topic").post(async (req, res) => {
+  const { userId = "65f471667a725acbb3ba057f" } = req?.body;
+  if (!userId) return res.status(400).json({ Alert: "user id required!" });
+
+  const userExists = await userModel.findById(userId);
+
+  if (userExists) {
+    const lessonProgress = userExists?.lesson[0]?.lessonProgress || [];
+    const falseLessons = [];
+
+    lessonProgress.forEach((progress) => {
+      if (progress.completed === false) {
+        falseLessons.push(progress); // Collect all lessons with completed === false
+      }
+    });
+
+    if (falseLessons.length > 0) {
+      res.status(200).json(falseLessons); // Send all lessons with completed === false
+    } else {
+      res.status(404).json({ Alert: "No Data found!" });
+    }
+  }
+});
+
 router.route("/create-user").post(async (req, res) => {
   if (!req.session.user) {
     //only someone who hasn't logged in can create an account

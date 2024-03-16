@@ -10,6 +10,7 @@ import First from "./components/Learn/TestPages/First";
 import Second from "./components/Learn/TestPages/Second";
 import NextPage from "./components/Learn/NextPage";
 import Anything from "./components/Learn/Anything";
+import LearnClicked from "./components/Learn/LearnClicked";
 
 export const UserContext = createContext();
 
@@ -22,6 +23,7 @@ function App() {
   const [theTopic, setTheTopic] = useState("");
   const [theProgressVal, setTheProgressVal] = useState(0);
   const [specificTopic, setSpecificTopic] = useState("");
+  const [topicRelated, setTopicRelated] = useState([]);
   const BASE = "http://localhost:8000";
 
   // const navigator = useNavigation();
@@ -45,6 +47,7 @@ function App() {
     setTheProgressVal,
     specificTopic,
     setSpecificTopic,
+    topicRelated, setTopicRelated
   };
 
   return (
@@ -62,6 +65,7 @@ function App() {
             <Route path="/addresources" element={<AddStudy />} />
             <Route path="/nextpage/:id" element={<NextPage />} />
             <Route path="/anything" element={<Anything />} />
+            <Route path="/learnclicked" element={<LearnClicked/>}></Route>
             <Route path="/:lesson" element={<First />} />
             <Route path="/second" element={<Second />} />
             <Route path="/learnprint" element={<LearnBlueprint />}></Route>
