@@ -2,7 +2,12 @@ const express = require("express");
 const router = express.Router();
 
 const userModel = require("../models/user");
-const topicsModel = require("../models/topics");
+const {
+  topicsModel,
+  lessonSchema,
+  topicLessonSchema,
+  topicsSchema,
+} = require("../models/topics");
 
 router.post("/getModules", async (req, res) => {
   const { courses } = req.body;
@@ -59,6 +64,42 @@ router.post("/updateCourse", async (req, res) => {
   } catch (error) {
     console.error(error);
     res.status(500).json({ message: "Error appending course" });
+  }
+});
+
+router.post("/updateTopics", async (req, res) => {
+  const { sourceKey, lessonTitleArr, topic } = req.body;
+
+  // Validate input (optional but recommended)
+  if (!sourceKey || !lessonTitleArr || !topic) {
+    return res.status(400).json({ message: "Missing required fields" });
+  }
+
+  const lessonArr = lessonTitleArr.map((lessonTitleStr) => ({
+    lessonTitle: lessonTitleStr,
+    lessonBody: "No lesson body",
+  })); // Create an array of lesson objects
+
+  try {
+    const updatedTopic = await topicsModel.findOne({ sourceKey });
+
+    const topicLessonAppend = {
+      topic,
+      lessons: lessonArr,
+    };
+
+    updatedTopic.topicLesson.push(topicLessonAppend); // Append to the topicLesson array
+
+    await updatedTopic.save(); // Save the updated topic
+
+    if (!updatedTopic) {
+      return res.status(404).json({ message: "Topic not found" });
+    }
+
+    res.json({ message: "Topic lessons updated successfully!" });
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ message: "Error updating topic lessons" });
   }
 });
 
