@@ -23,7 +23,7 @@ const ExamCountDown = ({examType, onComplete}) => {
       break;
 
     case "s1":
-      examDuration = 1;
+      examDuration = 4500;
       break;
   }
   const endTime = startTime + examDuration;
