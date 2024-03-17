@@ -74,16 +74,7 @@ function Gemini() {
             ) : (
               ""
             )}
-            {data ? (
-              data.map((x, index) => (
-                <div key={index} className="bot-response">
-                  <p>{x.Data}</p> {/* Change "Data" to "data" */}
-                </div>
-              ))
-            ) : (
-              <p>No data available</p>
-            )}
-            <p>{JSON.stringify(data)}</p>
+            <p>{JSON.stringify(data.Data)}</p>
           </form>
           <hr />
           <p>{status}</p>
