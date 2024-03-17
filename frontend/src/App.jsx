@@ -15,6 +15,7 @@ import Scope from "./pages/TestPages/Scope";
 import ExamFinalized from "./pages/TestPages/ExamFinal";
 import FeedbackPage from "./pages/FeedbackPage/FeedbackPage";
 import ExamPage from "./pages/ExamPage/ExamPage";
+import ExamReceipt from "./pages/ExamPage/ExamReceipt/ExamReceipt";
 
 
 export const UserContext = createContext();
@@ -122,6 +123,7 @@ function App() {
           <Route path="/authenticate" element={<Authenticate />} />
           <Route path="add-questions" element={<AddQuestionsPage />}/>
           <Route path="exam" element={<ExamPage />}/>
+          <Route path="receipt" element={<ExamReceipt />}/>
           <Route path="/examfinal" element={<ExamFinalized/>}></Route> {/**Incomplete */}
           <Route path="/scope" element={<Scope/>}></Route> {/**Radhul is working on this */}
           <Route path="/feedback" element={<FeedbackPage/>}></Route>
