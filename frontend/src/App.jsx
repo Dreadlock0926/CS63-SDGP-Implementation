@@ -41,6 +41,7 @@ function App() {
   const [testedPureProgress, setPureTestedProgress] = useState(0);
   const [testedStatProgress, setStatTestedProgress] = useState(0);
   const [isAuthenticated, setIsAuthenticated] = useState(false);
+  const [userId,setUserId] = useState('');
 
   const [loggedInUser, setLoggedInUser] = useState({
     username: "", // Assuming username is required
@@ -109,6 +110,8 @@ function App() {
     setPureTestedProgress,
     testedStatProgress,
     setStatTestedProgress,
+    userId,
+    setUserId
   };
 
   return (

@@ -9,6 +9,7 @@ import { useContext, useEffect, useState } from "react";
 import { UserContext } from "../../App";
 import { CircularProgressbar } from "react-circular-progressbar";
 import Axios from "axios";
+import axios from "axios";
 
 // Dashboard Header Tab
 function DashboardHeader() {
@@ -267,11 +268,20 @@ function DashboardPage() {
     testedStatProgress,
     setStatTestedProgress,
     isAuthenticated,
+    userId,
+    setUserId
   } = useContext(UserContext);
+  
+
+
 
   useEffect(() => {
     const fetchData = async () => {
       try {
+        const response = await axios.post("http://localhost:8000/progression/get/marks",{useRef:loggedInUser._id})
+        console.log("The response is "+response);
+        
+
         setVoxalpoints(loggedInUser.voxalPoints);
         setHoursLearned(loggedInUser.hoursLearned);
         setCompleteCourse(loggedInUser.completeCourse);
@@ -293,6 +303,8 @@ function DashboardPage() {
 
     fetchData();
   }, [user]);
+
+  
 
   return (
     <>

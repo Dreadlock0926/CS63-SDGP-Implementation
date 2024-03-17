@@ -20,6 +20,8 @@ const Login = () => {
     setUser,
     setData,
     data,
+    userId,
+    setUserId
   } = useContext(UserContext); //there's a problem here (context)
   const [issue, setIssue] = useState("");
 
@@ -34,13 +36,14 @@ const Login = () => {
       const response = await Axios.post(BASE, user);
 
       if (response.status === 200) {
-        console.log(response.data);
+        console.log(response.data.data._id);
         setData(response.data);
-        setIsAuthenticated(true);
-
+        setUserId(response.data.data._id)
         sessionStorage.setItem("loggedUser", JSON.stringify(response.data));
+        setIsAuthenticated(true);
         navigator("/");
       }
+      console.log(userId);
     } catch (error) {
       console.error(error);
         if (error.response.status === 401) {

@@ -62,6 +62,7 @@ function Progressionmark() {
 
   useEffect(() => {
     if (loggedInUser) {
+      console.log(loggedInUser);
       calculation(loggedInUser);
     }
   }, [loggedInUser]);
