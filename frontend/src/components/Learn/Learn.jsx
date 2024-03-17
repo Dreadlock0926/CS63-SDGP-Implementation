@@ -4,14 +4,13 @@ import { useContext, useEffect, useState } from "react";
 import { UserContext } from "../../App";
 import { FetchMaterial } from "../Api/Api";
 import { Link } from "react-router-dom";
-import { Button } from "@mui/material";
+import { Button } from "../muiComponents";
 import Materials from "./Materials";
 import NotLogged from "../NotLogged";
 import "./Learn.css";
 
 const Learn = () => {
-  const { loading, logged, theTopic, setTheTopic } =
-    useContext(UserContext);
+  const { loading, logged, theTopic, setTheTopic } = useContext(UserContext);
 
   return logged && !loading ? (
     <div className="learn-container">
@@ -22,7 +21,12 @@ const Learn = () => {
         <Link
           to="/learnprint"
           className="subject-link"
-          onClick={()=>{if(theTopic!==""){setTheTopic("")}setTheTopic("Pure")}}
+          onClick={() => {
+            if (theTopic !== "") {
+              setTheTopic("");
+            }
+            setTheTopic("Pure");
+          }}
         >
           <div className="subject">
             <h2>Pure Mathematics 1</h2>
@@ -32,7 +36,12 @@ const Learn = () => {
         <Link
           to="/learnprint"
           className="subject-link"
-          onClick={()=>{if(theTopic!==""){setTheTopic("")}setTheTopic("Stat")}}
+          onClick={() => {
+            if (theTopic !== "") {
+              setTheTopic("");
+            }
+            setTheTopic("Stat");
+          }}
         >
           <div className="subject">
             <h2>Statistics</h2>
