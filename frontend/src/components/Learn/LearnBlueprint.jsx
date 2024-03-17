@@ -3,7 +3,7 @@
 import React, { useContext, useEffect, useState } from "react";
 import { UserContext } from "../../App";
 import { Link, useNavigate } from "react-router-dom";
-import { Container, Typography } from "../muiComponents";
+import { Container, Typography } from "@mui/material";
 import Axios from "axios";
 
 const LearnBlueprint = () => {

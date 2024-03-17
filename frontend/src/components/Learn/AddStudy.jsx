@@ -1,8 +1,9 @@
 /* eslint-disable no-unused-vars */
 import { useContext, useRef, useState } from "react";
+import { AddMaterial } from "../Api/Api";
 import Axios from "axios";
 import { UserContext } from "../../App";
-import { useNavigation, useParams } from "react-router-dom";
+import { useNavigation,useParams } from "react-router-dom";
 
 import Loading from "../Loading";
 // import { RingLoader } from "react-spinners/RingLoader";
@@ -23,7 +24,7 @@ const AddStudy = () => {
   });
 
   const theDrop = useRef();
-  const { id } = useParams();
+  const {id} = useParams();
 
   const addMaterial = async (e) => {
     e.preventDefault();

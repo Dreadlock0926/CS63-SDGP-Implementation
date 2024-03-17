@@ -8,56 +8,33 @@ const cluster = process.env.CLUSTER;
 const session = require("express-session");
 const helmet = require("helmet");
 const { join } = require("path");
-const register = require("./routes/register");
-const login = require("./routes/login");
-const examResources = require("./routes/exams");
-const courses = require("./routes/courses");
-const learn = require("./routes/learn");
-const user = require("./routes/user");
-const getTopics = require("./routes/getTopics");
+const learningMaterial = require("./routes/learn");
 const morgan = require("morgan");
 
-async function authenticated(req, res, next) {
-  if (req?.session?.user) {
-    const user = req.session.user;
-    const foundUser = await userModel.findOne({ username: user.username });
-    if (!foundUser) {
-      return res.status(400).json({ Alert: "invalid user!" });
-    }
-    return res.status(200).json(foundUser);
-  } else {
-    return res.status(401).json({ Alert: "Not logged in!" });
-  }
-}
 
-app.use(cors({ origin: "*" })); //allow access from anywhere for now!
-app.use(morgan("combined"));
+app.use(cors({ origin: "*" }));  //allow access from anywhere for now!
+app.use(morgan("dev"));
 app.use(express.urlencoded());
 app.use(helmet());
 app.use(express.json());
 
 app.get("/", (req, res) => {
-  res.status(200).send("<h1>Hey docker!</h1>");
+  res.status(200).send("<h1>Hey docker! 🐳</h1>");
 });
 
-app.set("trust proxy", 1);
+app.set("trust proxy", 1); 
 app.use(
   session({
     secret: "keyboard cat",
     resave: false,
     saveUninitialized: false,
-    cookie: { maxAge: 60000 * 60 },
+    cookie: { secure: true },
   })
 );
 
-app.use("/register", register);
-app.use("/login", login);
-// app.use(authenticated); //uncomment during final authentication tests 🔓
-app.use("/exam", examResources);
-app.use("/course", courses);
-app.use("/user", user);
-app.use("/learn", learn);
-app.use("/getTopics", getTopics);
+
+app.use("/resources",learningMaterial);
+
 
 app.use("*", (req, res) => {
   //leave this below all the other routes cuz this is the LAST RESORT JUST INCASE THE requested url is neither of the existing routes
@@ -71,7 +48,7 @@ app.use("*", (req, res) => {
   }
 });
 
-async function connectDB() {
+async function connectDB(req, res) {
   try {
     await mongoose.connect(cluster, { useNewUrlParser: true });
     console.log("Connected to Database! ");
