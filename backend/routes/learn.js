@@ -183,19 +183,19 @@ router.route("/testing-user").post(async (req, res) => {
 
 router.route("/false-topic").post(async (req, res) => {
   try {
-    const { userId, theTopic } = req.body;
+    const { userId="65f57152c37530390606d744", theTopic="Differentiation" } = req.body;
     if (!userId || !theTopic)
       return res.status(400).json({ Alert: "User id and topic required!" });
 
     const userExists = await userModel.findById(userId);
     if (!userExists) return res.status(404).json({ Alert: "User not found!" });
-
+    console.log(userExists);
     // Find the lesson progress for the requested topic
     const lessonProgress =
       userExists.lesson[0]?.topicLesson.find(
         (lesson) => lesson.topic === theTopic
       )?.lessonProgress || [];
-
+    
     // Filter lessons with completed === false
     const falseLessons = lessonProgress.filter(
       (progress) => !progress.completed

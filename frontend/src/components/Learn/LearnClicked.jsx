@@ -17,6 +17,8 @@ const LearnClicked = () => {
     setLoading,
     setTheProgressVal,
     user,
+    lessonCounter,
+    setLessonCounter,
   } = useContext(UserContext);
   const { lesson } = useParams();
   const [status, setStatus] = useState("");
@@ -27,7 +29,7 @@ const LearnClicked = () => {
         setLoading(true);
         const response = await Axios.post(`${BASE}/resources/false-topic`, {
           userId: "65f57152c37530390606d744",
-          theTopic: lesson
+          theTopic: lesson,
         });
         setTopicRelated(response.data);
         setStatus("");
@@ -53,7 +55,11 @@ const LearnClicked = () => {
         }
       } catch (error) {
         console.error(error);
-        setStatus(error.response ? error.response.status : "Error while processing data!");
+        setStatus(
+          error.response
+            ? error.response.status
+            : "Error while processing data!"
+        );
       } finally {
         setLoading(false);
       }
@@ -66,8 +72,9 @@ const LearnClicked = () => {
     try {
       const outcome = await Axios.put(`${BASE}/resources/progress/updates`, {
         progress: theProgressVal,
-        userId: "65f2a146a0acea296a663650" //user.id
+        userId: "65f2a146a0acea296a663650", //user.id
       });
+      setLessonCounter((prev)=>prev+1);
       if (outcome.data.status === 200) {
         alert("Incremented!");
       }
@@ -78,29 +85,33 @@ const LearnClicked = () => {
 
   useEffect(() => {
     if (isHovering) {
-      setTheProgressVal(prev => prev + (topicRelated.length / 100));
+      setTheProgressVal((prev) => prev + topicRelated.length / 100);
       IncrementProgress();
     }
   }, [isHovering, topicRelated]); // Increment progress when hovering or when topicRelated changes
 
-  return (
+  return topicRelated.length ? (
     <div>
       <h1>Learn Clicked</h1>
-      {topicRelated.map(x => x.topic === lesson && (
-        <div key={x._id}>
-          <h1>{x.source}</h1>
-          <p>{x.topic}</p>
-          {x.lessonPages.map((iter, index) => (
-            <div key={index}>
-              <Link to={`/nextpage/${index + 1}`} onClick={IncrementProgress}>{iter}</Link>
+      {topicRelated.map(
+        (x) =>
+          x.topic === lesson && (
+            <div key={x._id}>
+              <h1>{x.source}</h1>
+              <p>{x.topic}</p>
+              {x.lessonPages[0]}
             </div>
-          ))}
-        </div>
-      ))}
-      <Link to={`/nextpage/${Number(0) + 1}`} onClick={IncrementProgress}>Next Page!</Link>
+          )
+      )}
+      <p>{lessonCounter}</p>
+      <Link to={`/nextpage`} onClick={IncrementProgress}>
+        Next Page!
+      </Link>
       <p>{JSON.stringify(topicRelated)}</p>
       <p>The status {status}</p>
     </div>
+  ) : (
+    <h1>No Topic Related Resources!</h1>
   );
 };
 

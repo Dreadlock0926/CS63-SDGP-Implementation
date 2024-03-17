@@ -21,6 +21,8 @@ const NextPage = () => {
     setLoading,
     setTheProgressVal,
     user,
+    lessonCounter,
+    setLessonCounter,
   } = useContext(UserContext);
 
   useEffect(()=>{
@@ -29,7 +31,7 @@ const NextPage = () => {
 
   async function getTheLesson() {
     try {
-      const response = await Axios.post(`${BASE}/resources/search/${id}`, {
+      const response = await Axios.post(`${BASE}/resources/search/${lessonCounter}`, {
         specificTopic,
       });
       if (response.data.status === 200) {
@@ -37,10 +39,10 @@ const NextPage = () => {
       }
       console.log(`The topic is ${specificTopic}`);
     } catch (err) {
-      if(err.response.status===404){
-        alert(`Congrats you have completed ${specificTopic}!`)
-        navigator("/resources")
-      }
+      // if(err.response.status===404){
+      //   alert(`Congrats you have completed ${specificTopic}!`)
+      //   navigator("/resources")
+      // }
       console.error(err.data.status);
     } finally {
       console.log(material);
@@ -49,7 +51,7 @@ const NextPage = () => {
 
   useEffect(() => {
     getTheLesson();
-  }, [id]);
+  }, [lessonCounter]);
 
   let theProgressGiven = 0;
   async function getNumberOfLessonForProgress() {
@@ -78,6 +80,7 @@ const NextPage = () => {
   }
 
   async function IncrementProgress() {
+    setLessonCounter((prev)=>prev+1);
     try {
       const outcome = await Axios.put(`${BASE}/resources/progress/updates`, {
         progress: theProgressVal,
@@ -106,12 +109,13 @@ const NextPage = () => {
   return (
     <div>
       <h1>The Next Page!</h1>
+      <p>{lessonCounter}</p>
       <div>
         {material && material.length
           ? JSON.stringify(material)
           : "No results found!"}
       </div>
-      <Link to={`/nextpage/${Number(id) + 1}`} onClick={IncrementProgress}>
+      <Link to={`/nextpage`} onClick={IncrementProgress}>
         Next Page!
       </Link>
       {/* <div className="abovend" ref={ref}>The End</div>

@@ -22,6 +22,7 @@ function App() {
   const [response, setResponse] = useState("");
   const [theTopic, setTheTopic] = useState("");
   const [theProgressVal, setTheProgressVal] = useState(0);
+  const [lessonCounter, setLessonCounter] = useState(0);
   const [specificTopic, setSpecificTopic] = useState("");
   const [topicRelated, setTopicRelated] = useState([]);
   const BASE = "http://localhost:8000";
@@ -47,7 +48,10 @@ function App() {
     setTheProgressVal,
     specificTopic,
     setSpecificTopic,
-    topicRelated, setTopicRelated
+    topicRelated,
+    setTopicRelated,
+    lessonCounter,
+    setLessonCounter,
   };
 
   return (
@@ -63,9 +67,12 @@ function App() {
               element={<LearningResource />}
             ></Route>
             <Route path="/addresources" element={<AddStudy />} />
-            <Route path="/nextpage/:id" element={<NextPage />} />
+            <Route path="/nextpage" element={<NextPage />} />
             <Route path="/anything" element={<Anything />} />
-            <Route path="/learnclicked/:lesson" element={<LearnClicked/>}></Route>
+            <Route
+              path="/learnclicked/:lesson"
+              element={<LearnClicked />}
+            ></Route>
             {/* <Route path="/:lesson" element={<First />} /> */}
             <Route path="/second" element={<Second />} />
             <Route path="/learnprint" element={<LearnBlueprint />}></Route>
