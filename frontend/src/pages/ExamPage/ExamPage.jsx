@@ -49,7 +49,7 @@ function PopUp() {
 
 function ExamPageContent({setIsLoadingInfo, setExamType, setExamSubject, setNumQuestions, setCorrectIndexes, correctIndex, setMark, 
     setCorrectQuestions, setWrongQuestions, correctQuestions, wrongQuestions, submitButtonClicked, setUserWrittenAnswers, examRef, 
-    userRef, setUserRef, submitRun}) {
+    userRef, setUserRef, submitRun, setTotalMark}) {
 
     function QuestionOnPage({question, mqNum}) {
 
@@ -185,6 +185,7 @@ function ExamPageContent({setIsLoadingInfo, setExamType, setExamSubject, setNumQ
     useEffect(() => {
         let markCount = -1;
         let mark = 0;
+        let totalMark = 0;
 
         let wrongQuestionsOrigin = [];
 
@@ -192,6 +193,7 @@ function ExamPageContent({setIsLoadingInfo, setExamType, setExamSubject, setNumQ
             let markGrid = questions[i].props.question.marksGrid;
             for (let j = 0; j < markGrid.length; j++) {
                 if (markGrid[j] !== "") {
+                    totalMark += parseInt(markGrid[j]);
                     markCount++;
                     if (correctIndex.includes(markCount)) {
                         mark += parseInt(markGrid[j]);
@@ -206,6 +208,7 @@ function ExamPageContent({setIsLoadingInfo, setExamType, setExamSubject, setNumQ
 
         setWrongQuestions(wrongQuestionsOrigin);
 
+        setTotalMark(totalMark);
         setMark(mark);
     }, [correctIndex])
 
@@ -310,6 +313,7 @@ function ExamPage() {
     const [correctQuestions, setCorrectQuestions] = useState([]);
     const [wrongQuestions, setWrongQuestions] = useState([]);
     const [mark, setMark] = useState(0);
+    const [totalMark, setTotalMark] = useState(0);
 
     const [userWrittenAnswers, setUserWrittenAnswers] = useState([]);
 
@@ -339,6 +343,7 @@ function ExamPage() {
                 "examRef": examRef,
                 "userRef": userRef,
                 "marks": mark,
+                "totalMark": totalMark,
                 "correctQuestions": correctQuestions,
                 "wrongQuestions": wrongQuestions,
                 "userAnswers": userWrittenAnswers
@@ -353,6 +358,9 @@ function ExamPage() {
         
         console.log("The users marks are:")
         console.log(mark);
+
+        console.log("The total marks are:")
+        console.log(totalMark);
 
         console.log("the correct indexes are: ")
         console.log(correctIndex);
@@ -385,6 +393,7 @@ function ExamPage() {
             submitButtonClicked={submitButtonClicked} setUserWrittenAnswers={setUserWrittenAnswers}
             setUserRef={setUserRef} userRef={userRef}
             setMark={setMark} submitRun={submitRun}
+            setTotalMark={setTotalMark}
             />
         </div>
     )

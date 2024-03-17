@@ -57,7 +57,7 @@ router.route("/getExam").post(async (req, res) => {
 })
 
 router.route("/updateExam").post(async (req, res) => {
-  const { examRef, userRef, marks, correctQuestions, wrongQuestions, userAnswers } = req?.body;
+  const { examRef, userRef, marks, totalMark, correctQuestions, wrongQuestions, userAnswers } = req?.body;
 
   if (!examRef) {
     return res.status(400).json({ Alert: "The exam reference ID is missing." });
@@ -67,7 +67,7 @@ router.route("/updateExam").post(async (req, res) => {
     return res.status(400).json({ Alert: "The user reference ID is missing." });
   }
 
-  const examData = await examModel.findByIdAndUpdate(examRef, { mark: marks, userAnswers:userAnswers })
+  const examData = await examModel.findByIdAndUpdate(examRef, { mark: marks, totalMark: totalMark, userAnswers:userAnswers })
 
   let userData;
 
