@@ -15,26 +15,34 @@ const LearnBlueprint = () => {
     topicRelated,
     data,
     setData,
+    setLessonCounter,
+    theProgressVal,
+    setTheProgressVal,
+    lessonCounter,
+    setTheTopic,
     setTopicRelated,
   } = useContext(UserContext);
   const [userData, setUserData] = useState([]);
   const [loading, setLoading] = useState(false);
+  const [topicTitles, setTopicTitles] = useState([]);
+  const [topicPercentage, setTopicPercentage] = useState([]);
   const [status, setStatus] = useState("");
   const navigator = useNavigate();
 
   async function fetchData(topic) {
     try {
       setLoading(true);
-      const response = await Axios.post(`${BASE}/resources/topic/learned`, {
-        theTopic: topic,
-      });
-      setTopicRelated(response.data);
-      console.log(response.data);
+      // const response = await Axios.post(`${BASE}/resources/topic/learned`, {
+      //   theTopic: topic,
+      // });
+      // setTopicRelated(response.data);
+      // console.log(`The topics ${JSON.stringify(response.data)}`);
       const theUser = await Axios.post(`${BASE}/resources/testing-user`, {
-        userId: "65f57152c37530390606d744", //user.id
+        userId: "65f584b5794ca9565c2dc26a",
       });
       setUserData(theUser.data);
-      console.log(theUser.data);
+      setTopicTitles(Object.keys(theUser.data));
+      setTopicPercentage(Object.values(theUser.data));
     } catch (error) {
       console.error(error);
       if (error.response && error.response.status === 404) {
@@ -44,6 +52,20 @@ const LearnBlueprint = () => {
       }
     } finally {
       setLoading(false);
+    }
+  }
+
+  async function IncrementProgress() {
+    try {
+      const outcome = await Axios.put(`${BASE}/resources/progress/updates`, {
+        userId: "65f584b5794ca9565c2dc26a",
+         //user.id
+      });
+      if (outcome.data.status === 200) {
+        setLessonCounter((prev) => prev + 1);
+      }
+    } catch (err) {
+      console.error(err.message);
     }
   }
 
@@ -61,6 +83,10 @@ const LearnBlueprint = () => {
     fetchTopicData();
   }, [theTopic]);
 
+  useEffect(() => {
+    console.log(topicPercentage);
+  }, [topicPercentage]);
+
   return (
     <Container>
       {loading ? (
@@ -77,38 +103,30 @@ const LearnBlueprint = () => {
               <tr>
                 <th>Topic</th>
                 <th>Learned Progress</th>
-                <th>Tested</th>
+                <th>Incomplete Lessons</th>
               </tr>
             </thead>
             <tbody>
-              {topicRelated.map((x, index) => (
-                <tr key={index}>
-                  <td>{x.topic}</td>
-                  <td>
-                    <p>{x.learnedProgress}</p> {/* Display learned progress */}
-                    <Link to={`/learnclicked/${x.topic}`}>
-                      {/* Link to continue learning */}
-                      {x.topic}
-                    </Link>
-                  </td>
-                  <td>
-                    {/* Add column for "Tested" if needed */}
-                    {/* Content for the "Tested" column */}
-                  </td>
-                </tr>
-              ))}
-              {/* User Data */}
-              {userData && userData.length ? (
-                userData.map((x, index) => (
-                  <tr key={x._id || index}>
-                    <td colSpan="3">{x.completionPercentage}</td>
+              {/* Rendering topicRelated */}
+              {topicTitles &&
+                topicTitles.map((title, index) => (
+                  <tr key={index}>
+                    <td>
+                      <div>{title}</div>
+                    </td>
+                    <td>
+                      {topicPercentage && topicPercentage[index] && (
+                        <Link
+                          to={`/learnclicked/${title}`}
+                          onClick={IncrementProgress}
+                        >
+                          {topicPercentage[index].completedPercentage}
+                        </Link>
+                      )}
+                    </td>
+                    <td>{/* Render incomplete lessons here */}</td>
                   </tr>
-                ))
-              ) : (
-                <tr>
-                  <td colSpan="3">No completed Progress found</td>
-                </tr>
-              )}
+                ))}
             </tbody>
           </table>
           <Typography variant="body1">{status}</Typography>

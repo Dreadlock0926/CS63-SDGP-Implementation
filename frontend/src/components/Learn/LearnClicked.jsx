@@ -19,18 +19,25 @@ const LearnClicked = () => {
     user,
     lessonCounter,
     setLessonCounter,
+    theTopic,
   } = useContext(UserContext);
   const { lesson } = useParams();
   const [status, setStatus] = useState("");
+
+  useEffect(()=>{
+    console.log(JSON.stringify(lesson));
+  },[lesson])
 
   useEffect(() => {
     const fetchData = async () => {
       try {
         setLoading(true);
         const response = await Axios.post(`${BASE}/resources/false-topic`, {
-          userId: "65f57152c37530390606d744",
-          theTopic: lesson,
+          userId: "65f584b5794ca9565c2dc26a",
+          topic: lesson,
+          source: "p1",
         });
+        console.log(response.data);
         setTopicRelated(response.data);
         setStatus("");
       } catch (error) {
@@ -74,11 +81,14 @@ const LearnClicked = () => {
         userId: "65f2a146a0acea296a663650",
         topicRelated, //user.id
       });
-      setLessonCounter((prev)=>prev+1);
-      if (outcome.data.status === 200) {
+      setLessonCounter((prev) => prev + 1);
+      if (outcome.response.status === 200) {
         alert("Incremented!");
       }
     } catch (error) {
+      if (error.response.status === 404) {
+        setStatus("No resources found!");
+      }
       console.error(error.message);
     }
   };
@@ -90,27 +100,34 @@ const LearnClicked = () => {
     }
   }, [isHovering, topicRelated]); // Increment progress when hovering or when topicRelated changes
 
-  return topicRelated.length ? (
+  return topicRelated && topicRelated.incompleteLessons ? (
     <div>
-      <h1>Learn Clicked</h1>
-      {topicRelated.map(
-        (x) =>
-          x.topic === lesson && (
-            <div key={x._id}>
-              <h1>{x.source}</h1>
-              <p>{x.topic}</p>
-              {x.lessonPages[lessonCounter]}
-            </div>
-          )
+      {theTopic === "Pure" ? (
+        <h1>Pure Mathematics I</h1>
+      ) : theTopic === "Stat" ? (
+        <h1>Probability And Statistics</h1>
+      ) : (
+        <h1>No Topic!</h1>
       )}
-      <Link to={`/nextpage`} onClick={IncrementProgress}>
-        Next Page!
-      </Link>
-      <p>The status {status}</p>
+      <h1>Learn Clicked</h1>
+      <h1>{topicRelated.topic}</h1>
+      <p>{topicRelated.source}</p>
+      <div>
+        <br />
+        {topicRelated.incompleteLessons.map((lesson, index) => (
+          <div key={index}>
+            <Link to={lesson}>{lesson}</Link>
+          </div>
+        ))}
+        <br />
+      </div>
+      <button onClick={IncrementProgress}>Next Page!</button>
+      <p>{status}</p>
     </div>
   ) : (
     <h1>No Topic Related Resources!</h1>
   );
+  
 };
 
 export default LearnClicked;

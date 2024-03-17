@@ -139,48 +139,58 @@ router.route("/completeLesson").post(async (req, res) => {
   }
 });
 
-router.route("/testing-user").post(async (req, res) => {
+router.post("/testing-user", async (req, res) => {
   try {
-    const { userId = "65f57152c37530390606d744" } = req?.body;
-    const userExists = await userModel.findById(userId);
+    const { userID = "65f584b5794ca9565c2dc26a", source = "p1" } = req.body; // Extract userID and source from request body
 
-    if (userExists) {
-      let trueCounter = 0;
-      const lessonProgress =
-        userExists?.lesson[0]?.topicLesson[0]?.lessonProgress || [];
-
-      const theLesson = userExists?.lesson[0];
-
-      lessonProgress.forEach((progress) => {
-        if (progress.completed === true) {
-          trueCounter++;
-        }
-      });
-
-      const totalLessons = lessonProgress.length;
-      const completionPercentage = (trueCounter / totalLessons) * 100;
-
-      console.log(
-        `Completion percentage: ${Math.round(completionPercentage)}%`
-      );
-
-      if (trueCounter > 0) {
-        res.status(200).json({
-          completedLessons: trueCounter,
-          totalLessons,
-          completionPercentage: `${Math.round(completionPercentage)}%`,
-          theLesson,
-        });
-      } else {
-        res.status(404).json({ Alert: "No completed lessons found!" });
-      }
-    } else {
-      res.status(404).json({ Alert: "User not found!" });
+    // Validate userID
+    if (!userID) {
+      return res
+        .status(400)
+        .json({ message: "Missing userID in request body" });
     }
+
+    const user = await userModel.findById(userID); // Find user by ID
+    if (!user) {
+      return res.status(404).json({ message: "User not found" });
+    }
+
+    const lesson = user.lesson.find((lesson) => lesson.source === source); // Find specific lesson object
+    if (!lesson) {
+      return res
+        .status(404)
+        .json({ message: "Source not found for this user" });
+    }
+
+    const topicLessons = lesson.topicLesson; // Extract topicLesson array
+
+    const topicCompletions = {}; // Object to store topic and completion percentage
+
+    topicLessons.forEach((topicLesson) => {
+      const completedCount = topicLesson.lessonProgress.filter(
+        (lesson) => lesson.completed
+      ).length;
+      const completedPercentage = Math.round(
+        (completedCount / topicLesson.lessonProgress.length) * 100
+      );
+      topicCompletions[topicLesson.topic] = { completedPercentage };
+    });
+
+    const response = topicCompletions; // Response object
+
+    res.status(200).json(response); // Send response object
   } catch (error) {
-    res.status(500).json({ error: error.message });
+    console.error(error);
+    res.status(500).json({ message: "Server error" });
   }
 });
+
+
+
+
+
+
+
 
 router.route("/false-topic").post(async (req, res) => {
   try {
@@ -218,7 +228,7 @@ router.route("/false-topic").post(async (req, res) => {
       }
     }
 
-    res.json(incompleteLessons); // Return array of incomplete lesson names
+    res.json({ incompleteLessons, topic, source }); // Return array of incomplete lesson names
   } catch (error) {
     console.error(error);
     res.status(500).send("Internal server error");
@@ -273,13 +283,11 @@ router
   .route("/progress/updates")
   .post(async (req, res) => {
     //this is not in the schema for the given userId = 65e5ee3fa014a87ba21c66d3
-    const { userId,topicRelated} = req?.body;
+    const { userId } = req?.body;
     const userExists = await userModel.findById(userId);
     if (!userExists) return res.status(404).json({ Alert: "Invalid user!" });
 
-    const updated = await userExists.updateOne({
-      progress: { $inc: progress },
-    });
+    
 
     if (!updated) {
       res.status(400).json({ Alert: "Error while updating!" });
