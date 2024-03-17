@@ -16,7 +16,7 @@ import ExamFinalized from "./pages/TestPages/ExamFinal";
 import FeedbackPage from "./pages/FeedbackPage/FeedbackPage";
 import ExamPage from "./pages/ExamPage/ExamPage";
 import ExamReceipt from "./pages/ExamPage/ExamReceipt/ExamReceipt";
-
+import ExamHistory from "./pages/ExamPage/ExamHistoryPage/ExamHistory";
 
 export const UserContext = createContext();
 
@@ -121,12 +121,15 @@ function App() {
           <Route path="/login" element={<Login />} />
           <Route path="/registration" element={<Register />} />
           <Route path="/authenticate" element={<Authenticate />} />
-          <Route path="add-questions" element={<AddQuestionsPage />}/>
-          <Route path="exam" element={<ExamPage />}/>
-          <Route path="receipt" element={<ExamReceipt />}/>
-          <Route path="/examfinal" element={<ExamFinalized/>}></Route> {/**Incomplete */}
-          <Route path="/scope" element={<Scope/>}></Route> {/**Radhul is working on this */}
-          <Route path="/feedback" element={<FeedbackPage/>}></Route>
+          <Route path="add-questions" element={<AddQuestionsPage />} />
+          <Route path="exam" element={<ExamPage />} />
+          <Route path="receipt" element={<ExamReceipt />} />
+          <Route path="/examfinal" element={<ExamFinalized />}></Route>{" "}
+          <Route path="/exam-history" element={<ExamHistory />}></Route>
+          {/**Incomplete */}
+          <Route path="/scope" element={<Scope />}></Route>{" "}
+          {/**Radhul is working on this */}
+          <Route path="/feedback" element={<FeedbackPage />}></Route>
           <Route path="*" element={<UnknownPage />} />
         </Routes>
       </BrowserRouter>
