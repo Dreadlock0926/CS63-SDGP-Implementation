@@ -6,14 +6,18 @@ import { ClipLoader } from 'react-spinners';
 import "//unpkg.com/mathlive";
 import ExamCountDown from "../TestPages/ExamCount-Down";
 
-function InfoPanel({ examType, examSubject, numQuestions }) {
+function InfoPanel({ examType, examSubject, numQuestions, setSubmitRun, submitRun }) {
+
+    const toggleSubmitRun = () => {
+        setSubmitRun(true);
+    }
 
   return (
     <div className="info-panel">
       <div className="timer-container">
         <div className="timer-text">Time Remaining</div>
         <div className="timer">
-            <ExamCountDown examType={"s1"} />
+            <ExamCountDown examType={"s1"} onComplete={toggleSubmitRun} />
         </div>
       </div>
       <div className="questions-remaining">0 out of {numQuestions} Questions Answered</div>
@@ -45,7 +49,7 @@ function PopUp() {
 
 function ExamPageContent({setIsLoadingInfo, setExamType, setExamSubject, setNumQuestions, setCorrectIndexes, correctIndex, setMark, 
     setCorrectQuestions, setWrongQuestions, correctQuestions, wrongQuestions, submitButtonClicked, setUserWrittenAnswers, examRef, 
-    userRef, setUserRef}) {
+    userRef, setUserRef, submitRun}) {
 
     function QuestionOnPage({question, mqNum}) {
 
@@ -77,6 +81,9 @@ function ExamPageContent({setIsLoadingInfo, setExamType, setExamSubject, setNumQ
     const [correctAnswers, setCorrectAnswers] = useState([]);
     const [questionsList, setQuestionsList] = useState([]);
     const [isLoading, setIsLoading] = useState(true);
+
+    const [enablePopup, setEnablePopup] = useState(false);
+
     let writtenAnswers = [];
 
     useEffect(() => {
@@ -203,6 +210,7 @@ function ExamPageContent({setIsLoadingInfo, setExamType, setExamSubject, setNumQ
     }, [correctIndex])
 
     const submitAnswers = () => {
+
         const writtenAnswerContainer = document.querySelectorAll("math-field");
         writtenAnswers = (Array.from(writtenAnswerContainer).map((answer) => answer.value));
 
@@ -225,6 +233,43 @@ function ExamPageContent({setIsLoadingInfo, setExamType, setExamSubject, setNumQ
     
     }
 
+    useEffect(() => {
+        if (submitRun) {
+            submitAnswers();
+        }
+    }, [submitRun])
+
+    function PopUp({ submitButtonClicked, submitAnswers, TogglePopup, enablePopup }) {
+
+        return (
+            <>
+                {enablePopup && <div className="popup-container">
+                    <div className="popup">
+                        <button onClick={() => TogglePopup(false)} className="submit">Close</button>
+                        <button onClick={() => {
+                            if (!submitButtonClicked) {
+                                submitAnswers()
+                            }
+                        }} className="submit">
+                        Confirm Answer Submission
+                        </button>
+                    </div>
+                </div>}
+            </>
+        )
+    }
+
+    const TogglePopup = (bool) => {
+        if (bool) {
+            window.scrollTo(0, 0);
+            document.querySelector(".exams-container").classList.add('exams-container-on-popup');
+            setEnablePopup(true);
+        } else {
+            document.querySelector(".exams-container").classList.remove('exams-container-on-popup');
+            setEnablePopup(false);
+        }
+    }
+
     return (
         <>
         <div className="exam-page">
@@ -235,27 +280,23 @@ function ExamPageContent({setIsLoadingInfo, setExamType, setExamSubject, setNumQ
             ) : (
             <>
                 <div className="questions-container">{questions}</div>
-                <button onClick={() => {
+                {/* <button onClick={() => {
                     if (!submitButtonClicked) {
                         submitAnswers()
                     }
                 }} className="submit">
                 Submit Answers
-                </button>
+                </button> */}
+                <button className="submit-inverse" onClick={() => {TogglePopup(true)}}>Submit Answers</button>
             </>
             )}
         </div>
+        <PopUp submitButtonClicked={submitButtonClicked} submitAnswers={submitAnswers} enablePopup={enablePopup} TogglePopup={TogglePopup} />
         </>
       );
 }
 
 function ExamPage() {
-
-    window.addEventListener("beforeunload", (ev) => 
-        {  
-            ev.preventDefault();
-            return ev.returnValue = 'Are you sure you want to close?';
-        });
 
     const [examRef, setExamRef] = useState("65f600bcfa9e45b41d790ded");
     const [userRef, setUserRef] = useState("");
@@ -273,6 +314,7 @@ function ExamPage() {
     const [userWrittenAnswers, setUserWrittenAnswers] = useState([]);
 
     const [submitButtonClicked, setSubmitButtonClicked] = useState(false);
+    const [submitRun, setSubmitRun] = useState(false);
 
     useEffect(() => {
 
@@ -332,6 +374,7 @@ function ExamPage() {
 
     return (
         <div className="exams-container">
+            {!isLoadingInfo && <InfoPanel examType={examType} examSubject={examSubject} numQuestions={numQuestions} setSubmitRun={setSubmitRun} />}
             <ExamPageContent 
             examRef={examRef}
             setIsLoadingInfo={setIsLoadingInfo} setExamType={setExamType} 
@@ -341,10 +384,8 @@ function ExamPage() {
             correctQuestions={correctQuestions} wrongQuestions={wrongQuestions}
             submitButtonClicked={submitButtonClicked} setUserWrittenAnswers={setUserWrittenAnswers}
             setUserRef={setUserRef} userRef={userRef}
-            setMark={setMark} 
+            setMark={setMark} submitRun={submitRun}
             />
-            {!isLoadingInfo && <InfoPanel examType={examType} examSubject={examSubject} numQuestions={numQuestions} />}
-            <PopUp />
         </div>
     )
 }
