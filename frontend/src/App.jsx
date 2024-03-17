@@ -24,7 +24,7 @@ function App() {
   const [theProgressVal, setTheProgressVal] = useState(0);
   const [lessonCounter, setLessonCounter] = useState(0);
   const [specificTopic, setSpecificTopic] = useState("");
-  const [topicRelated, setTopicRelated] = useState([]);
+  const [topicRelated, setTopicRelated] = useState([]); //learned topics
   const BASE = "http://localhost:8000";
 
   // const navigator = useNavigation();

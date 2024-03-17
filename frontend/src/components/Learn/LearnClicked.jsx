@@ -71,8 +71,8 @@ const LearnClicked = () => {
   const IncrementProgress = async () => {
     try {
       const outcome = await Axios.put(`${BASE}/resources/progress/updates`, {
-        progress: theProgressVal,
-        userId: "65f2a146a0acea296a663650", //user.id
+        userId: "65f2a146a0acea296a663650",
+        topicRelated, //user.id
       });
       setLessonCounter((prev)=>prev+1);
       if (outcome.data.status === 200) {
@@ -99,15 +99,13 @@ const LearnClicked = () => {
             <div key={x._id}>
               <h1>{x.source}</h1>
               <p>{x.topic}</p>
-              {x.lessonPages[0]}
+              {x.lessonPages[lessonCounter]}
             </div>
           )
       )}
-      <p>{lessonCounter}</p>
       <Link to={`/nextpage`} onClick={IncrementProgress}>
         Next Page!
       </Link>
-      <p>{JSON.stringify(topicRelated)}</p>
       <p>The status {status}</p>
     </div>
   ) : (

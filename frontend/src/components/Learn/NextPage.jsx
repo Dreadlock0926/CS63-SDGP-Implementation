@@ -1,6 +1,6 @@
 /* eslint-disable react-hooks/exhaustive-deps */
 /* eslint-disable no-unused-vars */
-import { Link, useParams,useNavigate } from "react-router-dom";
+import { Link, useParams, useNavigate } from "react-router-dom";
 import Axios from "axios";
 import { useContext, useEffect, useState } from "react";
 import { UserContext } from "../../App";
@@ -22,36 +22,38 @@ const NextPage = () => {
     setTheProgressVal,
     user,
     lessonCounter,
+    topicRelated,
+    setTopicRelated,
     setLessonCounter,
   } = useContext(UserContext);
 
-  useEffect(()=>{
-    console.log(specificTopic);
-  },[specificTopic])
-
-  async function getTheLesson() {
-    try {
-      const response = await Axios.post(`${BASE}/resources/search/${lessonCounter}`, {
-        specificTopic,
-      });
-      if (response.data.status === 200) {
-        setMaterial(response.data);
-      }
-      console.log(`The topic is ${specificTopic}`);
-    } catch (err) {
-      // if(err.response.status===404){
-      //   alert(`Congrats you have completed ${specificTopic}!`)
-      //   navigator("/resources")
-      // }
-      console.error(err.data.status);
-    } finally {
-      console.log(material);
-    }
-  }
-
   useEffect(() => {
-    getTheLesson();
-  }, [lessonCounter]);
+    console.log(specificTopic);
+  }, [specificTopic]);
+
+  // async function getTheLesson() {
+  //   try {
+  //     const response = await Axios.post(`${BASE}/resources/search/${lessonCounter}`, {
+  //       specificTopic,
+  //     });
+  //     if (response.data.status === 200) {
+  //       setMaterial(response.data);
+  //     }
+  //     console.log(`The topic is ${specificTopic}`);
+  //   } catch (err) {
+  //     // if(err.response.status===404){
+  //     //   alert(`Congrats you have completed ${specificTopic}!`)
+  //     //   navigator("/resources")
+  //     // }
+  //     console.error(err.data.status);
+  //   } finally {
+  //     console.log(material);
+  //   }
+  // }
+
+  // useEffect(() => {
+  //   getTheLesson();
+  // }, [lessonCounter]);
 
   let theProgressGiven = 0;
   async function getNumberOfLessonForProgress() {
@@ -80,7 +82,7 @@ const NextPage = () => {
   }
 
   async function IncrementProgress() {
-    setLessonCounter((prev)=>prev+1);
+    setLessonCounter((prev) => prev + 1);
     try {
       const outcome = await Axios.put(`${BASE}/resources/progress/updates`, {
         progress: theProgressVal,
@@ -110,6 +112,11 @@ const NextPage = () => {
     <div>
       <h1>The Next Page!</h1>
       <p>{lessonCounter}</p>
+      {topicRelated.map((x) => (
+        <div key={x._id}>
+          <p>{x.lessonPages[lessonCounter]}</p>
+        </div>
+      ))}
       <div>
         {material && material.length
           ? JSON.stringify(material)

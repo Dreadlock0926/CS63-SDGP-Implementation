@@ -13,6 +13,8 @@ const LearnBlueprint = () => {
     user,
     setSpecificTopic,
     topicRelated,
+    data,
+    setData,
     setTopicRelated,
   } = useContext(UserContext);
   const [userData, setUserData] = useState([]);

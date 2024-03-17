@@ -260,7 +260,7 @@ router
   .route("/progress/updates")
   .post(async (req, res) => {
     //this is not in the schema for the given userId = 65e5ee3fa014a87ba21c66d3
-    const { userId, progress = 50 } = req?.body;
+    const { userId,topicRelated} = req?.body;
     const userExists = await userModel.findById(userId);
     if (!userExists) return res.status(404).json({ Alert: "Invalid user!" });
 
