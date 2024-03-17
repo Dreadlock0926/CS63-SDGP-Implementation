@@ -146,7 +146,8 @@ router.route("/testing-user").post(async (req, res) => {
 
     if (userExists) {
       let trueCounter = 0;
-      const lessonProgress = userExists?.lesson[0]?.topicLesson[0]?.lessonProgress || [];
+      const lessonProgress =
+        userExists?.lesson[0]?.topicLesson[0]?.lessonProgress || [];
 
       const theLesson = userExists?.lesson[0];
 
@@ -183,32 +184,44 @@ router.route("/testing-user").post(async (req, res) => {
 
 router.route("/false-topic").post(async (req, res) => {
   try {
-    const { userId="65f57152c37530390606d744", theTopic="Differentiation" } = req.body;
-    if (!userId || !theTopic)
+    const {
+      userId = "65f584b5794ca9565c2dc26a",
+      topic = "Differentiation",
+      source = "p1",
+    } = req.body;
+
+    if (!userId || !topic)
       return res.status(400).json({ Alert: "User id and topic required!" });
 
-    const userExists = await userModel.findById(userId);
-    if (!userExists) return res.status(404).json({ Alert: "User not found!" });
-    console.log(userExists);
-    // Find the lesson progress for the requested topic
-    const lessonProgress =
-      userExists.lesson[0]?.topicLesson.find(
-        (lesson) => lesson.topic === theTopic
-      )?.lessonProgress || [];
-    
-    // Filter lessons with completed === false
-    const falseLessons = lessonProgress.filter(
-      (progress) => !progress.completed
-    );
+    const user = await userModel.findById(userId).populate("lesson.topicRef"); // Populate topic details
 
-    if (falseLessons.length > 0) {
-      res.status(200).json(falseLessons); // Send all lessons with completed === false
-    } else {
-      res.status(404).json({ Alert: "No incomplete lessons found!" });
+    if (!user) {
+      return res.status(404).send("User not found");
     }
+
+    const incompleteLessons = [];
+
+    console.log(user.lesson);
+
+    for (const topicProgress of user.lesson) {
+      if (topicProgress.source === source) {
+        for (const lessonProgress of topicProgress.topicLesson) {
+          if (lessonProgress.topic === topic) {
+            const incompleteLessonNames = lessonProgress.lessonProgress
+              .filter((lesson) => !lesson.completed)
+              .map((lesson) => lesson.lessonName);
+            incompleteLessons.push(...incompleteLessonNames);
+            break;
+          }
+        }
+        break;
+      }
+    }
+
+    res.json(incompleteLessons); // Return array of incomplete lesson names
   } catch (error) {
-    console.error("Error:", error);
-    res.status(500).json({ Alert: "Internal Server Error" });
+    console.error(error);
+    res.status(500).send("Internal server error");
   }
 });
 
