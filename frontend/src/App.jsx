@@ -65,8 +65,8 @@ function App() {
             <Route path="/addresources" element={<AddStudy />} />
             <Route path="/nextpage/:id" element={<NextPage />} />
             <Route path="/anything" element={<Anything />} />
-            <Route path="/learnclicked" element={<LearnClicked/>}></Route>
-            <Route path="/:lesson" element={<First />} />
+            <Route path="/learnclicked/:lesson" element={<LearnClicked/>}></Route>
+            {/* <Route path="/:lesson" element={<First />} /> */}
             <Route path="/second" element={<Second />} />
             <Route path="/learnprint" element={<LearnBlueprint />}></Route>
             <Route path="*" element={<UnknownPage />} />

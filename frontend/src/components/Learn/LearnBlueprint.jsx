@@ -7,8 +7,14 @@ import { Container, Typography } from "@mui/material";
 import Axios from "axios";
 
 const LearnBlueprint = () => {
-  const { theTopic, BASE, user, setSpecificTopic,topicRelated, setTopicRelated} = useContext(UserContext);
-
+  const {
+    theTopic,
+    BASE,
+    user,
+    setSpecificTopic,
+    topicRelated,
+    setTopicRelated,
+  } = useContext(UserContext);
   const [userData, setUserData] = useState([]);
   const [loading, setLoading] = useState(false);
   const [status, setStatus] = useState("");
@@ -23,7 +29,7 @@ const LearnBlueprint = () => {
       setTopicRelated(response.data);
       console.log(response.data);
       const theUser = await Axios.post(`${BASE}/resources/testing-user`, {
-        userId: "65f471667a725acbb3ba057f", //user.id
+        userId: "65f57152c37530390606d744", //user.id
       });
       setUserData(theUser.data);
       console.log(theUser.data);
@@ -73,30 +79,36 @@ const LearnBlueprint = () => {
               </tr>
             </thead>
             <tbody>
-              {/* {userData.map((x) => {
-                <div key={x._id}>
-                  <h1>{x.completionPercentage}</h1>
-                </div>;
-              })} */}
-              <Link to={"/learnclicked"}>{JSON.stringify(userData)}</Link> {/**User Data */}
-              <br/>
-      
+              {topicRelated.map((x, index) => (
+                <tr key={index}>
+                  <td>{x.topic}</td>
+                  <td>
+                    <p>{x.learnedProgress}</p> {/* Display learned progress */}
+                    <Link to={`/learnclicked/${x.topic}`}>
+                      {/* Link to continue learning */}
+                      {x.topic}
+                    </Link>
+                  </td>
+                  <td>
+                    {/* Add column for "Tested" if needed */}
+                    {/* Content for the "Tested" column */}
+                  </td>
+                </tr>
+              ))}
+              {/* User Data */}
+              {userData && userData.length ? (
+                userData.map((x, index) => (
+                  <tr key={x._id || index}>
+                    <td colSpan="3">{x.completionPercentage}</td>
+                  </tr>
+                ))
+              ) : (
+                <tr>
+                  <td colSpan="3">No completed Progress found</td>
+                </tr>
+              )}
             </tbody>
           </table>
-          <div>
-            {userData && userData.length ? (
-              userData.map((x, index) => (
-                <div key={x._id || index}>
-                  <p>{x.completionPercentage}</p>
-                </div>
-              ))
-            ) : (
-              <p>No data found</p>
-            )}
-            {/* <Link>{`${JSON.stringify(
-              userData.completionPercentage
-            )} Complete!`}</Link> */}
-          </div>
           <Typography variant="body1">{status}</Typography>
         </>
       )}

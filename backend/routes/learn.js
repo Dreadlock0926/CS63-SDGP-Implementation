@@ -141,12 +141,12 @@ router.route("/completeLesson").post(async (req, res) => {
 
 router.route("/testing-user").post(async (req, res) => {
   try {
-    const { userId = "65f471667a725acbb3ba057f" } = req?.body;
+    const { userId = "65f57152c37530390606d744" } = req?.body;
     const userExists = await userModel.findById(userId);
 
     if (userExists) {
       let trueCounter = 0;
-      const lessonProgress = userExists?.lesson[0]?.lessonProgress || [];
+      const lessonProgress = userExists?.lesson[0]?.topicLesson[0]?.lessonProgress || [];
 
       const theLesson = userExists?.lesson[0];
 
@@ -182,26 +182,33 @@ router.route("/testing-user").post(async (req, res) => {
 });
 
 router.route("/false-topic").post(async (req, res) => {
-  const { userId = "65f471667a725acbb3ba057f" } = req?.body;
-  if (!userId) return res.status(400).json({ Alert: "user id required!" });
+  try {
+    const { userId, theTopic } = req.body;
+    if (!userId || !theTopic)
+      return res.status(400).json({ Alert: "User id and topic required!" });
 
-  const userExists = await userModel.findById(userId);
+    const userExists = await userModel.findById(userId);
+    if (!userExists) return res.status(404).json({ Alert: "User not found!" });
 
-  if (userExists) {
-    const lessonProgress = userExists?.lesson[0]?.lessonProgress || [];
-    const falseLessons = [];
+    // Find the lesson progress for the requested topic
+    const lessonProgress =
+      userExists.lesson[0]?.topicLesson.find(
+        (lesson) => lesson.topic === theTopic
+      )?.lessonProgress || [];
 
-    lessonProgress.forEach((progress) => {
-      if (progress.completed === false) {
-        falseLessons.push(progress); // Collect all lessons with completed === false
-      }
-    });
+    // Filter lessons with completed === false
+    const falseLessons = lessonProgress.filter(
+      (progress) => !progress.completed
+    );
 
     if (falseLessons.length > 0) {
       res.status(200).json(falseLessons); // Send all lessons with completed === false
     } else {
-      res.status(404).json({ Alert: "No Data found!" });
+      res.status(404).json({ Alert: "No incomplete lessons found!" });
     }
+  } catch (error) {
+    console.error("Error:", error);
+    res.status(500).json({ Alert: "Internal Server Error" });
   }
 });
 
