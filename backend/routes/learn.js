@@ -186,12 +186,6 @@ router.post("/testing-user", async (req, res) => {
 });
 
 
-
-
-
-
-
-
 router.route("/false-topic").post(async (req, res) => {
   try {
     const {
@@ -282,17 +276,63 @@ router.route("/create-user").post(async (req, res) => {
 router
   .route("/progress/updates")
   .post(async (req, res) => {
-    //this is not in the schema for the given userId = 65e5ee3fa014a87ba21c66d3
-    const { userId } = req?.body;
-    const userExists = await userModel.findById(userId);
-    if (!userExists) return res.status(404).json({ Alert: "Invalid user!" });
-
-    
-
-    if (!updated) {
-      res.status(400).json({ Alert: "Error while updating!" });
-    } else {
-      res.status(200).json({ Alert: "Updated!" });
+    try {
+      const { lessonName, userId, source, topic } = req.body; // Extract lessonName, userId, and source from request body
+  
+      // Validate request body
+      if (!lessonName  || !userId  ||  !source) {
+        return res.status(400).json({
+          message: "Missing lessonName, userId, or source in request body",
+        });
+      }
+  
+      const user = await userModel.findById(userId); // Find user by ID
+      if (!user) {
+        return res.status(404).json({ message: "User not found" });
+      }
+  
+      const updatedUser = user;
+  
+      // Find the lesson object to update, considering case sensitivity and source
+      let found = false;
+  
+      for (const lessonProgress of updatedUser.lesson) {
+        if (lessonProgress.source === source) {
+          // Check if source matches
+  
+          for (const topicLesson of lessonProgress.topicLesson) {
+            if (topicLesson.topic === topic) {
+              // Check if topic matches
+  
+              for (const lesson of topicLesson.lessonProgress) {
+                if (lesson.lessonName === lessonName) {
+                  // Check if lesson matches
+                  lesson.completed = true;
+                  console.log("Lesson completed:", lesson);
+                  // Update completed field
+                  found = true;
+                  break;
+                }
+              }
+            }
+          }
+        }
+      }
+  
+      if (!found) {
+        return res
+          .status(404)
+          .json({ message: "Lesson not found for this user and source" });
+      }
+  
+      // ... rest of the code remains the same (updating completed field and saving)
+      await updatedUser.save();
+      res
+        .status(200)
+        .json({ message: "Lesson marked as completed successfully" }); // Send response object
+    } catch (error) {
+      console.error(error);
+      res.status(500).json({ message: "Server error" });
     }
   })
   .get(async (req, res) => {

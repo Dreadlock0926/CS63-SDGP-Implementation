@@ -21,6 +21,7 @@ function App() {
   const [status, setStatus] = useState("");
   const [response, setResponse] = useState("");
   const [theTopic, setTheTopic] = useState("");
+  const [TheSource, setSource] = useState("");
   const [theProgressVal, setTheProgressVal] = useState(0);
   const [lessonCounter, setLessonCounter] = useState(0);
   const [specificTopic, setSpecificTopic] = useState("");
@@ -37,13 +38,14 @@ function App() {
     setLogged,
     user,
     setUser,
-    status,
+    TheSource,
     setStatus,
     response,
     setResponse,
     theTopic,
     setTheTopic,
     BASE,
+    status,
     theProgressVal,
     setTheProgressVal,
     specificTopic,
@@ -51,6 +53,7 @@ function App() {
     topicRelated,
     setTopicRelated,
     lessonCounter,
+    setSource,
     setLessonCounter,
   };
 

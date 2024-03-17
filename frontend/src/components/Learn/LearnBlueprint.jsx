@@ -17,6 +17,8 @@ const LearnBlueprint = () => {
     setData,
     setLessonCounter,
     theProgressVal,
+    TheSource,
+    setSource,
     setTheProgressVal,
     lessonCounter,
     setTheTopic,
@@ -26,10 +28,11 @@ const LearnBlueprint = () => {
   const [loading, setLoading] = useState(false);
   const [topicTitles, setTopicTitles] = useState([]);
   const [topicPercentage, setTopicPercentage] = useState([]);
+  const [theSubTopic,setTheSubTopic] = useState("")
   const [status, setStatus] = useState("");
   const navigator = useNavigate();
 
-  async function fetchData(topic) {
+  async function fetchData(topic,source) {
     try {
       setLoading(true);
       // const response = await Axios.post(`${BASE}/resources/topic/learned`, {
@@ -38,8 +41,10 @@ const LearnBlueprint = () => {
       // setTopicRelated(response.data);
       // console.log(`The topics ${JSON.stringify(response.data)}`);
       const theUser = await Axios.post(`${BASE}/resources/testing-user`, {
-        userId: "65f584b5794ca9565c2dc26a",
+        userId: "65f584b5794ca9565c2dc26a", //user.id
+        source
       });
+      setSource(source);
       setUserData(theUser.data);
       setTopicTitles(Object.keys(theUser.data));
       setTopicPercentage(Object.values(theUser.data));
@@ -59,6 +64,7 @@ const LearnBlueprint = () => {
     try {
       const outcome = await Axios.put(`${BASE}/resources/progress/updates`, {
         userId: "65f584b5794ca9565c2dc26a",
+        source:TheSource
          //user.id
       });
       if (outcome.data.status === 200) {
@@ -72,9 +78,9 @@ const LearnBlueprint = () => {
   useEffect(() => {
     const fetchTopicData = async () => {
       if (theTopic === "Pure") {
-        await fetchData("Pure Mathematics I");
+        await fetchData("Pure Mathematics I","p1");
       } else if (theTopic === "Stat") {
-        await fetchData("Probability and Statistics");
+        await fetchData("Probability and Statistics","s1");
       } else {
         navigator("/resources");
       }
