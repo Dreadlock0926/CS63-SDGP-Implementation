@@ -5,6 +5,8 @@ import { useEffect, useState } from "react";
 import { ClipLoader } from 'react-spinners';
 import "//unpkg.com/mathlive";
 import ExamCountDown from "../TestPages/ExamCount-Down";
+import { useNavigate, Link, Navigate } from "react-router-dom";
+
 
 function InfoPanel({ examType, examSubject, numQuestions, setSubmitRun, submitRun }) {
 
@@ -354,6 +356,8 @@ function ExamPage() {
 
     }
 
+    const navigator = useNavigate();
+
     useEffect(() => {
         
         console.log("The users marks are:")
@@ -376,6 +380,7 @@ function ExamPage() {
         
         if (submitButtonClicked) {
             postUserDetails();
+            navigator("/receipt", {state:{examRef:examRef}});
         }
 
     }, [submitButtonClicked])

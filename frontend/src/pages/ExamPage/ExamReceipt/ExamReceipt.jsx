@@ -1,14 +1,21 @@
 import Axios from "axios";
 import { useEffect, useState } from "react";
 import "./ExamReceipt.css";
+import { useLocation } from "react-router-dom";
 
 function ExamReceipt() {
 
-    const [examID, setExamID] = useState("65f600bcfa9e45b41d790ded");
+    const [examID, setExamID] = useState("");
     const [mark, setMark] = useState("");
     const [examType, setExamType] = useState("");
 
     const [loadingInfo, setLoadingInfo] = useState(true);
+
+    const location = useLocation();
+
+    useEffect(() => {
+        setExamID(location.state.examRef);
+    }, [])
 
     useEffect(() => {
         setLoadingInfo(true);
@@ -25,13 +32,18 @@ function ExamReceipt() {
             setMark(Math.round((receiptData.mark/receiptData.totalMark)*100));
             setExamType(receiptData.examType);
 
+
         } catch (err) {
             console.log(err);
         }
 
     }
 
-    getReceipt();
+    useEffect(() => {
+        if (examID) {
+            getReceipt();
+        }
+    }, [examID])
 
     return (
         <div className="receipt-centerer">
