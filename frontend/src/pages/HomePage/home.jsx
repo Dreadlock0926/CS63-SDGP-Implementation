@@ -17,7 +17,7 @@ function Home() {
         <div className="backgroundContainer">
             <img alt="background" className="bgImg" src="./images/background.png" />
             <div className="itemsContainer">
-                <p className="webText"><b>ALiyah</b> <br />Welcome Back  {user.Session.username}</p>
+                <p className="webText"><b>ALiyah</b> <br />Welcome Back  {user.username}</p>
                 <a className="coursesBtn" href="#">GO TO COURSES</a>
             </div>
         </div>

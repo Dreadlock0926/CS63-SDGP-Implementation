@@ -20,7 +20,7 @@ router.route("/").post(async (req, res) => {
     if (text.length) {
       return res.status(200).json({Data:text});
     } else {
-      return res.status(400).send("No results found!");
+      return res.status(404).send("No results found!");
     }
   } catch (err) {
     res.json({ Alert: `Something went wrong ${err.status}` });
