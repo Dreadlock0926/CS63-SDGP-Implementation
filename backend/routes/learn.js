@@ -215,7 +215,11 @@ router.route("/false-topic").post(async (req, res) => {
 router.route("/create-user").post(async (req, res) => {
   if (!req.session.user) {
     //only someone who hasn't logged in can create an account
-    const { username = "nibba", password = "213" } = req?.body;
+    const {
+      username = "nibba",
+      password = "213",
+      topicRef = "65c378a0a8620085a4fe85f7",
+    } = req?.body;
     if (!username || !password)
       return res.status(400).json({ Alert: "Username/Password Missing!" });
 
@@ -236,10 +240,15 @@ router.route("/create-user").post(async (req, res) => {
       completed: false,
     };
 
-    const topicProgress = {
-      source: "p1",
+    const topicLesson = {
       topic: "integration",
       lessonProgress: [lesson1, lesson2, lesson3],
+    };
+
+    const topicProgress = {
+      source: "p1",
+      topicRef: topicRef,
+      topicLesson: [topicLesson],
     };
 
     if (!validityUser) {
