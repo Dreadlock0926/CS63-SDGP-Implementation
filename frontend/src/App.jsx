@@ -127,7 +127,7 @@ function App() {
           <Route path="receipt" element={<ExamReceipt />} />
           <Route path="/examfinal" element={<ExamFinalized />}></Route>{" "}
           <Route path="/exam-history" element={<ExamHistory />}></Route>
-          <Route path="/examreview" element={<ExamReview/>}></Route>
+          <Route path="/exam-review/:examID" element={<ExamReview />}></Route>
           {/**Incomplete */}
           <Route path="/scope" element={<Scope />}></Route>{" "}
           {/**Radhul is working on this */}

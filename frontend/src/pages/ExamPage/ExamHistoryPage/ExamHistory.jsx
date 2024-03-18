@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from "react";
 import Axios from "axios";
+import { Link } from "react-router-dom";
 
 const ExamHistory = () => {
   const [loggedInUser, setLoggedInUser] = useState({});
@@ -99,9 +100,9 @@ const ExamHistory = () => {
           return (
             <div key={exam._id}>
               <div>{exam.examModule}</div>
-              <div>
+              <Link to={`/exam-review/${exam._id}`}>
                 {exam.mark}/{exam.totalMark}
-              </div>
+              </Link>
             </div>
           );
         })
