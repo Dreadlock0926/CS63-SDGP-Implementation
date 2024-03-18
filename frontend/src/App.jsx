@@ -46,26 +46,22 @@ function App() {
   const [totalAnswers,setTotalAnswers] = useState([]);
 
   const [loggedInUser, setLoggedInUser] = useState({
-    username: "", // Assuming username is required
-    password: "", // Assuming password is required (not used in this example)
-    marks: 0,
-    testHistory: {
-      Maths: [0], // Assuming Maths is an array of marks
-      Statistics: [0], // Assuming Statistics is an array of marks
-    },
-    testnumber: 0,
-    voxalPoints: 0,
-    hoursLearned: 0,
-    ongoingCourses: 0,
-    completeCourse: 0,
-    PureMathematics: {
-      learnedProgress: 0,
-      lesson: 0,
-    },
-    Statistics: {
-      learnedProgress: 0,
-      lesson: 0,
-    },
+    _id: "", // User ID
+    username: "", // Username
+    password: "", // Password (typically not stored in front-end state for security reasons)
+    voxelPoints: 0, // Typo corrected from 'voxel' to match your schema; adjust as necessary
+    courses: [], // Array to store ongoing courses
+    completedCourses: [], // Array to store completed courses
+    correctQuestions: [], // Array to store IDs or details of correctly answered questions
+    wrongQuestions: [], // Array to store IDs or details of incorrectly answered questions
+    feedbackExams: [], // Array to store feedback from exams
+    topicalExams: [], // Array to store topical exam details
+    createdAt: "", // Date string of when the user was created
+    updatedAt: "", // Date string of the last update to the user profile
+    __v: 0, // Version key for MongoDB (if using Mongoose)
+    topicProbabilities: {}, // Object to store topic probabilities; structure depends on further details
+    lessons: [], // Array to store lesson progress; structure depends on further details
+    // Additional fields based on your initial setup
   });
 
   // Structuring the context value explicitly

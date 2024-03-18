@@ -2,11 +2,18 @@ import axios from 'axios';
 import React, { useContext, useEffect, useState } from 'react';
 import { UserContext } from '../../App';
 import { LineChart, Line, CartesianGrid, XAxis, YAxis, Tooltip } from 'recharts';
+import { CircularProgressbar } from "react-circular-progressbar";
 
 const Displaygraph = () => {
+  const progressBarStyle = {
+    // Set a smaller width and height for the progress bar container
+    width: '100px',
+    height: '100px'
+  };
+  
   // Use local state to store the chart data
   const [chartData, setChartData] = useState([]);
-  const {testedPureProgress,setPureTestedProgress} = useContext(UserContext);
+  const {testedPureProgress,setPureTestedProgress ,voxalPoints} = useContext(UserContext);
 
   // You're already using useContext here, ensure that it provides 'id'
   const id = localStorage.getItem('id');
@@ -14,6 +21,7 @@ const Displaygraph = () => {
   useEffect(() => {
     const fetchData = async () => {
       try {
+        
         const response = await axios.post("http://localhost:8000/progression/get/marks", { useRef: id });
         console.log(response)
         
@@ -33,6 +41,7 @@ const Displaygraph = () => {
         setPureTestedProgress(averageMarks);
         // Set the processed data to the local state
         setChartData(processedData);
+        
 
       } catch (err) {
         console.log(err);
@@ -40,7 +49,10 @@ const Displaygraph = () => {
     };
 
     fetchData();
-  }, [id]); // Only re-run the effect if 'id' changes
+  }, [id,setPureTestedProgress]); // Only re-run the effect if 'id' changes
+
+
+
 
   // Render the LineChart with the data from state
   const renderLineChart = (
@@ -56,7 +68,26 @@ const Displaygraph = () => {
   return (
     <div>
       {chartData.length > 0 ? renderLineChart : <p>Loading chart...</p>}
-      <h5>The total maths marks are : {testedPureProgress}</h5>
+      {/* <h5>The total maths marks are : {testedPureProgress}</h5>
+      <div style={progressBarStyle}>
+          <CircularProgressbar
+            value={testedPureProgress}
+            text={`${testedPureProgress}%`}
+            styles={{
+            
+            path: {
+            stroke: `rgba(62, 152, 199, ${
+            testedPureProgress / 100
+                })`,
+              },
+            // Customize the text color and style as needed
+            }}
+            />
+
+      </div> */}
+      {/* <br />
+      <p>The voxal Points are : {voxalPoints}</p> */}
+      
     </div>
   );
 };
