@@ -2,7 +2,7 @@
 import { useContext, useState } from "react";
 import Axios from "axios";
 import { UserContext } from "../../App";
-import { useNavigate, Link } from "react-router-dom";
+import { useNavigate, Link, json } from "react-router-dom";
 import NavBar from "../../components/NavigationBar/navBar.jsx";
 import "../main.css";
 import "./account.css";
@@ -35,11 +35,14 @@ const Login = () => {
       setLoading(true);
       const response = await Axios.post(BASE, user);
 
+
+      localStorage.setItem("id",response.data.data._id);
       if (response.status === 200) {
-        console.log(response.data.data._id);
+        console.log(response.data);
         setData(response.data);
         setUserId(response.data.data._id)
         sessionStorage.setItem("loggedUser", JSON.stringify(response.data));
+        
         setIsAuthenticated(true);
         navigator("/");
       }

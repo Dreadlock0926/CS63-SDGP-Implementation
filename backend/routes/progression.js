@@ -73,12 +73,16 @@ router.route("/get").post(async (req, res) => {
 
 router.route("/get/marks").post(async (req, res) => {
   const { useRef } = req.body;
+  console.log(useRef);
+ 
   if(!useRef){
     return res.status(400).json({ Alert: "No data found!" });
   }
+  
   try {
     // Make sure to use the `new` keyword when creating a new ObjectId instance
     const response = await examModel.find({ userRef: new mongoose.Types.ObjectId(useRef) });
+    console.log(response);
 
     if (!response || response.length === 0) { // Checking if the response array is empty
       return res.status(400).json({ Alert: "No data found!" });
@@ -87,8 +91,12 @@ router.route("/get/marks").post(async (req, res) => {
     }
   } catch (err) {
     console.log(err);
+    console.log(err);
     return res.status(500).json({ error: err.message });
+
   }
 });
+
+
 
 module.exports = router;

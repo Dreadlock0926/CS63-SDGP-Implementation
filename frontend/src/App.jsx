@@ -16,6 +16,7 @@ import ExamFinalized from "./pages/TestPages/ExamFinal";
 import FeedbackPage from "./pages/FeedbackPage/FeedbackPage";
 import ExamPage from "./pages/ExamPage/ExamPage";
 import ExamReceipt from "./pages/ExamPage/ExamReceipt/ExamReceipt";
+import Displaygraph from "./components/graphs/Displaygraph";
 
 
 export const UserContext = createContext();
@@ -42,6 +43,7 @@ function App() {
   const [testedStatProgress, setStatTestedProgress] = useState(0);
   const [isAuthenticated, setIsAuthenticated] = useState(false);
   const [userId,setUserId] = useState('');
+  const [totalAnswers,setTotalAnswers] = useState([]);
 
   const [loggedInUser, setLoggedInUser] = useState({
     username: "", // Assuming username is required
@@ -111,7 +113,9 @@ function App() {
     testedStatProgress,
     setStatTestedProgress,
     userId,
-    setUserId
+    setUserId,
+    totalAnswers,
+    setTotalAnswers
   };
 
   return (
@@ -130,6 +134,8 @@ function App() {
           <Route path="/examfinal" element={<ExamFinalized/>}></Route> {/**Incomplete */}
           <Route path="/scope" element={<Scope/>}></Route> {/**Radhul is working on this */}
           <Route path="/feedback" element={<FeedbackPage/>}></Route>
+          <Route path= "/didplayGraph" element={<Displaygraph/>}></Route>
+          
           <Route path="*" element={<UnknownPage />} />
         </Routes>
       </BrowserRouter>

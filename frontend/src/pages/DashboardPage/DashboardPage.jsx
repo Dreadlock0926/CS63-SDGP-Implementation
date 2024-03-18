@@ -10,6 +10,7 @@ import { UserContext } from "../../App";
 import { CircularProgressbar } from "react-circular-progressbar";
 import Axios from "axios";
 import axios from "axios";
+import Displaygraph from "../../components/graphs/Displaygraph";
 
 // Dashboard Header Tab
 function DashboardHeader() {
@@ -33,7 +34,7 @@ function DashboardGraph() {
       <div className="dashboard-graph-container">
         <h2 className="graph-title">Progress</h2>
         <div className="graph">
-          <ProgressGraph />
+          <Displaygraph/>
         </div>
       </div>
     </>
