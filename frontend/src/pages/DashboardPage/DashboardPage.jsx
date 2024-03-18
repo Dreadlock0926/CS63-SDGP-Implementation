@@ -291,12 +291,13 @@ function DashboardPage() {
         if (sessionUser) {
           setLoggedInUser(sessionUser);
           setVoxalpoints(sessionUser.voxalPoints)
+         
         }
         
         
         setHoursLearned(0);
         setCompleteCourse(0);
-        setongoingCourses(0);
+        
         setPureMathLearnedProgress(
           loggedInUser.PureMathematics.learnedProgress
         );
@@ -319,6 +320,10 @@ function DashboardPage() {
     // React to loggedInUser updates
     console.log(loggedInUser.voxelPoints);
     setVoxalpoints(loggedInUser.voxelPoints)
+    setCompleteCourse(loggedInUser.completedCourses.length)
+    setongoingCourses(loggedInUser.courses.length);
+    
+    console.log("The completed courses are "+completeCourse);
   }, [loggedInUser]);
 
 
@@ -331,8 +336,8 @@ function DashboardPage() {
           <DashboardGraph />
           <DashboardStatistics
             voxal={voxalPoints}
-            ongoingCourses={0}
-            completedCourses={0}
+            ongoingCourses={ongoingCourse}
+            completedCourses={completeCourse}
             hoursLearned={0}
           />
           <DashboardCourses />
