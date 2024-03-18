@@ -21,10 +21,22 @@ router.route("/saveExam").post(async (req, res) => {
   if (validityExam) {
     // Update user's examInfo after successful exam creation
     try {
-      // let examTypeFormatted = `${examType}Exams`
-      const updatedUser = await userModel.findByIdAndUpdate(userRef, {
-        $push: { feedbackExams: validityExam._id }, // Push exam object Id
-      });
+
+      let updatedUser = null;
+
+      if (examType.toLowerCase() === "feedback") {
+
+        updatedUser = await userModel.findByIdAndUpdate(userRef, {
+          $push: { feedbackExams: validityExam._id }, // Push exam object Id
+        });
+
+      } else if (examType.toLowerCase() === "topical") {
+
+        updatedUser = await userModel.findByIdAndUpdate(userRef, {
+          $push: { topicalExams: validityExam._id }, // Push exam object Id
+        });
+
+      }
 
       if (updatedUser) {
         res.status(201).json([{ Alert: "Exam Saved!" }]);
