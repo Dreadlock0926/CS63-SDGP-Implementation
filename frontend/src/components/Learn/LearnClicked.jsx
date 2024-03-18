@@ -1,7 +1,7 @@
 /* eslint-disable react-hooks/exhaustive-deps */
 /* eslint-disable no-unused-vars */
-import { useContext, useEffect, useState, useNavigate } from "react";
-import { Link, useParams } from "react-router-dom";
+import { useContext, useEffect, useState } from "react";
+import { Link, useParams, useNavigate } from "react-router-dom";
 import { UserContext } from "../../App";
 import Axios from "axios";
 import { useHover } from "@uidotdev/usehooks";
@@ -19,13 +19,13 @@ const LearnClicked = () => {
     TheSource,
     setTheProgressVal,
     user,
-    lessonCounter,
-    setLessonCounter,
     theTopic,
   } = useContext(UserContext);
   const { lesson } = useParams();
+  const [lessonCounter, setLessonCounter] = useState(0);
   const [status, setStatus] = useState("");
-  const [theLessonName,setTheLessonName] = useState([])
+  const [theLessonName, setTheLessonName] = useState([]);
+  const navigator = useNavigate();
 
   useEffect(() => {
     console.log(JSON.stringify(lesson));
@@ -55,6 +55,10 @@ const LearnClicked = () => {
     fetchData();
   }, [lesson]); // Fetch data when lesson changes
 
+  // useEffect(() => {
+  //   console.log(lessonCounter < topicRelated.incompleteLessons.length);
+  // }, [topicRelated]);
+
   useEffect(() => {
     const getNumberOfLessonForProgress = async () => {
       try {
@@ -79,32 +83,34 @@ const LearnClicked = () => {
     getNumberOfLessonForProgress();
   }, []); // Fetch data once on component mount
 
+
+
+  const [lessonName, setLessonName] = useState("");
+
+  useEffect(() => {
+    console.log(lessonName);
+  }, [lessonName]);
+
   const IncrementProgress = async () => {
-    // try {
-    //   const outcome = await Axios.put(`${BASE}/resources/progress/updates`, {
-    //     userId: "65f2a146a0acea296a663650",
-    //     topicRelated, //user.id
-    //   });
-    //   setLessonCounter((prev) => prev + 1);
-    //   if (outcome.response.status === 200) {
-    //     alert("Incremented!");
-    //   }
-    // } catch (error) {
-    //   if (error.response.status === 404) {
-    //     setStatus("No resources found!");
-    //   }
-    //   console.error(error.message);
-    // }
-    const updateUserProgress = await Axios.post(`${BASE}/resources/progress/updates`, {
-      userId: "65f584b5794ca9565c2dc26a",
-      topic: lesson,
-      TheSource,
-      lessonName:"Solving quadratic equations by factorisation"
-    });
-    console.log(updateUserProgress.data)
-    for(let i = 1 ; i < topicRelated?.incompleteLessons?.length ; i++) {
+    try {
+      const outcome = await Axios.put(`${BASE}/resources/progress/updates`, {
+        userId: "65f584b5794ca9565c2dc26a", //user.id
+        topic: lesson,
+        source: TheSource,
+        lessonName, //user.id
+      });
+      
       setLessonCounter((prev) => prev + 1);
+      if (outcome.status === 200) {
+        alert("Incremented!");
+      }
+    } catch (error) {
+      if (error.status === 404) {
+        setStatus("No resources found!");
+      }
+      console.error(error.message);
     }
+    setLessonCounter((counter) => counter + 1);
   };
 
   useEffect(() => {
@@ -114,7 +120,10 @@ const LearnClicked = () => {
     }
   }, [isHovering, topicRelated]); // Increment progress when hovering or when topicRelated changes
 
-  return topicRelated && topicRelated.incompleteLessons ? (
+  return !loading &&
+    topicRelated &&
+    topicRelated.incompleteLessons &&
+    theTopic ? (
     loading ? (
       "Loading..."
     ) : (
@@ -129,14 +138,40 @@ const LearnClicked = () => {
         <h1>Learn Clicked</h1>
         <h1>{topicRelated.topic}</h1>
         <div>
-          {topicRelated.incompleteLessons.map((lesson, index) => (
-            <div key={index}>
-              <Link to={lesson}>{lesson}</Link>
+          {topicRelated.incompleteLessons.length > 0 ? (
+            <div>
+              <Link
+                to={
+                  lessonCounter <= topicRelated.incompleteLessons.length
+                    ? () => {
+                        topicRelated.incompleteLessons[lessonCounter];
+                        setLessonName(
+                          topicRelated.incompleteLessons[lessonCounter]
+                        );
+                      }
+                    : "You have completed the topic!"
+                }
+              >
+                {topicRelated.incompleteLessons[lessonCounter]}
+              </Link>
             </div>
-          ))}
-          <br />
+          ) : (
+            <h1>{`You have completed ${topicRelated.topic}`}</h1>
+          )}
         </div>
-        <button onClick={IncrementProgress}>Next Page!</button>
+        <button
+          onClick={() => {
+            if (lessonCounter < topicRelated.incompleteLessons.length - 1) {
+              IncrementProgress();
+            } else {
+              alert("You have finished the topic!");
+              navigator("/learnprint");
+            }
+          }}
+          disabled={lessonCounter >= topicRelated.incompleteLessons.length}
+        >
+          Next Page!
+        </button>
         <p>{status}</p>
       </div>
     )

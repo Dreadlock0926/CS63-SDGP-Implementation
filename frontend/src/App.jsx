@@ -11,6 +11,7 @@ import Second from "./components/Learn/TestPages/Second";
 import NextPage from "./components/Learn/NextPage";
 import Anything from "./components/Learn/Anything";
 import LearnClicked from "./components/Learn/LearnClicked";
+import TopicalExam from "./components/Learn/TopicalExam";
 
 export const UserContext = createContext();
 
@@ -23,7 +24,6 @@ function App() {
   const [theTopic, setTheTopic] = useState("");
   const [TheSource, setSource] = useState("");
   const [theProgressVal, setTheProgressVal] = useState(0);
-  const [lessonCounter, setLessonCounter] = useState(0);
   const [specificTopic, setSpecificTopic] = useState("");
   const [topicRelated, setTopicRelated] = useState([]);
   const BASE = "http://localhost:8000";
@@ -52,9 +52,8 @@ function App() {
     setSpecificTopic,
     topicRelated,
     setTopicRelated,
-    lessonCounter,
     setSource,
-    setLessonCounter,
+ 
   };
 
   return (
@@ -75,6 +74,10 @@ function App() {
             <Route
               path="/learnclicked/:lesson"
               element={<LearnClicked />}
+            ></Route>
+                        <Route
+              path="/topicalExam/:lesson"
+              element={<TopicalExam />}
             ></Route>
             {/* <Route path="/:lesson" element={<First />} /> */}
             <Route path="/second" element={<Second />} />

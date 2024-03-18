@@ -275,7 +275,7 @@ router.route("/create-user").post(async (req, res) => {
 
 router
   .route("/progress/updates")
-  .post(async (req, res) => {
+  .put(async (req, res) => {
     try {
       const { lessonName, userId, source, topic } = req.body; // Extract lessonName, userId, and source from request body
   
@@ -285,6 +285,8 @@ router
           message: "Missing lessonName, userId, or source in request body",
         });
       }
+
+      console.log(req.body);
   
       const user = await userModel.findById(userId); // Find user by ID
       if (!user) {
@@ -348,22 +350,6 @@ router
       console.error(err);
     }
   })
-  .put(async (req, res) => {
-    const { userId, progress } = req?.body;
-    const userExists = await userModel.findById(userId);
-    if (!userExists) {
-      res.status(404).json({ Alert: "User not found!" });
-    } else {
-      const userProgress = await userExists.updateOne({
-        learnedProgress: { $inc: progress },
-      });
-      if (userProgress) {
-        res.status(200).json({ Alert: "Updated Progress!" });
-      } else {
-        res.status(400).json({ Alert: "Couldn't update!" });
-      }
-    }
-  });
 
 router.route("/topic/:id").post(async (req, res) => {
   const id = req?.params?.id;

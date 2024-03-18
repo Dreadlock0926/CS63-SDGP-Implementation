@@ -15,24 +15,25 @@ const LearnBlueprint = () => {
     topicRelated,
     data,
     setData,
-    setLessonCounter,
+
     theProgressVal,
     TheSource,
     setSource,
     setTheProgressVal,
-    lessonCounter,
+
     setTheTopic,
+    setLessonTopic,
     setTopicRelated,
   } = useContext(UserContext);
   const [userData, setUserData] = useState([]);
   const [loading, setLoading] = useState(false);
   const [topicTitles, setTopicTitles] = useState([]);
   const [topicPercentage, setTopicPercentage] = useState([]);
-  const [theSubTopic,setTheSubTopic] = useState("")
+  const [theSubTopic, setTheSubTopic] = useState("");
   const [status, setStatus] = useState("");
   const navigator = useNavigate();
 
-  async function fetchData(topic,source) {
+  async function fetchData(topic, source) {
     try {
       setLoading(true);
       // const response = await Axios.post(`${BASE}/resources/topic/learned`, {
@@ -42,7 +43,7 @@ const LearnBlueprint = () => {
       // console.log(`The topics ${JSON.stringify(response.data)}`);
       const theUser = await Axios.post(`${BASE}/resources/testing-user`, {
         userId: "65f584b5794ca9565c2dc26a", //user.id
-        source
+        source,
       });
       setSource(source);
       setUserData(theUser.data);
@@ -61,15 +62,17 @@ const LearnBlueprint = () => {
   }
 
   async function IncrementProgress() {
+
     try {
       const outcome = await Axios.put(`${BASE}/resources/progress/updates`, {
         userId: "65f584b5794ca9565c2dc26a",
-        source:TheSource
-         //user.id
+        source: TheSource,
+        //user.id
       });
-      if (outcome.data.status === 200) {
-        setLessonCounter((prev) => prev + 1);
-      }
+      console.log(outcome.data);
+      // if (outcome.data.status === 200) {
+      //   setLessonCounter((prev) => prev + 1);
+      // }
     } catch (err) {
       console.error(err.message);
     }
@@ -78,9 +81,9 @@ const LearnBlueprint = () => {
   useEffect(() => {
     const fetchTopicData = async () => {
       if (theTopic === "Pure") {
-        await fetchData("Pure Mathematics I","p1");
+        await fetchData("Pure Mathematics I", "p1");
       } else if (theTopic === "Stat") {
-        await fetchData("Probability and Statistics","s1");
+        await fetchData("Probability and Statistics", "s1");
       } else {
         navigator("/resources");
       }
@@ -93,7 +96,7 @@ const LearnBlueprint = () => {
     console.log(topicPercentage);
   }, [topicPercentage]);
 
-  return (
+  return topicTitles &&  topicTitles.length ? (
     <Container>
       {loading ? (
         <Typography variant="h4">Loading...</Typography>
@@ -123,10 +126,35 @@ const LearnBlueprint = () => {
                     <td>
                       {topicPercentage && topicPercentage[index] && (
                         <Link
-                          to={`/learnclicked/${title}`}
+                          to={
+                            topicPercentage[index].completedPercentage === 100
+                              ? () => {
+                                  setStatus(
+                                    "You have already completed this topic!"
+                                  );
+                                  setLessonTopic(0);
+                                }
+                              : `/learnclicked/${title}`
+                          }
                           onClick={IncrementProgress}
                         >
-                          {topicPercentage[index].completedPercentage}
+                          {`${topicPercentage[index].completedPercentage}%`}
+                        </Link>
+                      )}
+                    </td>
+                    <td>
+                      {topicPercentage && topicPercentage[index] && (
+                        <Link
+                          to={
+                            topicPercentage[index].completedPercentage == 100
+                              ? `/topicalExam/${title}`
+                              : ""
+                          }
+                          onClick={IncrementProgress}
+                        >
+                          {topicPercentage[index].completedPercentage == 100
+                            ? "Yes"
+                            : "No"}
                         </Link>
                       )}
                     </td>
@@ -139,7 +167,7 @@ const LearnBlueprint = () => {
         </>
       )}
     </Container>
-  );
+  ) : <h1>No resources found!</h1>;
 };
 
 export default LearnBlueprint;
