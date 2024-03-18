@@ -27,6 +27,7 @@ import NextPage from "./components/Learn/NextPage";
 import Anything from "./components/Learn/Anything";
 import ExamReceipt from "./pages/ExamPage/ExamReceipt/ExamReceipt";
 import ExamHistory from "./pages/ExamPage/ExamHistoryPage/ExamHistory";
+import ExamReview from "./pages/ExamPage/ExamReview/ExamReview";
 
 export const UserContext = createContext();
 
@@ -138,6 +139,7 @@ function App() {
           <Route path="exam" element={<ExamPage />} />
           <Route path="receipt" element={<ExamReceipt />} />
           <Route path="/exam-history" element={<ExamHistory />}></Route>
+          <Route path="/examreview" element={<ExamReview/>}></Route>
           {/**Incomplete */}
           <Route path="/scope" element={<Scope />}></Route>{" "}
           {/**Radhul is working on this */}
