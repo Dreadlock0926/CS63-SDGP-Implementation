@@ -17,6 +17,7 @@ import FeedbackPage from "./pages/FeedbackPage/FeedbackPage";
 import ExamPage from "./pages/ExamPage/ExamPage";
 import ExamReceipt from "./pages/ExamPage/ExamReceipt/ExamReceipt";
 import ExamHistory from "./pages/ExamPage/ExamHistoryPage/ExamHistory";
+import ExamReview from "./pages/ExamPage/ExamReview/ExamReview";
 
 export const UserContext = createContext();
 
@@ -126,6 +127,7 @@ function App() {
           <Route path="receipt" element={<ExamReceipt />} />
           <Route path="/examfinal" element={<ExamFinalized />}></Route>{" "}
           <Route path="/exam-history" element={<ExamHistory />}></Route>
+          <Route path="/examreview" element={<ExamReview/>}></Route>
           {/**Incomplete */}
           <Route path="/scope" element={<Scope />}></Route>{" "}
           {/**Radhul is working on this */}
