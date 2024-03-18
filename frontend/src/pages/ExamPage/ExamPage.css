@@ -28,7 +28,8 @@
 }
 
 .info-panel {
-    width: 50%;
+    width: 20%;
+    margin-left: 100px;
     padding: 20px;
     margin-right: 100px;
     border-radius: 25px 0px 25px 0px;
