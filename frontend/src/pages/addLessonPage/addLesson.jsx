@@ -4,7 +4,7 @@ import Axios from "axios";
 const AddLesson = () => {
   const [section, setSection] = useState([]);
   const [enteredSection, setEnteredSection] = useState("");
-  const [selectedImage, setSelectedImage] = useState(null); // Use null for no image
+  const [selectedImage, setSelectedImage] = useState(null);
   const [resImgUrl, setResImgUrl] = useState(null);
   const [imageUrl, setImageUrl] = useState([]);
 
@@ -39,8 +39,8 @@ const AddLesson = () => {
   const [state, dispatch] = useReducer(reducer, initialState);
 
   const handleLesson = () => {
-    if (state.selectedSource != null) {
-      if (state.selectedSource == "Pure Mathematics I") {
+    if (state.selectedSource !== null) {
+      if (state.selectedSource === "Pure Mathematics I") {
         setLessons("p1");
       } else {
         setLessons("s1");
@@ -52,11 +52,11 @@ const AddLesson = () => {
     if (section.length > 0 && imageUrl.length > 0) {
       try {
         const response = await Axios.post(
-          "http://localhost:8000/addLesson/setLessons",
+          "http://localhost:8000/getTopics/setLessons",
           {
-            source: source,
+            sourceKey: source,
             topic: state.selectedTopic,
-            lessonTitle: state.selectedLesson,
+            lessonTitle: state.selectedLesson.lessonTitle,
             lessonBody: {
               lessonSection: section,
               sectionImgURL: imageUrl,
@@ -78,7 +78,7 @@ const AddLesson = () => {
         "http://localhost:8000/getTopics/getLessons",
         {
           sourceKey: sourceKey,
-          topic: topic,
+          topic: topic || state.selectedTopic,
         }
       );
       dispatch({ type: "SET_LESSONS", payload: response.data.lessons });
@@ -96,6 +96,7 @@ const AddLesson = () => {
       const response = await Axios.post("http://localhost:8000/getTopics", {
         sourceKey: sourceKey,
       });
+
       dispatch({ type: "SET_TOPICS", payload: response.data.topics });
       dispatch({
         type: "SET_SELECTED_TOPIC",
@@ -119,8 +120,12 @@ const AddLesson = () => {
   };
 
   useEffect(() => {
-    if (state.selectedSource != null) {
-      if (state.selectedSource == "Pure Mathematics I") {
+    fetchSources();
+  }, []);
+
+  useEffect(() => {
+    if (state.selectedSource !== null) {
+      if (state.selectedSource === "Pure Mathematics I") {
         fetchTopics("p1");
       } else {
         fetchTopics("s1");
@@ -129,8 +134,8 @@ const AddLesson = () => {
   }, [state.selectedSource]);
 
   useEffect(() => {
-    if (state.selectedSource != null && state.selectedTopic != null) {
-      if (state.selectedSource == "Pure Mathematics I") {
+    if (state.selectedSource !== null && state.selectedTopic !== null) {
+      if (state.selectedSource === "Pure Mathematics I") {
         fetchLessons("p1", state.selectedTopic);
       } else {
         fetchLessons("s1", state.selectedTopic);
@@ -138,13 +143,9 @@ const AddLesson = () => {
     }
   }, [state.selectedTopic]);
 
-  useEffect(() => {
-    fetchSources();
-  }, []);
-
   const updateStates = () => {
-    setSection((prevSection) => [...prevSection, enteredSection]); // Avoid mutating state
-    if (resImgUrl != null) {
+    setSection((prevSection) => [...prevSection, enteredSection]);
+    if (resImgUrl !== null) {
       setImageUrl((prevImageUrl) => [...prevImageUrl, resImgUrl]);
       setResImgUrl(null);
     } else {
@@ -157,30 +158,15 @@ const AddLesson = () => {
     fileInput.value = "";
 
     setSelectedImage(null);
-
-    // Clear selected image after upload
   };
 
   useEffect(() => {
     if (section.length > 0 && imageUrl.length > 0) {
-      console.log("section", section);
-      console.log("imageUrl", imageUrl);
     }
   }, [section, imageUrl]);
 
   useEffect(() => {
-    if (selectedImage != null && selectedImage.length != 0) {
-      console.log("Image selected");
-      console.log(selectedImage);
-    } else {
-      console.log("No image selected");
-    }
-  }, [selectedImage]);
-
-  useEffect(() => {
-    if (resImgUrl != null) {
-      console.log("Image uploaded");
-      console.log(resImgUrl);
+    if (resImgUrl !== null) {
       updateStates();
     }
   }, [resImgUrl]);
@@ -191,8 +177,7 @@ const AddLesson = () => {
 
   const uploadFigure = async () => {
     try {
-      if (selectedImage != null) {
-        console.log("lol");
+      if (selectedImage !== null) {
         const formData = new FormData();
         formData.append("file", selectedImage);
         formData.append("upload_preset", "xpr9hqrv");
@@ -201,7 +186,6 @@ const AddLesson = () => {
           "https://api.cloudinary.com/v1_1/dl13hpmzu/upload",
           formData,
           {
-            // Add headers for Cloudinary upload
             headers: {
               "Content-Type": "multipart/form-data",
             },
@@ -209,16 +193,13 @@ const AddLesson = () => {
         );
 
         setResImgUrl(response.data.secure_url);
-        // Add section with image
       } else if (!enteredSection) {
         alert("Enter a section!");
       } else {
-        // Handle the case where there's a section but no image
-        updateStates(); // Add section without image
+        updateStates();
       }
     } catch (error) {
       console.error(error);
-      // Handle upload errors gracefully, e.g., display an error message
     }
   };
 
@@ -275,7 +256,7 @@ const AddLesson = () => {
             }
           >
             {state.lessons.map((lesson, index) => (
-              <option key={index} value={lesson}>
+              <option key={index} value={lesson.lessonTitle}>
                 {lesson.lessonTitle}
               </option>
             ))}
@@ -288,10 +269,12 @@ const AddLesson = () => {
       {section.length > 0 && (
         <div>
           {section.map((sectionText, index) => (
-            <>
-              <p key={index}>{sectionText}</p>
-              {imageUrl[index] !== "" && <img src={imageUrl[index]} />}
-            </>
+            <div key={index}>
+              <p>{sectionText}</p>
+              {imageUrl[index] !== "" && (
+                <img src={imageUrl[index]} alt={`Section ${index}`} />
+              )}
+            </div>
           ))}
         </div>
       )}

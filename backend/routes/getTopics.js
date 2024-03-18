@@ -8,6 +8,7 @@ router.route("/").post(async (req, res) => {
 
   if (!sourceKey)
     return res.status(400).json({ Alert: "The topic source is missing!" });
+
   const topicData = await topicsModel.findOne({ sourceKey });
 
   if (!topicData) {
@@ -83,16 +84,15 @@ router.post("/getLessons", async (req, res) => {
 });
 
 router.post("/setLessons", async (req, res) => {
-  const { source, topic, lessonTitle, lessonBody } = req.body;
+  const { sourceKey, topic, lessonTitle, lessonBody } = req.body;
 
-  if (!source || !topic || !lessonTitle || !lessonBody) {
+  if (!sourceKey || !topic || !lessonTitle || !lessonBody) {
     return res.status(400).json({ message: "Missing required fields" });
   }
 
   try {
-    const updatedTopic = await topicsModel.findOneAndUpdate({
-      source,
-      topics: { $elemMatch: { topic } },
+    const updatedTopic = await topicsModel.findOne({
+      sourceKey,
     });
 
     if (!updatedTopic) {
