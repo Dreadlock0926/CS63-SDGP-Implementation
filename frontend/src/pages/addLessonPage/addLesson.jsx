@@ -1,6 +1,8 @@
 import React, { useEffect, useState, useReducer } from "react";
 import Axios from "axios";
 
+import "./addLesson.css";
+
 const AddLesson = () => {
   const [section, setSection] = useState([]);
   const [enteredSection, setEnteredSection] = useState("");
