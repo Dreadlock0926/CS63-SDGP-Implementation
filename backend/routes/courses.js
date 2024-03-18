@@ -72,7 +72,7 @@ router.post("/getLessons", async (req, res) => {
 });
 
 router.post("/updateTopics", async (req, res) => {
-  const { sourceKey, lessonTitleArr, topic, topicRef } = req.body;
+  const { sourceKey, lessonTitleArr, topic } = req.body;
 
   // Validate input (optional but recommended)
   if (!sourceKey || !lessonTitleArr || !topic) {
@@ -81,7 +81,7 @@ router.post("/updateTopics", async (req, res) => {
 
   const lessonArr = lessonTitleArr.map((lessonTitleStr) => ({
     lessonTitle: lessonTitleStr,
-    lessonBody: "No lesson body",
+    lessonBody: {},
   })); // Create an array of lesson objects
 
   try {
@@ -90,7 +90,6 @@ router.post("/updateTopics", async (req, res) => {
     const topicLessonAppend = {
       topic,
       lessons: lessonArr,
-      topicRef: topicRef,
     };
 
     updatedTopic.topicLesson.push(topicLessonAppend); // Append to the topicLesson array

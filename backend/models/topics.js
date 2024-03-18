@@ -1,7 +1,12 @@
 const mongoose = require("mongoose");
+const lessonBodySchema = new mongoose.Schema({
+  lessonSection: { type: [String], default: [] },
+  sectionImgURL: { type: [String], default: [] },
+});
+
 const lessonSchema = new mongoose.Schema({
   lessonTitle: { type: String, required: true },
-  lessonBody: { type: String, default: "No lesson body" },
+  lessonBody: { type: lessonBodySchema, default: {} },
 });
 
 const topicLessonSchema = new mongoose.Schema({
