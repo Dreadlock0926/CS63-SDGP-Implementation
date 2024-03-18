@@ -141,7 +141,7 @@ router.route("/completeLesson").post(async (req, res) => {
 
 router.post("/testing-user", async (req, res) => {
   try {
-    const { userID = "65f584b5794ca9565c2dc26a", source = "p1" } = req.body; // Extract userID and source from request body
+    const { userID , source } = req.body; // Extract userID and source from request body
 
     // Validate userID
     if (!userID) {

@@ -41,7 +41,7 @@ const LearnClicked = () => {
       try {
         setLoading(true);
         const response = await Axios.post(`${BASE}/resources/false-topic`, {
-          userId: "65f584b5794ca9565c2dc26a",
+          userId: "65f86f434b9403f9d70d8aa3",
           topic: lesson,
           source: TheSource,
         });
@@ -93,7 +93,7 @@ const LearnClicked = () => {
     console.log(lesson, TheSource, lessonName);
     try {
       const outcome = await Axios.put(`${BASE}/resources/progress/updates`, {
-        userId: "65f584b5794ca9565c2dc26a", //user.id
+        userId: "65f86f434b9403f9d70d8aa3", //user.id
         topic: lesson,
         source: TheSource,
         lessonName: lessonName, //user.id
@@ -105,7 +105,7 @@ const LearnClicked = () => {
       }
     } catch (error) {
       if (error.status === 404) {
-        setStatus("No resources found!");
+        setStatus("You have completed the topic!");
       }
       console.error(error.message);
     }
@@ -127,6 +127,10 @@ const LearnClicked = () => {
 
   useEffect(() => {
     if (Object.keys(topicRelated).length > 0) {
+      console.log(
+        `Lesson Counter : ${lessonCounter}\nIncomplete : ${topicRelated.incompleteLessons.length}`
+      );
+      lessonCounter >= topicRelated.incompleteLessons.length 
       setLessonName(topicRelated.incompleteLessons[lessonCounter]);
     }
   }, [lessonCounter, topicRelated]);
@@ -156,7 +160,7 @@ const LearnClicked = () => {
             <div>
               <Link
                 to={
-                  lessonCounter <= topicRelated.incompleteLessons.length
+                  lessonCounter < topicRelated.incompleteLessons.length
                     ? () => {
                         topicRelated.incompleteLessons[lessonCounter];
                         setLessonName(
@@ -176,16 +180,16 @@ const LearnClicked = () => {
         <h1>{topicRelated.incompleteLessons[lessonCounter]}</h1>
         <button
           onClick={() => {
-            if (lessonCounter < topicRelated.incompleteLessons.length - 1) {
+            if (lessonCounter <= topicRelated.incompleteLessons.length) {
               IncrementProgress(); //works
             } else {
               setStatus(`Congrats you have completed ${lesson}`);
-              setTimeout(() => {
-                navigator("/learnprint");
-              }, 1500);
+              // setTimeout(() => {
+              //   navigator("/learnprint");
+              // }, 1500);
             }
           }}
-          disabled={lessonCounter >= topicRelated.incompleteLessons.length}
+          disabled={lessonCounter > topicRelated.incompleteLessons.length}
         >
           {`Next Page!`}
         </button>

@@ -62,7 +62,7 @@ const LearnBlueprint = () => {
       // setTopicRelated(response.data);
       // console.log(`The topics ${JSON.stringify(response.data)}`);
       const theUser = await Axios.post(`${BASE}/resources/testing-user`, {
-        userId: "65f584b5794ca9565c2dc26a", //user.id
+        userID: "65f86f434b9403f9d70d8aa3", //user.id
         source,
       });
       setSource(source);
@@ -84,7 +84,7 @@ const LearnBlueprint = () => {
   async function IncrementProgress(theSource) {
     // try {
     //   const outcome = await Axios.put(`${BASE}/resources/progress/updates`, {
-    //     userId: "65f584b5794ca9565c2dc26a",
+    //     userId: "65f86f434b9403f9d70d8aa3",
     //     source: TheSource,
     //     //user.id
     //   });
