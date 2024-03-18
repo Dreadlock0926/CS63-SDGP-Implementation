@@ -9,8 +9,7 @@ import Login from "./pages/AccountPage/login";
 import Register from "./pages/AccountPage/register";
 import Authenticate from "./pages/AccountPage/Authenticate";
 import AddQuestionsPage from "./pages/addQuestionsPage/addQuestions";
-import ErrorPage from "./components/Error404/ErrorPage";
-import ExamQuestionTest from "./pages/TestPages/ExamQuestionTest";
+import AddLesson from "./pages/addLessonPage/addLesson";
 import Scope from "./pages/TestPages/Scope";
 import ExamFinalized from "./pages/TestPages/ExamFinal";
 import FeedbackPage from "./pages/FeedbackPage/FeedbackPage";
@@ -122,6 +121,7 @@ function App() {
           <Route path="/registration" element={<Register />} />
           <Route path="/authenticate" element={<Authenticate />} />
           <Route path="add-questions" element={<AddQuestionsPage />} />
+          <Route path="/add-lesson" element={<AddLesson />} />
           <Route path="exam" element={<ExamPage />} />
           <Route path="receipt" element={<ExamReceipt />} />
           <Route path="/examfinal" element={<ExamFinalized />}></Route>{" "}
