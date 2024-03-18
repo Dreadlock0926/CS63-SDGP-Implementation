@@ -2,8 +2,18 @@
 /* eslint-disable react-hooks/exhaustive-deps */
 import React, { useContext, useEffect, useState } from "react";
 import { UserContext } from "../../App";
-import { Link, useNavigate } from "react-router-dom";
-import { Container, Typography } from "@mui/material";
+import { Link as RouterLink, useNavigate } from "react-router-dom";
+import {
+  Container,
+  Typography,
+  Table,
+  TableHead,
+  TableBody,
+  TableRow,
+  TableCell,
+  Link,
+} from "@mui/material";
+import { styled } from "@mui/system";
 import Axios from "axios";
 
 const LearnBlueprint = () => {
@@ -33,6 +43,16 @@ const LearnBlueprint = () => {
   const [status, setStatus] = useState("");
   const navigator = useNavigate();
 
+  const useStyles = styled((theme) => ({
+    tableRow: {
+      transition: "box-shadow 0.3s, border-color 0.3s",
+      "&:hover": {
+        borderColor: "green",
+        boxShadow: "0px 0px 10px 0px rgba(0,0,0,0.5)",
+      },
+    },
+  }));
+
   async function fetchData(topic, source) {
     try {
       setLoading(true);
@@ -61,21 +81,21 @@ const LearnBlueprint = () => {
     }
   }
 
-  async function IncrementProgress() {
-
-    try {
-      const outcome = await Axios.put(`${BASE}/resources/progress/updates`, {
-        userId: "65f584b5794ca9565c2dc26a",
-        source: TheSource,
-        //user.id
-      });
-      console.log(outcome.data);
-      // if (outcome.data.status === 200) {
-      //   setLessonCounter((prev) => prev + 1);
-      // }
-    } catch (err) {
-      console.error(err.message);
-    }
+  async function IncrementProgress(theSource) {
+    // try {
+    //   const outcome = await Axios.put(`${BASE}/resources/progress/updates`, {
+    //     userId: "65f584b5794ca9565c2dc26a",
+    //     source: TheSource,
+    //     //user.id
+    //   });
+    //   console.log(outcome.data);
+    //   // if (outcome.data.status === 200) {
+    //   //   setLessonCounter((prev) => prev + 1);
+    //   // }
+    // } catch (err) {
+    //   console.error(err.message);
+    // }
+    // alert("Clicked!");
   }
 
   useEffect(() => {
@@ -96,78 +116,110 @@ const LearnBlueprint = () => {
     console.log(topicPercentage);
   }, [topicPercentage]);
 
-  return topicTitles &&  topicTitles.length ? (
-    <Container>
-      {loading ? (
-        <Typography variant="h4">Loading...</Typography>
-      ) : (
-        <>
-          <Typography variant="h3">
-            {theTopic === "Pure"
-              ? "Pure Mathematics I"
-              : "Probability And Statistics"}
-          </Typography>
-          <table style={{ width: "100%", textAlign: "center" }}>
-            <thead>
-              <tr>
-                <th>Topic</th>
-                <th>Learned Progress</th>
-                <th>Incomplete Lessons</th>
-              </tr>
-            </thead>
-            <tbody>
-              {/* Rendering topicRelated */}
-              {topicTitles &&
-                topicTitles.map((title, index) => (
-                  <tr key={index}>
-                    <td>
-                      <div>{title}</div>
-                    </td>
-                    <td>
-                      {topicPercentage && topicPercentage[index] && (
-                        <Link
-                          to={
-                            topicPercentage[index].completedPercentage === 100
-                              ? () => {
-                                  setStatus(
-                                    "You have already completed this topic!"
-                                  );
-                                  setLessonTopic(0);
+  return (
+    <>
+      {topicTitles && topicTitles.length ? (
+        <Container style={{ margin: "10px" }}>
+          {loading ? (
+            <Typography variant="h4">Loading...</Typography>
+          ) : (
+            <>
+              <Typography variant="h3">
+                {theTopic === "Pure"
+                  ? "Pure Mathematics I"
+                  : "Probability And Statistics"}
+              </Typography>
+              <Table style={{ width: "100%", textAlign: "center" }}>
+                <TableHead>
+                  <TableRow>
+                    <TableCell>Topic</TableCell>
+                    <TableCell>Learned Progress</TableCell>
+                    <TableCell>Topical Exams</TableCell>
+                  </TableRow>
+                </TableHead>
+                <TableBody>
+                  {/* Rendering topicRelated */}
+                  {topicTitles &&
+                    topicTitles.map((title, index) => (
+                      <TableRow key={index}>
+                        <TableCell>
+                          <div>{title}</div>
+                        </TableCell>
+                        <TableCell>
+                          {topicPercentage && topicPercentage[index] && (
+                            <RouterLink
+                              to={
+                                topicPercentage[index].completedPercentage !==
+                                100
+                                  ? `/learnclicked/${title}`
+                                  : null
+                              }
+                              onClick={() => {
+                                if (status !== "") {
+                                  // Set status if completed
+                                  setStatus("");
                                 }
-                              : `/learnclicked/${title}`
-                          }
-                          onClick={IncrementProgress}
-                        >
-                          {`${topicPercentage[index].completedPercentage}%`}
-                        </Link>
-                      )}
-                    </td>
-                    <td>
-                      {topicPercentage && topicPercentage[index] && (
-                        <Link
-                          to={
-                            topicPercentage[index].completedPercentage == 100
-                              ? `/topicalExam/${title}`
-                              : ""
-                          }
-                          onClick={IncrementProgress}
-                        >
-                          {topicPercentage[index].completedPercentage == 100
-                            ? "Yes"
-                            : "No"}
-                        </Link>
-                      )}
-                    </td>
-                    <td>{/* Render incomplete lessons here */}</td>
-                  </tr>
-                ))}
-            </tbody>
-          </table>
-          <Typography variant="body1">{status}</Typography>
-        </>
+                                if (
+                                  topicPercentage[index].completedPercentage ===
+                                  100
+                                ) {
+                                  setStatus(`You have completed ${title}`);
+                                }
+                                // Prevent default link behavior
+                              }}
+                            >
+                              {topicPercentage[index].completedPercentage ===
+                              100
+                                ? "Completed"
+                                : `${topicPercentage[index].completedPercentage}% Complete`}
+                            </RouterLink>
+                          )}
+                        </TableCell>
+                        <TableCell>
+                          {topicPercentage &&
+                            topicPercentage[index] &&
+                            (topicPercentage[index].completedPercentage ===
+                            100 ? (
+                              <RouterLink
+                                component="button"
+                                variant="body2"
+                                to={`/topicalExam/${title}`}
+                              >
+                                Yes
+                              </RouterLink>
+                            ) : (
+                              <RouterLink
+                                variant="body2"
+                                onClick={() => {
+                                  setStatus(
+                                    `Please complete ${title} to access the Topical Exam!`
+                                  );
+                                }}
+                              >
+                                No
+                              </RouterLink>
+                            ))}
+                        </TableCell>
+                        <TableCell>
+                          {/* Render incomplete lessons here */}
+                        </TableCell>
+                      </TableRow>
+                    ))}
+                </TableBody>
+              </Table>
+              <Typography variant="body1">{status}</Typography>
+            </>
+          )}
+        </Container>
+      ) : (
+        <Typography variant="h3">{`No ${
+          theTopic === "Pure"
+            ? "Pure Mathematics I"
+            : "Probability And Statistics"
+        } resources found!`}</Typography>
       )}
-    </Container>
-  ) : <h1>No resources found!</h1>;
+    </>
+  );
 };
 
 export default LearnBlueprint;

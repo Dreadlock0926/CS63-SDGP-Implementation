@@ -42,7 +42,7 @@ const TopicalExam = () => {
     <div>
       <h1>Welcome to the topical exam of {lesson}</h1>
       <div className="questions">
-        <p>1. This is a test question</p>
+        <p>1. This is the first question in {lesson}</p>
         <input
           onChange={handleChange}
           name="answer"

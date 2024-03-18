@@ -3,16 +3,16 @@ import { useContext, useRef, useState } from "react";
 import { AddMaterial } from "../Api/Api";
 import Axios from "axios";
 import { UserContext } from "../../App";
-import { useNavigation,useParams } from "react-router-dom";
+import { useNavigation, useParams, useNavigate } from "react-router-dom";
 
 import Loading from "../Loading";
 // import { RingLoader } from "react-spinners/RingLoader";
 import "./Add.css";
 
 const AddStudy = () => {
-  const { loading, setLoading, status, setStatus, navigator } =
-    useContext(UserContext);
+  const { loading, setLoading, status, setStatus } = useContext(UserContext);
   const BASE = "http://localhost:8000/resources";
+  const navigator = useNavigate();
 
   const [data, setData] = useState({
     topic: "Pure Mathematics I",
@@ -24,7 +24,7 @@ const AddStudy = () => {
   });
 
   const theDrop = useRef();
-  const {id} = useParams();
+  const { id } = useParams();
 
   const addMaterial = async (e) => {
     e.preventDefault();
@@ -44,18 +44,21 @@ const AddStudy = () => {
       // {headers: {"Content-Type": "multipart/form-data"}
       //if we need images to be sent we need to use forms , rn the form is not sending the data properly!
       //there's a problem here
+      console.log(resources.data);
 
-      if (resources.data.status === 201) {
+      if (resources.status === 201) {
         setStatus("Added Resource!");
         setTimeout(() => {
           setStatus("");
-        }, 2000);
-        navigator("/resources");
+          navigator("/resources");
+        }, 1500);
       }
     } catch (err) {
       console.error(err);
-      if (err.data && err.data.status === 409) {
+      if (err.status === 409) {
         setStatus(`${data.title} Already exists!`);
+      } else if (err.status === 400) {
+        setStatus("Error while adding resources!");
       }
     } finally {
       setLoading(false);
@@ -133,8 +136,7 @@ const AddStudy = () => {
             ></input>
             <button type="submit">Add Resource</button>
           </form>
-          <h1>Your id {id}</h1>
-          <p>{status}</p>
+          <h1>{status}</h1>
         </div>
       )}
     </>

@@ -5,6 +5,15 @@ import { Link, useParams, useNavigate } from "react-router-dom";
 import { UserContext } from "../../App";
 import Axios from "axios";
 import { useHover } from "@uidotdev/usehooks";
+import {
+  Container,
+  Typography,
+  Table,
+  TableHead,
+  TableBody,
+  TableRow,
+  TableCell,
+} from "@mui/material";
 
 const LearnClicked = () => {
   const [hoverRef, isHovering] = useHover();
@@ -38,7 +47,7 @@ const LearnClicked = () => {
         const response = await Axios.post(`${BASE}/resources/false-topic`, {
           userId: "65f584b5794ca9565c2dc26a",
           topic: lesson,
-          TheSource,
+          source: TheSource,
         });
 
         console.log(response.data);
@@ -83,8 +92,6 @@ const LearnClicked = () => {
     getNumberOfLessonForProgress();
   }, []); // Fetch data once on component mount
 
-
-
   const [lessonName, setLessonName] = useState("");
 
   useEffect(() => {
@@ -99,7 +106,7 @@ const LearnClicked = () => {
         source: TheSource,
         lessonName, //user.id
       });
-      
+
       setLessonCounter((prev) => prev + 1);
       if (outcome.status === 200) {
         alert("Incremented!");
@@ -120,12 +127,15 @@ const LearnClicked = () => {
     }
   }, [isHovering, topicRelated]); // Increment progress when hovering or when topicRelated changes
 
-  return !loading &&
+  return (
+    !loading &&
     topicRelated &&
     topicRelated.incompleteLessons &&
-    theTopic ? (
-    loading ? (
+    theTopic &&
+    (loading ? (
       "Loading..."
+    ) : status ? (
+      <Typography variant="h3">{status}</Typography>
     ) : (
       <div>
         {theTopic === "Pure" ? (
@@ -159,24 +169,25 @@ const LearnClicked = () => {
             <h1>{`You have completed ${topicRelated.topic}`}</h1>
           )}
         </div>
+        <h1>{topicRelated.incompleteLessons[lessonCounter]}</h1>
         <button
           onClick={() => {
             if (lessonCounter < topicRelated.incompleteLessons.length - 1) {
-              IncrementProgress();
+              IncrementProgress(); //works
             } else {
-              alert("You have finished the topic!");
-              navigator("/learnprint");
+              setStatus(`Congrats you have completed ${lesson}`);
+              setTimeout(() => {
+                navigator("/learnprint");
+              }, 1500);
             }
           }}
           disabled={lessonCounter >= topicRelated.incompleteLessons.length}
         >
-          Next Page!
+          {`Next Page!`}
         </button>
-        <p>{status}</p>
+        {/* <p>{status}</p> */}
       </div>
-    )
-  ) : (
-    <h1>No Topic Related Resources!</h1>
+    ))
   );
 };
 
