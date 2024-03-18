@@ -303,7 +303,7 @@ function ExamPageContent({setIsLoadingInfo, setExamType, setExamSubject, setNumQ
 
 function ExamPage() {
 
-    const [examRef, setExamRef] = useState("65f600bcfa9e45b41d790ded");
+    const [examRef, setExamRef] = useState("65f8690fee075fad884a3e4f");
     const [userRef, setUserRef] = useState("");
 
     const [isLoadingInfo, setIsLoadingInfo] = useState(true);
@@ -350,6 +350,7 @@ function ExamPage() {
                 "wrongQuestions": wrongQuestions,
                 "userAnswers": userWrittenAnswers
             });
+
         } catch (err) {
             console.log(err);
         }
@@ -379,11 +380,14 @@ function ExamPage() {
         console.log(userWrittenAnswers);
         
         if (submitButtonClicked) {
-            postUserDetails();
-            navigator("/receipt", {state:{examRef:examRef}});
+            postUserDetails().then(
+                navigator("/receipt", {state:{examRef:examRef}})
+            )
         }
 
     }, [submitButtonClicked])
+
+
 
     return (
         <div className="exams-container">
