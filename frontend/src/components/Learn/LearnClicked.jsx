@@ -90,7 +90,6 @@ const LearnClicked = () => {
   const [lessonName, setLessonName] = useState("");
 
   const IncrementProgress = async () => {
-    console.log(lesson, TheSource, lessonName);
     try {
       const outcome = await Axios.put(`${BASE}/resources/progress/updates`, {
         userId: "65f86f434b9403f9d70d8aa3", //user.id
@@ -109,7 +108,6 @@ const LearnClicked = () => {
       }
       console.error(error.message);
     }
-    setLessonCounter((counter) => counter + 1);
   };
 
   useEffect(() => {
@@ -120,17 +118,11 @@ const LearnClicked = () => {
   }, [isHovering, topicRelated]); // Increment progress when hovering or when topicRelated changes
 
   useEffect(() => {
-    if (lessonName) {
-      console.log(lessonName);
-    }
-  }, [lessonName]);
-
-  useEffect(() => {
     if (Object.keys(topicRelated).length > 0) {
-      console.log(
-        `Lesson Counter : ${lessonCounter}\nIncomplete : ${topicRelated.incompleteLessons.length}`
-      );
-      lessonCounter >= topicRelated.incompleteLessons.length 
+      if (lessonCounter >= topicRelated.incompleteLessons.length) {
+        navigator("/learnprint");
+      }
+
       setLessonName(topicRelated.incompleteLessons[lessonCounter]);
     }
   }, [lessonCounter, topicRelated]);
@@ -189,7 +181,7 @@ const LearnClicked = () => {
               // }, 1500);
             }
           }}
-          disabled={lessonCounter > topicRelated.incompleteLessons.length}
+          disabled={lessonCounter >= topicRelated.incompleteLessons.length}
         >
           {`Next Page!`}
         </button>
