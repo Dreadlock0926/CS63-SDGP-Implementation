@@ -40,10 +40,14 @@ const AddLesson = () => {
 
   const handleLesson = () => {
     if (state.selectedSource !== null) {
-      if (state.selectedSource === "Pure Mathematics I") {
-        setLessons("p1");
+      if (section.length > 0 && imageUrl.length > 0) {
+        if (state.selectedSource === "Pure Mathematics I") {
+          setLessons("p1");
+        } else {
+          setLessons("s1");
+        }
       } else {
-        setLessons("s1");
+        alert("Add sections to the lesson!");
       }
     }
   };
