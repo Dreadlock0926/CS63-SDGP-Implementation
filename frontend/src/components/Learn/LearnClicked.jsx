@@ -37,10 +37,6 @@ const LearnClicked = () => {
   const navigator = useNavigate();
 
   useEffect(() => {
-    console.log(JSON.stringify(lesson));
-  }, [lesson]);
-
-  useEffect(() => {
     const fetchData = async () => {
       try {
         setLoading(true);
@@ -50,7 +46,6 @@ const LearnClicked = () => {
           source: TheSource,
         });
 
-        console.log(response.data);
         setTopicRelated(response.data);
         setStatus("");
       } catch (error) {
@@ -94,17 +89,14 @@ const LearnClicked = () => {
 
   const [lessonName, setLessonName] = useState("");
 
-  useEffect(() => {
-    console.log(lessonName);
-  }, [lessonName]);
-
   const IncrementProgress = async () => {
+    console.log(lesson, TheSource, lessonName);
     try {
       const outcome = await Axios.put(`${BASE}/resources/progress/updates`, {
         userId: "65f584b5794ca9565c2dc26a", //user.id
         topic: lesson,
         source: TheSource,
-        lessonName, //user.id
+        lessonName: lessonName, //user.id
       });
 
       setLessonCounter((prev) => prev + 1);
@@ -126,6 +118,18 @@ const LearnClicked = () => {
       IncrementProgress();
     }
   }, [isHovering, topicRelated]); // Increment progress when hovering or when topicRelated changes
+
+  useEffect(() => {
+    if (lessonName) {
+      console.log(lessonName);
+    }
+  }, [lessonName]);
+
+  useEffect(() => {
+    if (Object.keys(topicRelated).length > 0) {
+      setLessonName(topicRelated.incompleteLessons[lessonCounter]);
+    }
+  }, [lessonCounter, topicRelated]);
 
   return (
     !loading &&

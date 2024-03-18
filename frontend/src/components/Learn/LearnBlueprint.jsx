@@ -112,10 +112,6 @@ const LearnBlueprint = () => {
     fetchTopicData();
   }, [theTopic]);
 
-  useEffect(() => {
-    console.log(topicPercentage);
-  }, [topicPercentage]);
-
   return (
     <>
       {topicTitles && topicTitles.length ? (
