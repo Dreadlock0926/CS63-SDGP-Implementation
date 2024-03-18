@@ -16,15 +16,34 @@ function ExamReview() {
 
     const addAnswers = () => {
         const answerFields = document.querySelectorAll("math-field");
-        
+        const subContainers = document.querySelectorAll(".answer-for-sub-question")
+
+        subContainers.forEach(subContainer => {
+            subContainer.style.flexDirection = "column";
+            subContainer.style.alignItems = "flex-start";
+        })
+
         for (let i = 0; i < answerFields.length; i++) {
+
+            const p = document.createElement("p");
+            p.style.textAlign = "start";
+            p.style.fontSize = "1.15rem";
+            p.innerText = "Correct Answer:";
+            p.style.fontWeight = "bold";
 
             const mathfield = document.createElement("math-field");
             mathfield.value = correctAnswers[i];
             mathfield.style.border = "2px solid green";
+            mathfield.style.marginBlock = "25px";
+            mathfield.style.width = "100%";
             mathfield.readOnly = "true";
 
-            answerFields[i].parentNode.insertBefore(mathfield, answerFields[i].nextSibling);
+            const fieldContainer = document.createElement("div");
+            fieldContainer.style.width = "40%";
+            fieldContainer.appendChild(p);
+            fieldContainer.appendChild(mathfield);
+
+            answerFields[i].parentNode.insertBefore(fieldContainer, answerFields[i].nextSibling);
             answerFields[i].value = userAnswers[i];
             answerFields[i].readOnly = "true";
             
@@ -70,7 +89,7 @@ function ExamReview() {
 
         try {
             const response = await Axios.post('http://localhost:8000/exam/getExam', {
-                "examRef":"65f6dd471ff32881c7c75cb1"
+                "examRef":"65f6dd481ff32881c7c75cb4"
             });
             setExamData(response.data);
         } catch (err) {
