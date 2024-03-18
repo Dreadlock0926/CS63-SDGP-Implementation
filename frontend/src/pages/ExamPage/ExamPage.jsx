@@ -22,7 +22,6 @@ function InfoPanel({ examType, examSubject, numQuestions, setSubmitRun, submitRu
             <ExamCountDown examType={"s1"} onComplete={toggleSubmitRun} />
         </div>
       </div>
-      <div className="questions-remaining">0 out of {numQuestions} Questions Answered</div>
       <div className="exam-info">
         <div className="exam-info-header">Exam Information</div>
         <div className="subject-info">
@@ -36,17 +35,6 @@ function InfoPanel({ examType, examSubject, numQuestions, setSubmitRun, submitRu
       </div>
     </div>
   );
-}
-
-function PopUp() {
-
-    return (
-        <div className="popup-container">
-            <div className="popup">
-                <button>Click Me!</button>
-            </div>
-        </div>
-    )
 }
 
 function ExamPageContent({setIsLoadingInfo, setExamType, setExamSubject, setNumQuestions, setCorrectIndexes, correctIndex, setMark, 
@@ -71,7 +59,7 @@ function ExamPageContent({setIsLoadingInfo, setExamType, setExamSubject, setNumQ
                 <math-field 
                 placeholder="Workings..."
                 onInput={evt => setAnswer(evt.target.value)} 
-                style={{height: 200 + 'px',marginBlock: 20 + 'px', width: 60 + '%'}}>{answer}
+                style={{height: 200 + 'px',marginBlock: 20 + 'px', width: 800 + 'px'}}>{answer}
                     </math-field>
                 }
 
@@ -248,16 +236,23 @@ function ExamPageContent({setIsLoadingInfo, setExamType, setExamSubject, setNumQ
 
         return (
             <>
-                {enablePopup && <div className="popup-container">
-                    <div className="popup">
-                        <button onClick={() => TogglePopup(false)} className="submit">Close</button>
-                        <button onClick={() => {
-                            if (!submitButtonClicked) {
-                                submitAnswers()
-                            }
-                        }} className="submit">
-                        Confirm Answer Submission
-                        </button>
+                {enablePopup && 
+                <div className="popup-container">
+                    <div className="popups">
+                        <div className="top-popup">Warning</div>
+                        <div className="middle-popup">
+                            <div className="p">You are about to submit your answers and calculate your mark. If there are any questions left unanswered, you will not get another chance.</div>
+                        </div>
+                        <div className="bottom-popup">
+                            <button onClick={() => TogglePopup(false)} className="submit-ans">Close</button>
+                            <button onClick={() => {
+                                if (!submitButtonClicked) {
+                                    submitAnswers()
+                                }
+                            }} className="submit-ans">
+                            Confirm Answer Submission
+                            </button>
+                        </div>
                     </div>
                 </div>}
             </>
