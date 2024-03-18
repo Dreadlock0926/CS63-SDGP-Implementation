@@ -2,6 +2,7 @@ import "./ExamReview.css";
 import QuestionComponent from "../../../components/QuestionComponent/QuestionComponent";
 import Axios from "axios";
 import { useEffect, useState, useLayoutEffect } from "react";
+import { ClipLoader } from 'react-spinners';
 import { useParams } from "react-router";
 import "//unpkg.com/mathlive";
 
@@ -15,10 +16,19 @@ function ExamReview() {
 
   const [examData, setExamData] = useState({});
   const [loading, setLoading] = useState(true);
+  const [displayButton, setDisplayButton] = useState(true);
 
   const addAnswers = () => {
+    setDisplayButton(false);
+
+    const questionContainer = document.querySelector(".question-review-container");
+    const pageContainer = document.querySelector(".qr-container");
     const answerFields = document.querySelectorAll("math-field");
     const subContainers = document.querySelectorAll(".answer-for-sub-question");
+
+    questionContainer.classList.remove("hidden");
+    pageContainer.style.alignItems = "normal";
+    pageContainer.classList.remove("vh-det");
 
     subContainers.forEach((subContainer) => {
       subContainer.style.flexDirection = "column";
@@ -88,6 +98,7 @@ function ExamReview() {
           console.log(err);
         }
       }
+      setLoading(false);
       setQuestions(questionsArray);
       setCorrectAnswers(answerArray);
     }
@@ -109,18 +120,6 @@ function ExamReview() {
   }, []);
 
   useEffect(() => {
-    if (!loading && questions.length === questionIDs.length) {
-    }
-  }, [loading]);
-
-  useEffect(() => {
-    console.log(questions);
-    if (questions.length > 0) {
-      setLoading(false);
-    }
-  }, [questions]);
-
-  useEffect(() => {
     if (examData) {
       setUserAnswers(examData.userAnswers);
       setQuestionIDs(examData.examQuestions);
@@ -139,8 +138,33 @@ function ExamReview() {
 
   return (
     <>
-      <div className="question-review-container">{questions}</div>
-      <button onClick={addAnswers}>Add Answers</button>
+      {loading ? (
+            <div className="loader-container">
+                <ClipLoader size={450} color="#1fa3d5" loading={true} />
+            </div>
+            ) : (
+        <div className="qr-container vh-det">
+        <div className="question-review-container hidden">{questions}</div>
+        <div className="info-panel question-review">
+          <div className="top-qr">
+            <div className="qrt">
+              <div className="qrt-container">Module: </div>
+              <div className="qrt-value">{examData.examModule}</div>
+            </div>
+            <div className="qrt">
+              <div className="qrt-container">Exam Type: </div>
+              <div className="qrt-value">{examData.examType} Exam</div>
+            </div>
+          </div>
+          <div className="middle-qr">
+            <div className="qr-mark-title">Mark</div>
+            <div className="qr-mark">{Math.round(examData.mark/examData.totalMark * 100)}%</div>
+          </div>
+          <div className="bottom-qr">
+            {displayButton && <button onClick={addAnswers}>View Answers</button>}
+          </div>
+        </div>
+      </div>)}
     </>
   );
 }
