@@ -298,7 +298,7 @@ function ExamPageContent({setIsLoadingInfo, setExamType, setExamSubject, setNumQ
 
 function ExamPage() {
 
-    const [examRef, setExamRef] = useState("65f8690fee075fad884a3e4f");
+    const [examRef, setExamRef] = useState("65f8cf43e608d6d5516090ea");
     const [userRef, setUserRef] = useState("");
 
     const [isLoadingInfo, setIsLoadingInfo] = useState(true);
