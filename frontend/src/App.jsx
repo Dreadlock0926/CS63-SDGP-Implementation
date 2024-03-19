@@ -34,8 +34,10 @@ function App() {
   const [user, setUser] = useState({ username: "", password: "" });
   const [completeCourse, setCompleteCourse] = useState(0);
   const [hoursLearned, setHoursLearned] = useState(0);
-  const [pureMathLearnedProgress, setPureMathLearnedProgress] = useState(0);
-  const [statLearnedProgress, setStatLearnedProgress] = useState(0);
+  const [pureMathLearnedProgress, setPureMathLearnedProgress] = useState(null);
+  const [pureLessonCount,setPureLessonCount] = useState(0);
+  const [statLessonCount,setStatLessonCount] = useState(0);
+  const [statLearnedProgress, setStatLearnedProgress] = useState(null);
   const [mathLesson, setMathLesson] = useState(0);
   const [statlLesson, setStatLesson] = useState(0);
   const [status, setStatus] = useState("");
@@ -44,24 +46,23 @@ function App() {
   const [isAuthenticated, setIsAuthenticated] = useState(false);
   const [userId,setUserId] = useState('');
   const [totalAnswers,setTotalAnswers] = useState([]);
+  const [examHistory,setExamHistory] = useState([]);
+  const [statisticsMarks, setStatisticsMarks] = useState([]);
+  const [mathematicsMarks, setMathematicsMarks] = useState([]);
+  const [totalMathsmarks,setTotalMathsmark] = useState([]);
+  const [totalStatMarks,setTotalStatMarks] = useState([]);
+  const [totalMarks,setTotalMarks] = useState([]);
 
   const [loggedInUser, setLoggedInUser] = useState({
-    _id: "", // User ID
-    username: "", // Username
-    password: "", // Password (typically not stored in front-end state for security reasons)
-    voxelPoints: 0, // Typo corrected from 'voxel' to match your schema; adjust as necessary
-    courses: [], // Array to store ongoing courses
-    completedCourses: [], // Array to store completed courses
-    correctQuestions: [], // Array to store IDs or details of correctly answered questions
-    wrongQuestions: [], // Array to store IDs or details of incorrectly answered questions
-    feedbackExams: [], // Array to store feedback from exams
-    topicalExams: [], // Array to store topical exam details
-    createdAt: "", // Date string of when the user was created
-    updatedAt: "", // Date string of the last update to the user profile
-    __v: 0, // Version key for MongoDB (if using Mongoose)
-    topicProbabilities: {}, // Object to store topic probabilities; structure depends on further details
-    lessons: [], // Array to store lesson progress; structure depends on further details
-    // Additional fields based on your initial setup
+    _id: "", // Exam ID
+  examType: "", // Type of the exam
+  examQuestions: [], // Array of exam questions
+  userRef: "", // Reference to the user ID (loggedInUser._id)
+  userAnswers: [], // Array of user's answers
+  examModule: "", // Module of the exam
+  examTopic: "", // Topic of the exam
+  mark: null, // User's mark for the exam
+  totalMark: null, // Total mark of the exam
   });
 
   // Structuring the context value explicitly
@@ -111,7 +112,17 @@ function App() {
     userId,
     setUserId,
     totalAnswers,
-    setTotalAnswers
+    setTotalAnswers,
+    pureLessonCount,
+    setPureLessonCount,
+    statLessonCount,setStatLessonCount,
+    examHistory,setExamHistory,
+    statisticsMarks, setStatisticsMarks,
+    mathematicsMarks, setMathematicsMarks,
+    totalMathsmarks,setTotalMathsmark,
+    totalStatMarks,setTotalStatMarks,
+    totalMarks,setTotalMarks
+    
   };
 
   return (

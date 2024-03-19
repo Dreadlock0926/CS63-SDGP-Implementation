@@ -89,7 +89,7 @@ router.route("/get/marks").post(async (req, res) => {
     } else {
       return res.status(200).send(response);
     }
-  } catch (err) {
+  } catch (err) { 
     console.log(err);
     console.log(err);
     return res.status(500).json({ error: err.message });

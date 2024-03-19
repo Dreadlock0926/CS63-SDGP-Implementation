@@ -78,16 +78,7 @@ function DashboardStatistics({
 
 // Dashboard Courses Tab
 function DashboardCourses() {
-  const { loggedInUser, setLoggedInUser } = useContext(UserContext);
-
-  useEffect(() => {
-    setLoggedInUser(JSON.parse(sessionStorage.getItem("loggedUser")).data);
-  }, [setLoggedInUser]);
-
-  useEffect(() => {
-   console.log(JSON.parse(sessionStorage.getItem("loggedUser")).data)
-  }, [loggedInUser]);
-
+  const { loggedInUser, setLoggedInUser,examHistory,setExamHistory } = useContext(UserContext);
   const {
     statLearnedProgress,
     pureMathLearnedProgress,
@@ -95,7 +86,80 @@ function DashboardCourses() {
     statlLesson,
     testedPureProgress,
     testedStatProgress,
+    setPureTestedProgress,
+    setStatTestedProgress,
+    pureLessonCount,
+    statLessonCount,
+    statisticsMarks, 
+    setStatisticsMarks,
+    mathematicsMarks, 
+    setMathematicsMarks,
+    totalMathsmarks,setTotalMathsmark,
+    totalStatMarks,setTotalStatMarks
   } = useContext(UserContext);
+  
+  
+
+  console.log(loggedInUser);
+  useEffect(()=>{
+    setExamHistory(loggedInUser.data);
+  },[loggedInUser])
+
+  useEffect(() => {
+    console.log(examHistory);
+    let tempStatisticsMarks = [];
+    let totaltempStatMarks = [];
+    let tempMathematicsMarks = [];
+    let totaltempMathsMarks = [];
+    if (Array.isArray(examHistory)) {
+      examHistory.forEach(exam => { // Changed '.foreach' to '.forEach'
+        if (exam.examModule === 'Probability & Statistics I') {
+          tempStatisticsMarks.push(exam.mark);
+          totaltempStatMarks.push(exam.totalMark);
+
+        } else if (exam.examModule === 'Pure Mathematics I') {
+          tempMathematicsMarks.push(exam.mark);
+          totaltempMathsMarks.push(exam.totalMark);
+        }
+      });
+      console.log(tempMathematicsMarks)
+      console.log(tempStatisticsMarks)
+      setMathematicsMarks(tempMathematicsMarks);
+      setStatisticsMarks(tempStatisticsMarks);
+      setTotalMathsmark(totaltempMathsMarks);
+      setTotalStatMarks(totaltempStatMarks);
+    }
+    
+    
+    
+
+    
+
+  }, [examHistory]);
+  
+useEffect(()=>{
+    const correcttotalStatmarks = statisticsMarks.reduce((acc,current)=> acc+current,0);
+    const totalStatmark = totalStatMarks.reduce((acc,current)=> acc+current,0);
+
+    const correcttotalPuremaths = mathematicsMarks.reduce((acc,current)=> acc+current,0);
+    const totalPureMaths = totalMathsmarks.reduce((acc,current)=> acc+current,0);
+
+    const averageStatMarks =Math.round((correcttotalStatmarks/totalStatmark)*100,2);
+    const averagePureMarks = Math.round(((correcttotalPuremaths/totalPureMaths)*100),2);
+
+    console.log(averagePureMarks);
+    console.log(averageStatMarks);
+
+    setStatTestedProgress(averageStatMarks);
+    setPureTestedProgress(averagePureMarks);
+
+},[statisticsMarks,totalStatMarks,mathematicsMarks,totalMathsmarks])
+  
+  
+
+
+
+  
 
   return (
     <>
@@ -109,18 +173,18 @@ function DashboardCourses() {
             <div className="course-card">
               <div className="course-title">Pure Mathematics I</div>
               <div className="course-lessons">
-                {0} lessons
+                {mathLesson} lessons
               </div>
               <div className="course-progress-tab">
                 <div className="prog-bar">
                   <div style={{ width: 100, height: 100 }}>
                     <CircularProgressbar
                       value={0}
-                      text={`0%`}
+                      text={`${pureLessonCount}%`}
                       styles={{
                         path: {
                           stroke: `rgba(62, 152, 199, ${
-                           0 / 100
+                            pureLessonCount / 100
                           })`,
                         },
                       }}
@@ -132,11 +196,11 @@ function DashboardCourses() {
                   <div style={{ width: 100, height: 100 }}>
                     <CircularProgressbar
                       value={0}
-                      text={`0%`}
+                      text={`${testedPureProgress}`}
                       styles={{
                         path: {
                           stroke: `rgba(62, 152, 199, ${
-                            0/ 100
+                            testedPureProgress/ 100
                           })`,
                         },
                         // Customize the text color and style as needed
@@ -150,18 +214,18 @@ function DashboardCourses() {
             <div className="course-card">
               <div className="course-title">Statistics</div>
               <div className="course-lessons">
-                {0} lessons
+                {statlLesson} lessons
               </div>
               <div className="course-progress-tab">
                 <div className="prog-bar">
                   <div style={{ width: 100, height: 100 }}>
                     <CircularProgressbar
                       value={0}
-                      text={`0%`}
+                      text={`${statLessonCount}%`}
                       styles={{
                         path: {
                           stroke: `rgba(62, 152, 199, ${
-                           0 / 100
+                            statLessonCount / 100
                           })`,
                         },
                         // Customize the text color and style as needed
@@ -174,11 +238,11 @@ function DashboardCourses() {
                   <div style={{ width: 100, height: 100 }}>
                     <CircularProgressbar
                       value={0}
-                      text={`0%`}
+                      text={`${testedStatProgress}`}
                       styles={{
                         path: {
                           stroke: `rgba(62, 152, 199, ${
-                            0 / 100
+                            testedStatProgress / 100
                           })`,
                         },
                         // Customize the text color and style as needed
@@ -229,10 +293,11 @@ function DashboardActivity() {
 // Dashboard Final Display Page
 function DashboardPage() {
   
-  const [object,setObject] = useState({});
+  
   const { loggedInUser, setLoggedInUser } = useContext(UserContext);
 
   const {
+    
     loading,
     setLoading: setLoading,
     value,
@@ -274,58 +339,96 @@ function DashboardPage() {
     isAuthenticated,
     userId,
     setUserId,
+    pureLessonCount,
+    setPureLessonCount,
+    statLessonCount,setStatLessonCount
   } = useContext(UserContext);
 
-  // useEffect(() => {
-  //   setLoggedInUser(JSON.parse(sessionStorage.getItem("loggedUser")).data);
-  // }, []);
-
-  // useEffect(() => {
-  //   console.log(loggedInUser);
-  // }, [loggedInUser]);
+  
   
   useEffect(() => {
     const fetchData = async () => {
+      
       try {
-        const sessionUser = JSON.parse(sessionStorage.getItem("loggedUser"))?.data;
-        if (sessionUser) {
-          setLoggedInUser(sessionUser);
-          setVoxalpoints(sessionUser.voxalPoints)
-         
+        console.log(data);
+        const sessionData = sessionStorage.getItem("loggedUser");
+        if (sessionData) {
+          const sessionUser = JSON.parse(sessionData).data;
+          
+          setVoxalpoints(sessionUser.voxelPoints);
+          setHoursLearned(0); // Make sure to compute the correct value
+          setCompleteCourse(sessionUser.completedCourses.length);
+          setongoingCourses(sessionUser.courses.length);
+          if (sessionUser.lesson && sessionUser.lesson.length > 0) {
+            setPureMathLearnedProgress(sessionUser.lesson[0].topicLesson);
+            setStatLearnedProgress(sessionUser.lesson[1].topicLesson);
+            
+          } else {
+            // Handle the case where lesson is not an array or is empty
+            setPureMathLearnedProgress(null);
+          }
+          console.log("Voxel Points:", sessionUser.voxelPoints);
         }
-        
-        
-        setHoursLearned(0);
-        setCompleteCourse(0);
-        
-        setPureMathLearnedProgress(
-          loggedInUser.PureMathematics.learnedProgress
-        );
-        setStatLearnedProgress(0);
-        setMathLesson(0);
-        setStatLesson(0);
-        setPureTestedProgress(0);
-        setStatTestedProgress(0);
-
-        console.log(voxalPoints);
       } catch (error) {
         console.error("Error fetching data:", error);
       }
     };
-
+  
     fetchData();
   }, []);
 
-  useEffect(() => {
-    // React to loggedInUser updates
-    console.log(loggedInUser.voxelPoints);
-    setVoxalpoints(loggedInUser.voxelPoints)
-    setCompleteCourse(loggedInUser.completedCourses.length)
-    setongoingCourses(loggedInUser.courses.length);
-    
-    console.log("The completed courses are "+completeCourse);
-  }, [loggedInUser]);
+  
 
+  useEffect(() => {
+    console.log(pureMathLearnedProgress)
+    if (Array.isArray(pureMathLearnedProgress)) {
+    // Assuming pureMathLearnedProgress is the array of topicLessons as seen in your screenshot
+      const totalCount = pureMathLearnedProgress.reduce((total, topic) => {
+      // Count the completed lessons within this topic's lessonProgress
+      const completedCount = topic.lessonProgress.filter(lesson => lesson.completed).length;
+      // Add this topic's completed count to the total count
+      return total + completedCount;
+    }, 0); // Start with a total count of 0
+    setMathLesson(totalCount)
+      
+      const totaNumber = pureMathLearnedProgress.reduce((total,topic)=>{
+        const totalCount = topic.lessonProgress.length+total;
+        return totalCount;
+      },0)
+    
+      const percentage = Math.round((totalCount/totaNumber)*100,2);
+      console.log("The total number is"+percentage);
+      setPureLessonCount(percentage);
+    }
+  }, [pureMathLearnedProgress]);
+
+  ////for statistics 
+
+  useEffect(()=>{
+    console.log(statLearnedProgress);
+    if(Array.isArray(statLearnedProgress)){
+      const totalCount = statLearnedProgress.reduce((total,topic)=>{
+        const completeCount = topic.lessonProgress.filter(lesson=> lesson.completed).length;
+        return total+completeCount;
+
+      },0)
+      setStatLesson(totalCount);
+      const totalNumber = statLearnedProgress.reduce((total,topic)=>{
+        const totalCount = topic.lessonProgress.length+total;
+        return totalCount;
+      },0)
+      const percentage = Math.round((totalCount/totalNumber)*100,2);
+      setStatLessonCount(percentage);
+    }
+  },[statLearnedProgress])
+
+  
+
+
+useEffect(()=>{
+  console.log(pureLessonCount);
+  
+},[pureLessonCount])
 
 
   return (

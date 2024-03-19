@@ -15,7 +15,7 @@ function Progressionmark() {
   
   // Use local state to store the chart data
   const [chartData, setChartData] = useState([]);
-  const {testedPureProgress,setPureTestedProgress ,voxalPoints} = useContext(UserContext);
+  const {totalMarks,setTotalMarks,voxalPoints,loggedInUser, setLoggedInUser} = useContext(UserContext);
 
   // You're already using useContext here, ensure that it provides 'id'
   const id = localStorage.getItem('id');
@@ -25,7 +25,10 @@ function Progressionmark() {
       try {
         
         const response = await axios.post("http://localhost:8000/progression/get/marks", { useRef: id });
+        
         console.log(response)
+        setLoggedInUser(response);
+       
         
         // Process the fetched data and calculate percentages
         const processedData = response.data.map((item, index) => ({
@@ -39,8 +42,9 @@ function Progressionmark() {
         console.log('Sum of total marks:', marks);
 
 
-        const averageMarks = Math.round(100*(marks/totalOfTotalMarks),3);
-        setPureTestedProgress(averageMarks);
+        const averageMarks = Math.round(100*(marks/totalOfTotalMarks),2);
+        
+        setTotalMarks(averageMarks);
         // Set the processed data to the local state
         setChartData(processedData);
         
@@ -51,8 +55,13 @@ function Progressionmark() {
     };
 
     fetchData();
-  }, [id,setPureTestedProgress]); // Only re-run the effect if 'id' changes
+  }, [id,setTotalMarks]); // Only re-run the effect if 'id' changes
 
+  useEffect(()=>{
+      console.log(loggedInUser);
+  },[loggedInUser])
+
+  
 
 
 
@@ -72,11 +81,10 @@ function Progressionmark() {
       {chartData.length > 0 ? (
         <div className="progress-container">
           <div className="avg-mark-container">
-            <p>Average Mathematics Mark</p>
-            <h2>{testedPureProgress}</h2>
+            <p>Average Total Mark</p>
+            <h2>{totalMarks}</h2>
             <br />
-            <p>Average Statistics Mark</p>
-            <h2>{testedPureProgress}</h2>
+            
           </div>
           <div>{renderLineChart}</div>
         </div>
