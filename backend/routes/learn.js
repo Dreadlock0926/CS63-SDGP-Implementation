@@ -141,7 +141,7 @@ router.route("/completeLesson").post(async (req, res) => {
 
 router.post("/testing-user", async (req, res) => {
   try {
-    const { userID , source } = req.body; // Extract userID and source from request body
+    const { userID, source } = req.body; // Extract userID and source from request body
 
     // Validate userID
     if (!userID) {
@@ -185,7 +185,6 @@ router.post("/testing-user", async (req, res) => {
   }
 });
 
-
 router.route("/false-topic").post(async (req, res) => {
   try {
     const {
@@ -205,8 +204,6 @@ router.route("/false-topic").post(async (req, res) => {
 
     const incompleteLessons = [];
 
-    console.log(user.lesson);
-
     for (const topicProgress of user.lesson) {
       if (topicProgress.source === source) {
         for (const lessonProgress of topicProgress.topicLesson) {
@@ -222,7 +219,33 @@ router.route("/false-topic").post(async (req, res) => {
       }
     }
 
-    res.json({ incompleteLessons, topic, source,user }); // Return array of incomplete lesson names
+    // const sourceExists = await topicsModel.findOne({ sourceKey: source });
+    // console.log(sourceExists);
+    // if (sourceExists) {
+    //   const theSpecificTopic = sourceExists.topicLesson.find(
+    //     (topicItem) => topicItem.topic === topic
+    //   );
+
+    //   if (theSpecificTopic) {
+    //     theSpecificTopic.lessons.forEach((lesson) => {
+    //       if (
+    //         lesson.lessonTitle ===
+    //         "Solving quadratic equations by factorisation"
+    //       ) {
+    //         console.log(lesson.lessonTitle);
+    //       }else{
+    //         console.log("Lesson unavailable!")
+    //       }
+    //     });
+
+    //     // Save the changes to the database
+    //     await sourceExists.save();
+    //   }
+    // }
+
+    res
+      .status(200)
+      .json({ incompleteLessons, topic,  source, user }); // Return array of incomplete lesson names
   } catch (error) {
     console.error(error);
     res.status(500).send("Internal server error");
@@ -278,34 +301,34 @@ router
   .put(async (req, res) => {
     try {
       const { lessonName, userId, source, topic } = req.body; // Extract lessonName, userId, and source from request body
-  
+
       // Validate request body
-      if (!lessonName  || !userId  ||  !source) {
+      if (!lessonName || !userId || !source) {
         return res.status(400).json({
           message: "Missing lessonName, userId, or source in request body",
         });
       }
 
       console.log(req.body);
-  
+
       const user = await userModel.findById(userId); // Find user by ID
       if (!user) {
         return res.status(404).json({ message: "User not found" });
       }
-  
+
       const updatedUser = user;
-  
+
       // Find the lesson object to update, considering case sensitivity and source
       let found = false;
-  
+
       for (const lessonProgress of updatedUser.lesson) {
         if (lessonProgress.source === source) {
           // Check if source matches
-  
+
           for (const topicLesson of lessonProgress.topicLesson) {
             if (topicLesson.topic === topic) {
               // Check if topic matches
-  
+
               for (const lesson of topicLesson.lessonProgress) {
                 if (lesson.lessonName === lessonName) {
                   // Check if lesson matches
@@ -320,13 +343,13 @@ router
           }
         }
       }
-  
+
       if (!found) {
         return res
           .status(404)
           .json({ message: "Lesson not found for this user and source" });
       }
-  
+
       // ... rest of the code remains the same (updating completed field and saving)
       await updatedUser.save();
       res
@@ -349,7 +372,7 @@ router
     } catch (err) {
       console.error(err);
     }
-  })
+  });
 
 router.route("/topic/:id").post(async (req, res) => {
   const id = req?.params?.id;
