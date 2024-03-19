@@ -6,9 +6,7 @@ import { Link, useNavigate } from "react-router-dom";
 import Axios from "axios";
 import { UserContext } from "../../App";
 import {
-  Button,
   FormControl,
-  Input,
   InputLabel,
   MenuItem,
   Select,
@@ -193,26 +191,32 @@ const Forum = () => {
 
   return logged ? (
     <div className="mainContainer">
+
       <div className="forumContainer">
-        <div className="forumHeader">
-            <p className="forumTitle">Top Questions</p>
-        <p style={{fontSize: "16px"}}>Would you kindly grace us with a question? The button below eagerly awaits your gentle touch, yearning for the opportunity to fulfill its purpose in this vast digital realm.</p>
-        <Link className="addQuestionBtn" to="/addforum">Add question</Link>
-        <br />
-          Welcome back, {user.username || user}!
+        <div className="fHeaderContainer">
+          <div className="forumHeader">
+            < p className="forumTitle">👋 Hey there, {user.username || user}! Welcome to our Forums!</p>
+              <p style={{fontSize: "16px"}}>Would you kindly grace us with a question? The button below eagerly awaits your gentle touch, yearning for the opportunity to fulfill its purpose in this vast digital realm.</p>
+            <Link className="addQuestionBtn" to="/addforum">Add question</Link>
+              <br />
+              <br />
+          </div>
         </div>
-        <form onSubmit={searchUp}>
-          <input
-            onChange={(e) => {
-              setSearch(e.target.value);
-            }}
-            placeholder="Search here..."
-            type="text"
-          ></input>
-          <button type="submit" disabled={loading}>
-            Search...
+
+        <div className="searchContainer">
+          <form onSubmit={searchUp}>
+            <input className="searchQuestion"
+               onChange={(e) => {
+                setSearch(e.target.value);
+                }}
+              placeholder="Search your queries here..."
+              type="text"/>
+          <button className="searchBtn" type="submit" disabled={loading}>
+            <img className="searchImg" src="./images/search.png" />
           </button>
-        </form>
+          </form>
+        </div>
+
         <FormControl style={{ marginBottom: "20px" }}>
           <InputLabel>Select Topic</InputLabel>
           <br />

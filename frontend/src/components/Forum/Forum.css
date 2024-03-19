@@ -1,39 +1,97 @@
-body {
-  background-color: #f4f3f3;
-}
-
 .forumContainer {
-  margin: 40px;
-  padding: 40px;
   background-color: #ffffff;
-  border-radius: 20px;
-  box-shadow: 0 0 20px rgba(0, 0, 0, 0.1);
 }
 
 .addQuestionBtn {
+  color: #666666;
   text-decoration: none;
-  color: black;
-  height: 55px;
-  width: 55px;
-  border: none;
-  border-radius: 10px;
-  background-color: white;
   transition: all 0.2s;
+  font-size: 14px;
 }
 
 .addQuestionBtn:hover {
-  transition: 0.2s;
-  transform: scale(1.1);
+  color: #4a9dec;
+  transition: 0.5s;
   cursor: pointer;
-  border: 2px solid #4a9dec;
-  box-shadow: 0px 0px 0px 7px rgb(74, 157, 236, 20%);
-  background-color: white;
+  transition: all 0.2s;
 }
 
 .forumTitle {
   font-weight: bold;
   font-size: 26px;
+  margin-bottom: 0;
 }
+
+.fHeaderContainer {
+  margin: 20px;
+}
+
+.forumHeader {
+  background: rgb(237,255,238);
+  background: linear-gradient(180deg, rgba(237,255,238,1) 18%, rgba(244,243,243,1) 85%);
+  box-shadow: rgba(0, 0, 0, 0.16) 0px 1px 4px;
+  padding: 20px;
+  border-radius: 20px;
+}
+
+.searchContainer {
+  background: rgb(237,255,238);
+  background: linear-gradient(180deg, rgba(237,255,238,1) 18%, rgba(244,243,243,1) 85%);
+  box-shadow: rgba(0, 0, 0, 0.16) 0px 1px 4px;
+  padding: 20px;
+  border-radius: 20px;
+}
+
+.searchQuestion {
+  border: 2px solid transparent;
+  width: 60em;
+  height: 3em;
+  padding-left: 0.8em;
+  outline: none;
+  overflow: hidden;
+  background-color: #F3F3F3;
+  border-radius: 10px;
+  transition: all 0.5s;
+}
+
+.searchQuestion:hover {
+  border: 2px solid #4a9dec;
+  box-shadow: 0px 0px 0px 7px rgb(74, 157, 236, 20%);
+  background-color: white;
+}
+
+.searchBtn {
+  height: 3em;
+  width: 3em;
+}
+
+.searchImg {
+  height: 3em;
+  width: 3em;
+  padding: 0;
+  margin: 0;
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
@@ -84,27 +142,4 @@ h1 {
 .replyForm {
   margin-top: 20px;
   margin-bottom: 20px; /* Add margin for spacing */
-}
-
-input[type="text"] {
-  width: 100%;
-  padding: 12px;
-  border: 1px solid #ccc;
-  border-radius: 5px;
-  font-size: 16px;
-  margin-bottom: 15px;
-}
-
-button {
-  padding: 12px 24px;
-  background-color: #007bff;
-  color: #ffffff;
-  border: none;
-  border-radius: 5px;
-  cursor: pointer;
-  transition: background-color 0.3s, color 0.3s;
-}
-
-button:hover {
-  background-color: #0056b3;
 }
