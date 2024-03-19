@@ -1,12 +1,10 @@
-/* eslint-disable no-unused-vars */
 import axios from 'axios';
 import React, { useContext, useEffect, useState } from 'react';
 import { UserContext } from '../../App';
 import { LineChart, Line, CartesianGrid, XAxis, YAxis, Tooltip } from 'recharts';
 import { CircularProgressbar } from "react-circular-progressbar";
-import "./Progressionmark.css";
 
-function Progressionmark() {
+const Displaygraph = () => {
   const progressBarStyle = {
     // Set a smaller width and height for the progress bar container
     width: '100px',
@@ -15,7 +13,7 @@ function Progressionmark() {
   
   // Use local state to store the chart data
   const [chartData, setChartData] = useState([]);
-  const {totalMarks,setTotalMarks,voxalPoints,loggedInUser, setLoggedInUser} = useContext(UserContext);
+  const {testedPureProgress,setPureTestedProgress ,voxalPoints} = useContext(UserContext);
 
   // You're already using useContext here, ensure that it provides 'id'
   const id = localStorage.getItem('id');
@@ -25,10 +23,7 @@ function Progressionmark() {
       try {
         
         const response = await axios.post("http://localhost:8000/progression/get/marks", { useRef: id });
-        
         console.log(response)
-        setLoggedInUser(response);
-       
         
         // Process the fetched data and calculate percentages
         const processedData = response.data.map((item, index) => ({
@@ -42,9 +37,8 @@ function Progressionmark() {
         console.log('Sum of total marks:', marks);
 
 
-        const averageMarks = Math.round(100*(marks/totalOfTotalMarks),2);
-        
-        setTotalMarks(averageMarks);
+        const averageMarks = Math.round(100*(marks/totalOfTotalMarks),3);
+        setPureTestedProgress(averageMarks);
         // Set the processed data to the local state
         setChartData(processedData);
         
@@ -55,13 +49,8 @@ function Progressionmark() {
     };
 
     fetchData();
-  }, [id,setTotalMarks]); // Only re-run the effect if 'id' changes
+  }, [id,setPureTestedProgress]); // Only re-run the effect if 'id' changes
 
-  useEffect(()=>{
-      console.log(loggedInUser);
-  },[loggedInUser])
-
-  
 
 
 
@@ -78,23 +67,29 @@ function Progressionmark() {
 
   return (
     <div>
-      {chartData.length > 0 ? (
-        <div className="progress-container">
-          <div className="avg-mark-container">
-            <p>Average Total Mark</p>
-            <h2>{totalMarks}</h2>
-            <br />
+      {chartData.length > 0 ? renderLineChart : <p>Loading chart...</p>}
+      {/* <h5>The total maths marks are : {testedPureProgress}</h5>
+      <div style={progressBarStyle}>
+          <CircularProgressbar
+            value={testedPureProgress}
+            text={`${testedPureProgress}%`}
+            styles={{
             
-          </div>
-          <div>{renderLineChart}</div>
-        </div>
-      ) : (
-        <div>
-          <p>Loading...</p>
-        </div>
-      )}
+            path: {
+            stroke: `rgba(62, 152, 199, ${
+            testedPureProgress / 100
+                })`,
+              },
+            // Customize the text color and style as needed
+            }}
+            />
+
+      </div> */}
+      {/* <br />
+      <p>The voxal Points are : {voxalPoints}</p> */}
+      
     </div>
   );
-}
+};
 
-export default Progressionmark;
+export default Displaygraph;
