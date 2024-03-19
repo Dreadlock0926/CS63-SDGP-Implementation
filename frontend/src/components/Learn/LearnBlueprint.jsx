@@ -22,8 +22,6 @@ const LearnBlueprint = () => {
     theTopic,
     BASE,
     user,
-    setSpecificTopic,
-    topicRelated,
     data,
     setData,
 

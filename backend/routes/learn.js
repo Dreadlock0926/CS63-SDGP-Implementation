@@ -244,7 +244,7 @@ router.route("/fromtopics").post(async (req, res) => {
 
     if (topicExists) {
       console.log(`The topic length `);
-      console.log(topicExists?.topicLesson);
+      console.log(topicExists?.topicLesson?.length)
       for (let i = 0; i < topicExists?.topicLesson?.length; i++) {
         if (topicExists.topicLesson[i].topic === topic) {
           return res.status(200).json(topicExists.topicLesson[i].lessons);

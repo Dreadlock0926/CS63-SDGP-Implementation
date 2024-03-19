@@ -18,8 +18,6 @@ import {
 const LearnClicked = () => {
   const [hoverRef, isHovering] = useHover();
   const {
-    topicRelated,
-    setTopicRelated,
     BASE,
     theProgressVal,
     setLessons,
@@ -27,13 +25,15 @@ const LearnClicked = () => {
     loading,
     TheSource,
     setTheProgressVal,
+    topicRelated,
+    setTopicRelated,
     user,
     theTopic,
   } = useContext(UserContext);
   const { lesson } = useParams();
   const [lessonCounter, setLessonCounter] = useState(0);
   const [status, setStatus] = useState("");
-  const [theLessonName, setTheLessonName] = useState([]);
+  const [theLessonName, setTheLessonName] = useState("");
   const navigator = useNavigate();
 
   useEffect(() => {
@@ -45,6 +45,7 @@ const LearnClicked = () => {
           topic: lesson,
           source: TheSource,
         });
+        console.log(`The topic ${lesson}\nThe source : ${TheSource}`);
         console.log(response.data);
         setTopicRelated(response.data);
         setStatus("");
@@ -62,34 +63,30 @@ const LearnClicked = () => {
   }, [lesson]); // Fetch data when lesson changes
 
   // useEffect(() => {
-  //   console.log(lessonCounter < topicRelated.incompleteLessons.length);
-  // }, [topicRelated]);
+  //   const getNumberOfLessonForProgress = async () => {
+  //     try {
+  //       setLoading(true);
+  //       const { data } = await Axios.get(BASE, { userId: user.id });
+  //       if (data.status === 200) {
+  //         setLessons(data);
+  //         setTheProgressVal(data.topics.length / 100);
+  //       }
+  //     } catch (error) {
+  //       console.error(error);
+  //       setStatus(
+  //         error.response
+  //           ? error.response.status
+  //           : "Error while processing data!"
+  //       );
+  //     } finally {
+  //       setLoading(false);
+  //     }
+  //   };
 
-  useEffect(() => {
-    const getNumberOfLessonForProgress = async () => {
-      try {
-        setLoading(true);
-        const { data } = await Axios.get(BASE, { userId: user.id });
-        if (data.status === 200) {
-          setLessons(data);
-          setTheProgressVal(data.topics.length / 100);
-        }
-      } catch (error) {
-        console.error(error);
-        setStatus(
-          error.response
-            ? error.response.status
-            : "Error while processing data!"
-        );
-      } finally {
-        setLoading(false);
-      }
-    };
+  //   getNumberOfLessonForProgress();
+  // }, []); // Fetch data once on component mount
 
-    getNumberOfLessonForProgress();
-  }, []); // Fetch data once on component mount
-
-  const [lessonName, setLessonName] = useState("");
+  // const [lessonName, setLessonName] = useState("");
 
   const IncrementProgress = async () => {
     try {
@@ -97,7 +94,7 @@ const LearnClicked = () => {
         userId: "65f86f434b9403f9d70d8aa3", //user.id
         topic: lesson,
         source: TheSource,
-        lessonName: lessonName, //user.id
+        lessonName: theLessonName, //user.id
       });
 
       if (outcome.status === 200) {
@@ -120,21 +117,60 @@ const LearnClicked = () => {
 
   useEffect(() => {
     if (Object.keys(topicRelated).length > 0) {
-      if (lessonCounter >= topicRelated.incompleteLessons.length) {
+      if (lessonCounter >= topicRelated.lessonBody.lessonSection.length) {
         setStatus(`Congrats! You have completed ${lesson}`);
         setTimeout(() => {
           navigator("/learnprint");
         }, 1500);
       }
-
-      setLessonName(topicRelated.incompleteLessons[lessonCounter]);
     }
   }, [lessonCounter, topicRelated]);
 
+  useEffect(() => {
+    console.log(`The counter is ${lessonCounter}`);
+  }, [lessonCounter]);
+
   return (
     <>
-      <h1>Learn Cliked!</h1>
-      <p>{status}</p>
+      <div>
+        {topicRelated.map((x, index) => (
+          <div key={index} style={{ margin: "2%", padding: "2%" }}>
+            {index === lessonCounter ? (
+              <div>
+                {" "}
+                <h1>{x.lessonTitle}</h1>
+                {x?.lessonBody.lessonSection &&
+                  x?.lessonBody.lessonSection.map((x) => {
+                    return <h1 key={index}>{x}</h1>;
+                  })}
+                {x?.lessonBody.sectionImgURL &&
+                  x?.lessonBody.sectionImgURL.map((x, index) => {
+                    return <img src={x} key={index}></img>;
+                  })}
+              </div>
+            ) : (
+              ""
+            )}
+          </div>
+        ))}
+        <button
+          onClick={() => {
+            if (lessonCounter <= topicRelated.lessonBody.lessonSection.length) {
+              IncrementProgress(); //works
+            } else {
+              setStatus(`Congrats you have completed ${lesson}`);
+              // setTimeout(() => {
+              //   navigator("/learnprint");
+              // }, 1500);
+            }
+          }}
+          disabled={
+            lessonCounter >= topicRelated.lessonBody.lessonSection.length
+          }
+        >
+          {`Next Page!`}
+        </button>
+      </div>
     </>
   );
 };

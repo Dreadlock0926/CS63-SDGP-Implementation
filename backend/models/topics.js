@@ -22,6 +22,7 @@ const topicsSchema = new mongoose.Schema({
     },
   },
   topicKeys: { type: Array, required: false },
+  topicLesson: {type: Array }
 });
 
 const topicsModel = mongoose.model("topics", topicsSchema);

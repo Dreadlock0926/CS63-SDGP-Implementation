@@ -20,6 +20,7 @@ function App() {
   const [theProgressVal, setTheProgressVal] = useState(0);
   const [specificTopic, setSpecificTopic] = useState("");
   const [topicRelated, setTopicRelated] = useState([]);
+
   const BASE = "http://localhost:8000";
 
   // const navigator = useNavigation();
