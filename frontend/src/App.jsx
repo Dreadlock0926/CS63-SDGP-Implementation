@@ -3,7 +3,6 @@ import { useState, createContext } from "react";
 import { BrowserRouter, Routes, Route, useNavigation } from "react-router-dom";
 import UnknownPage from "./components/Unknown";
 import Learn from "./components/Learn/Learn";
-import AddStudy from "./components/Learn/AddStudy";
 import LearnBlueprint from "./components/Learn/LearnBlueprint";
 import LearningResource from "./components/Learn/LearningResource";
 import LearnClicked from "./components/Learn/LearnClicked";
@@ -62,9 +61,6 @@ function App() {
               path="/materials/:index"
               element={<LearningResource />}
             ></Route>
-            <Route path="/addresources" element={<AddStudy />} />
-           
-
             <Route
               path="/learnclicked/:lesson"
               element={<LearnClicked />}
@@ -74,7 +70,6 @@ function App() {
               element={<TopicalExam />}
             ></Route>
             {/* <Route path="/:lesson" element={<First />} /> */}
-
             <Route path="/learnprint" element={<LearnBlueprint />}></Route>
             <Route path="*" element={<UnknownPage />} />
           </Routes>

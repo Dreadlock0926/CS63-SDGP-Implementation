@@ -39,11 +39,6 @@ const Learn = () => {
           </div>
         </Link>
       </div>
-      <Button className="add-resources-btn">
-        <Link to="/addresources" className="link">
-          Add Learning Resources
-        </Link>
-      </Button>
     </div>
   ) : (
     <NotLogged />
