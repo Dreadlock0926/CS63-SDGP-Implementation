@@ -1,8 +1,9 @@
 import React from "react";
 import { CountdownCircleTimer } from "react-countdown-circle-timer";
 
-const ExamCountDown = ({examType, onComplete}) => {
+const ExamCountDown = (examType) => {
   // the value gets passed as an object and not a string so it is accessing the examType field here
+  examType = examType.examType;
   const minuteSeconds = 60;
   const hourSeconds = 3600;
 
@@ -47,7 +48,7 @@ const ExamCountDown = ({examType, onComplete}) => {
         colors="#218380"
         duration={remainingTime}
         //define here what to do when the timer is complete
-        onComplete={() => onComplete()}
+        onComplete={() => console.log("Completed!")}
         children={formatTime}
       ></CountdownCircleTimer>
     </div>

@@ -55,12 +55,6 @@ app.use("/login", login);
 // app.use(authenticated); //uncomment during final authentication tests 🔓
 app.use("/exam", examResources);
 app.use("/course", courses);
-app.use("/gemini", gemini);
-app.use("/progression", progression);
-app.use("/addQuestion", addQuestion);
-app.use("/getQuestionsOnTopic", getQuestionsOnTopic);
-app.use("/getQuestion", getQuestion);
-app.use("/getTopics", getTopics);
 app.use("/user", user);
 app.use("/learn", learn);
 app.use("/getTopics", getTopics);

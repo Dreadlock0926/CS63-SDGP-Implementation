@@ -28,10 +28,6 @@ const examSchema = new mongoose.Schema({
   mark: {
     type: Number,
   },
-
-  totalMark: {
-    type: Number,
-  },
 });
 
 const examModel = mongoose.model("exams", examSchema);
