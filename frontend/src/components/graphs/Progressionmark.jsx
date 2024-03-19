@@ -1,90 +1,96 @@
 /* eslint-disable no-unused-vars */
-import axios from 'axios';
-import React, { useContext, useEffect, useState } from 'react';
-import { UserContext } from '../../App';
-import { LineChart, Line, CartesianGrid, XAxis, YAxis, Tooltip } from 'recharts';
-import { CircularProgressbar } from "react-circular-progressbar";
+import { useContext, useEffect, useState } from "react";
+import { LineChart, Line, CartesianGrid, XAxis, YAxis } from "recharts";
+import { UserContext } from "../../App";
 import "./Progressionmark.css";
 
 function Progressionmark() {
-  const progressBarStyle = {
-    // Set a smaller width and height for the progress bar container
-    width: '100px',
-    height: '100px'
-  };
-  
-  // Use local state to store the chart data
-  const [chartData, setChartData] = useState([]);
-  const {totalMarks,setTotalMarks,voxalPoints,loggedInUser, setLoggedInUser} = useContext(UserContext);
+  const { loggedInUser, setLoggedInUser } = useContext(UserContext);
 
-  // You're already using useContext here, ensure that it provides 'id'
-  const id = localStorage.getItem('id');
+  const [totalMark, setTotalMark] = useState(0);
+  const [totalStatMarks, setTotalStatMarks] = useState(0);
+  const [average, setAverage] = useState(0);
+  const [chartData, setChartData] = useState([]);
+
+  function calculation(data) {
+    const mathsMarks = data.testHistory.Maths;
+    const statMarks = data.testHistory.Statistics;
+
+    if (mathsMarks.length >= statMarks.length) {
+      const transFormData = mathsMarks.map((mark, index) => ({
+        testNumber: index + 1,
+        Maths: mark,
+        Statistics: statMarks[index] || 0,
+      }));
+      setChartData(transFormData);
+    } else {
+      const transFormData = statMarks.map((mark, index) => ({
+        testNumber: index + 1,
+        Statistics: mark,
+        Maths: mathsMarks[index] || 0,
+      }));
+      setChartData(transFormData);
+    }
+
+    if (data && data.testHistory && data.testHistory.Maths) {
+      const totalMathsMarks = data.testHistory.Maths.reduce(
+        (acc, currentMark) => acc + currentMark,
+        0
+      );
+      const averageMathsMarks = Math.round(
+        totalMathsMarks / data.testHistory.Maths.length
+      );
+      setTotalMark(totalMathsMarks);
+      setAverage(averageMathsMarks);
+    }
+
+    if (data && data.testHistory && data.testHistory.Statistics) {
+      const totalStatMathMarks = data.testHistory.Statistics.reduce(
+        (acc, currentMark) => acc + currentMark,
+        0
+      );
+      const averageStatMarks = Math.round(
+        totalStatMathMarks / data.testHistory.Statistics.length
+      );
+      setTotalStatMarks(averageStatMarks);
+    }
+  }
 
   useEffect(() => {
-    const fetchData = async () => {
-      try {
-        
-        const response = await axios.post("http://localhost:8000/progression/get/marks", { useRef: id });
-        
-        console.log(response)
-        setLoggedInUser(response);
-       
-        
-        // Process the fetched data and calculate percentages
-        const processedData = response.data.map((item, index) => ({
-          name: `Exam ${index + 1}`, // Assuming you want to label exams numerically
-          percentage: (item.mark / item.totalMark) * 100
-        }));
+    setLoggedInUser(JSON.parse(sessionStorage.getItem("loggedUser")).data);
+  }, []);
 
-        const totalOfTotalMarks = response.data.reduce((acc, current) => acc + current.totalMark, 0);
-        const marks = response.data.reduce((acc,current)=>acc+current.mark,0);
+  useEffect(() => {
+    if (loggedInUser) {
+      calculation(loggedInUser);
+    }
+  }, [loggedInUser]);
 
-        console.log('Sum of total marks:', marks);
-
-
-        const averageMarks = Math.round(100*(marks/totalOfTotalMarks),2);
-        
-        setTotalMarks(averageMarks);
-        // Set the processed data to the local state
-        setChartData(processedData);
-        
-
-      } catch (err) {
-        console.log(err);
-      }
-    };
-
-    fetchData();
-  }, [id,setTotalMarks]); // Only re-run the effect if 'id' changes
-
-  useEffect(()=>{
-      console.log(loggedInUser);
-  },[loggedInUser])
-
-  
-
-
-
-  // Render the LineChart with the data from state
   const renderLineChart = (
-    <LineChart width={600} height={300} data={chartData} margin={{ top: 5, right: 20, bottom: 5, left: 0 }}>
-      <Line type="monotone" dataKey="percentage" stroke="#8884d8" />
+    <LineChart
+      width={500}
+      height={350}
+      data={chartData}
+      margin={{ top: 5, right: 20, bottom: 5, left: 0 }}
+    >
+      <Line type="monotone" dataKey="Maths" stroke="#8884d8" />
+      <Line type="monotone" dataKey="Statistics" stroke="#8884d8" />
       <CartesianGrid stroke="#ccc" strokeDasharray="5 5" />
-      <XAxis dataKey="name" />
+      <XAxis dataKey="testNumber" />
       <YAxis />
-      <Tooltip />
     </LineChart>
   );
 
   return (
     <div>
-      {chartData.length > 0 ? (
+      {loggedInUser ? (
         <div className="progress-container">
           <div className="avg-mark-container">
-            <p>Average Total Mark</p>
-            <h2>{totalMarks}</h2>
+            <p>Average Mathematics Mark</p>
+            <h2>{average}</h2>
             <br />
-            
+            <p>Average Statistics Mark</p>
+            <h2>{totalStatMarks}</h2>
           </div>
           <div>{renderLineChart}</div>
         </div>

@@ -28,8 +28,7 @@
 }
 
 .info-panel {
-    width: 20%;
-    margin-left: 100px;
+    width: 450px;
     padding: 20px;
     margin-right: 100px;
     border-radius: 25px 0px 25px 0px;
@@ -58,13 +57,6 @@
 
 .exams-container {
     display: flex;
-    flex-direction: row-reverse;
-}
-
-.exams-container-on-popup {
-    width: 100vw;
-    height: 100vh;
-    overflow: hidden;
 }
 
 .exam-page {
@@ -98,39 +90,14 @@
     flex-direction: column;
 }
 
-.submit-ans {
-    background-color: white;
-    color: green;
-    border: 1px solid white;
-    padding: 10px;
-    border-radius: 50px;
-    font-size: 1.25rem;
-    transition: 0.3s;
-}
-
-.submit:hover {
-    border: 1px solid white;
+.submit {
     background-color: green;
     color: white;
-    cursor: pointer;
-}
-
-.submit-inverse {
-    background-color: green;
-    color: white;
-    border: 1px solid green;
+    border: 0px;
     padding: 10px;
     border-radius: 50px;
     margin-block: 70px;
     font-size: 1.25rem;
-    transition: 0.3s;
-}
-
-.submit-inverse:hover {
-    border: 1px solid green;
-    background-color: white;
-    color: green;
-    cursor: pointer;
 }
 
 .questions-container {
@@ -143,44 +110,4 @@
     align-items: center;
     width: 100vw;
     height: 100vh;
-}
-
-.popup-container {
-    backdrop-filter: blur(5px);
-    position: absolute;
-    height: 100vh;
-    width: 100vw;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-}
-
-.popups {
-    background-color: green;
-    border-radius: 25px;
-    height: 500px;
-    width: 500px;
-    padding: 20px;
-    display: flex;
-    flex-direction: column;
-    justify-content: space-between;
-    color: white;
-}
-
-.top-popup {
-    font-size: 2rem;
-    font-weight: bold;
-    display: flex;
-    justify-content: center;
-}
-
-.middle-popup {
-    text-align: center;
-    font-weight: bold;
-    font-size: 1.4rem;
-}
-
-.bottom-popup {
-    display: flex;
-    justify-content: space-around;
 }
