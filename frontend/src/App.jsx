@@ -25,6 +25,9 @@ import First from "./components/Learn/TestPages/First";
 import Second from "./components/Learn/TestPages/Second";
 import NextPage from "./components/Learn/NextPage";
 import Anything from "./components/Learn/Anything";
+import ExamReceipt from "./pages/ExamPage/ExamReceipt/ExamReceipt";
+import ExamHistory from "./pages/ExamPage/ExamHistoryPage/ExamHistory";
+import ExamReview from "./pages/ExamPage/ExamReview/ExamReview";
 
 export const UserContext = createContext();
 
@@ -112,21 +115,28 @@ function App() {
           <Route path="/select-course" element={<SelectCourses />} />
           <Route path="/select-course/:theTopic" element={<SpecificCourse />} />
           <Route path="/resources" element={<Learn />} />
-            <Route path="/materials" element={<LearningResource />}></Route>
-            <Route
-              path="/materials/:index"
-              element={<LearningResource />}
-            ></Route>
-            <Route path="/addresources" element={<AddStudy />} />
-            <Route path="/nextpage/:id" element={<NextPage />} />
-            <Route path="/anything" element={<Anything />} />
-            <Route path="/:lesson" element={<First />} />
-            <Route path="/second" element={<Second />} />
-            <Route path="/learnprint" element={<LearnBlueprint />}></Route>
+          <Route path="/materials" element={<LearningResource />}></Route>
+          <Route
+            path="/materials/:index"
+            element={<LearningResource />}
+          ></Route>
+          <Route path="/addresources" element={<AddStudy />} />
+          <Route path="/nextpage/:id" element={<NextPage />} />
+          <Route path="/anything" element={<Anything />} />
+          <Route path="/:lesson" element={<First />} />
+          <Route path="/second" element={<Second />} />
+          <Route path="/learnprint" element={<LearnBlueprint />}></Route>
           <Route path="exam" element={<ExamPage />} />
           <Route path="/examfinal" element={<ExamFinalized />}></Route>
           {/**Incomplete */}
           <Route path="/scope" element={<Scope />}></Route>
+          <Route path="exam" element={<ExamPage />} />
+          <Route path="receipt" element={<ExamReceipt />} />
+          <Route path="/examfinal" element={<ExamFinalized />}></Route>{" "}
+          <Route path="/exam-history" element={<ExamHistory />}></Route>
+          <Route path="/exam-review/:examID" element={<ExamReview />}></Route>
+          {/**Incomplete */}
+          <Route path="/scope" element={<Scope />}></Route>{" "}
           {/**Radhul is working on this */}
           <Route path="/feedback" element={<FeedbackPage />}></Route>
           <Route path="*" element={<UnknownPage />} />
