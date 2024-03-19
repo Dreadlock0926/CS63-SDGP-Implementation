@@ -5,13 +5,6 @@ import { useContext, useEffect, useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import Axios from "axios";
 import { UserContext } from "../../App";
-import {
-  FormControl,
-  InputLabel,
-  MenuItem,
-  Select,
-  Typography,
-} from "@mui/material";
 import "./Forum.css";
 import All from "./All";
 import PureMath from "./PureMath";
@@ -195,7 +188,7 @@ const Forum = () => {
       <div className="forumContainer">
         <div className="fHeaderContainer">
           <div className="forumHeader">
-            < p className="forumTitle">👋 Hey there, {user.username || user}! Welcome to our Forums!</p>
+            <p className="forumTitle">👋 Hey there, {user.username || user}! Welcome to our Forums!</p>
               <p style={{fontSize: "16px"}}>Would you kindly grace us with a question? The button below eagerly awaits your gentle touch, yearning for the opportunity to fulfill its purpose in this vast digital realm.</p>
             <Link className="addQuestionBtn" to="/addforum">Add question</Link>
               <br />
@@ -204,6 +197,8 @@ const Forum = () => {
         </div>
 
         <div className="searchContainer">
+            <p className="forumTitle">🔎 Search Filter</p>
+            <br />
           <form onSubmit={searchUp}>
             <input className="searchQuestion"
                onChange={(e) => {
@@ -211,28 +206,24 @@ const Forum = () => {
                 }}
               placeholder="Search your queries here..."
               type="text"/>
-          <button className="searchBtn" type="submit" disabled={loading}>
-            <img className="searchImg" src="./images/search.png" />
-          </button>
+          </form>
+
+          <p>Topic Filter</p>
+          <form>
+            <select              
+              className="dropdownContainer"
+              value={down}
+              onChange={(e) => setDown(Number(e.target.value))}>
+              <option value={0}>All</option>
+              <option value={1}>Pure Math</option>
+              <option value={2}>Statistics</option>
+            </select>
           </form>
         </div>
-
-        <FormControl style={{ marginBottom: "20px" }}>
-          <InputLabel>Select Topic</InputLabel>
-          <br />
-          <Select
-            className="theDrop"
-            value={down}
-            onChange={(e) => setDown(Number(e.target.value))}
-          >
-            <MenuItem value={0}>All</MenuItem>
-            <MenuItem value={1}>Pure Math</MenuItem>
-            <MenuItem value={2}>Statistics</MenuItem>
-          </Select>
-        </FormControl>
         <p>{status}</p>
+
         {loading ? (
-          <Typography variant="h5">Loading...</Typography>
+          <p>Loading...</p>
         ) : down === 0 ? (
           data && data.length ? (
             data.map((x) => (
@@ -303,14 +294,14 @@ const Forum = () => {
             "No statistics questions have been posted yet"
           )
         ) : null}
-        <Typography>{status}</Typography>
+        <p>{status}</p>
       </div>
     </div>
   ) : (
     <div>
-      <Typography variant="h1">
+      <p>
         Please <Link to="/login">login</Link> to continue to the forum
-      </Typography>
+      </p>
     </div>
   );
 };
