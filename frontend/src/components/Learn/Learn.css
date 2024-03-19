@@ -1,0 +1,31 @@
+.learn-container {
+  font-family: "poppins";
+  margin: 5% ;
+}
+
+.header {
+  text-align: center;
+}
+
+.subjects-container {
+  display: flex;
+  justify-content: center;
+}
+
+.subject-link {
+  text-decoration: none;
+  color: inherit;
+}
+
+.subject {
+  border: 1px solid #ccc;
+  border-radius: 5px;
+  padding: 20px;
+  margin: 20px;
+  text-align: center;
+}
+
+.add-resources-btn {
+  display: block;
+  margin: 20px auto;
+}

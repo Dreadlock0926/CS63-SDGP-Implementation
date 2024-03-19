@@ -15,11 +15,16 @@ import Scope from "./pages/TestPages/Scope";
 import ExamFinalized from "./pages/TestPages/ExamFinal";
 import FeedbackPage from "./pages/FeedbackPage/FeedbackPage";
 import ExamPage from "./pages/ExamPage/ExamPage";
+import SelectCourses from "./pages/SelectCoursesPage/SelectCourses";
+import SpecificCourse from "./pages/SelectCoursesPage/SpecificCourse";
+import Learn from "./components/Learn/Learn";
+import AddStudy from "./components/Learn/AddStudy";
+import LearnBlueprint from "./components/Learn/LearnBlueprint";
+import LearningResource from "./components/Learn/LearningResource";
 import ExamReceipt from "./pages/ExamPage/ExamReceipt/ExamReceipt";
 import ExamHistory from "./pages/ExamPage/ExamHistoryPage/ExamHistory";
 import ExamReview from "./pages/ExamPage/ExamReview/ExamReview";
 import Displaygraph from "./components/graphs/Displaygraph";
-
 
 export const UserContext = createContext();
 
@@ -138,14 +143,22 @@ function App() {
           <Route path="/registration" element={<Register />} />
           <Route path="/authenticate" element={<Authenticate />} />
           <Route path="add-questions" element={<AddQuestionsPage />} />
+          <Route path="/select-course" element={<SelectCourses />} />
+          <Route path="/select-course/:theTopic" element={<SpecificCourse />} />
+          <Route path="/resources" element={<Learn />} />
+            <Route path="/materials" element={<LearningResource />}></Route>
+            <Route
+              path="/materials/:index"
+              element={<LearningResource />}
+            ></Route>
+          <Route path="/addresources" element={<AddStudy />} />
+          <Route path="/learnprint" element={<LearnBlueprint />}></Route>
           <Route path="exam" element={<ExamPage />} />
           <Route path="receipt" element={<ExamReceipt />} />
           <Route path="/examfinal" element={<ExamFinalized />}></Route>{" "}
           <Route path="/exam-history" element={<ExamHistory />}></Route>
           <Route path="/exam-review/:examID" element={<ExamReview />}></Route>
-          {/**Incomplete */}
           <Route path="/scope" element={<Scope />}></Route>{" "}
-          {/**Radhul is working on this */}
           <Route path="/feedback" element={<FeedbackPage />}></Route>
           <Route path="*" element={<UnknownPage />} />
         </Routes>
