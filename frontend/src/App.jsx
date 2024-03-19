@@ -18,6 +18,8 @@ import ExamPage from "./pages/ExamPage/ExamPage";
 import ExamReceipt from "./pages/ExamPage/ExamReceipt/ExamReceipt";
 import ExamHistory from "./pages/ExamPage/ExamHistoryPage/ExamHistory";
 import ExamReview from "./pages/ExamPage/ExamReview/ExamReview";
+import Displaygraph from "./components/graphs/Displaygraph";
+
 
 export const UserContext = createContext();
 
@@ -34,36 +36,35 @@ function App() {
   const [user, setUser] = useState({ username: "", password: "" });
   const [completeCourse, setCompleteCourse] = useState(0);
   const [hoursLearned, setHoursLearned] = useState(0);
-  const [pureMathLearnedProgress, setPureMathLearnedProgress] = useState(0);
-  const [statLearnedProgress, setStatLearnedProgress] = useState(0);
+  const [pureMathLearnedProgress, setPureMathLearnedProgress] = useState(null);
+  const [pureLessonCount,setPureLessonCount] = useState(0);
+  const [statLessonCount,setStatLessonCount] = useState(0);
+  const [statLearnedProgress, setStatLearnedProgress] = useState(null);
   const [mathLesson, setMathLesson] = useState(0);
   const [statlLesson, setStatLesson] = useState(0);
   const [status, setStatus] = useState("");
   const [testedPureProgress, setPureTestedProgress] = useState(0);
   const [testedStatProgress, setStatTestedProgress] = useState(0);
   const [isAuthenticated, setIsAuthenticated] = useState(false);
+  const [userId,setUserId] = useState('');
+  const [totalAnswers,setTotalAnswers] = useState([]);
+  const [examHistory,setExamHistory] = useState([]);
+  const [statisticsMarks, setStatisticsMarks] = useState([]);
+  const [mathematicsMarks, setMathematicsMarks] = useState([]);
+  const [totalMathsmarks,setTotalMathsmark] = useState([]);
+  const [totalStatMarks,setTotalStatMarks] = useState([]);
+  const [totalMarks,setTotalMarks] = useState([]);
 
   const [loggedInUser, setLoggedInUser] = useState({
-    username: "", // Assuming username is required
-    password: "", // Assuming password is required (not used in this example)
-    marks: 0,
-    testHistory: {
-      Maths: [0], // Assuming Maths is an array of marks
-      Statistics: [0], // Assuming Statistics is an array of marks
-    },
-    testnumber: 0,
-    voxalPoints: 0,
-    hoursLearned: 0,
-    ongoingCourses: 0,
-    completeCourse: 0,
-    PureMathematics: {
-      learnedProgress: 0,
-      lesson: 0,
-    },
-    Statistics: {
-      learnedProgress: 0,
-      lesson: 0,
-    },
+    _id: "", // Exam ID
+  examType: "", // Type of the exam
+  examQuestions: [], // Array of exam questions
+  userRef: "", // Reference to the user ID (loggedInUser._id)
+  userAnswers: [], // Array of user's answers
+  examModule: "", // Module of the exam
+  examTopic: "", // Topic of the exam
+  mark: null, // User's mark for the exam
+  totalMark: null, // Total mark of the exam
   });
 
   // Structuring the context value explicitly
@@ -110,6 +111,20 @@ function App() {
     setPureTestedProgress,
     testedStatProgress,
     setStatTestedProgress,
+    userId,
+    setUserId,
+    totalAnswers,
+    setTotalAnswers,
+    pureLessonCount,
+    setPureLessonCount,
+    statLessonCount,setStatLessonCount,
+    examHistory,setExamHistory,
+    statisticsMarks, setStatisticsMarks,
+    mathematicsMarks, setMathematicsMarks,
+    totalMathsmarks,setTotalMathsmark,
+    totalStatMarks,setTotalStatMarks,
+    totalMarks,setTotalMarks
+    
   };
 
   return (

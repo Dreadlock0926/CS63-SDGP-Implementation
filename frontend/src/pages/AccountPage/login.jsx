@@ -2,10 +2,11 @@
 import { useContext, useState } from "react";
 import Axios from "axios";
 import { UserContext } from "../../App";
-import { useNavigate, Link } from "react-router-dom";
+import { useNavigate, Link, json } from "react-router-dom";
 import NavBar from "../../components/NavigationBar/navBar.jsx";
 import "../main.css";
 import "./account.css";
+import { MathJax } from "better-react-mathjax";
 
 const Login = () => {
   const BASE = "http://localhost:8000/login";
@@ -20,11 +21,15 @@ const Login = () => {
     setUser,
     setData,
     data,
+    userId,
+    setUserId,
+    
   } = useContext(UserContext); //there's a problem here (context)
   const [issue, setIssue] = useState("");
 
   const handleChange = (e) => {
     setUser({ ...user, [e.target.name]: e.target.value });
+
   };
 
   async function Login(e) {
@@ -32,15 +37,23 @@ const Login = () => {
     try {
       setLoading(true);
       const response = await Axios.post(BASE, user);
-
+      localStorage.setItem("id",response.data.data._id);
       if (response.status === 200) {
         console.log(response.data);
         setData(response.data);
-        setIsAuthenticated(true);
-
+        setUserId(response.data.data._id)
+        
         sessionStorage.setItem("loggedUser", JSON.stringify(response.data));
+        localStorage.setItem("loggedUser", JSON.stringify(response.data));
+        
+      
+
+
+        
+        setIsAuthenticated(true);
         navigator("/");
       }
+      console.log(userId);
     } catch (error) {
       console.error(error);
         if (error.response.status === 401) {
