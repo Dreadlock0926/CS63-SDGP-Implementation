@@ -192,21 +192,15 @@ const Forum = () => {
   };
 
   return logged ? (
-    <div className="main">
-      <div
-        style={{ margin: "5%", border: "12px solid #ccc", padding: "20px" }}
-        className="container"
-      >
-        <Typography variant="h4" className="forumTitle">
-          Forum
-        </Typography>
+    <div className="mainContainer">
+      <div className="forumContainer">
+        <div className="forumHeader">
+            <p className="forumTitle">Top Questions</p>
+        <p style={{fontSize: "16px"}}>Would you kindly grace us with a question? The button below eagerly awaits your gentle touch, yearning for the opportunity to fulfill its purpose in this vast digital realm.</p>
+        <Link className="addQuestionBtn" to="/addforum">Add question</Link>
         <br />
-        <br />
-        <Typography variant="h4">
-          Welcome back, {user.username || user}
-        </Typography>
-        <br />
-        <br />
+          Welcome back, {user.username || user}!
+        </div>
         <form onSubmit={searchUp}>
           <input
             onChange={(e) => {
@@ -306,7 +300,6 @@ const Forum = () => {
           )
         ) : null}
         <Typography>{status}</Typography>
-        <Link to="/addforum">Add question to forum? 🤔</Link>
       </div>
     </div>
   ) : (
