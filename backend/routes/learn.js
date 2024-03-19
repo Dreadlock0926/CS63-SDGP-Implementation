@@ -98,7 +98,7 @@ router.route("/topic").post(async (req, res) => {
 router.route("/completeLesson").post(async (req, res) => {
   try {
     const {
-      userId = "65f471667a725acbb3ba057f",
+      userId = "65f86f434b9403f9d70d8aa3",
       lessonName = "substitutionIntegration",
     } = req.body;
 
@@ -189,7 +189,7 @@ router.post("/testing-user", async (req, res) => {
 router.route("/false-topic").post(async (req, res) => {
   try {
     const {
-      userId = "65f584b5794ca9565c2dc26a",
+      userId = "65f86f434b9403f9d70d8aa3",
       topic = "Differentiation",
       source = "p1",
     } = req.body;
@@ -222,7 +222,7 @@ router.route("/false-topic").post(async (req, res) => {
       }
     }
 
-    res.json({ incompleteLessons, topic, source }); // Return array of incomplete lesson names
+    res.json({ incompleteLessons, topic, source,user }); // Return array of incomplete lesson names
   } catch (error) {
     console.error(error);
     res.status(500).send("Internal server error");

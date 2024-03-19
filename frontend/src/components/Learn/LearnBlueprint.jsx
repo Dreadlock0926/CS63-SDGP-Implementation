@@ -114,7 +114,7 @@ const LearnBlueprint = () => {
 
   return (
     <>
-      {topicTitles && topicTitles.length ? (
+      {topicTitles && topicTitles.length && (
         <Container style={{ margin: "10px" }}>
           {loading ? (
             <Typography variant="h4">Loading...</Typography>
@@ -207,12 +207,6 @@ const LearnBlueprint = () => {
             </>
           )}
         </Container>
-      ) : (
-        <Typography variant="h3">{`No ${
-          theTopic === "Pure"
-            ? "Pure Mathematics I"
-            : "Probability And Statistics"
-        } resources found!`}</Typography>
       )}
     </>
   );

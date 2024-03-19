@@ -45,7 +45,7 @@ const LearnClicked = () => {
           topic: lesson,
           source: TheSource,
         });
-
+        console.log(response.data);
         setTopicRelated(response.data);
         setStatus("");
       } catch (error) {
@@ -98,13 +98,12 @@ const LearnClicked = () => {
         lessonName: lessonName, //user.id
       });
 
-      setLessonCounter((prev) => prev + 1);
       if (outcome.status === 200) {
-        alert("Incremented!");
+        setLessonCounter((prev) => prev + 1);
       }
     } catch (error) {
       if (error.status === 404) {
-        setStatus("You have completed the topic!");
+        setStatus(`You have completed ${lesson}!`);
       }
       console.error(error.message);
     }
@@ -120,7 +119,11 @@ const LearnClicked = () => {
   useEffect(() => {
     if (Object.keys(topicRelated).length > 0) {
       if (lessonCounter >= topicRelated.incompleteLessons.length) {
-        navigator("/learnprint");
+        setStatus(`Congrats! You have completed ${lesson}`);
+        setTimeout(() => {
+          
+          navigator("/learnprint");
+        }, 1500);
       }
 
       setLessonName(topicRelated.incompleteLessons[lessonCounter]);
@@ -137,7 +140,7 @@ const LearnClicked = () => {
     ) : status ? (
       <Typography variant="h3">{status}</Typography>
     ) : (
-      <div>
+      <div style={{ textAlign: "center" }}>
         {theTopic === "Pure" ? (
           <h1>Pure Mathematics I</h1>
         ) : theTopic === "Stat" ? (
@@ -145,7 +148,6 @@ const LearnClicked = () => {
         ) : (
           <h1>No Topic!</h1>
         )}
-        <h1>Learn Clicked</h1>
         <h1>{topicRelated.topic}</h1>
         <div>
           {topicRelated.incompleteLessons.length > 0 ? (

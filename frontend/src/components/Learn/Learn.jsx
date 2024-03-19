@@ -5,7 +5,6 @@ import { UserContext } from "../../App";
 import { FetchMaterial } from "../Api/Api";
 import { Link } from "react-router-dom";
 import { Button } from "@mui/material";
-import Materials from "./Materials";
 import NotLogged from "../NotLogged";
 import "./Learn.css";
 

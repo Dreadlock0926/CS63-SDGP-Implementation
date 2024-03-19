@@ -6,13 +6,8 @@ import Learn from "./components/Learn/Learn";
 import AddStudy from "./components/Learn/AddStudy";
 import LearnBlueprint from "./components/Learn/LearnBlueprint";
 import LearningResource from "./components/Learn/LearningResource";
-import First from "./components/Learn/TestPages/First";
-import Second from "./components/Learn/TestPages/Second";
-import NextPage from "./components/Learn/NextPage";
-import Anything from "./components/Learn/Anything";
 import LearnClicked from "./components/Learn/LearnClicked";
 import TopicalExam from "./components/Learn/TopicalExam";
-
 export const UserContext = createContext();
 
 function App() {
@@ -53,7 +48,6 @@ function App() {
     topicRelated,
     setTopicRelated,
     setSource,
- 
   };
 
   return (
@@ -69,18 +63,18 @@ function App() {
               element={<LearningResource />}
             ></Route>
             <Route path="/addresources" element={<AddStudy />} />
-            <Route path="/nextpage" element={<NextPage />} />
-            <Route path="/anything" element={<Anything />} />
+           
+
             <Route
               path="/learnclicked/:lesson"
               element={<LearnClicked />}
             ></Route>
-                        <Route
+            <Route
               path="/topicalExam/:lesson"
               element={<TopicalExam />}
             ></Route>
             {/* <Route path="/:lesson" element={<First />} /> */}
-            <Route path="/second" element={<Second />} />
+
             <Route path="/learnprint" element={<LearnBlueprint />}></Route>
             <Route path="*" element={<UnknownPage />} />
           </Routes>
