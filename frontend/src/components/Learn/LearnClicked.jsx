@@ -40,17 +40,19 @@ const LearnClicked = () => {
     const fetchData = async () => {
       try {
         setLoading(true);
-        const response = await Axios.post(`${BASE}/resources/false-topic`, {
+        const response = await Axios.post(`${BASE}/resources/fromtopics`, {
           userId: "65f86f434b9403f9d70d8aa3",
           topic: lesson,
-          source: TheSource,  
+          source: TheSource,
         });
         console.log(response.data);
         setTopicRelated(response.data);
         setStatus("");
       } catch (error) {
         console.error(error.message);
-        setStatus(error.response.status);
+        if (error.response.status === 404) {
+          setStatus("No resources found!");
+        }
       } finally {
         setLoading(false);
       }
@@ -121,7 +123,6 @@ const LearnClicked = () => {
       if (lessonCounter >= topicRelated.incompleteLessons.length) {
         setStatus(`Congrats! You have completed ${lesson}`);
         setTimeout(() => {
-          
           navigator("/learnprint");
         }, 1500);
       }
@@ -131,67 +132,10 @@ const LearnClicked = () => {
   }, [lessonCounter, topicRelated]);
 
   return (
-    
-    !loading &&
-    topicRelated &&
-    topicRelated.incompleteLessons &&
-    theTopic &&
-    (loading ? (
-      "Loading..."
-    ) : status ? (
-      <Typography variant="h3">{status}</Typography>
-    ) : (
-      
-      <div style={{ textAlign: "center" }}>
-        {theTopic === "Pure" ? (
-          <h1>Pure Mathematics I</h1>
-        ) : theTopic === "Stat" ? (
-          <h1>Probability And Statistics</h1>
-        ) : (
-          <h1>No Topic!</h1>
-        )}
-        <h1>{topicRelated.topic}</h1>
-        <div>
-          {topicRelated.incompleteLessons.length > 0 ? (
-            <div>
-              <Link
-                to={
-                  lessonCounter < topicRelated.incompleteLessons.length
-                    ? () => {
-                        topicRelated.incompleteLessons[lessonCounter];
-                        setLessonName(
-                          topicRelated.incompleteLessons[lessonCounter]
-                        );
-                      }
-                    : "You have completed the topic!"
-                }
-              >
-                {topicRelated.incompleteLessons[lessonCounter]}
-              </Link>
-            </div>
-          ) : (
-            <h1>{`You have completed ${topicRelated.topic}`}</h1>
-          )}
-        </div>
-        <h1>{topicRelated.incompleteLessons[lessonCounter]}</h1>
-        <button
-          onClick={() => {
-            if (lessonCounter <= topicRelated.incompleteLessons.length) {
-              IncrementProgress(); //works
-            } else {
-              setStatus(`Congrats you have completed ${lesson}`);
-              // setTimeout(() => {
-              //   navigator("/learnprint");
-              // }, 1500);
-            }
-          }}
-          disabled={lessonCounter >= topicRelated.incompleteLessons.length}
-        >
-          {`Next Page!`}
-        </button>
-        {/* <p>{status}</p> */}
-      </div>
-    ))
+    <>
+      <h1>Learn Cliked!</h1>
+      <p>{status}</p>
+    </>
   );
 };
 

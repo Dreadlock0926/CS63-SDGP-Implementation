@@ -219,36 +219,46 @@ router.route("/false-topic").post(async (req, res) => {
       }
     }
 
-    // const sourceExists = await topicsModel.findOne({ sourceKey: source });
-    // console.log(sourceExists);
-    // if (sourceExists) {
-    //   const theSpecificTopic = sourceExists.topicLesson.find(
-    //     (topicItem) => topicItem.topic === topic
-    //   );
-
-    //   if (theSpecificTopic) {
-    //     theSpecificTopic.lessons.forEach((lesson) => {
-    //       if (
-    //         lesson.lessonTitle ===
-    //         "Solving quadratic equations by factorisation"
-    //       ) {
-    //         console.log(lesson.lessonTitle);
-    //       }else{
-    //         console.log("Lesson unavailable!")
-    //       }
-    //     });
-
-    //     // Save the changes to the database
-    //     await sourceExists.save();
-    //   }
-    // }
-
-    res
-      .status(200)
-      .json({ incompleteLessons, topic,  source, user }); // Return array of incomplete lesson names
+    res.status(200).json({ incompleteLessons, topic, source, user }); // Return array of incomplete lesson names
   } catch (error) {
     console.error(error);
     res.status(500).send("Internal server error");
+  }
+});
+
+router.route("/fromtopics").post(async (req, res) => {
+  try {
+    const {
+      userId = "65f86f434b9403f9d70d8aa3",
+      topic = "Quadratics",
+      source = "p1",
+    } = req.body;
+    console.log(req.body);
+
+    const userExists = await userModel.findById(userId);
+    if (!userExists) {
+      return res.status(404).json({ Alert: "User not found!" });
+    }
+
+    const topicExists = await topicsModel.findOne({ sourceKey: source });
+
+    if (topicExists) {
+      console.log(`The topic length `);
+      console.log(topicExists?.topicLesson);
+      for (let i = 0; i < topicExists?.topicLesson?.length; i++) {
+        if (topicExists.topicLesson[i].topic === topic) {
+          return res.status(200).json(topicExists.topicLesson[i].lessons);
+        }
+      }
+      return res
+        .status(404)
+        .json({ Alert: "Topic not found for the given source" });
+    } else {
+      return res.status(404).json({ Alert: "Source not found" });
+    }
+  } catch (err) {
+    console.error(err);
+    res.status(500).json({ error: "Internal server error" });
   }
 });
 
