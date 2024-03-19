@@ -131,6 +131,7 @@ const LearnClicked = () => {
   }, [lessonCounter, topicRelated]);
 
   return (
+    
     !loading &&
     topicRelated &&
     topicRelated.incompleteLessons &&
@@ -140,6 +141,7 @@ const LearnClicked = () => {
     ) : status ? (
       <Typography variant="h3">{status}</Typography>
     ) : (
+      
       <div style={{ textAlign: "center" }}>
         {theTopic === "Pure" ? (
           <h1>Pure Mathematics I</h1>

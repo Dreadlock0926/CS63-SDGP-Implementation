@@ -15,6 +15,7 @@ import {
 } from "@mui/material";
 import { styled } from "@mui/system";
 import Axios from "axios";
+import "./Learn.css";
 
 const LearnBlueprint = () => {
   const {
@@ -115,7 +116,7 @@ const LearnBlueprint = () => {
   return (
     <>
       {topicTitles && topicTitles.length && (
-        <Container style={{ margin: "10px" }}>
+        <Container style={{ margin: "10px" }}  className="container">
           {loading ? (
             <Typography variant="h4">Loading...</Typography>
           ) : (
