@@ -78,6 +78,7 @@ const ForumSearch = () => {
 
   return transfer === 1 ? (
     <div className="container">
+      <Link to={"/forum"}>Back To Forum</Link>
       <h1 className="text-center mb-4" style={{ textAlign: "center" }}>
         Forum Search
       </h1>
@@ -123,7 +124,6 @@ const ForumSearch = () => {
       ) : (
         <p className="text-center">No results found</p>
       )}
-      <Link to={"/forum"}>Back To Forum</Link>
     </div>
   ) : (
     "Nothing searched!"

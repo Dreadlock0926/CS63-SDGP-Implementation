@@ -76,7 +76,7 @@ const Forum = () => {
       // } else {
       //   setStatus("Error while upvoting");
       // }
-      setStatus("Upvoted");
+
       setData((prevData) =>
         prevData.map((item) =>
           item._id === id ? { ...item, rating: item.rating + 1 } : item
