@@ -177,7 +177,7 @@ const LearnClicked = () => {
         <div style={{ display: "flex", fontFamily: "poppins" }}>
           <div
             className="sidebar"
-            style={{ width: "20%", marginRight: "20px" }}
+            style={{ width: "20%", marginRight: "20px",margin:"20px",padding:"10px" }}
           >
             <h1>{lesson}</h1>
             {topicRelated.map((x, index) => (
@@ -204,14 +204,18 @@ const LearnClicked = () => {
               <div key={index} style={{ margin: "2%", padding: "2%" }}>
                 {index === lessonCounter ? (
                   <div>
-                    <h1>{x.lessonTitle}</h1>
+                    <h1>
+                      {falseTopics?.incompleteLessons.includes(x.lessonTitle)
+                        ? x.lessonTitle
+                        : `${x.lessonTitle} (Completed!)`}
+                    </h1>
                     {x?.lessonBody?.lessonSection &&
                       x?.lessonBody?.lessonSection.map((x, index) => (
                         <h1 key={index}>{x}</h1>
                       ))}
                     {x?.lessonBody?.sectionImgURL &&
                       x?.lessonBody?.sectionImgURL.map((x, index) => (
-                        <img src={x} key={index} alt={`section-img-${index}`} />
+                        <img src={x} key={index} />
                       ))}
                   </div>
                 ) : (
@@ -221,11 +225,19 @@ const LearnClicked = () => {
             ))}
             <h1>{status}</h1>
             <button
-              onClick={IncrementProgress}
+              onClick={() => {
+                if (topicRelated?.incompleteLessons?.length!==0) {
+                  IncrementProgress();
+                } else {
+                  setStatus(`Congrats! You have completed ${lesson}! 🥳`);
+                }
+              }}
               disabled={
                 lessonCounter >= topicRelated?.incompleteLessons?.length
               }
-            >{`Next Page!`}</button>
+            >
+              Next Page!
+            </button>
           </div>
         </div>
       </>
