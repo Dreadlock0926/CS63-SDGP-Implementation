@@ -8,6 +8,7 @@ import { LineChart, Line, CartesianGrid, XAxis, YAxis } from "recharts";
 import { useContext, useEffect, useState } from "react";
 import { UserContext } from "../../App";
 import { CircularProgressbar } from "react-circular-progressbar";
+import 'react-circular-progressbar/dist/styles.css'; 
 import Axios from "axios";
 import axios from "axios";
 import Displaygraph from "../../components/graphs/Displaygraph";
@@ -129,11 +130,7 @@ function DashboardCourses() {
       setTotalMathsmark(totaltempMathsMarks);
       setTotalStatMarks(totaltempStatMarks);
     }
-    
-    
-    
-
-    
+  
 
   }, [examHistory]);
   
@@ -183,9 +180,12 @@ useEffect(()=>{
                       text={`${pureLessonCount}%`}
                       styles={{
                         path: {
-                          stroke: `rgba(62, 152, 199, ${
-                            pureLessonCount / 100
-                          })`,
+                          // Use the progress percentage to determine the opacity
+                          stroke: `rgba(62, 152, 199, ${pureLessonCount / 100})`,
+                        },
+                        text: {
+                          // Adjust text color as needed
+                          fill: '#f88',
                         },
                       }}
                     />
@@ -199,9 +199,12 @@ useEffect(()=>{
                       text={`${testedPureProgress}`}
                       styles={{
                         path: {
-                          stroke: `rgba(62, 152, 199, ${
-                            testedPureProgress/ 100
-                          })`,
+                          // Use the progress percentage to determine the opacity
+                          stroke: `rgba(62, 152, 199, ${testedPureProgress / 100})`,
+                        },
+                        text: {
+                          // Adjust text color as needed
+                          fill: '#f88',
                         },
                         // Customize the text color and style as needed
                       }}
@@ -227,6 +230,9 @@ useEffect(()=>{
                           stroke: `rgba(62, 152, 199, ${
                             statLessonCount / 100
                           })`,
+                        },text: {
+                          // Adjust text color as needed
+                          fill: 'rgba(62, 152, 199)',
                         },
                         // Customize the text color and style as needed
                       }}
@@ -244,6 +250,9 @@ useEffect(()=>{
                           stroke: `rgba(62, 152, 199, ${
                             testedStatProgress / 100
                           })`,
+                        },text: {
+                          // Adjust text color as needed
+                          fill: 'rgba(62, 152, 199)',
                         },
                         // Customize the text color and style as needed
                       }}

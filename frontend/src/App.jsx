@@ -143,6 +143,7 @@ function App() {
           <Route path="/examfinal" element={<ExamFinalized />}></Route>{" "}
           <Route path="/exam-history" element={<ExamHistory />}></Route>
           <Route path="/exam-review/:examID" element={<ExamReview />}></Route>
+          <Route path="/grapgh" element ={<Displaygraph/>}></Route>
           {/**Incomplete */}
           <Route path="/scope" element={<Scope />}></Route>{" "}
           {/**Radhul is working on this */}

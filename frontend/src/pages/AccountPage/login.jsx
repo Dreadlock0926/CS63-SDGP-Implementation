@@ -44,7 +44,7 @@ const Login = () => {
         setUserId(response.data.data._id)
         
         sessionStorage.setItem("loggedUser", JSON.stringify(response.data));
-        localStorage.setItem("loggedUser", JSON.stringify(response.data));
+        
         
       
 

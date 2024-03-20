@@ -72,6 +72,7 @@ router.route("/get").post(async (req, res) => {
 
 
 router.route("/get/marks").post(async (req, res) => {
+  const listofQuestions = [];
   const { useRef } = req.body;
   console.log(useRef);
  
@@ -81,8 +82,11 @@ router.route("/get/marks").post(async (req, res) => {
   
   try {
     // Make sure to use the `new` keyword when creating a new ObjectId instance
-    const response = await examModel.find({ userRef: new mongoose.Types.ObjectId(useRef) });
+    const response = await examModel.find({ userRef: new mongoose.Types.ObjectId(useRef),examType: "Feedback" });
+  
+   
     console.log(response);
+   
 
     if (!response || response.length === 0) { // Checking if the response array is empty
       return res.status(400).json({ Alert: "No data found!" });
