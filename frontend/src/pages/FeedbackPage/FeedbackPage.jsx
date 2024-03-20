@@ -54,6 +54,8 @@ const FeedbackPage = () => {
         .then(function (response) {
             setCorrectAnswers(response.data.correctQuestions);
             setWrongAnswers(response.data.wrongQuestions);
+            console.log("tma: ")
+            console.log(response.data.topicProbabilities[moduleID]);
             setTopicProbabilitiesCloned(response.data.topicProbabilities[moduleID]);
         })
         .catch(function (error) {
@@ -66,9 +68,10 @@ const FeedbackPage = () => {
     useEffect(() => {
 
         async function updateModuleProbability() {
-            await Axios.post("http://localhost:8000/user/updateModuleProbabilities", {
+            await Axios.post("http://localhost:8000/user/setModuleProbabilities", {
                 username: loggedInUser.username,
-                topicProbabilities: moduleProbabilities
+                topicProbabilities: moduleProbabilities,
+                moduleID: moduleID
             })
             .then(function (response) {
                 console.log(response);
@@ -78,7 +81,7 @@ const FeedbackPage = () => {
               })
         }
 
-        if (!loggedInUser.topicProbabilities) {
+        if (probabilitiesSet) {
             updateModuleProbability();
         }
 
@@ -87,17 +90,6 @@ const FeedbackPage = () => {
     //Get questions based on probabilities
     const getQuestionsOnProbability = async (moduleID) => {
         setModuleID(moduleID);
-
-        console.log(loggedInUser);
-
-            await initializeProbabilities(loggedInUser)
-            .then((result) => {
-                console.log(result);
-                setModuleProbabilities(result);
-            })
-            .catch((error) => {
-                console.log(error);
-            })
 
         await Axios.post("http://localhost:8000/getQuestion/getAllQuestions", {
             moduleID: moduleID
@@ -233,6 +225,7 @@ const FeedbackPage = () => {
 
         setTopicProbabilities(topicProbabilitiesClone);
         setProbabilitiesSet(true);
+        setModuleProbabilities(topicProbabilitiesClone);
 
     }
 

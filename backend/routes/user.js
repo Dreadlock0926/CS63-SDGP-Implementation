@@ -40,6 +40,30 @@ router.route("/updateModuleProbabilities").post(async (req, res) => {
   }
 });
 
+router.route("/setModuleProbabilities").post(async (req, res) => {
+  const { username, topicProbabilities, moduleID } = req?.body;
+
+  console.log(username, topicProbabilities);
+
+  if (!username || !topicProbabilities || !moduleID) {
+    return res
+      .status(400)
+      .json({ Alert: "Username or Topic Probabilities Missing!" });
+  }
+
+  const updateObject = {};
+  updateObject[`topicProbabilities.${moduleID}`] = topicProbabilities;
+
+  const validUser = await userModel.updateOne(
+    { username: username },
+    { $set: updateObject }
+  );
+
+  if (validUser) {
+    res.status(201).json([{ Alert: "Module Probabilities updated!" }]);
+  }
+});
+
 router.post("/getUserById", async (req, res) => {
   const { id } = req.body;
 
