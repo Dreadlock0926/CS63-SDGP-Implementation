@@ -81,9 +81,13 @@ const LearnBlueprint = () => {
     }
   }
 
-  useEffect(()=>{
-    console.log();
-  },[])
+  useEffect(() => {
+    console.log(
+      userData
+        ? `The user data -> ${JSON.stringify(userData)}`
+        : "No data bozo!"
+    );
+  }, [userData]);
 
   async function IncrementProgress(theSource) {
     // try {

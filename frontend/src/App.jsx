@@ -49,7 +49,8 @@ function App() {
     topicRelated,
     setTopicRelated,
     setSource,
-    falseTopics, setFalseTopics
+    falseTopics,
+    setFalseTopics,
   };
 
   return (
@@ -66,6 +67,10 @@ function App() {
             ></Route>
             <Route
               path="/learnclicked/:lesson"
+              element={<LearnClicked />}
+            ></Route>
+            <Route
+              path="/learnclicked/:lesson/:subtopic"
               element={<LearnClicked />}
             ></Route>
             <Route

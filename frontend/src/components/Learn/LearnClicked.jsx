@@ -32,7 +32,7 @@ const LearnClicked = () => {
     setFalseTopics,
     theTopic,
   } = useContext(UserContext);
-  const { lesson } = useParams();
+  const { lesson, subtopic } = useParams();
   const [lessonCounter, setLessonCounter] = useState(0);
   const [status, setStatus] = useState("");
   const [theLessonName, setTheLessonName] = useState("");
@@ -83,6 +83,10 @@ const LearnClicked = () => {
     FalseTopics();
   }, [lesson]); // Fetch data when lesson changes
 
+  useEffect(() => {
+    console.log(`The false topics -> ${JSON.stringify(falseTopics)}`);
+  }, [falseTopics]);
+
   // useEffect(() => {
   //   const getNumberOfLessonForProgress = async () => {
   //     try {
@@ -119,6 +123,7 @@ const LearnClicked = () => {
       if (response.status === 200) {
         setFalseTopics(response.data);
       }
+      console.log(response.data);
     } catch (err) {
       if (err.status === 404) {
         setStatus("No data found!");
@@ -152,9 +157,9 @@ const LearnClicked = () => {
     }
   };
 
-  useEffect(()=>{
-    FalseTopics()
-  },[])
+  useEffect(() => {
+    FalseTopics();
+  }, []);
 
   // useEffect(() => {
   //   console.log(
@@ -169,49 +174,59 @@ const LearnClicked = () => {
       "Loading..."
     ) : (
       <>
-        <div>
-          {topicRelated.map((x, index) => (
-            <div key={index} style={{ margin: "2%", padding: "2%" }}>
-              {/* <nav>
-                <ul>{x.lessonTitle}</ul>
-              </nav> */}
-              {index === lessonCounter ? (
-                <div>
-                  <h1>{x.lessonTitle}</h1>
-                  {x?.lessonBody?.lessonSection &&
-                    x?.lessonBody?.lessonSection.map((x) => {
-                      return <h1 key={index}>{x}</h1>;
-                    })}
-                  {x?.lessonBody?.sectionImgURL &&
-                    x?.lessonBody?.sectionImgURL.map((x, index) => {
-                      return <img src={x} key={index}></img>;
-                    })}
-                </div>
-              ) : (
-                ""
-              )}
-            </div>
-          ))}
-          <button
-            onClick={IncrementProgress}
-            // onClick={() => {
-            //   if (
-            //     lessonCounter <=
-            //     topicRelated[lessonCounter]?.lessonBody?.lessonSection.length
-            //   ) {
-            //     IncrementProgress(); //works
-            //   } else {
-            //     setStatus(`Congrats you have completed ${lesson}`);
-            //     // setTimeout(() => {
-            //     //   navigator("/learnprint");
-            //     // }, 1500);
-            //   }
-            // }}
-            // disabled={
-            //   lessonCounter >=
-            //   topicRelated[lessonCounter]?.lessonBody?.lessonSection.length
-            // }
-          >{`Next Page!`}</button>
+        <div style={{ display: "flex", fontFamily: "poppins" }}>
+          <div
+            className="sidebar"
+            style={{ width: "20%", marginRight: "20px" }}
+          >
+            <h1>{lesson}</h1>
+            {topicRelated.map((x, index) => (
+              <ul
+                key={index}
+                style={{ listStyleType: "none", textDecoration: "none" }}
+              >
+                <Link
+                  onClick={() => {
+                    alert(`Clicked ${x.lessonTitle}`);
+                  }}
+                >
+                  {falseTopics?.incompleteLessons.includes(x.lessonTitle) ? (
+                    <h1 style={{ color: "red" }}>{x.lessonTitle}</h1>
+                  ) : (
+                    <h1 style={{ color: "green" }}>{x.lessonTitle}</h1>
+                  )}
+                </Link>
+              </ul>
+            ))}
+          </div>
+          <div style={{ flex: 1 }}>
+            {topicRelated.map((x, index) => (
+              <div key={index} style={{ margin: "2%", padding: "2%" }}>
+                {index === lessonCounter ? (
+                  <div>
+                    <h1>{x.lessonTitle}</h1>
+                    {x?.lessonBody?.lessonSection &&
+                      x?.lessonBody?.lessonSection.map((x, index) => (
+                        <h1 key={index}>{x}</h1>
+                      ))}
+                    {x?.lessonBody?.sectionImgURL &&
+                      x?.lessonBody?.sectionImgURL.map((x, index) => (
+                        <img src={x} key={index} alt={`section-img-${index}`} />
+                      ))}
+                  </div>
+                ) : (
+                  ""
+                )}
+              </div>
+            ))}
+            <h1>{status}</h1>
+            <button
+              onClick={IncrementProgress}
+              disabled={
+                lessonCounter >= topicRelated?.incompleteLessons?.length
+              }
+            >{`Next Page!`}</button>
+          </div>
         </div>
       </>
     )
