@@ -24,7 +24,6 @@ const LearnBlueprint = () => {
     user,
     data,
     setData,
-
     theProgressVal,
     TheSource,
     setSource,

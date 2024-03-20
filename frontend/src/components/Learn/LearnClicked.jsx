@@ -40,95 +40,36 @@ const LearnClicked = () => {
   const [theLessonName, setTheLessonName] = useState("");
   const navigator = useNavigate();
 
-  // const theSubtopic = subtopic.replace(/ /g, "-");
-  // console.log(theSubtopic)
-
-  useEffect(() => {
-    const fetchData = async () => {
-      try {
-        setLoading(true);
-        const response = await Axios.post(`${BASE}/resources/fromtopics`, {
-          userId: "65f86f434b9403f9d70d8aa3",
-          topic,
-          source: TheSource,
-        });
-        console.log(`The topic ${topic}\nThe source : ${TheSource}`);
-        console.log(response.data);
-        setTopicRelated(response.data);
-        setStatus("");
-      } catch (error) {
-        console.error(error.message);
-        if (error.status === 404) {
-          setStatus("No resources found!");
-        }
-      } finally {
-        setLoading(false);
+  async function fetchData() {
+    try {
+      setLoading(true);
+      const response = await Axios.post(`${BASE}/resources/fromtopics`, {
+        userId: "65f86f434b9403f9d70d8aa3",
+        topic,
+        source: TheSource,
+      });
+      setTopicRelated(response.data);
+      setStatus("");
+    } catch (error) {
+      console.error(error.message);
+      if (error.status === 404) {
+        setStatus("No resources found!");
       }
-    };
-
-    async function FalseTopics() {
-      try {
-        const response = await Axios.post(`${BASE}/resources/false-topic`, {
-          userId: "65f86f434b9403f9d70d8aa3",
-          topic: topic,
-          source: TheSource,
-        });
-        if (response.status === 200) {
-          setFalseTopics(response.data);
-        }
-      } catch (err) {
-        if (err.status === 404) {
-          setStatus("No data found!");
-        }
-        console.error(err.message);
-      }
+    } finally {
+      setLoading(false);
     }
-
-    fetchData();
-    FalseTopics();
-  }, [lesson]); // Fetch data when lesson changes
-
-  useEffect(() => {
-    console.log(`The false topics -> ${JSON.stringify(falseTopics)}`);
-  }, [falseTopics]);
-
-  // useEffect(() => {
-  //   const getNumberOfLessonForProgress = async () => {
-  //     try {
-  //       setLoading(true);
-  //       const { data } = await Axios.get(BASE, { userId: user.id });
-  //       if (data.status === 200) {
-  //         setLessons(data);
-  //         setTheProgressVal(data.topics.length / 100);
-  //       }
-  //     } catch (error) {
-  //       console.error(error);
-  //       setStatus(
-  //         error.response
-  //           ? error.response.status
-  //           : "Error while processing data!"
-  //       );
-  //     } finally {
-  //       setLoading(false);
-  //     }
-  //   };
-
-  //   getNumberOfLessonForProgress();
-  // }, []); // Fetch data once on component mount
-
-  // const [lessonName, setLessonName] = useState("");
+  }
 
   async function FalseTopics() {
     try {
       const response = await Axios.post(`${BASE}/resources/false-topic`, {
         userId: "65f86f434b9403f9d70d8aa3",
-        topic: "Quadratics",
+        topic,
         source: TheSource,
       });
       if (response.status === 200) {
         setFalseTopics(response.data);
       }
-      console.log(response.data);
     } catch (err) {
       if (err.status === 404) {
         setStatus("No data found!");
@@ -137,23 +78,31 @@ const LearnClicked = () => {
     }
   }
 
+  useEffect(() => {
+    fetchData();
+    FalseTopics();
+  }, [lesson]);
+
+  useEffect(() => {
+    const currentLesson = topicRelated[lessonCounter]?.lessonTitle || "";
+    setTheLessonName(decodeURIComponent(lesson));
+  }, [lessonCounter, topicRelated]);
+
   const IncrementProgress = async () => {
     try {
       const lessonNameArray = topicRelated.map((x) => x?.lessonTitle);
 
       const outcome = await Axios.put(`${BASE}/resources/progress/updates`, {
-        userId: "65f86f434b9403f9d70d8aa3", //user.id
+        userId: "65f86f434b9403f9d70d8aa3",
         topic,
         source: TheSource,
-        lessonName: lessonNameArray[lessonCounter], // Get the first index in the lessonName array
+        lessonName: lessonNameArray[lessonCounter],
       });
 
       if (outcome.status === 200) {
         setLessonCounter((prev) => prev + 1);
         FalseTopics();
       }
-
-      console.log(outcome.data);
     } catch (error) {
       if (error.status === 404) {
         setStatus(`Congrats! You have completed ${topic}! 🥳`);
@@ -161,18 +110,6 @@ const LearnClicked = () => {
       console.error(error.message);
     }
   };
-
-  useEffect(() => {
-    FalseTopics();
-  }, []);
-
-  // useEffect(() => {
-  //   console.log(
-  //     topicRelated !== null
-  //       ? JSON.stringify(topicRelated[lessonCounter]?.lessonBody?.lessonSection)
-  //       : "No data!"
-  //   );
-  // }, [topicRelated]);
 
   return topicRelated && topicRelated.length ? (
     loading ? (
@@ -203,9 +140,10 @@ const LearnClicked = () => {
                 }}
               >
                 <Link
-                  onClick={() => {
-                    alert(`Clicked ${x.lessonTitle}`);
-                  }}
+                  to={`/learnclicked/${topic}/${encodeURIComponent(
+                    x.lessonTitle
+                  )}`}
+                  style={{ textDecoration: "none" }}
                 >
                   {falseTopics?.incompleteLessons.includes(x.lessonTitle) ? (
                     <h1 style={{ color: "red" }}>{x.lessonTitle}</h1>
@@ -221,47 +159,49 @@ const LearnClicked = () => {
               flex: 1,
               border: "12px solid #17B169",
               borderWidth: "5px",
-              margin:"20px",
-              padding:"10px"
+              margin: "20px",
+              padding: "10px",
             }}
           >
             <h1>{status}</h1>
             {topicRelated.map((x, index) => (
               <div key={index} style={{ margin: "2%", padding: "2%" }}>
-                {index === lessonCounter ? (
+                {lesson === x.lessonTitle ? (
                   <div>
                     <h1>
                       {falseTopics?.incompleteLessons.includes(x.lessonTitle)
                         ? x.lessonTitle
-                        : `${x.lessonTitle} (Completed!)`}
+                        : `${x.lessonTitle} (Completed)`}
                     </h1>
                     {x?.lessonBody?.lessonSection &&
-                      x?.lessonBody?.lessonSection.map((x, index) => (
-                        <h1 key={index}>{x}</h1>
+                      x?.lessonBody?.lessonSection.map((section, index) => (
+                        <Typography key={index} variant="h5">
+                          {section}
+                        </Typography>
                       ))}
                     {x?.lessonBody?.sectionImgURL &&
-                      x?.lessonBody?.sectionImgURL.map((x, index) => (
-                        <img src={x} key={index} />
+                      x?.lessonBody?.sectionImgURL.map((url, index) => (
+                        <img key={index} src={url} />
                       ))}
                   </div>
-                ) : (
-                  ""
-                )}
+                ) : null}
               </div>
             ))}
             <Button
               onClick={() => {
-                if (topicRelated?.incompleteLessons?.length === 0) {
-                  setTimeout(() => {
-                    navigator("/learnprint");
-                  }, 1500);
-                } else {
+                if (topicRelated[lessonCounter].lessonTitle !== null) {
+                  navigator(
+                    `/learnclicked/${topic}/${encodeURIComponent(
+                      topicRelated.lessonTitle[lessonCounter]
+                    )}`
+                  );
                   IncrementProgress();
                 }
               }}
-              disabled={
-                lessonCounter >= topicRelated?.incompleteLessons?.length
-              }
+              // disabled={
+              //   lessonCounter >=
+              //   topicRelated?.lessonTitle[lessonCounter]?.length
+              // }
             >
               Next Page!
             </Button>

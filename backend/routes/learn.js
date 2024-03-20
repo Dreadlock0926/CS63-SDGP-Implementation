@@ -69,7 +69,7 @@ router.route("/topic/learned").post(async (req, res) => {
 
 router.route("/getLessonBodies").post(async (req, res) => {
   const { lessonTitle, topic, userId } = req?.body;
-
+  console.log(req.body);
   if (!lessonTitle || !topic || !userId) {
     return res.status(400).json({ Alert: "Missing Request Body" });
   }
@@ -286,11 +286,7 @@ router.route("/false-topic").post(async (req, res) => {
 
 router.route("/fromtopics").post(async (req, res) => {
   try {
-    const {
-      userId = "65f86f434b9403f9d70d8aa3",
-      topic = "Quadratics",
-      source = "p1",
-    } = req.body;
+    const { userId, topic, source } = req.body;
     console.log(req.body);
 
     const userExists = await userModel.findById(userId);
