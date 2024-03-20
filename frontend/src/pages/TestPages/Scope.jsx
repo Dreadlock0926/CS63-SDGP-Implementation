@@ -50,7 +50,6 @@ const Scope = () => {
         "http://localhost:8000/addQuestion/getModules"
       );
 
-      getTopics();
       dispatch({ type: "FETCH_MODULES", payload: response.data });
       dispatch({ type: "SELECT_MODULE", payload: response.data[0] });
       getTopics(response.data[0]);

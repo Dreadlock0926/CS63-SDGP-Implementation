@@ -115,7 +115,10 @@ const ExamHistory = () => {
         topicalExams.map((exam) => {
           return (
             <div key={exam._id}>
-              {exam.mark}/{exam.totalMark}
+              <div>{exam.examModule}</div>
+              <Link to={`/exam-review/${exam._id}`}>
+                {exam.mark}/{exam.totalMark}
+              </Link>
             </div>
           );
         })
