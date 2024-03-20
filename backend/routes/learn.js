@@ -67,6 +67,55 @@ router.route("/topic/learned").post(async (req, res) => {
   }
 });
 
+router.route("/getLessonBodies").post(async (req, res) => {
+  const { lessonTitle, topic, userId } = req?.body;
+
+  if (!lessonTitle || !topic || !userId) {
+    return res.status(400).json({ Alert: "Missing Request Body" });
+  }
+
+  const lesson = await topicsModel.findOne({
+    "topicLesson.lessons.lessonTitle": lessonTitle,
+  });
+
+  if (!lesson) {
+    return res.status(404).send("Lesson not found");
+  }
+
+  let lessonBody = null;
+
+  // Extract and return the lessonBody from the found lesson
+  for (const topicLesson of lesson.topicLesson) {
+    if (topicLesson.topic === topic) {
+      lessonBody = topicLesson.lessons.find(
+        (lesson) => lesson.lessonTitle === lessonTitle
+      ).lessonBody;
+    }
+  }
+
+  console.log(lessonBody);
+
+  const user = await userModel.findById(userId);
+
+  if (!user) {
+    return res.status(404).send("User not found");
+  }
+
+  let lessonProgressReturn = null;
+
+  for (const topicProgress of user.lesson) {
+    for (const lessonProgress of topicProgress.topicLesson) {
+      if (lessonProgress.topic === topic) {
+        lessonProgressReturn = lessonProgress;
+      }
+    }
+  }
+
+  const response = { lessonBody, lessonProgressReturn };
+
+  res.status(200).json(response);
+});
+
 router.route("/topic").post(async (req, res) => {
   const topic = req?.body?.topic;
   if (!topic) {
@@ -165,6 +214,12 @@ router.post("/testing-user", async (req, res) => {
     const topicLessons = lesson.topicLesson; // Extract topicLesson array
 
     const topicCompletions = {}; // Object to store topic and completion percentage
+    const topicFirstLesson = {};
+
+    topicLessons.forEach((topicLesson) => {
+      topicFirstLesson[topicLesson.topic] =
+        topicLesson.lessonProgress[0].lessonName;
+    });
 
     topicLessons.forEach((topicLesson) => {
       const completedCount = topicLesson.lessonProgress.filter(
@@ -181,9 +236,7 @@ router.post("/testing-user", async (req, res) => {
       topicCompletions[topicLesson.topic] = { completedPercentage, lessons };
     });
 
-    const response = topicCompletions; // Response object
-
-    res.status(200).json(response); // Send response object
+    res.status(200).json({ topicCompletions, topicFirstLesson }); // Send response object
   } catch (error) {
     console.error(error);
     res.status(500).json({ message: "Server error" });
