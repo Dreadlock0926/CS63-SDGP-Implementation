@@ -313,11 +313,11 @@ router
       const { lessonName, userId, source, topic } = req.body; // Extract lessonName, userId, and source from request body
 
       // Validate request body
-      if (!lessonName || !userId || !source) {
-        return res.status(400).json({
-          message: "Missing lessonName, userId, or source in request body",
-        });
-      }
+      // if (!lessonName || !userId || !source) {
+      //   return res.status(400).json({
+      //     message: "Missing lessonName, userId, or source in request body",
+      //   });
+      // }
 
       console.log(req.body);
 
