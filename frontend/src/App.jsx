@@ -66,11 +66,7 @@ function App() {
               element={<LearningResource />}
             ></Route>
             <Route
-              path="/learnclicked/:lesson"
-              element={<LearnClicked />}
-            ></Route>
-            <Route
-              path="/learnclicked/:lesson/:subtopic"
+              path="/learnclicked/:topic/:lesson"
               element={<LearnClicked />}
             ></Route>
             <Route

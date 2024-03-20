@@ -124,6 +124,12 @@ const LearnBlueprint = () => {
     console.log(`\nThe topics -> ${JSON.stringify(topicTitles)}`);
   }, [topicTitles]);
 
+  useEffect(() => {
+    setTimeout(() => {
+      setStatus("");
+    }, 2500);
+  }, [status]);
+
   return (
     <>
       {topicTitles && topicTitles.length && (
@@ -132,15 +138,16 @@ const LearnBlueprint = () => {
             <Typography variant="h4">Loading...</Typography>
           ) : (
             <>
-              <Typography variant="h3">
+              <Typography
+                variant="h3"
+                style={{ textAlign: "center", margin: "20px" }}
+              >
                 {theTopic === "Pure"
                   ? "Pure Mathematics I"
                   : "Probability And Statistics"}
               </Typography>
               <br />
-              <Typography variant="body1">
-                {status}
-              </Typography>
+              <Typography variant="body1">{status}</Typography>
               <br />
               <Table style={{ width: "100%", textAlign: "center" }}>
                 <TableHead>

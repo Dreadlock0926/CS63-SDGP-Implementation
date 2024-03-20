@@ -15,6 +15,8 @@ import {
   TableCell,
 } from "@mui/material";
 
+import Button from "@mui/material/Button";
+
 const LearnClicked = () => {
   const [hoverRef, isHovering] = useHover();
   const {
@@ -32,7 +34,7 @@ const LearnClicked = () => {
     setFalseTopics,
     theTopic,
   } = useContext(UserContext);
-  const { lesson, subtopic } = useParams();
+  const { topic, lesson } = useParams();
   const [lessonCounter, setLessonCounter] = useState(0);
   const [status, setStatus] = useState("");
   const [theLessonName, setTheLessonName] = useState("");
@@ -47,10 +49,10 @@ const LearnClicked = () => {
         setLoading(true);
         const response = await Axios.post(`${BASE}/resources/fromtopics`, {
           userId: "65f86f434b9403f9d70d8aa3",
-          topic: lesson,
+          topic,
           source: TheSource,
         });
-        console.log(`The topic ${lesson}\nThe source : ${TheSource}`);
+        console.log(`The topic ${topic}\nThe source : ${TheSource}`);
         console.log(response.data);
         setTopicRelated(response.data);
         setStatus("");
@@ -68,7 +70,7 @@ const LearnClicked = () => {
       try {
         const response = await Axios.post(`${BASE}/resources/false-topic`, {
           userId: "65f86f434b9403f9d70d8aa3",
-          topic: lesson,
+          topic: topic,
           source: TheSource,
         });
         if (response.status === 200) {
@@ -141,7 +143,7 @@ const LearnClicked = () => {
 
       const outcome = await Axios.put(`${BASE}/resources/progress/updates`, {
         userId: "65f86f434b9403f9d70d8aa3", //user.id
-        topic: lesson,
+        topic,
         source: TheSource,
         lessonName: lessonNameArray[lessonCounter], // Get the first index in the lessonName array
       });
@@ -154,7 +156,7 @@ const LearnClicked = () => {
       console.log(outcome.data);
     } catch (error) {
       if (error.status === 404) {
-        setStatus(`Congrats! You have completed ${lesson}! 🥳`);
+        setStatus(`Congrats! You have completed ${topic}! 🥳`);
       }
       console.error(error.message);
     }
@@ -174,7 +176,7 @@ const LearnClicked = () => {
 
   return topicRelated && topicRelated.length ? (
     loading ? (
-      "Loading..."
+      <h1>Loading...</h1>
     ) : (
       <>
         <div style={{ display: "flex", fontFamily: "poppins" }}>
@@ -184,14 +186,21 @@ const LearnClicked = () => {
               width: "20%",
               marginRight: "20px",
               margin: "20px",
-              padding: "10px",
+              padding: "20px",
+              borderRight: "12px solid #17B169",
+              borderWidth: "5px",
+              borderRadius: "5px",
             }}
           >
-            <h1>{lesson}</h1>
+            <h1>{topic}</h1>
             {topicRelated.map((x, index) => (
               <ul
                 key={index}
-                style={{ listStyleType: "none", textDecoration: "none" }}
+                style={{
+                  listStyleType: "none",
+                  textDecoration: "none",
+                  fontSize: 10,
+                }}
               >
                 <Link
                   onClick={() => {
@@ -207,7 +216,16 @@ const LearnClicked = () => {
               </ul>
             ))}
           </div>
-          <div style={{ flex: 1 }}>
+          <div
+            style={{
+              flex: 1,
+              border: "12px solid #17B169",
+              borderWidth: "5px",
+              margin:"20px",
+              padding:"10px"
+            }}
+          >
+            <h1>{status}</h1>
             {topicRelated.map((x, index) => (
               <div key={index} style={{ margin: "2%", padding: "2%" }}>
                 {index === lessonCounter ? (
@@ -231,8 +249,7 @@ const LearnClicked = () => {
                 )}
               </div>
             ))}
-            <h1>{status}</h1>
-            <button
+            <Button
               onClick={() => {
                 if (topicRelated?.incompleteLessons?.length === 0) {
                   setTimeout(() => {
@@ -247,7 +264,7 @@ const LearnClicked = () => {
               }
             >
               Next Page!
-            </button>
+            </Button>
           </div>
         </div>
       </>
