@@ -3,13 +3,10 @@
 /* eslint-disable react/prop-types */
 import {
   Button,
-  FormControl,
   Input,
-  InputLabel,
-  MenuItem,
-  Select,
   Typography,
 } from "@mui/material";
+import "./Forum.css";
 import { useContext, useState } from "react";
 import { UserContext } from "../../App";
 

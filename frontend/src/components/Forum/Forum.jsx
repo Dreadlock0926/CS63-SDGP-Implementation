@@ -3,8 +3,9 @@
 /* eslint-disable react/prop-types */
 import { useContext, useEffect, useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
-import Axios from "axios";
 import { UserContext } from "../../App";
+import Axios from "axios";
+import { ClipLoader } from 'react-spinners';
 import "./Forum.css";
 import All from "./All";
 import PureMath from "./PureMath";
@@ -210,7 +211,7 @@ const Forum = () => {
             
             <div style={{display: "flex"}}>
               <p style={{fontSize: "18px"}}>Topic Filter:</p>
-              <form style={{marginLeft: "10px", marginTop: "7px"}}>
+              <form style={{marginLeft: "10px", marginTop: "10px"}}>
                 <select              
                   className="dropdownContainer"
                   value={down}
@@ -225,7 +226,9 @@ const Forum = () => {
         <p>{status}</p>
 
         {loading ? (
-          <p>Loading...</p>
+          <div className="forumload">
+            <ClipLoader size={80} color="#1fa3d5" loading={true} />
+          </div>
         ) : down === 0 ? (
           data && data.length ? (
             data.map((x) => (
@@ -302,7 +305,7 @@ const Forum = () => {
   ) : (
     <div>
       <p>
-        Please <Link to="/login">login</Link> to continue to the forum
+        Please <Link to="/login">login</Link> to continue to the forum!
       </p>
     </div>
   );
