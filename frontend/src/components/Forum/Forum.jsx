@@ -197,29 +197,31 @@ const Forum = () => {
         </div>
 
         <div className="searchContainer">
-            <p className="forumTitle">🔎 Search Filter</p>
-            <br />
-          <form onSubmit={searchUp}>
-            <input className="searchQuestion"
-               onChange={(e) => {
-                setSearch(e.target.value);
-                }}
-              placeholder="Search your queries here..."
-              type="text"/>
-          </form>
-
-          <p>Topic Filter</p>
-          <form>
-            <select              
-              className="dropdownContainer"
-              value={down}
-              onChange={(e) => setDown(Number(e.target.value))}>
-              <option value={0}>All</option>
-              <option value={1}>Pure Math</option>
-              <option value={2}>Statistics</option>
-            </select>
-          </form>
-        </div>
+              <p className="forumTitle">🔎 Search Filter</p>
+              <br />
+            <form onSubmit={searchUp}>
+              <input className="searchQuestion"
+                onChange={(e) => {
+                  setSearch(e.target.value);
+                  }}
+                  placeholder="Search your queries here..."
+                  type="text"/>
+            </form>
+            
+            <div style={{display: "flex"}}>
+              <p style={{fontSize: "18px"}}>Topic Filter:</p>
+              <form style={{marginLeft: "10px", marginTop: "7px"}}>
+                <select              
+                  className="dropdownContainer"
+                  value={down}
+                  onChange={(e) => setDown(Number(e.target.value))}>
+                  <option value={0}>All</option>
+                  <option value={1}>Pure Math</option>
+                  <option value={2}>Statistics</option>
+                </select>
+              </form>
+            </div>
+          </div>
         <p>{status}</p>
 
         {loading ? (

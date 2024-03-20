@@ -59,46 +59,21 @@
   background-color: white;
 }
 
-.searchBtn {
+select {
+  border: 2px solid #666666;
+  width: 10em;
   height: 3em;
-  width: 3em;
-  padding: 0;
-  margin: 0;
-  border: none;
-  background-color: transparent;
-  transition: all 0.2s;
+  padding-left: 0.8em;
+  background-color: #F3F3F3;
+  border-radius: 10px;
+  transition: all 0.5s;
 }
 
-.searchBtn:hover {
-  cursor: pointer;
-  transform: scale(1.1);
-  transition: all 0.2s;
+select:hover, select:focus {
+  border: 2px solid #4a9dec;
+  box-shadow: 0px 0px 0px 7px rgb(74, 157, 236, 20%);
+  background-color: white;
 }
-
-.searchImg {
-  height: 3em;
-  width: 3em;
-}
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 
 
