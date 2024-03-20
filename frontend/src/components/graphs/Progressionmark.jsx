@@ -5,8 +5,11 @@ import { UserContext } from '../../App';
 import { LineChart, Line, CartesianGrid, XAxis, YAxis, Tooltip } from 'recharts';
 import { CircularProgressbar } from "react-circular-progressbar";
 import "./Progressionmark.css";
+import { useNavigate } from 'react-router-dom';
+
 
 function Progressionmark() {
+  const navigator = useNavigate();
   const progressBarStyle = {
     // Set a smaller width and height for the progress bar container
     width: '100px',
@@ -34,6 +37,7 @@ function Progressionmark() {
         // eslint-disable-next-line react/prop-types
         console.log(`Clicked on ${data.name} with mark ${data.percentage}`);
         console.log(clickedPoint);
+
       };
       
 
@@ -48,6 +52,14 @@ function Progressionmark() {
     return null;
   };
 
+
+  const passData = (payload)=>{
+    console.log(payload.payload.id);
+    const examId = payload.payload.id;
+    navigator(`/exam-review/${examId}`);
+
+  }
+  
 
   // You're already using useContext here, ensure that it provides 'id'
   const id = localStorage.getItem('id');
@@ -70,6 +82,7 @@ function Progressionmark() {
         .map((item, index) => ({
           name: `Exam ${index + 1}`, // Assuming you want to label exams numerically
           percentage: (item.mark / item.totalMark) * 100,
+          id:item._id
           
         }));
         
@@ -78,6 +91,7 @@ function Progressionmark() {
         .map((item,index)=>({
           name: `Exam ${index + 1}`, // Assuming you want to label exams numerically
           percentage: (item.mark / item.totalMark) * 100,
+          id:item._id
 
         }))
         
@@ -91,6 +105,11 @@ function Progressionmark() {
         // Set the processed data to the local state
         setPureMathsData(pureMathsarray);
         setProbStatsData(statArray);
+
+
+        console.log(pureMathsarray);
+        console.log(statArray);
+
         
 
       } catch (err) {
@@ -118,9 +137,9 @@ function Progressionmark() {
         <YAxis />
         <Tooltip content={<CustomTooltip />} />
         {/* Line for Pure Mathematics I */}
-        <Line type="monotone" dataKey="percentage" data={pureMathsData} stroke="#8884d8" name="Pure Mathematics I" />
+        <Line type="monotone" dataKey="percentage" data={pureMathsData} stroke="#8884d8" name="Pure Mathematics I" activeDot={{ onClick: (event, payload) =>  passData(payload) }} />
         {/* Line for Probability & Statistics I */}
-        <Line type="monotone" dataKey="percentage" data={probStatsData} stroke="#82ca9d" name="Probability & Statistics I" />
+        <Line type="monotone" dataKey="percentage" data={probStatsData} stroke="#82ca9d" name="Probability & Statistics I" activeDot={{ onClick: (event, payload) =>  passData(payload) }} />
   </LineChart>
     
     </>

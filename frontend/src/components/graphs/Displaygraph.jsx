@@ -23,33 +23,33 @@ const Displaygraph = () => {
 
   // eslint-disable-next-line react/prop-types
   const CustomTooltip = ({ active, payload, label }) => {
-    // eslint-disable-next-line react/prop-types
     if (active && payload && payload.length) {
-      // eslint-disable-next-line react/prop-types
-      const data = payload[0].payload; // Assuming the payload structure, you may need to adjust this
-      
-      // We use a mouse event here to capture the click and update the clickedPoint state
-      const handleTooltipClick = () => {
-        // eslint-disable-next-line react/prop-types
-        setClickedPoint({ examNumber: data.name, mark: data.percentage });
-        // eslint-disable-next-line react/prop-types
-        console.log(`Clicked on ${data.name} with mark ${data.percentage}`);
-        console.log(clickedPoint);
+      const data = payload[0].payload;
+  
+      const handleTooltipClick = (event) => {
+        event.stopPropagation(); // Add this to stop event propagation
+        const examId = data.id;
+        console.log("Exam ID for navigation:", examId); // Debugging line
+        navigator(`/exam-review/${examId}`);
       };
-      
-
+  
       return (
         <div className="custom-tooltip" onClick={handleTooltipClick}>
           <p>{label}</p>
-
-       
           <p>{`Mark: ${payload[0].value}%`}</p>
         </div>
       );
     }
-
+  
     return null;
   };
+  const passData = (payload)=>{
+    console.log(payload.payload.id);
+    const examId = payload.payload.id;
+    navigator(`/exam-review/${examId}`);
+
+  }
+  
 
   
   
@@ -86,25 +86,15 @@ const Displaygraph = () => {
         console.log(response)
         
         // Process the fetched data and calculate percentages
-        const processedData = response.data.map((item, index) => ({
-          name: `Exam ${index + 1}`, // Assuming you want to label exams numerically
-          percentage: (item.mark / item.totalMark) * 100,
-          
-        }));
-
+        
 
         
-        
-        const totalOfTotalMarks = response.data.reduce((acc, current) => acc + current.totalMark, 0);
-        const marks = response.data.reduce((acc,current)=>acc+current.mark,0);
-        console.log(processedData);
-        console.log('Sum of total marks:', marks);
-
         const pureMathsarray = response.data.filter(item=> item.examModule==='Pure Mathematics I')
         .map((item, index) => ({
           name: `Exam ${index + 1}`, // Assuming you want to label exams numerically
           percentage: (item.mark / item.totalMark) * 100,
-          
+          id:item._id
+
         }));
         
 
@@ -112,18 +102,17 @@ const Displaygraph = () => {
         .map((item,index)=>({
           name: `Exam ${index + 1}`, // Assuming you want to label exams numerically
           percentage: (item.mark / item.totalMark) * 100,
+          id:item._id
 
         }))
         
-
-
-        const averageMarks = Math.round(100*(marks/totalOfTotalMarks),3);
-        setPureTestedProgress(averageMarks);
+       
+        
         setPureMathsData(pureMathsarray);
         setProbStatsData(statArray);
         // Set the processed data to the local state
-        setChartData(processedData);
-
+        
+        
         
         
       } catch (err) {
@@ -142,13 +131,13 @@ const Displaygraph = () => {
     <>
    <LineChart width={600} height={300} margin={{ top: 5, right: 20, bottom: 5, left: 0 }}>
         <CartesianGrid stroke="#ccc" strokeDasharray="5 5" />
-        <XAxis dataKey="name" />
-        <YAxis />
+        <XAxis dataKey="name"  />
+        <YAxis  />
         <Tooltip content={<CustomTooltip />} />
         {/* Line for Pure Mathematics I */}
-        <Line type="monotone" dataKey="percentage" data={pureMathsData} stroke="#8884d8" name="Pure Mathematics I" />
+        <Line type="monotone" dataKey="percentage" data={pureMathsData} stroke="#8884d8" name="Pure Mathematics I" activeDot={{ onClick: (event, payload) =>  passData(payload) }} />
         {/* Line for Probability & Statistics I */}
-        <Line type="monotone" dataKey="percentage" data={probStatsData} stroke="#82ca9d" name="Probability & Statistics I" />
+        <Line type="monotone" dataKey="percentage" data={probStatsData} stroke="#82ca9d" name="Probability & Statistics I"  activeDot={{ onClick: (event, payload) =>  passData(payload) }} />
   </LineChart>
     
     </>
