@@ -11,6 +11,23 @@ const SelectCourses = () => {
   const [userStartedCourses, setUserStartedCourses] = useState([]);
   const [userNotStartedCourses, setNotStartedCourses] = useState([]);
 
+  const [lessonProgress, setLessonProgress] = useState([]);
+
+  const initializeProgress = async (sourceKey) => {
+    const response = await Axios.post(
+      "http://localhost:8000/course/getProgress",
+      {
+        sourceKey: sourceKey,
+        userID: loggedInUser._id,
+      }
+    );
+
+    setLessonProgress((prevLessonProgress) => [
+      ...prevLessonProgress,
+      response.data,
+    ]);
+  };
+
   const retrieveCourses = async (userCourses) => {
     try {
       const response = await Axios.post(
@@ -44,18 +61,40 @@ const SelectCourses = () => {
   }, [loggedInUser]);
   // Your code here
 
+  useEffect(() => {
+    if (userStartedCourses.length > 0) {
+      userStartedCourses.forEach((course) => {
+        initializeProgress(course.sourceKey);
+      });
+    }
+  }, [userStartedCourses]);
+
   return { loggedInUser } ? (
     <div>
       <h1>Select Courses</h1>
       <p>Welcome {loggedInUser.username}</p>
-      {userStartedCourses ? (
+      {userStartedCourses &&
+      lessonProgress.length == userStartedCourses.length ? (
         <div>
           <h1>Courses In Progress</h1>
           {userStartedCourses.length == 0 ? (
             <p>No Courses Started!!</p>
           ) : (
             userStartedCourses.map((course, i) => (
-              <CourseComponent course={course} key={i} />
+              <div key={i}>
+                <CourseComponent
+                  course={course}
+                  completedFlag={true}
+                  progress={{
+                    maxLessons: lessonProgress.find(
+                      (progress) => progress.sourceKey === course.sourceKey
+                    )?.noOfLessonCount,
+                    lessonsCompleted: lessonProgress.find(
+                      (progress) => progress.sourceKey === course.sourceKey
+                    )?.completedLessonCount,
+                  }}
+                />
+              </div>
             ))
           )}
         </div>
@@ -70,7 +109,9 @@ const SelectCourses = () => {
             <p>All Courses Started!!</p>
           ) : (
             userNotStartedCourses.map((course, i) => (
-              <CourseComponent course={course} key={i} />
+              <div key={i}>
+                <CourseComponent course={course} completedFlag={false} />
+              </div>
             ))
           )}
         </div>

@@ -107,4 +107,43 @@ router.post("/updateTopics", async (req, res) => {
   }
 });
 
+router.post("/getProgress", async (req, res) => {
+  const { sourceKey, userID } = req.body;
+
+  try {
+    const user = await userModel.findById(userID);
+
+    let totalLessonsCount = 0;
+    let completedLessonsCount = 0;
+
+    if (!user) {
+      return res.status(404).json({ message: "User not found" });
+    }
+
+    const userProgress = user.lesson.find(
+      (lesson) => lesson.source === sourceKey
+    );
+
+    for (const topic of userProgress.topicLesson) {
+      for (const lesson of topic.lessonProgress) {
+        totalLessonsCount++;
+        if (lesson.completed) {
+          completedLessonsCount++;
+        }
+      }
+    }
+
+    const progress = {
+      sourceKey: sourceKey,
+      noOfLessonCount: totalLessonsCount,
+      completedLessonCount: completedLessonsCount,
+    };
+
+    res.status(200).json(progress);
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ message: "Error fetching user progress" });
+  }
+});
+
 module.exports = router;
