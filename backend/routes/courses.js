@@ -2,12 +2,7 @@ const express = require("express");
 const router = express.Router();
 
 const userModel = require("../models/user");
-const {
-  topicsModel,
-  lessonSchema,
-  topicLessonSchema,
-  topicsSchema,
-} = require("../models/topics");
+const { topicsModel } = require("../models/topics");
 
 router.post("/getModules", async (req, res) => {
   const { courses } = req.body;

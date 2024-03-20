@@ -11,6 +11,7 @@ const { join } = require("path");
 const register = require("./routes/register");
 const login = require("./routes/login");
 const examResources = require("./routes/exams");
+const addQuestion = require("./routes/addQuestion");
 const courses = require("./routes/courses");
 const learn = require("./routes/learn");
 const user = require("./routes/user");
@@ -54,6 +55,7 @@ app.use("/register", register);
 app.use("/login", login);
 // app.use(authenticated); //uncomment during final authentication tests 🔓
 app.use("/exam", examResources);
+app.use("/addQuestion", addQuestion);
 app.use("/course", courses);
 app.use("/user", user);
 app.use("/learn", learn);

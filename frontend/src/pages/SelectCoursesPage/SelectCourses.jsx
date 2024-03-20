@@ -56,6 +56,8 @@ const SelectCourses = () => {
         sourceKeys.push(lessonProgress.source);
       });
 
+      console.log(sourceKeys);
+
       retrieveCourses(sourceKeys);
     }
   }, [loggedInUser]);
