@@ -39,6 +39,7 @@ const LearnBlueprint = () => {
   const [loading, setLoading] = useState(false);
   const [topicTitles, setTopicTitles] = useState([]);
   const [topicPercentage, setTopicPercentage] = useState([]);
+  const [topicFirstLesson, setTopicFirstLesson] = useState({});
   const [theSubTopic, setTheSubTopic] = useState("");
   const [status, setStatus] = useState("");
   const navigator = useNavigate();
@@ -66,9 +67,10 @@ const LearnBlueprint = () => {
         source,
       });
       setSource(source);
-      setUserData(theUser.data);
-      setTopicTitles(Object.keys(theUser.data));
-      setTopicPercentage(Object.values(theUser.data));
+      setUserData(theUser.data.topicCompletions);
+      setTopicTitles(Object.keys(theUser.data.topicCompletions));
+      setTopicFirstLesson(theUser.data.topicFirstLesson);
+      setTopicPercentage(Object.values(theUser.data.topicCompletions));
     } catch (error) {
       console.error(error);
       if (error.response && error.response.status === 404) {
@@ -138,9 +140,7 @@ const LearnBlueprint = () => {
                   : "Probability And Statistics"}
               </Typography>
               <br />
-              <Typography variant="body1">
-                {status}
-              </Typography>
+              <Typography variant="body1">{status}</Typography>
               <br />
               <Table style={{ width: "100%", textAlign: "center" }}>
                 <TableHead>
@@ -161,7 +161,7 @@ const LearnBlueprint = () => {
                         <TableCell>
                           {topicPercentage && topicPercentage[index] && (
                             <RouterLink
-                              to={`/learnclicked/${title}`}
+                              to={`/learnclicked/${title}/${topicFirstLesson[title]}`}
                               onClick={() => {
                                 if (status !== "") {
                                   // Set status if completed

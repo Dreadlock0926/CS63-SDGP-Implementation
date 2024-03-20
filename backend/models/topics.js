@@ -1,28 +1,25 @@
 const mongoose = require("mongoose");
+const lessonBodySchema = new mongoose.Schema({
+  lessonSection: { type: [String], default: [] },
+  sectionImgURL: { type: [String], default: [] },
+});
+
+const lessonSchema = new mongoose.Schema({
+  lessonTitle: { type: String, required: true },
+  lessonBody: { type: lessonBodySchema, default: {} },
+});
+
+const topicLessonSchema = new mongoose.Schema({
+  topic: { type: String, required: true },
+  lessons: { type: [lessonSchema], required: true },
+});
+
 const topicsSchema = new mongoose.Schema({
   source: { type: String, required: true },
   sourceKey: { type: String, required: true, unique: true },
   topics: { type: Array, required: true },
-  learnedProgress: {
-    type: Array,
-    default: [],
-    percentage: { type: [Number], default: [] },
-    url: { type: String, default: "" },
-  },
-  tested: {
-    type: Array,
-    default: [],
-    state: {
-      type: Boolean,
-      default: false,
-    },
-    testedExams: {
-      type: Array,
-      default: [],
-    },
-  },
   topicKeys: { type: Array, required: false },
-  topicLesson: {type: Array }
+  topicLesson: { type: [topicLessonSchema], required: true },
 });
 
 const topicsModel = mongoose.model("topics", topicsSchema);
