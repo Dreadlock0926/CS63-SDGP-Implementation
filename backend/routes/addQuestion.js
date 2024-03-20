@@ -1,7 +1,7 @@
 const express = require("express");
 const router = express.Router();
 const questionModel = require("../models/question");
-const { topicsModel } = require("../models/topics");
+const topicsModel = require("../models/topics");
 
 router.route("/").post(async (req, res) => {
   const {
@@ -42,7 +42,7 @@ router.route("/").post(async (req, res) => {
 router.route("/getQuestionInfo").post(async (req, res) => {
   const { source } = req?.body;
 
-  if (source != "Default") {
+  if (source !== "Default") {
     if (!source)
       return res.status(400).json({ Alert: "The source is missing!" });
     const sourceData = await topicsModel.findOne({ source });

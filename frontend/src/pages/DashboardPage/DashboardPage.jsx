@@ -8,8 +8,11 @@ import { LineChart, Line, CartesianGrid, XAxis, YAxis } from "recharts";
 import { useContext, useEffect, useState } from "react";
 import { UserContext } from "../../App";
 import { CircularProgressbar } from "react-circular-progressbar";
-import "react-circular-progressbar/dist/styles.css";
+import 'react-circular-progressbar/dist/styles.css'; 
 import Axios from "axios";
+import axios from "axios";
+import Displaygraph from "../../components/graphs/Displaygraph";
+import Progressionmark from "../../components/graphs/Progressionmark";
 
 // Dashboard Header Tab
 function DashboardHeader() {
@@ -33,7 +36,7 @@ function DashboardGraph() {
       <div className="dashboard-graph-container">
         <h2 className="graph-title">Progress</h2>
         <div className="graph">
-          <ProgressGraph />
+          <Progressionmark/>
         </div>
       </div>
     </>
@@ -76,16 +79,7 @@ function DashboardStatistics({
 
 // Dashboard Courses Tab
 function DashboardCourses() {
-  const { loggedInUser, setLoggedInUser } = useContext(UserContext);
-
-  useEffect(() => {
-    setLoggedInUser(JSON.parse(sessionStorage.getItem("loggedUser")).data);
-  }, []);
-
-  useEffect(() => {
-    console.log(loggedInUser);
-  }, [loggedInUser]);
-
+  const { loggedInUser, setLoggedInUser,examHistory,setExamHistory } = useContext(UserContext);
   const {
     statLearnedProgress,
     pureMathLearnedProgress,
@@ -93,12 +87,24 @@ function DashboardCourses() {
     statlLesson,
     testedPureProgress,
     testedStatProgress,
+    setPureTestedProgress,
+    setStatTestedProgress,
+    pureLessonCount,
+    statLessonCount,
+    statisticsMarks, 
+    setStatisticsMarks,
+    mathematicsMarks, 
+    setMathematicsMarks,
+    totalMathsmarks,setTotalMathsmark,
+    totalStatMarks,setTotalStatMarks
   } = useContext(UserContext);
+  
+  
 
   console.log(loggedInUser);
-  useEffect(() => {
+  useEffect(()=>{
     setExamHistory(loggedInUser.data);
-  }, [loggedInUser]);
+  },[loggedInUser])
 
   useEffect(() => {
     console.log(examHistory);
@@ -107,59 +113,50 @@ function DashboardCourses() {
     let tempMathematicsMarks = [];
     let totaltempMathsMarks = [];
     if (Array.isArray(examHistory)) {
-      examHistory.forEach((exam) => {
-        // Changed '.foreach' to '.forEach'
-        if (exam.examModule === "Probability & Statistics I") {
+      examHistory.forEach(exam => { // Changed '.foreach' to '.forEach'
+        if (exam.examModule === 'Probability & Statistics I') {
           tempStatisticsMarks.push(exam.mark);
           totaltempStatMarks.push(exam.totalMark);
-        } else if (exam.examModule === "Pure Mathematics I") {
+
+        } else if (exam.examModule === 'Pure Mathematics I') {
           tempMathematicsMarks.push(exam.mark);
           totaltempMathsMarks.push(exam.totalMark);
         }
       });
-      console.log(tempMathematicsMarks);
-      console.log(tempStatisticsMarks);
+      console.log(tempMathematicsMarks)
+      console.log(tempStatisticsMarks)
       setMathematicsMarks(tempMathematicsMarks);
       setStatisticsMarks(tempStatisticsMarks);
       setTotalMathsmark(totaltempMathsMarks);
       setTotalStatMarks(totaltempStatMarks);
     }
+  
+
   }, [examHistory]);
+  
+useEffect(()=>{
+    const correcttotalStatmarks = statisticsMarks.reduce((acc,current)=> acc+current,0);
+    const totalStatmark = totalStatMarks.reduce((acc,current)=> acc+current,0);
 
-  useEffect(() => {
-    const correcttotalStatmarks = statisticsMarks.reduce(
-      (acc, current) => acc + current,
-      0
-    );
-    const totalStatmark = totalStatMarks.reduce(
-      (acc, current) => acc + current,
-      0
-    );
+    const correcttotalPuremaths = mathematicsMarks.reduce((acc,current)=> acc+current,0);
+    const totalPureMaths = totalMathsmarks.reduce((acc,current)=> acc+current,0);
 
-    const correcttotalPuremaths = mathematicsMarks.reduce(
-      (acc, current) => acc + current,
-      0
-    );
-    const totalPureMaths = totalMathsmarks.reduce(
-      (acc, current) => acc + current,
-      0
-    );
-
-    const averageStatMarks = Math.round(
-      (correcttotalStatmarks / totalStatmark) * 100,
-      2
-    );
-    const averagePureMarks = Math.round(
-      (correcttotalPuremaths / totalPureMaths) * 100,
-      2
-    );
+    const averageStatMarks =Math.round((correcttotalStatmarks/totalStatmark)*100,2);
+    const averagePureMarks = Math.round(((correcttotalPuremaths/totalPureMaths)*100),2);
 
     console.log(averagePureMarks);
     console.log(averageStatMarks);
 
     setStatTestedProgress(averageStatMarks);
     setPureTestedProgress(averagePureMarks);
-  }, [statisticsMarks, totalStatMarks, mathematicsMarks, totalMathsmarks]);
+
+},[statisticsMarks,totalStatMarks,mathematicsMarks,totalMathsmarks])
+  
+  
+
+
+
+  
 
   return (
     <>
@@ -173,24 +170,22 @@ function DashboardCourses() {
             <div className="course-card">
               <div className="course-title">Pure Mathematics I</div>
               <div className="course-lessons">
-                {loggedInUser.PureMathematics.lesson} lessons
+                {mathLesson} lessons
               </div>
               <div className="course-progress-tab">
                 <div className="prog-bar">
                   <div style={{ width: 100, height: 100 }}>
                     <CircularProgressbar
-                      value={loggedInUser.PureMathematics.learnedProgress}
-                      text={`${loggedInUser.PureMathematics.learnedProgress}%`}
+                      value={0}
+                      text={`${pureLessonCount}%`}
                       styles={{
                         path: {
                           // Use the progress percentage to determine the opacity
-                          stroke: `rgba(62, 152, 199, ${
-                            pureLessonCount / 100
-                          })`,
+                          stroke: `rgba(62, 152, 199, ${pureLessonCount / 100})`,
                         },
                         text: {
                           // Adjust text color as needed
-                          fill: "#f88",
+                          fill: '#f88',
                         },
                       }}
                     />
@@ -200,18 +195,16 @@ function DashboardCourses() {
                 <div className="prog-bar">
                   <div style={{ width: 100, height: 100 }}>
                     <CircularProgressbar
-                      value={loggedInUser.PureMathematics.testedProgress}
-                      text={`${loggedInUser.PureMathematics.testedProgress}%`}
+                      value={0}
+                      text={`${testedPureProgress}`}
                       styles={{
                         path: {
                           // Use the progress percentage to determine the opacity
-                          stroke: `rgba(62, 152, 199, ${
-                            testedPureProgress / 100
-                          })`,
+                          stroke: `rgba(62, 152, 199, ${testedPureProgress / 100})`,
                         },
                         text: {
                           // Adjust text color as needed
-                          fill: "#f88",
+                          fill: '#f88',
                         },
                         // Customize the text color and style as needed
                       }}
@@ -224,23 +217,22 @@ function DashboardCourses() {
             <div className="course-card">
               <div className="course-title">Statistics</div>
               <div className="course-lessons">
-                {loggedInUser.Statistics.learnedProgress} lessons
+                {statlLesson} lessons
               </div>
               <div className="course-progress-tab">
                 <div className="prog-bar">
                   <div style={{ width: 100, height: 100 }}>
                     <CircularProgressbar
-                      value={loggedInUser.Statistics.learnedProgress}
-                      text={`${loggedInUser.Statistics.learnedProgress}%`}
+                      value={0}
+                      text={`${statLessonCount}%`}
                       styles={{
                         path: {
                           stroke: `rgba(62, 152, 199, ${
-                            loggedInUser.Statistics.learnedProgress / 100
+                            statLessonCount / 100
                           })`,
-                        },
-                        text: {
+                        },text: {
                           // Adjust text color as needed
-                          fill: "rgba(62, 152, 199)",
+                          fill: 'rgba(62, 152, 199)',
                         },
                         // Customize the text color and style as needed
                       }}
@@ -251,17 +243,16 @@ function DashboardCourses() {
                 <div className="prog-bar">
                   <div style={{ width: 100, height: 100 }}>
                     <CircularProgressbar
-                      value={loggedInUser.Statistics.testedProgress}
-                      text={`${loggedInUser.Statistics.testedProgress}%`}
+                      value={0}
+                      text={`${testedStatProgress}`}
                       styles={{
                         path: {
                           stroke: `rgba(62, 152, 199, ${
-                            loggedInUser.Statistics.testedProgress / 100
+                            testedStatProgress / 100
                           })`,
-                        },
-                        text: {
+                        },text: {
                           // Adjust text color as needed
-                          fill: "rgba(62, 152, 199)",
+                          fill: 'rgba(62, 152, 199)',
                         },
                         // Customize the text color and style as needed
                       }}
@@ -310,9 +301,12 @@ function DashboardActivity() {
 
 // Dashboard Final Display Page
 function DashboardPage() {
+  
+  
   const { loggedInUser, setLoggedInUser } = useContext(UserContext);
 
   const {
+    
     loading,
     setLoading: setLoading,
     value,
@@ -352,32 +346,99 @@ function DashboardPage() {
     testedStatProgress,
     setStatTestedProgress,
     isAuthenticated,
+    userId,
+    setUserId,
+    pureLessonCount,
+    setPureLessonCount,
+    statLessonCount,setStatLessonCount
   } = useContext(UserContext);
 
+  
+  
   useEffect(() => {
     const fetchData = async () => {
+      
       try {
-        setVoxalpoints(loggedInUser.voxalPoints);
-        setHoursLearned(loggedInUser.hoursLearned);
-        setCompleteCourse(loggedInUser.completeCourse);
-        setongoingCourses(loggedInUser.ongoingCourses);
-        setPureMathLearnedProgress(
-          loggedInUser.PureMathematics.learnedProgress
-        );
-        setStatLearnedProgress(loggedInUser.Statistics.learnedProgress);
-        setMathLesson(loggedInUser.PureMathematics.lesson);
-        setStatLesson(loggedInUser.Statistics.lesson);
-        setPureTestedProgress(loggedInUser.PureMathematics.testedProgress);
-        setStatTestedProgress(loggedInUser.Statistics.testedProgress);
-
-        console.log(loggedInUser.voxalPoints);
+        console.log(data);
+        const sessionData = sessionStorage.getItem("loggedUser");
+        if (sessionData) {
+          const sessionUser = JSON.parse(sessionData).data;
+          
+          setVoxalpoints(sessionUser.voxelPoints);
+          setHoursLearned(0); // Make sure to compute the correct value
+          setCompleteCourse(sessionUser.completedCourses.length);
+          setongoingCourses(sessionUser.courses.length);
+          if (sessionUser.lesson && sessionUser.lesson.length > 0) {
+            setPureMathLearnedProgress(sessionUser.lesson[0].topicLesson);
+            setStatLearnedProgress(sessionUser.lesson[1].topicLesson);
+            
+          } else {
+            // Handle the case where lesson is not an array or is empty
+            setPureMathLearnedProgress(null);
+          }
+          console.log("Voxel Points:", sessionUser.voxelPoints);
+        }
       } catch (error) {
         console.error("Error fetching data:", error);
       }
     };
-
+  
     fetchData();
-  }, [user]);
+  }, []);
+
+  
+
+  useEffect(() => {
+    console.log(pureMathLearnedProgress)
+    if (Array.isArray(pureMathLearnedProgress)) {
+    // Assuming pureMathLearnedProgress is the array of topicLessons as seen in your screenshot
+      const totalCount = pureMathLearnedProgress.reduce((total, topic) => {
+      // Count the completed lessons within this topic's lessonProgress
+      const completedCount = topic.lessonProgress.filter(lesson => lesson.completed).length;
+      // Add this topic's completed count to the total count
+      return total + completedCount;
+    }, 0); // Start with a total count of 0
+    setMathLesson(totalCount)
+      
+      const totaNumber = pureMathLearnedProgress.reduce((total,topic)=>{
+        const totalCount = topic.lessonProgress.length+total;
+        return totalCount;
+      },0)
+    
+      const percentage = Math.round((totalCount/totaNumber)*100,2);
+      console.log("The total number is"+percentage);
+      setPureLessonCount(percentage);
+    }
+  }, [pureMathLearnedProgress]);
+
+  ////for statistics 
+
+  useEffect(()=>{
+    console.log(statLearnedProgress);
+    if(Array.isArray(statLearnedProgress)){
+      const totalCount = statLearnedProgress.reduce((total,topic)=>{
+        const completeCount = topic.lessonProgress.filter(lesson=> lesson.completed).length;
+        return total+completeCount;
+
+      },0)
+      setStatLesson(totalCount);
+      const totalNumber = statLearnedProgress.reduce((total,topic)=>{
+        const totalCount = topic.lessonProgress.length+total;
+        return totalCount;
+      },0)
+      const percentage = Math.round((totalCount/totalNumber)*100,2);
+      setStatLessonCount(percentage);
+    }
+  },[statLearnedProgress])
+
+  
+
+
+useEffect(()=>{
+  console.log(pureLessonCount);
+  
+},[pureLessonCount])
+
 
   return (
     <>
@@ -386,10 +447,10 @@ function DashboardPage() {
         <div className="dashboard-main">
           <DashboardGraph />
           <DashboardStatistics
-            voxal={loggedInUser.voxalPoints}
-            ongoingCourses={loggedInUser.ongoingCourses}
-            completedCourses={loggedInUser.completeCourse}
-            hoursLearned={loggedInUser.hoursLearned}
+            voxal={voxalPoints}
+            ongoingCourses={ongoingCourse}
+            completedCourses={completeCourse}
+            hoursLearned={0}
           />
           <DashboardCourses />
           <DashboardActivity />

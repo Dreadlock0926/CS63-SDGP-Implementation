@@ -8,19 +8,18 @@ const cluster = process.env.CLUSTER;
 const session = require("express-session");
 const helmet = require("helmet");
 const { join } = require("path");
-const register = require("./routes/register");
-const gemini = require("./routes/gemini");
 const progression = require("./routes/progression");
-const getQuestionsOnTopic = require("./routes/getQuestionsOnTopic");
-const getQuestion = require("./routes/getQuestion");
+const gemini = require("./routes/gemini");
+const exam = require("./routes/exam");
 const login = require("./routes/login");
-const examResources = require("./routes/exam");
+const register = require("./routes/register");
 const addQuestion = require("./routes/addQuestion");
-const courses = require("./routes/courses");
-const learn = require("./routes/learn");
-const user = require("./routes/user");
+const getQuestion = require("./routes/getQuestion")
+const getQuestionsOnTopic = require("./routes/getQuestionsOnTopic")
 const getTopics = require("./routes/getTopics");
-const morgan = require("morgan");
+const examResources = require("./routes/exams")
+const user = require("./routes/user");
+const cookieParser = require("cookie-parser");
 
 async function authenticated(req, res, next) {
   if (req?.session?.user) {
@@ -35,9 +34,8 @@ async function authenticated(req, res, next) {
   }
 }
 
-app.use(cors({ origin: "*" })); //allow access from anywhere for now!
-app.use(morgan("combined"));
-app.use(express.urlencoded());
+app.use(cors({ origin: "*" }));
+app.use(express.urlencoded()); //allow access from anywhere for now!
 app.use(helmet());
 app.use(express.json());
 
@@ -45,8 +43,9 @@ app.get("/", (req, res) => {
   res.status(200).send("<h1>Hey docker!</h1>");
 });
 
-app.set("trust proxy", 1);
+app.set("trust proxy", 1); // trust first proxy
 app.use(
+  //adding sessions to test!
   session({
     secret: "keyboard cat",
     resave: false,
@@ -55,21 +54,16 @@ app.use(
   })
 );
 
-app.use("/register", register);
 app.use("/login", login);
-// app.use(authenticated); //uncomment during final authentication tests 🔓
-app.use("/exam", examResources);
-app.use("/addQuestion", addQuestion);
-app.use("/course", courses);
+app.use("/register", register);
 app.use("/gemini", gemini);
 app.use("/progression", progression);
 app.use("/addQuestion", addQuestion);
 app.use("/getQuestionsOnTopic", getQuestionsOnTopic);
 app.use("/getQuestion", getQuestion);
 app.use("/getTopics", getTopics);
+app.use("/exam", exam);
 app.use("/user", user);
-app.use("/learn", learn);
-app.use("/getTopics", getTopics);
 
 app.use("*", (req, res) => {
   //leave this below all the other routes cuz this is the LAST RESORT JUST INCASE THE requested url is neither of the existing routes

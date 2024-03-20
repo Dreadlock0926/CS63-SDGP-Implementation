@@ -12,7 +12,7 @@ const NavBar = () => {
           <a className="navItem" href="#">
             About
           </a>
-          <a className="navItem" href="select-course">
+          <a className="navItem" href="#">
             Courses
           </a>
           <a className="navItem" href="#">

@@ -21,16 +21,21 @@ router.route("/saveExam").post(async (req, res) => {
   if (validityExam) {
     // Update user's examInfo after successful exam creation
     try {
+
       let updatedUser = null;
 
       if (examType.toLowerCase() === "feedback") {
+
         updatedUser = await userModel.findByIdAndUpdate(userRef, {
           $push: { feedbackExams: validityExam._id }, // Push exam object Id
         });
+
       } else if (examType.toLowerCase() === "topical") {
+
         updatedUser = await userModel.findByIdAndUpdate(userRef, {
           $push: { topicalExams: validityExam._id }, // Push exam object Id
         });
+
       }
 
       if (updatedUser) {
@@ -150,9 +155,6 @@ router.route("/getExamHistory").post(async (req, res) => {
     if (!user) {
       return res.status(404).send("User not found");
     }
-
-    console.log(user.topicalExams);
-    console.log(user.feedbackExams);
 
     const exams = {
       topicalExams: user.topicalExams,

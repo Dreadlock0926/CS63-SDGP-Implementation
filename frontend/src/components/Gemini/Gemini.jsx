@@ -3,9 +3,9 @@ import Axios from "axios";
 import { UserContext } from "../../App";
 import BarLoader from "react-spinners/BarLoader";
 import { AiFillRobot } from "react-icons/ai";
-import { TextField, Button } from "../muiComponents";
-
-import "./Bot.css";
+import TextField from "@mui/material/TextField";
+import Button from "@mui/material/Button"; 
+import "./Bot.css"; 
 
 function Gemini() {
   const { loggedInUser } = useContext(UserContext);
@@ -37,7 +37,7 @@ function Gemini() {
 
   return loggedInUser ? (
     <div className="bot-container">
-      <AiFillRobot className="dabot" onClick={() => setMenu((prev) => !prev)}>
+      <AiFillRobot className="dabot" onClick={() => setMenu(prev => !prev)}>
         {menu ? "Close Bot" : "Open Bot!"}
       </AiFillRobot>
       {menu && (
