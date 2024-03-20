@@ -16,6 +16,7 @@ function App() {
   const [status, setStatus] = useState("");
   const [response, setResponse] = useState("");
   const [theTopic, setTheTopic] = useState("");
+  const [falseTopics, setFalseTopics] = useState([]);
   const [TheSource, setSource] = useState("");
   const [theProgressVal, setTheProgressVal] = useState(0);
   const [specificTopic, setSpecificTopic] = useState("");
@@ -48,6 +49,7 @@ function App() {
     topicRelated,
     setTopicRelated,
     setSource,
+    falseTopics, setFalseTopics
   };
 
   return (

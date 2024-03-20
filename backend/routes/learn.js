@@ -170,10 +170,15 @@ router.post("/testing-user", async (req, res) => {
       const completedCount = topicLesson.lessonProgress.filter(
         (lesson) => lesson.completed
       ).length;
+
+      const lessons = topicLesson.lessonProgress.map(
+        (lesson) => lesson.lessonName
+      );
+
       const completedPercentage = Math.round(
         (completedCount / topicLesson.lessonProgress.length) * 100
       );
-      topicCompletions[topicLesson.topic] = { completedPercentage };
+      topicCompletions[topicLesson.topic] = { completedPercentage, lessons };
     });
 
     const response = topicCompletions; // Response object
@@ -244,7 +249,7 @@ router.route("/fromtopics").post(async (req, res) => {
 
     if (topicExists) {
       console.log(`The topic length `);
-      console.log(topicExists?.topicLesson?.length)
+      console.log(topicExists?.topicLesson?.length);
       for (let i = 0; i < topicExists?.topicLesson?.length; i++) {
         if (topicExists.topicLesson[i].topic === topic) {
           return res.status(200).json(topicExists.topicLesson[i].lessons);

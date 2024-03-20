@@ -29,7 +29,8 @@ const LearnBlueprint = () => {
     TheSource,
     setSource,
     setTheProgressVal,
-
+    falseTopics,
+    setFalseTopics,
     setTheTopic,
     setLessonTopic,
     setTopicRelated,
@@ -80,6 +81,10 @@ const LearnBlueprint = () => {
     }
   }
 
+  useEffect(()=>{
+    console.log();
+  },[])
+
   async function IncrementProgress(theSource) {
     // try {
     //   const outcome = await Axios.put(`${BASE}/resources/progress/updates`, {
@@ -111,10 +116,14 @@ const LearnBlueprint = () => {
     fetchTopicData();
   }, [theTopic]);
 
+  useEffect(() => {
+    console.log(`\nThe topics -> ${JSON.stringify(topicTitles)}`);
+  }, [topicTitles]);
+
   return (
     <>
       {topicTitles && topicTitles.length && (
-        <Container style={{ margin: "10px" }}  className="container">
+        <Container style={{ margin: "10px" }} className="container">
           {loading ? (
             <Typography variant="h4">Loading...</Typography>
           ) : (
@@ -202,6 +211,7 @@ const LearnBlueprint = () => {
                     ))}
                 </TableBody>
               </Table>
+              <br />
               <Typography variant="body1">{status}</Typography>
             </>
           )}

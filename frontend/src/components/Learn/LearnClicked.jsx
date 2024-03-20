@@ -28,6 +28,8 @@ const LearnClicked = () => {
     topicRelated,
     setTopicRelated,
     user,
+    falseTopics,
+    setFalseTopics,
     theTopic,
   } = useContext(UserContext);
   const { lesson } = useParams();
@@ -59,7 +61,26 @@ const LearnClicked = () => {
       }
     };
 
+    async function FalseTopics() {
+      try {
+        const response = await Axios.post(`${BASE}/resources/false-topic`, {
+          userId: "65f86f434b9403f9d70d8aa3",
+          topic: lesson,
+          source: TheSource,
+        });
+        if (response.status === 200) {
+          setFalseTopics(response.data);
+        }
+      } catch (err) {
+        if (err.status === 404) {
+          setStatus("No data found!");
+        }
+        console.error(err.message);
+      }
+    }
+
     fetchData();
+    FalseTopics();
   }, [lesson]); // Fetch data when lesson changes
 
   // useEffect(() => {
@@ -88,11 +109,27 @@ const LearnClicked = () => {
 
   // const [lessonName, setLessonName] = useState("");
 
+  async function FalseTopics() {
+    try {
+      const response = await Axios.post(`${BASE}/resources/false-topic`, {
+        userId: "65f86f434b9403f9d70d8aa3",
+        topic: "Quadratics",
+        source: TheSource,
+      });
+      if (response.status === 200) {
+        setFalseTopics(response.data);
+      }
+    } catch (err) {
+      if (err.status === 404) {
+        setStatus("No data found!");
+      }
+      console.error(err.message);
+    }
+  }
+
   const IncrementProgress = async () => {
     try {
-      const lessonNameArray = topicRelated.map(
-        (x) => x?.lessonTitle
-      );
+      const lessonNameArray = topicRelated.map((x) => x?.lessonTitle);
 
       const outcome = await Axios.put(`${BASE}/resources/progress/updates`, {
         userId: "65f86f434b9403f9d70d8aa3", //user.id
@@ -103,7 +140,9 @@ const LearnClicked = () => {
 
       if (outcome.status === 200) {
         setLessonCounter((prev) => prev + 1);
+        FalseTopics();
       }
+
       console.log(outcome.data);
     } catch (error) {
       if (error.status === 404) {
@@ -113,6 +152,17 @@ const LearnClicked = () => {
     }
   };
 
+  useEffect(()=>{
+    FalseTopics()
+  },[])
+
+  // useEffect(() => {
+  //   console.log(
+  //     topicRelated !== null
+  //       ? JSON.stringify(topicRelated[lessonCounter]?.lessonBody?.lessonSection)
+  //       : "No data!"
+  //   );
+  // }, [topicRelated]);
 
   return topicRelated && topicRelated.length ? (
     loading ? (
@@ -122,15 +172,18 @@ const LearnClicked = () => {
         <div>
           {topicRelated.map((x, index) => (
             <div key={index} style={{ margin: "2%", padding: "2%" }}>
+              {/* <nav>
+                <ul>{x.lessonTitle}</ul>
+              </nav> */}
               {index === lessonCounter ? (
                 <div>
                   <h1>{x.lessonTitle}</h1>
-                  {x?.lessonBody.lessonSection &&
-                    x?.lessonBody.lessonSection.map((x) => {
+                  {x?.lessonBody?.lessonSection &&
+                    x?.lessonBody?.lessonSection.map((x) => {
                       return <h1 key={index}>{x}</h1>;
                     })}
-                  {x?.lessonBody.sectionImgURL &&
-                    x?.lessonBody.sectionImgURL.map((x, index) => {
+                  {x?.lessonBody?.sectionImgURL &&
+                    x?.lessonBody?.sectionImgURL.map((x, index) => {
                       return <img src={x} key={index}></img>;
                     })}
                 </div>
@@ -139,7 +192,26 @@ const LearnClicked = () => {
               )}
             </div>
           ))}
-          <button onClick={IncrementProgress}>{`Next Page!`}</button>
+          <button
+            onClick={IncrementProgress}
+            // onClick={() => {
+            //   if (
+            //     lessonCounter <=
+            //     topicRelated[lessonCounter]?.lessonBody?.lessonSection.length
+            //   ) {
+            //     IncrementProgress(); //works
+            //   } else {
+            //     setStatus(`Congrats you have completed ${lesson}`);
+            //     // setTimeout(() => {
+            //     //   navigator("/learnprint");
+            //     // }, 1500);
+            //   }
+            // }}
+            // disabled={
+            //   lessonCounter >=
+            //   topicRelated[lessonCounter]?.lessonBody?.lessonSection.length
+            // }
+          >{`Next Page!`}</button>
         </div>
       </>
     )
