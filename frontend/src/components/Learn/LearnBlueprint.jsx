@@ -137,6 +137,11 @@ const LearnBlueprint = () => {
                   ? "Pure Mathematics I"
                   : "Probability And Statistics"}
               </Typography>
+              <br />
+              <Typography variant="body1">
+                {status}
+              </Typography>
+              <br />
               <Table style={{ width: "100%", textAlign: "center" }}>
                 <TableHead>
                   <TableRow>
@@ -156,12 +161,7 @@ const LearnBlueprint = () => {
                         <TableCell>
                           {topicPercentage && topicPercentage[index] && (
                             <RouterLink
-                              to={
-                                topicPercentage[index].completedPercentage !==
-                                100
-                                  ? `/learnclicked/${title}`
-                                  : null
-                              }
+                              to={`/learnclicked/${title}`}
                               onClick={() => {
                                 if (status !== "") {
                                   // Set status if completed
@@ -177,9 +177,13 @@ const LearnBlueprint = () => {
                               }}
                             >
                               {topicPercentage[index].completedPercentage ===
-                              100
-                                ? "Completed"
-                                : `${topicPercentage[index].completedPercentage}% Complete`}
+                              100 ? (
+                                <p style={{ color: "green" }}>Completed</p>
+                              ) : (
+                                <p
+                                  style={{ color: "red" }}
+                                >{`${topicPercentage[index].completedPercentage}% Complete`}</p>
+                              )}
                             </RouterLink>
                           )}
                         </TableCell>
@@ -215,8 +219,6 @@ const LearnBlueprint = () => {
                     ))}
                 </TableBody>
               </Table>
-              <br />
-              <Typography variant="body1">{status}</Typography>
             </>
           )}
         </Container>

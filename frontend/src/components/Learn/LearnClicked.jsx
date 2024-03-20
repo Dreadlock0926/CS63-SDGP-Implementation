@@ -38,6 +38,9 @@ const LearnClicked = () => {
   const [theLessonName, setTheLessonName] = useState("");
   const navigator = useNavigate();
 
+  // const theSubtopic = subtopic.replace(/ /g, "-");
+  // console.log(theSubtopic)
+
   useEffect(() => {
     const fetchData = async () => {
       try {
@@ -53,7 +56,7 @@ const LearnClicked = () => {
         setStatus("");
       } catch (error) {
         console.error(error.message);
-        if (error.response.status === 404) {
+        if (error.status === 404) {
           setStatus("No resources found!");
         }
       } finally {
@@ -151,7 +154,7 @@ const LearnClicked = () => {
       console.log(outcome.data);
     } catch (error) {
       if (error.status === 404) {
-        setStatus(`You have completed ${lesson}!`);
+        setStatus(`Congrats! You have completed ${lesson}! 🥳`);
       }
       console.error(error.message);
     }
@@ -177,7 +180,12 @@ const LearnClicked = () => {
         <div style={{ display: "flex", fontFamily: "poppins" }}>
           <div
             className="sidebar"
-            style={{ width: "20%", marginRight: "20px",margin:"20px",padding:"10px" }}
+            style={{
+              width: "20%",
+              marginRight: "20px",
+              margin: "20px",
+              padding: "10px",
+            }}
           >
             <h1>{lesson}</h1>
             {topicRelated.map((x, index) => (
@@ -226,10 +234,12 @@ const LearnClicked = () => {
             <h1>{status}</h1>
             <button
               onClick={() => {
-                if (topicRelated?.incompleteLessons?.length!==0) {
-                  IncrementProgress();
+                if (topicRelated?.incompleteLessons?.length === 0) {
+                  setTimeout(() => {
+                    navigator("/learnprint");
+                  }, 1500);
                 } else {
-                  setStatus(`Congrats! You have completed ${lesson}! 🥳`);
+                  IncrementProgress();
                 }
               }}
               disabled={
