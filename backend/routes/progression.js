@@ -102,5 +102,38 @@ router.route("/get/marks").post(async (req, res) => {
 });
 
 
+router.route("/get/hours").post(async (req, res) => {
+  const { _id } = req.body;
+  
+  if (!_id) {
+    return res.status(400).json({ Alert: "No data found!" });
+  }
+  
+  try {
+    const user = await progressionModel.findById(_id);
+    if (user) {
+      const createdAt = new Date(user.createdAt);
+      const updatedAt = new Date(user.updatedAt);
+      
+      // Check if the dates are valid
+      if (!isNaN(createdAt.getTime()) && !isNaN(updatedAt.getTime())) {
+        const diff = updatedAt - createdAt;
+        const diffHours = diff / 3600000; // Convert milliseconds to hours
+        const totalHours = Math.round(diffHours,2);
+        console.log(totalHours);
+        return res.json({ hours: totalHours  });
+      } else {
+        // Handle the invalid date case
+        return res.status(400).json({ Alert: "Invalid date format." });
+      }
+    } else {
+      return res.status(404).json({ Alert: "User not found!" });
+    }
+  } catch (err) {
+    console.error(err);
+    return res.status(500).json({ Alert: "An error occurred while processing your request." });
+  }
+});
+
 
 module.exports = router;

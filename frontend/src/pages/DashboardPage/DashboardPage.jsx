@@ -49,6 +49,7 @@ function DashboardStatistics({
   ongoingCourses,
   completedCourses,
   hoursLearned,
+  
 }) {
   return (
     <>
@@ -432,12 +433,25 @@ function DashboardPage() {
   },[statLearnedProgress])
 
   
-
+const id = localStorage.getItem('id');
 
 useEffect(()=>{
-  console.log(pureLessonCount);
-  
-},[pureLessonCount])
+  const fetchData = async ()=>{
+    try{
+     const response = await axios.post("http://localhost:8000/progression/get/hours",{_id:id});
+     console.log(response);
+     if(response){
+      setHoursLearned(response.data.hours);
+     }
+
+    }catch(err){
+      console.log(err);
+    }
+
+  }
+  fetchData();
+
+},[hoursLearned])
 
 
   return (
@@ -450,7 +464,7 @@ useEffect(()=>{
             voxal={voxalPoints}
             ongoingCourses={ongoingCourse}
             completedCourses={completeCourse}
-            hoursLearned={0}
+            hoursLearned={hoursLearned}
           />
           <DashboardCourses />
           <DashboardActivity />
