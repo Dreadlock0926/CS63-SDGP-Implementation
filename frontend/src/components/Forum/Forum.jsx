@@ -98,7 +98,7 @@ const Forum = () => {
       }
     } catch (err) {
       console.error(err);
-    }
+    } 
   };
 
   const downVote = async (id) => {
@@ -197,7 +197,7 @@ const Forum = () => {
           </div>
         </div>
 
-        <div className="`searc`hContainer">
+        <div className="searchContainer">
               <p className="forumTitle">🔎 Search Filter</p>
               <br />
             <form onSubmit={searchUp}>
@@ -207,7 +207,11 @@ const Forum = () => {
                   }}
                   placeholder="Search your queries here..."
                   type="text"/>
-                  <button type="submit" disabled={loading}>Search...</button>
+                  <div className="submitBtn">
+                    <button style={{padding: "8px"}} type="submit" disabled={loading}>
+                      <img style={{height: "48px"}} src="./images/search.png" />
+                    </button>
+                  </div>
             </form>
             
             <div style={{display: "flex"}}>
@@ -227,7 +231,7 @@ const Forum = () => {
           <hr />
         <p>{status}</p>
         {loading ? (
-          <div className="forumload">
+          <div className="forumLoad">
             <ClipLoader size={80} color="#1fa3d5" loading={true} />
           </div>
         ) : down === 0 ? (

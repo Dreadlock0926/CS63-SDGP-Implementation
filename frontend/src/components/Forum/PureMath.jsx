@@ -24,7 +24,7 @@ const PureMath = ({
   toggle,setToggle
 }) => {
   return (
-    <div key={theKey} className="card" style={{ marginBottom: "20px" }}>
+    <div key={theKey} className="questionCard" style={{ marginBottom: "20px" }}>
       <Typography variant="h4">{x.question}</Typography>
       <Typography variant="body1">{x.description}</Typography>
       <Typography variant="h4">Responses:</Typography>
