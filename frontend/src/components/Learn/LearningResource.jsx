@@ -165,7 +165,6 @@ const LearningResource = () => {
               Next Page!
             </button>
           </div>
-          <h1>{status}</h1>
         </div>
       </>
     )
