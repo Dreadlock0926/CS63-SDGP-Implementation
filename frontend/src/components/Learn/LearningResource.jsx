@@ -13,7 +13,7 @@ const LearningResource = () => {
   const [topicRelated, setTopicRelated] = useState({});
   const [section, setSection] = useState([]);
 
-  const { loading, setLoading } = useContext(UserContext);
+  const { loading, setLoading, status, setStatus } = useContext(UserContext);
 
   const IncrementProgress = async () => {
     try {
@@ -41,6 +41,8 @@ const LearningResource = () => {
       if (x.lessonName == lesson) {
         if (x.completed == false) {
           IncrementProgress();
+        } else {
+          setStatus(`You have completed ${lesson}`);
         }
         currentLessonIndex = index;
       }
@@ -89,10 +91,10 @@ const LearningResource = () => {
     }
   }, [topicRelated, section]);
 
-  return topicRelated && Object.keys(topicRelated).length > 0 ? (
-    loading ? (
-      "Loading..."
-    ) : (
+  return loading ? (
+    <h1>Loading...</h1>
+  ) : (
+    topicRelated && Object.keys(topicRelated).length > 0 && (
       <>
         <div style={{ display: "flex", fontFamily: "poppins" }}>
           <div
@@ -101,14 +103,20 @@ const LearningResource = () => {
               width: "20%",
               marginRight: "20px",
               margin: "20px",
-              padding: "10px",
+              padding: "20px",
+              borderRight: "12px solid #17B169",
+              borderWidth: "5px",
+              borderRadius: "5px",
             }}
           >
-            <h1>{lesson}</h1>
             {topicRelated.map((x, index) => (
               <ul
                 key={index}
-                style={{ listStyleType: "none", textDecoration: "none" }}
+                style={{
+                  listStyleType: "none",
+                  textDecoration: "none",
+                  fontSize: 10,
+                }}
               >
                 <a
                   href={`/learning/${source}/${topic}/${x.lessonName}`}
@@ -123,7 +131,16 @@ const LearningResource = () => {
               </ul>
             ))}
           </div>
-          <div style={{ flex: 1 }}>
+          <div
+            style={{
+              flex: 1,
+              border: "12px solid #17B169",
+              borderWidth: "5px",
+              margin: "20px",
+              padding: "20px",
+            }}
+          >
+            <h1>{lesson}</h1>
             {Object.keys(section).length > 0 && (
               <div>
                 {section.lessonSection.map((sectionText, index) => (
@@ -148,11 +165,10 @@ const LearningResource = () => {
               Next Page!
             </button>
           </div>
+          <h1>{status}</h1>
         </div>
       </>
     )
-  ) : (
-    "No subtopic has been selected!"
   );
 };
 

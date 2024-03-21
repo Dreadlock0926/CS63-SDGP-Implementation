@@ -122,10 +122,15 @@ const LearnBlueprint = () => {
     fetchTopicData();
   }, [theTopic]);
 
-  return (
+  return loading ? (
+    <h1>Loading...</h1>
+  ) : (
     <>
       {topicTitles && topicTitles.length && (
-        <Container style={{ margin: "10px" }} className="container">
+        <Container
+          style={{ display: "flex", fontFamily: "poppins" }}
+          className="container"
+        >
           {loading ? (
             <Typography variant="h4">Loading...</Typography>
           ) : (

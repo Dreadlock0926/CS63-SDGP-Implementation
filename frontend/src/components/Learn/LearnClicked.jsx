@@ -172,8 +172,10 @@ const LearnClicked = () => {
   //   );
   // }, [topicRelated]);
 
-  return topicRelated && topicRelated.length ? (
-    loading ? (
+  return (
+    topicRelated &&
+    topicRelated.length &&
+    (loading ? (
       "Loading..."
     ) : (
       <>
@@ -184,14 +186,21 @@ const LearnClicked = () => {
               width: "20%",
               marginRight: "20px",
               margin: "20px",
-              padding: "10px",
+              padding: "20px",
+              borderRight: "12px solid #17B169",
+              borderWidth: "5px",
+              borderRadius: "5px",
             }}
           >
             <h1>{lesson}</h1>
             {topicRelated.map((x, index) => (
               <ul
                 key={index}
-                style={{ listStyleType: "none", textDecoration: "none" }}
+                style={{
+                  listStyleType: "none",
+                  textDecoration: "none",
+                  fontSize: 10,
+                }}
               >
                 <Link
                   onClick={() => {
@@ -207,7 +216,15 @@ const LearnClicked = () => {
               </ul>
             ))}
           </div>
-          <div style={{ flex: 1 }}>
+          <div
+            style={{
+              flex: 1,
+              border: "12px solid #17B169",
+              borderWidth: "5px",
+              margin: "20px",
+              padding: "10px",
+            }}
+          >
             {topicRelated.map((x, index) => (
               <div key={index} style={{ margin: "2%", padding: "2%" }}>
                 {index === lessonCounter ? (
@@ -251,9 +268,7 @@ const LearnClicked = () => {
           </div>
         </div>
       </>
-    )
-  ) : (
-    "No subtopic has been selected!"
+    ))
   );
 };
 
