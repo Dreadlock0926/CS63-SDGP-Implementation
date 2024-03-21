@@ -213,13 +213,20 @@ const FeedbackPage = () => {
                         numWrong += 1;
                     }
                 })
-                let probability = Math.round(numWrong/(numWrong+numCorrect) * 10)/10;
-                if (probability === 0) {
-                    probability = 0.1;
-                } else if (probability === 1) {
-                    probability = 0.9;
+
+                if (numCorrect !== 0 && numWrong !== 0) {
+
+                    let probability = Math.round(numWrong/(numWrong+numCorrect) * 10)/10;
+                    if (probability === 0) {
+                        probability = 0.1;
+                    } else if (probability === 1) {
+                        probability = 0.9;
+                    }
+
+                 topicProbabilitiesClone[key] = probability;
+
                 }
-                topicProbabilitiesClone[key] = probability;
+
             }   
         });
 
