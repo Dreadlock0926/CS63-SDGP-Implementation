@@ -1,106 +1,174 @@
 /* eslint-disable no-unused-vars */
 /* eslint-disable react-hooks/exhaustive-deps */
-import { useContext, useEffect, useRef, useState } from "react";
+import { useContext, useEffect, useState } from "react";
 import { UserContext } from "../../App";
 import Axios from "axios";
 import { useHover } from "@uidotdev/usehooks";
-import { Link, useParams } from "react-router-dom";
+import { Link, useParams, useNavigate } from "react-router-dom";
 
+const LearningResource = () => {
+  const navigate = useNavigate();
+  const { source, topic, lesson } = useParams();
 
-const LearningResource = (props) => {
-  const {
-    loading,
-    setLoading,
-    status,
-    setStatus,
-    user,
-    theProgressVal,
-    setTheProgressVal,
-  } = useContext(UserContext);
-  const BASE = "http://localhost:8000/resources/progress/updates";
-  const [ref, hovering] = useHover();
-  const [lessons, setLessons] = useState([]);
-  const { index } = useParams();
+  const [topicRelated, setTopicRelated] = useState({});
+  const [section, setSection] = useState([]);
 
-  let theProgressGiven = 0;
-  async function getNumberOfLessonForProgress() {
+  const { loading, setLoading, status, setStatus } = useContext(UserContext);
+
+  const IncrementProgress = async () => {
     try {
-      setLoading(true);
-      const { data } = await Axios.get(BASE, { userId: user.id });
-      if (data.status === 200) {
-        setLessons(data);
-        if (theProgressVal !== "") {
-          setTheProgressVal("");
+      const outcome = await Axios.put(
+        `http://localhost:8000/resources/progress/updates`,
+        {
+          userId: "65f86f434b9403f9d70d8aa3", //user.id
+          topic: topic,
+          source: source,
+          lessonName: lesson,
         }
-        theProgressGiven = data.topics.length / 100;
-        console.log(theProgressGiven);
-        setTheProgressVal(theProgressGiven);
-      } else if (data.status === 404) {
-        setStatus("No results found!");
-      } else {
-        setStatus("Error while processing data!");
-      }
-    } catch (err) {
-      console.error(err);
-    } finally {
-      setLoading(false);
-    }
-  }
+      );
 
-  async function updateProgress() {
-    try {
-      setLoading(true);
-      const { data } = await Axios.post(BASE, {
-        userId: user.id,
-        theProgressVal,
-      });
-      if (data.status === 201) {
-        setStatus("Updated Progress");
-      }
-    } catch (err) {
-      console.error(err);
-    } finally {
-      setLoading(false);
+      console.log(outcome.data);
+    } catch (error) {
+      console.error(error.message);
     }
-  }
+  };
+
+  const handleBtnClick = () => {
+    let currentLessonIndex = null;
+    let nextLesson = "";
+
+    topicRelated.map((x, index) => {
+      if (x.lessonName == lesson) {
+        if (x.completed == false) {
+          IncrementProgress();
+        } else {
+          setStatus(`You have completed ${lesson}`);
+        }
+        currentLessonIndex = index;
+      }
+    });
+
+    if (currentLessonIndex !== null) {
+      if (currentLessonIndex + 1 < topicRelated.length) {
+        nextLesson = topicRelated[currentLessonIndex + 1].lessonName;
+      } else {
+        nextLesson = topicRelated[0].lessonName;
+      }
+    }
+
+    window.location.href = `/learning/${source}/${topic}/${nextLesson}`;
+  };
 
   useEffect(() => {
-    getNumberOfLessonForProgress();
+    // const loggedUser = sessionStorage.getItem("loggedUser");
+
+    const fetchData = async () => {
+      setLoading(true);
+      try {
+        const response = await Axios.post(
+          "http://localhost:8000/resources/getLessonBodies",
+          {
+            userId: "65f86f434b9403f9d70d8aa3",
+            lessonTitle: lesson,
+            topic: topic,
+          }
+        );
+        setSection(response.data.lessonBody);
+        1;
+        setTopicRelated(response.data.lessonProgressReturn.lessonProgress);
+      } catch (error) {
+        console.error(error.message);
+      }
+    };
+    fetchData();
   }, []);
 
   useEffect(() => {
-    if (hovering) {
-      alert("Hovering")
-      setTheProgressVal((prev) => (prev += theProgressGiven));
-      updateProgress();
-      JSON.stringify(lessons);
+    if (Object.keys(topicRelated).length > 0) {
+      if (Object.keys(section).length > 0) {
+        setLoading(false);
+      }
     }
-  }, [hovering]);
+  }, [topicRelated, section]);
 
-  async function CompletedLesson() {
-    try {
-      setTheProgressVal((prev) => (prev += theProgressGiven));
-      updateProgress();
-    } catch (err) {
-      console.error(err);
-    }
-  }
-
-  return (
-    <div style={{ height: "4000px" }}>
-      <h1>Learning Resources</h1>
-      {/* <div className="end" ref={ref}>
-          <h1>The end!</h1>
-        </div> */}
-
-      <p>Your index {index ? index : "Nothing!"}</p>
-      <Link to={`/nextpage/${1}`} onClick={CompletedLesson}>
-        Next Page!
-      </Link>
-      <h1>Status {status ? status : "No status"}</h1>
-      <p>Progress {theProgressVal ? theProgressVal : "No progress"}</p>
-      <div className="end" ref={ref} >The End!</div>
-    </div>
+  return loading ? (
+    <h1>Loading...</h1>
+  ) : (
+    topicRelated && Object.keys(topicRelated).length > 0 && (
+      <>
+        <div style={{ display: "flex", fontFamily: "poppins" }}>
+          <div
+            className="sidebar"
+            style={{
+              width: "20%",
+              marginRight: "20px",
+              margin: "20px",
+              padding: "20px",
+              borderRight: "12px solid #17B169",
+              borderWidth: "5px",
+              borderRadius: "5px",
+            }}
+          >
+            {topicRelated.map((x, index) => (
+              <ul
+                key={index}
+                style={{
+                  listStyleType: "none",
+                  textDecoration: "none",
+                  fontSize: 10,
+                }}
+              >
+                <a
+                  href={`/learning/${source}/${topic}/${x.lessonName}`}
+                  style={{ textDecoration: "none" }}
+                >
+                  {x.completed == false ? (
+                    <h1 style={{ color: "red" }}>{x.lessonName}</h1>
+                  ) : (
+                    <h1 style={{ color: "green" }}>{x.lessonName}</h1>
+                  )}
+                </a>
+              </ul>
+            ))}
+          </div>
+          <div
+            style={{
+              flex: 1,
+              border: "12px solid #17B169",
+              borderWidth: "5px",
+              margin: "20px",
+              padding: "20px",
+            }}
+          >
+            <h1>{lesson}</h1>
+            {Object.keys(section).length > 0 && (
+              <div>
+                {section.lessonSection.map((sectionText, index) => (
+                  <div key={index}>
+                    <p>{sectionText}</p>
+                    {section.sectionImgURL[index] !== "" && (
+                      <img
+                        src={section.sectionImgURL[index]}
+                        onLoad={() => setLoading(false)}
+                        alt={`Section ${index}`}
+                      />
+                    )}
+                  </div>
+                ))}
+              </div>
+            )}
+            <button
+              onClick={() => {
+                handleBtnClick();
+              }}
+            >
+              Next Page!
+            </button>
+          </div>
+          <h1>{status}</h1>
+        </div>
+      </>
+    )
   );
 };
 

@@ -67,6 +67,55 @@ router.route("/topic/learned").post(async (req, res) => {
   }
 });
 
+router.route("/getLessonBodies").post(async (req, res) => {
+  const { lessonTitle, topic, userId } = req?.body;
+
+  if (!lessonTitle || !topic || !userId) {
+    return res.status(400).json({ Alert: "Missing Request Body" });
+  }
+
+  const lesson = await topicsModel.findOne({
+    "topicLesson.lessons.lessonTitle": lessonTitle,
+  });
+
+  if (!lesson) {
+    return res.status(404).send("Lesson not found");
+  }
+
+  let lessonBody = null;
+
+  // Extract and return the lessonBody from the found lesson
+  for (const topicLesson of lesson.topicLesson) {
+    if (topicLesson.topic === topic) {
+      lessonBody = topicLesson.lessons.find(
+        (lesson) => lesson.lessonTitle === lessonTitle
+      ).lessonBody;
+    }
+  }
+
+  console.log(lessonBody);
+
+  const user = await userModel.findById(userId);
+
+  if (!user) {
+    return res.status(404).send("User not found");
+  }
+
+  let lessonProgressReturn = null;
+
+  for (const topicProgress of user.lesson) {
+    for (const lessonProgress of topicProgress.topicLesson) {
+      if (lessonProgress.topic === topic) {
+        lessonProgressReturn = lessonProgress;
+      }
+    }
+  }
+
+  const response = { lessonBody, lessonProgressReturn };
+
+  res.status(200).json(response);
+});
+
 router.route("/topic").post(async (req, res) => {
   const topic = req?.body?.topic;
   if (!topic) {
@@ -98,7 +147,7 @@ router.route("/topic").post(async (req, res) => {
 router.route("/completeLesson").post(async (req, res) => {
   try {
     const {
-      userId = "65f471667a725acbb3ba057f",
+      userId = "65f86f434b9403f9d70d8aa3",
       lessonName = "substitutionIntegration",
     } = req.body;
 
@@ -139,14 +188,142 @@ router.route("/completeLesson").post(async (req, res) => {
   }
 });
 
+router.post("/testing-user", async (req, res) => {
+  try {
+    const { userID, source } = req.body; // Extract userID and source from request body
+
+    // Validate userID
+    if (!userID) {
+      return res
+        .status(400)
+        .json({ message: "Missing userID in request body" });
+    }
+
+    const user = await userModel.findById(userID); // Find user by ID
+    if (!user) {
+      return res.status(404).json({ message: "User not found" });
+    }
+
+    const lesson = user.lesson.find((lesson) => lesson.source === source); // Find specific lesson object
+    if (!lesson) {
+      return res
+        .status(404)
+        .json({ message: "Source not found for this user" });
+    }
+
+    const topicLessons = lesson.topicLesson; // Extract topicLesson array
+
+    const topicCompletions = {}; // Object to store topic and completion percentage
+    const topicFirstLesson = {};
+
+    topicLessons.forEach((topicLesson) => {
+      topicFirstLesson[topicLesson.topic] =
+        topicLesson.lessonProgress[0].lessonName;
+    });
+
+    topicLessons.forEach((topicLesson) => {
+      const completedCount = topicLesson.lessonProgress.filter(
+        (lesson) => lesson.completed
+      ).length;
+
+      const lessons = topicLesson.lessonProgress.map(
+        (lesson) => lesson.lessonName
+      );
+
+      const completedPercentage = Math.round(
+        (completedCount / topicLesson.lessonProgress.length) * 100
+      );
+      topicCompletions[topicLesson.topic] = { completedPercentage, lessons };
+    });
+
+    res.status(200).json({ topicCompletions, topicFirstLesson }); // Send response object
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ message: "Server error" });
+  }
+});
+
+router.route("/false-topic").post(async (req, res) => {
+  try {
+    const {
+      userId = "65f86f434b9403f9d70d8aa3",
+      topic = "Differentiation",
+      source = "p1",
+    } = req.body;
+
+    if (!userId || !topic)
+      return res.status(400).json({ Alert: "User id and topic required!" });
+
+    const user = await userModel.findById(userId).populate("lesson.topicRef"); // Populate topic details
+
+    if (!user) {
+      return res.status(404).send("User not found");
+    }
+
+    const incompleteLessons = [];
+
+    for (const topicProgress of user.lesson) {
+      if (topicProgress.source === source) {
+        for (const lessonProgress of topicProgress.topicLesson) {
+          if (lessonProgress.topic === topic) {
+            const incompleteLessonNames = lessonProgress.lessonProgress
+              .filter((lesson) => !lesson.completed)
+              .map((lesson) => lesson.lessonName);
+            incompleteLessons.push(...incompleteLessonNames);
+            break;
+          }
+        }
+        break;
+      }
+    }
+
+    res.status(200).json({ incompleteLessons, topic, source, user }); // Return array of incomplete lesson names
+  } catch (error) {
+    console.error(error);
+    res.status(500).send("Internal server error");
+  }
+});
+
+router.route("/fromtopics").post(async (req, res) => {
+  try {
+    const {
+      userId = "65f86f434b9403f9d70d8aa3",
+      topic = "Quadratics",
+      source = "p1",
+    } = req.body;
+    console.log(req.body);
+
+    const userExists = await userModel.findById(userId);
+    if (!userExists) {
+      return res.status(404).json({ Alert: "User not found!" });
+    }
+
+    const topicExists = await topicsModel.findOne({ sourceKey: source });
+
+    if (topicExists) {
+      console.log(`The topic length `);
+      console.log(topicExists?.topicLesson?.length);
+      for (let i = 0; i < topicExists?.topicLesson?.length; i++) {
+        if (topicExists.topicLesson[i].topic === topic) {
+          return res.status(200).json(topicExists.topicLesson[i].lessons);
+        }
+      }
+      return res
+        .status(404)
+        .json({ Alert: "Topic not found for the given source" });
+    } else {
+      return res.status(404).json({ Alert: "Source not found" });
+    }
+  } catch (err) {
+    console.error(err);
+    res.status(500).json({ error: "Internal server error" });
+  }
+});
+
 router.route("/create-user").post(async (req, res) => {
   if (!req.session.user) {
     //only someone who hasn't logged in can create an account
-    const {
-      username = "nibba",
-      password = "213",
-      topicRef = "65c378a0a8620085a4fe85f7",
-    } = req?.body;
+    const { username = "nibba", password = "213" } = req?.body;
     if (!username || !password)
       return res.status(400).json({ Alert: "Username/Password Missing!" });
 
@@ -167,15 +344,10 @@ router.route("/create-user").post(async (req, res) => {
       completed: false,
     };
 
-    const topicLesson = {
-      topic: "integration",
-      lessonProgress: [lesson1, lesson2, lesson3],
-    };
-
     const topicProgress = {
       source: "p1",
-      topicRef: topicRef,
-      topicLesson: [topicLesson],
+      topic: "integration",
+      lessonProgress: [lesson1, lesson2, lesson3],
     };
 
     if (!validityUser) {
@@ -194,20 +366,66 @@ router.route("/create-user").post(async (req, res) => {
 
 router
   .route("/progress/updates")
-  .post(async (req, res) => {
-    //this is not in the schema for the given userId = 65e5ee3fa014a87ba21c66d3
-    const { userId, progress = 50 } = req?.body;
-    const userExists = await userModel.findById(userId);
-    if (!userExists) return res.status(404).json({ Alert: "Invalid user!" });
+  .put(async (req, res) => {
+    try {
+      const { lessonName, userId, source, topic } = req.body; // Extract lessonName, userId, and source from request body
 
-    const updated = await userExists.updateOne({
-      progress: { $inc: progress },
-    });
+      // Validate request body
+      // if (!lessonName || !userId || !source) {
+      //   return res.status(400).json({
+      //     message: "Missing lessonName, userId, or source in request body",
+      //   });
+      // }
 
-    if (!updated) {
-      res.status(400).json({ Alert: "Error while updating!" });
-    } else {
-      res.status(200).json({ Alert: "Updated!" });
+      console.log(req.body);
+
+      const user = await userModel.findById(userId); // Find user by ID
+      if (!user) {
+        return res.status(404).json({ message: "User not found" });
+      }
+
+      const updatedUser = user;
+
+      // Find the lesson object to update, considering case sensitivity and source
+      let found = false;
+
+      for (const lessonProgress of updatedUser.lesson) {
+        if (lessonProgress.source === source) {
+          // Check if source matches
+
+          for (const topicLesson of lessonProgress.topicLesson) {
+            if (topicLesson.topic === topic) {
+              // Check if topic matches
+
+              for (const lesson of topicLesson.lessonProgress) {
+                if (lesson.lessonName === lessonName) {
+                  // Check if lesson matches
+                  lesson.completed = true;
+                  console.log("Lesson completed:", lesson);
+                  // Update completed field
+                  found = true;
+                  break;
+                }
+              }
+            }
+          }
+        }
+      }
+
+      if (!found) {
+        return res
+          .status(404)
+          .json({ message: "Lesson not found for this user and source" });
+      }
+
+      // ... rest of the code remains the same (updating completed field and saving)
+      await updatedUser.save();
+      res
+        .status(200)
+        .json({ message: "Lesson marked as completed successfully" }); // Send response object
+    } catch (error) {
+      console.error(error);
+      res.status(500).json({ message: "Server error" });
     }
   })
   .get(async (req, res) => {
@@ -221,22 +439,6 @@ router
       }
     } catch (err) {
       console.error(err);
-    }
-  })
-  .put(async (req, res) => {
-    const { userId, progress } = req?.body;
-    const userExists = await userModel.findById(userId);
-    if (!userExists) {
-      res.status(404).json({ Alert: "User not found!" });
-    } else {
-      const userProgress = await userExists.updateOne({
-        learnedProgress: { $inc: progress },
-      });
-      if (userProgress) {
-        res.status(200).json({ Alert: "Updated Progress!" });
-      } else {
-        res.status(400).json({ Alert: "Couldn't update!" });
-      }
     }
   });
 

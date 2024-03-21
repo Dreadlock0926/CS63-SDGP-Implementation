@@ -4,15 +4,27 @@ import { useContext, useEffect, useState } from "react";
 import { UserContext } from "../../App";
 import { FetchMaterial } from "../Api/Api";
 import { Link } from "react-router-dom";
-import { Button } from "../muiComponents";
-import Materials from "./Materials";
+import { Button } from "@mui/material";
 import NotLogged from "../NotLogged";
 import "./Learn.css";
 
 const Learn = () => {
-  const { loading, logged, theTopic, setTheTopic } = useContext(UserContext);
+  const { loggedInUser, setLoggedInUser, loading, logged, theTopic, setTheTopic } =
+    useContext(UserContext);
 
-  return logged && !loading ? (
+    useEffect(() => {
+      console.log("The logged user");
+      // console.log(sessionStorage.getItem("loggedUser"));
+      setLoggedInUser(JSON.parse(sessionStorage.getItem("loggedUser")).data);
+    }, [])
+
+    useEffect(() => {
+      if (Object.keys(loggedInUser).length > 0) {
+        console.log(loggedInUser);
+      }
+    }, [loggedInUser])
+
+  return Object.keys(loggedInUser).length > 0 && !loading ? (
     <div className="learn-container">
       <header className="header">
         <h1>Learning Resources</h1>
@@ -21,12 +33,7 @@ const Learn = () => {
         <Link
           to="/learnprint"
           className="subject-link"
-          onClick={() => {
-            if (theTopic !== "") {
-              setTheTopic("");
-            }
-            setTheTopic("Pure");
-          }}
+          onClick={()=>{if(theTopic!==""){setTheTopic("")}setTheTopic("Pure")}}
         >
           <div className="subject">
             <h2>Pure Mathematics 1</h2>
@@ -36,12 +43,7 @@ const Learn = () => {
         <Link
           to="/learnprint"
           className="subject-link"
-          onClick={() => {
-            if (theTopic !== "") {
-              setTheTopic("");
-            }
-            setTheTopic("Stat");
-          }}
+          onClick={()=>{if(theTopic!==""){setTheTopic("")}setTheTopic("Stat")}}
         >
           <div className="subject">
             <h2>Statistics</h2>
@@ -49,11 +51,6 @@ const Learn = () => {
           </div>
         </Link>
       </div>
-      <Button className="add-resources-btn">
-        <Link to="/addresources" className="link">
-          Add Learning Resources
-        </Link>
-      </Button>
     </div>
   ) : (
     <NotLogged />
