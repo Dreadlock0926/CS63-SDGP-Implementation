@@ -223,8 +223,8 @@ const Forum = () => {
               </form>
             </div>
           </div>
+          <hr />
         <p>{status}</p>
-
         {loading ? (
           <div className="forumload">
             <ClipLoader size={80} color="#1fa3d5" loading={true} />
