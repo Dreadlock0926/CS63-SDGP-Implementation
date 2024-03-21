@@ -46,6 +46,16 @@ function App() {
   const [isAuthenticated, setIsAuthenticated] = useState(false);
   const [theTopic, setTheTopic] = useState("");
   const [source, setSource] = useState("");
+  const [pureLessonCount,setPureLessonCount] = useState(0);
+  const [statLessonCount,setStatLessonCount] = useState(0);
+  const [userId,setUserId] = useState('');
+  const [totalAnswers,setTotalAnswers] = useState([]);
+  const [examHistory,setExamHistory] = useState([]);
+  const [statisticsMarks, setStatisticsMarks] = useState([]);
+  const [mathematicsMarks, setMathematicsMarks] = useState([]);
+  const [totalMathsmarks,setTotalMathsmark] = useState([]);
+  const [totalStatMarks,setTotalStatMarks] = useState([]);
+  const [totalMarks,setTotalMarks] = useState([]);
 
   const BASE = "http://localhost:8000";
 
@@ -100,6 +110,19 @@ function App() {
     setTheTopic,
     source,
     setSource,
+    userId,
+    setUserId,
+    totalAnswers,
+    setTotalAnswers,
+    pureLessonCount,
+    setPureLessonCount,
+    statLessonCount,setStatLessonCount,
+    examHistory,setExamHistory,
+    statisticsMarks, setStatisticsMarks,
+    mathematicsMarks, setMathematicsMarks,
+    totalMathsmarks,setTotalMathsmark,
+    totalStatMarks,setTotalStatMarks,
+    totalMarks,setTotalMarks
   };
 
   return (
