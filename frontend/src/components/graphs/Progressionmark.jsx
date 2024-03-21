@@ -127,10 +127,6 @@ function Progressionmark() {
     fetchData();
   }, [id, setTotalMarks]); // Only re-run the effect if 'id' changes
 
-  useEffect(() => {
-    console.log(loggedInUser);
-  }, [loggedInUser]);
-
   // Render the LineChart with the data from state
   const renderLineChart = (
     <>

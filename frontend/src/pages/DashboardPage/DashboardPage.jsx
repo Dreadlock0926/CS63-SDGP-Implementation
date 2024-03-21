@@ -79,7 +79,6 @@ function DashboardStatistics({
 
 // Dashboard Courses Tab
 function DashboardCourses() {
-
   const { loggedInUser, setLoggedInUser, examHistory, setExamHistory } =
     useContext(UserContext);
   const {
@@ -103,13 +102,11 @@ function DashboardCourses() {
     setTotalStatMarks,
   } = useContext(UserContext);
 
-  console.log(loggedInUser);
   useEffect(() => {
     setExamHistory(loggedInUser.data);
   }, [loggedInUser]);
 
   useEffect(() => {
-    console.log(examHistory);
     let tempStatisticsMarks = [];
     let totaltempStatMarks = [];
     let tempMathematicsMarks = [];
@@ -125,20 +122,17 @@ function DashboardCourses() {
           totaltempMathsMarks.push(exam.totalMark);
         }
       });
-      console.log(tempMathematicsMarks);
-      console.log(tempStatisticsMarks);
       setMathematicsMarks(tempMathematicsMarks);
       setStatisticsMarks(tempStatisticsMarks);
       setTotalMathsmark(totaltempMathsMarks);
       setTotalStatMarks(totaltempStatMarks);
     }
-
   }, [examHistory]);
 
   useEffect(() => {
-    console.log("logged in user:")
+    console.log("logged in user:");
     console.log(loggedInUser);
-  }, [loggedInUser])
+  }, [loggedInUser]);
 
   useEffect(() => {
     const correcttotalStatmarks = statisticsMarks.reduce(
@@ -303,10 +297,6 @@ function DashboardActivity() {
       ]
     : [];
 
-  useEffect(() => {
-    console.log(`The transformed data -> ${JSON.stringify(transformedData)}`);
-  }, [transformedData]);
-
   return (
     loggedInUser && (
       <div className="dashboard-activity">
@@ -390,11 +380,11 @@ function DashboardPage() {
         const sessionData = sessionStorage.getItem("loggedUser");
         if (sessionData) {
           const sessionUser = JSON.parse(sessionData).data;
+          console.log(`sessionUser: ${sessionUser}`);
 
           setVoxalpoints(sessionUser.voxelPoints);
           setHoursLearned(0); // Make sure to compute the correct value
-          setCompleteCourse(sessionUser.completedCourses.length);
-          setongoingCourses(sessionUser.courses.length);
+
           if (sessionUser.lesson && sessionUser.lesson.length > 0) {
             setPureMathLearnedProgress(sessionUser.lesson[0].topicLesson);
             setStatLearnedProgress(sessionUser.lesson[1].topicLesson);
@@ -440,7 +430,6 @@ function DashboardPage() {
   ////for statistics
 
   useEffect(() => {
-    console.log(statLearnedProgress);
     if (Array.isArray(statLearnedProgress)) {
       const totalCount = statLearnedProgress.reduce((total, topic) => {
         const completeCount = topic.lessonProgress.filter(
@@ -448,6 +437,7 @@ function DashboardPage() {
         ).length;
         return total + completeCount;
       }, 0);
+
       setStatLesson(totalCount);
       const totalNumber = statLearnedProgress.reduce((total, topic) => {
         const totalCount = topic.lessonProgress.length + total;
@@ -467,7 +457,6 @@ function DashboardPage() {
           "http://localhost:8000/progression/get/hours",
           { _id: id }
         );
-        console.log(response);
         if (response) {
           setHoursLearned(response.data.hours);
         }
