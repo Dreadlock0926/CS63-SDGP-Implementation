@@ -197,7 +197,7 @@ const Forum = () => {
           </div>
         </div>
 
-        <div className="searchContainer">
+        <div className="`searc`hContainer">
               <p className="forumTitle">🔎 Search Filter</p>
               <br />
             <form onSubmit={searchUp}>
@@ -207,6 +207,7 @@ const Forum = () => {
                   }}
                   placeholder="Search your queries here..."
                   type="text"/>
+                  <button type="submit" disabled={loading}>Search...</button>
             </form>
             
             <div style={{display: "flex"}}>
