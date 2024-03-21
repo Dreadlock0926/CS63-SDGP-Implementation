@@ -23,4 +23,4 @@ const topicsSchema = new mongoose.Schema({
 });
 
 const topicsModel = mongoose.model("topics", topicsSchema);
-module.exports = topicsModel;
+module.exports = { topicsModel, lessonSchema, topicLessonSchema, topicsSchema };

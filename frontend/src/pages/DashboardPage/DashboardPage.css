@@ -1,0 +1,160 @@
+html,body {
+    overflow: visible;
+    background-color: #f4f3f3;
+}
+
+.dashboard-header, .profile-corner {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+}
+
+.profile-corner {
+    width: 8%;
+}
+
+.notification-tab {
+    width: 35px;
+    height: 35px;
+    border-radius: 50px;
+    background-color: green;
+}
+
+.profile-icon {
+    width: 35px;
+    height: 35px;
+    border-radius: 50px;
+    background-color: rgb(1, 157, 1);
+}
+
+.graph {
+    height: 400px;
+    margin-top: auto;
+    margin-bottom: auto;
+}
+
+.statistics-tab {
+    display: grid;
+    grid-template-columns: auto auto;
+    margin-top: auto;
+    margin-bottom: auto;
+    column-gap: 30px;
+    row-gap: 55px;
+}
+
+.dashboard-main {
+    width: 100%;
+    display: grid;
+    grid-template-columns: auto auto;
+    column-gap: 25px;
+    row-gap: 25px;
+}
+
+.courses-tab {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    justify-items: center;
+}
+
+.activity-graph {
+    /* background-color: black; */
+    height: 300px;
+}
+
+.dashboard-statistics-container {
+    display: flex;
+    flex-direction: column;
+    border-radius: 15px;
+    padding: 25px;
+    background-color: white;
+}
+
+.dashboard-graph-container {
+    display: flex;
+    flex-direction: column;
+    border-radius: 15px;
+    padding: 20px;
+    background-color: white;
+}
+
+.dashboard-complete-container { 
+    padding: 25px;
+}
+
+.graph-title {
+    font-size: 2rem;
+}
+
+.points-tab {
+    background-color: #f4f3f3;
+    border-radius: 15px;
+    padding-block: 20px;
+    padding-inline: 20px;
+}
+
+.tab-header {
+    margin-bottom: 35px;
+}
+
+.st-num {
+    font-size: 1.5rem;
+    text-align: end;
+    border-left: 3px solid rgb(6, 140, 31);
+    border-radius: 3px;
+}
+
+.dashboard-courses, .dashboard-activity {
+    background-color: white;
+    border-radius: 15px;
+    padding: 20px;
+    display: flex;
+    flex-direction: column;
+}
+
+.course-card {
+    background-color: #f4f3f3;
+    border-radius: 15px;
+    padding: 15px;
+    padding-block: 35px;
+    width: 400px;
+}
+
+.course-title {
+    font-size: 1.25rem;
+    font-weight: bold;
+}
+
+.course-lessons {
+    font-size: 0.9rem;
+}
+
+.course-progress-tab {
+    display: flex;
+    justify-content: space-around;
+    margin-top: 20px;
+}
+
+.prog-bar {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.prog-bar-text {
+    font-size: 0.8rem;
+}
+
+.course-learn-progress, .course-test-progress {
+    padding: 15px;
+    padding-block: 20px;
+    border-radius: 50px;
+}
+
+.course-learn-progress {
+    border: 3px solid rgb(6, 140, 31);
+}
+
+.course-test-progress {
+    border: 3px solid rgb(6, 91, 140);
+}
+

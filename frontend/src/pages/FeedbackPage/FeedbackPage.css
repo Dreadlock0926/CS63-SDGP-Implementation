@@ -1,0 +1,15 @@
+.modules-container {
+    display: flex;
+    justify-content: space-around;
+}
+
+.module {
+    border-radius: 25px;
+    padding: 10px;
+    color: white;
+    background-color: green;
+}
+
+.module:hover {
+    cursor: pointer;
+}
