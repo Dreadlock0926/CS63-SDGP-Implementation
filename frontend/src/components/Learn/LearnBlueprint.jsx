@@ -16,6 +16,7 @@ import {
 import { styled } from "@mui/system";
 import Axios from "axios";
 import "./Learn.css";
+import { TailSpin } from "react-loader-spinner";
 
 const LearnBlueprint = () => {
   const {
@@ -24,7 +25,6 @@ const LearnBlueprint = () => {
     user,
     data,
     setData,
-
     theProgressVal,
     source,
     setSource,
@@ -123,7 +123,7 @@ const LearnBlueprint = () => {
   }, [theTopic]);
 
   return loading ? (
-    <h1>Loading...</h1>
+    <TailSpin/>
   ) : (
     <>
       {topicTitles && topicTitles.length && (
@@ -135,7 +135,8 @@ const LearnBlueprint = () => {
             <Typography variant="h4">Loading...</Typography>
           ) : (
             <>
-              <Typography variant="h3">
+              <Typography variant="h3"
+               style={{margin:"40px"}}>
                 {theTopic === "Pure"
                   ? "Pure Mathematics I"
                   : "Probability And Statistics"}
@@ -163,19 +164,7 @@ const LearnBlueprint = () => {
                           {topicPercentage && topicPercentage[index] && (
                             <RouterLink
                               to={`/learning/${source}/${title}/${topicFirstLesson[title]}`}
-                              onClick={() => {
-                                if (status !== "") {
-                                  // Set status if completed
-                                  setStatus("");
-                                }
-                                if (
-                                  topicPercentage[index].completedPercentage ===
-                                  100
-                                ) {
-                                  setStatus(`You have completed ${title}`);
-                                }
-                                // Prevent default link behavior
-                              }}
+
                             >
                               {topicPercentage[index].completedPercentage ===
                               100 ? (

@@ -250,18 +250,8 @@ const LearnClicked = () => {
             ))}
             <h1>{status}</h1>
             <button
-              onClick={() => {
-                if (topicRelated?.incompleteLessons?.length === 0) {
-                  setTimeout(() => {
-                    navigator("/learnprint");
-                  }, 1500);
-                } else {
-                  IncrementProgress();
-                }
-              }}
-              disabled={
-                lessonCounter >= topicRelated?.incompleteLessons?.length
-              }
+              onClick={IncrementProgress}
+              disabled={lessonCounter>=falseTopics.length}
             >
               Next Page!
             </button>

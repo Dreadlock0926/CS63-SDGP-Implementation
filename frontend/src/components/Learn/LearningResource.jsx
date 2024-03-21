@@ -5,6 +5,7 @@ import { UserContext } from "../../App";
 import Axios from "axios";
 import { useHover } from "@uidotdev/usehooks";
 import { Link, useParams, useNavigate } from "react-router-dom";
+import { TailSpin } from "react-loader-spinner";
 
 const LearningResource = () => {
   const navigate = useNavigate();
@@ -41,8 +42,6 @@ const LearningResource = () => {
       if (x.lessonName == lesson) {
         if (x.completed == false) {
           IncrementProgress();
-        } else {
-          setStatus(`You have completed ${lesson}`);
         }
         currentLessonIndex = index;
       }
@@ -74,7 +73,7 @@ const LearningResource = () => {
           }
         );
         setSection(response.data.lessonBody);
-        1;
+        console.log(response.data);
         setTopicRelated(response.data.lessonProgressReturn.lessonProgress);
       } catch (error) {
         console.error(error.message);
@@ -92,11 +91,12 @@ const LearningResource = () => {
   }, [topicRelated, section]);
 
   return loading ? (
-    <h1>Loading...</h1>
+    <TailSpin />
   ) : (
     topicRelated && Object.keys(topicRelated).length > 0 && (
       <>
         <div style={{ display: "flex", fontFamily: "poppins" }}>
+          <Link to={"/learnprint"} style={{margin:"20px"}}>Go Back!</Link>
           <div
             className="sidebar"
             style={{
