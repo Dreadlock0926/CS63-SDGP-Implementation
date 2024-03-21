@@ -17,9 +17,9 @@ const login = require("./routes/login");
 const examResources = require("./routes/exam");
 const addQuestion = require("./routes/addQuestion");
 const courses = require("./routes/courses");
-const learn = require("./routes/learn");
 const user = require("./routes/user");
 const getTopics = require("./routes/getTopics");
+const learningMaterial = require("./routes/learn");
 const morgan = require("morgan");
 
 async function authenticated(req, res, next) {
@@ -68,7 +68,7 @@ app.use("/getQuestionsOnTopic", getQuestionsOnTopic);
 app.use("/getQuestion", getQuestion);
 app.use("/getTopics", getTopics);
 app.use("/user", user);
-app.use("/learn", learn);
+app.use("/resources",learningMaterial);
 app.use("/getTopics", getTopics);
 
 app.use("*", (req, res) => {

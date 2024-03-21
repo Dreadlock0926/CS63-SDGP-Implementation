@@ -9,25 +9,17 @@ import Login from "./pages/AccountPage/login";
 import Register from "./pages/AccountPage/register";
 import Authenticate from "./pages/AccountPage/Authenticate";
 import AddQuestionsPage from "./pages/addQuestionsPage/addQuestions";
-import ErrorPage from "./components/Error404/ErrorPage";
-import ExamQuestionTest from "./pages/TestPages/ExamQuestionTest";
 import Scope from "./pages/TestPages/Scope";
-import ExamFinalized from "./pages/TestPages/ExamFinal";
 import FeedbackPage from "./pages/FeedbackPage/FeedbackPage";
 import ExamPage from "./pages/ExamPage/ExamPage";
 import SelectCourses from "./pages/SelectCoursesPage/SelectCourses";
 import SpecificCourse from "./pages/SelectCoursesPage/SpecificCourse";
-import Learn from "./components/Learn/Learn";
-import AddStudy from "./components/Learn/AddStudy";
-import LearnBlueprint from "./components/Learn/LearnBlueprint";
-import LearningResource from "./components/Learn/LearningResource";
-import First from "./components/Learn/TestPages/First";
-import Second from "./components/Learn/TestPages/Second";
-import NextPage from "./components/Learn/NextPage";
-import Anything from "./components/Learn/Anything";
 import ExamReceipt from "./pages/ExamPage/ExamReceipt/ExamReceipt";
 import ExamHistory from "./pages/ExamPage/ExamHistoryPage/ExamHistory";
 import ExamReview from "./pages/ExamPage/ExamReview/ExamReview";
+import Learn from "./components/Learn/Learn";
+import LearnBlueprint from "./components/Learn/LearnBlueprint";
+import LearningResource from "./components/Learn/LearningResource";
 
 export const UserContext = createContext();
 
@@ -52,6 +44,20 @@ function App() {
   const [testedPureProgress, setPureTestedProgress] = useState(0);
   const [testedStatProgress, setStatTestedProgress] = useState(0);
   const [isAuthenticated, setIsAuthenticated] = useState(false);
+  const [theTopic, setTheTopic] = useState("");
+  const [source, setSource] = useState("");
+  const [pureLessonCount,setPureLessonCount] = useState(0);
+  const [statLessonCount,setStatLessonCount] = useState(0);
+  const [userId,setUserId] = useState('');
+  const [totalAnswers,setTotalAnswers] = useState([]);
+  const [examHistory,setExamHistory] = useState([]);
+  const [statisticsMarks, setStatisticsMarks] = useState([]);
+  const [mathematicsMarks, setMathematicsMarks] = useState([]);
+  const [totalMathsmarks,setTotalMathsmark] = useState([]);
+  const [totalStatMarks,setTotalStatMarks] = useState([]);
+  const [totalMarks,setTotalMarks] = useState([]);
+
+  const BASE = "http://localhost:8000";
 
   const [loggedInUser, setLoggedInUser] = useState({});
 
@@ -77,6 +83,7 @@ function App() {
     setstatValue,
     course,
     setCourse,
+    BASE,
     ongoingCourse,
     setongoingCourses,
     user,
@@ -99,6 +106,23 @@ function App() {
     setPureTestedProgress,
     testedStatProgress,
     setStatTestedProgress,
+    theTopic,
+    setTheTopic,
+    source,
+    setSource,
+    userId,
+    setUserId,
+    totalAnswers,
+    setTotalAnswers,
+    pureLessonCount,
+    setPureLessonCount,
+    statLessonCount,setStatLessonCount,
+    examHistory,setExamHistory,
+    statisticsMarks, setStatisticsMarks,
+    mathematicsMarks, setMathematicsMarks,
+    totalMathsmarks,setTotalMathsmark,
+    totalStatMarks,setTotalStatMarks,
+    totalMarks,setTotalMarks
   };
 
   return (
@@ -114,30 +138,18 @@ function App() {
           <Route path="add-questions" element={<AddQuestionsPage />} />
           <Route path="/select-course" element={<SelectCourses />} />
           <Route path="/select-course/:theTopic" element={<SpecificCourse />} />
-          <Route path="/resources" element={<Learn />} />
-          <Route path="/materials" element={<LearningResource />}></Route>
-          <Route
-            path="/materials/:index"
-            element={<LearningResource />}
-          ></Route>
-          <Route path="/addresources" element={<AddStudy />} />
-          <Route path="/nextpage/:id" element={<NextPage />} />
-          <Route path="/anything" element={<Anything />} />
-          <Route path="/:lesson" element={<First />} />
-          <Route path="/second" element={<Second />} />
-          <Route path="/learnprint" element={<LearnBlueprint />}></Route>
           <Route path="exam" element={<ExamPage />} />
-          <Route path="/examfinal" element={<ExamFinalized />}></Route>
-          {/**Incomplete */}
           <Route path="/scope" element={<Scope />}></Route>
-          <Route path="exam" element={<ExamPage />} />
           <Route path="receipt" element={<ExamReceipt />} />
-          <Route path="/examfinal" element={<ExamFinalized />}></Route>{" "}
           <Route path="/exam-history" element={<ExamHistory />}></Route>
           <Route path="/exam-review/:examID" element={<ExamReview />}></Route>
-          {/**Incomplete */}
           <Route path="/scope" element={<Scope />}></Route>{" "}
-          {/**Radhul is working on this */}
+          <Route path="/resources" element={<Learn />} />
+          <Route
+            path="/learning/:source/:topic/:lesson"
+            element={<LearningResource />}
+          ></Route>
+          <Route path="/learnprint" element={<LearnBlueprint />}></Route>
           <Route path="/feedback" element={<FeedbackPage />}></Route>
           <Route path="*" element={<UnknownPage />} />
         </Routes>
