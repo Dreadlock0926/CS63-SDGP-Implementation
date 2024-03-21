@@ -54,8 +54,11 @@ const LearnBlueprint = () => {
     },
   }));
 
+
+
   async function fetchData(topic, source) {
     try {
+      console.log(`The topic is ${source}`)
       setLoading(true);
       // const response = await Axios.post(`${BASE}/resources/topic/learned`, {
       //   theTopic: topic,
@@ -72,8 +75,7 @@ const LearnBlueprint = () => {
       setTopicFirstLesson(theUser.data.topicFirstLesson);
       setTopicPercentage(Object.values(theUser.data.topicCompletions));
     } catch (error) {
-      console.error(error);
-      if (error.response && error.response.status === 404) {
+      if (error.status === 404) {
         setStatus("No resources found!");
       } else {
         setStatus("Error occurred while fetching resources.");

@@ -47,6 +47,8 @@ function App() {
   const [theTopic, setTheTopic] = useState("");
   const [source, setSource] = useState("");
 
+  const BASE = "http://localhost:8000";
+
   const [loggedInUser, setLoggedInUser] = useState({});
 
   // Structuring the context value explicitly
@@ -71,6 +73,7 @@ function App() {
     setstatValue,
     course,
     setCourse,
+    BASE,
     ongoingCourse,
     setongoingCourses,
     user,
@@ -119,7 +122,10 @@ function App() {
           <Route path="/exam-review/:examID" element={<ExamReview />}></Route>
           <Route path="/scope" element={<Scope />}></Route>{" "}
           <Route path="/resources" element={<Learn />} />
-          <Route path="/learning/:source/:topic/:lesson" element={<LearningResource />}></Route>
+          <Route
+            path="/learning/:source/:topic/:lesson"
+            element={<LearningResource />}
+          ></Route>
           <Route path="/learnprint" element={<LearnBlueprint />}></Route>
           <Route path="/feedback" element={<FeedbackPage />}></Route>
           <Route path="*" element={<UnknownPage />} />

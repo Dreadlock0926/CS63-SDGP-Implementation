@@ -43,9 +43,9 @@ const Login = () => {
       }
     } catch (error) {
       console.error(error);
-        if (error.response.status === 401) {
+        if (error.status === 401) {
           setIssue("Wrong Password, Please try again!");
-        } else if (error.response.status === 404) {
+        } else if (error.status === 404) {
           setIssue("Invalid Username, Please Try Again!");
         }
     } finally {

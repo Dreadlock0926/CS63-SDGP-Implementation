@@ -1,7 +1,7 @@
 const express = require("express");
 const router = express.Router();
 const learningModel = require("../models/learningResources");
-const topicsModel = require("../models/topics");
+const {topicsModel} = require("../models/topics");
 const userModel = require("../models/user");
 
 //needs to be put in a controller
