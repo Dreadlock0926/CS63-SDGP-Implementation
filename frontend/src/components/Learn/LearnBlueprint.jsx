@@ -24,7 +24,8 @@ const LearnBlueprint = () => {
     user,
     data,
     setData,
-
+    loggedInUser,
+    setLoggedInUser,
     theProgressVal,
     source,
     setSource,
@@ -35,6 +36,7 @@ const LearnBlueprint = () => {
     setLessonTopic,
     setTopicRelated,
   } = useContext(UserContext);
+
   const [userData, setUserData] = useState([]);
   const [loading, setLoading] = useState(false);
   const [topicTitles, setTopicTitles] = useState([]);
@@ -54,11 +56,9 @@ const LearnBlueprint = () => {
     },
   }));
 
-
-
-  async function fetchData(topic, source) {
+  async function fetchData(source) {
     try {
-      console.log(`The topic is ${source}`)
+      console.log(`The topic is ${source}`);
       setLoading(true);
       // const response = await Axios.post(`${BASE}/resources/topic/learned`, {
       //   theTopic: topic,
@@ -66,7 +66,7 @@ const LearnBlueprint = () => {
       // setTopicRelated(response.data);
       // console.log(`The topics ${JSON.stringify(response.data)}`);
       const theUser = await Axios.post(`${BASE}/resources/testing-user`, {
-        userID: "65f86f434b9403f9d70d8aa3", //user.id
+        userID: loggedInUser._id, //user.id
         source,
       });
       setSource(source);
@@ -84,6 +84,27 @@ const LearnBlueprint = () => {
       setLoading(false);
     }
   }
+
+  useEffect(() => {
+    setLoggedInUser(JSON.parse(sessionStorage.getItem("loggedUser")).data);
+  }, []);
+
+  useEffect(() => {
+    if (Object.keys(loggedInUser).length > 0) {
+      console.log(loggedInUser);
+      const fetchTopicData = async () => {
+        if (theTopic === "Pure") {
+          await fetchData("p1");
+        } else if (theTopic === "Stat") {
+          await fetchData("s1");
+        } else {
+          navigator("/resources");
+        }
+      };
+
+      fetchTopicData();
+    }
+  }, [loggedInUser]);
 
   // useEffect(() => {
   //   console.log(
@@ -109,20 +130,6 @@ const LearnBlueprint = () => {
     // }
     // alert("Clicked!");
   }
-
-  useEffect(() => {
-    const fetchTopicData = async () => {
-      if (theTopic === "Pure") {
-        await fetchData("Pure Mathematics I", "p1");
-      } else if (theTopic === "Stat") {
-        await fetchData("Probability and Statistics", "s1");
-      } else {
-        navigator("/resources");
-      }
-    };
-
-    fetchTopicData();
-  }, [theTopic]);
 
   return loading ? (
     <h1>Loading...</h1>

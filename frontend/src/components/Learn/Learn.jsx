@@ -7,22 +7,53 @@ import { Link } from "react-router-dom";
 import { Button } from "@mui/material";
 import NotLogged from "../NotLogged";
 import "./Learn.css";
+import Axios from "axios";
 
 const Learn = () => {
-  const { loggedInUser, setLoggedInUser, loading, logged, theTopic, setTheTopic } =
-    useContext(UserContext);
+  const {
+    loggedInUser,
+    setLoggedInUser,
+    loading,
+    logged,
+    theTopic,
+    setTheTopic,
+  } = useContext(UserContext);
 
-    useEffect(() => {
-      console.log("The logged user");
-      // console.log(sessionStorage.getItem("loggedUser"));
-      setLoggedInUser(JSON.parse(sessionStorage.getItem("loggedUser")).data);
-    }, [])
+  const [startedModule, setStartedModule] = useState([]);
 
-    useEffect(() => {
-      if (Object.keys(loggedInUser).length > 0) {
-        console.log(loggedInUser);
-      }
-    }, [loggedInUser])
+  const fetchStartedModule = async () => {
+    try {
+      const response = await Axios.post(
+        `http://localhost:8000/resources/getStartedCourses`,
+        {
+          userId: loggedInUser._id,
+        }
+      );
+
+      console.log(response.data);
+      setStartedModule(response.data.startedCourses);
+    } catch (error) {
+      console.error(error.message);
+    }
+  };
+
+  useEffect(() => {
+    // console.log(sessionStorage.getItem("loggedUser"));
+    setLoggedInUser(JSON.parse(sessionStorage.getItem("loggedUser")).data);
+  }, []);
+
+  useEffect(() => {
+    if (Object.keys(loggedInUser).length > 0) {
+      console.log(loggedInUser);
+      fetchStartedModule();
+    }
+  }, [loggedInUser]);
+
+  useEffect(() => {
+    if (startedModule.length > 0) {
+      console.log(startedModule);
+    }
+  }, [startedModule]);
 
   return Object.keys(loggedInUser).length > 0 && !loading ? (
     <div className="learn-container">
@@ -30,26 +61,26 @@ const Learn = () => {
         <h1>Learning Resources</h1>
       </header>
       <div className="subjects-container">
-        <Link
-          to="/learnprint"
-          className="subject-link"
-          onClick={()=>{if(theTopic!==""){setTheTopic("")}setTheTopic("Pure")}}
-        >
-          <div className="subject">
-            <h2>Pure Mathematics 1</h2>
-            <p>Explore pure mathematics topics</p>
-          </div>
-        </Link>
-        <Link
-          to="/learnprint"
-          className="subject-link"
-          onClick={()=>{if(theTopic!==""){setTheTopic("")}setTheTopic("Stat")}}
-        >
-          <div className="subject">
-            <h2>Statistics</h2>
-            <p>Discover statistical concepts and methods</p>
-          </div>
-        </Link>
+        {startedModule.length > 0 ? (
+          startedModule.map((course, index) => (
+            <Link
+              to={`/learnprint`}
+              key={index}
+              className="subject-link"
+              onClick={() => {
+                if (course === "Pure Mathematics I") {
+                  setTheTopic("Pure");
+                } else if (course === "Probability and Statistics I") {
+                  setTheTopic("Stat");
+                }
+              }}
+            >
+              <h3>{course}</h3>
+            </Link>
+          ))
+        ) : (
+          <h2>No courses started yet!</h2>
+        )}
       </div>
     </div>
   ) : (

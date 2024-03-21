@@ -1,7 +1,7 @@
 const express = require("express");
 const router = express.Router();
 const learningModel = require("../models/learningResources");
-const {topicsModel} = require("../models/topics");
+const { topicsModel } = require("../models/topics");
 const userModel = require("../models/user");
 
 //needs to be put in a controller
@@ -546,4 +546,42 @@ router.route("/test").post(async (req, res) => {
   }
 });
 
+router.route("/getStartedCourses").post(async (req, res) => {
+  const { userId } = req.body;
+
+  if (!userId) {
+    return res.status(400).json({ Alert: "User ID required!" });
+  }
+
+  const user = await userModel.findById(userId);
+
+  if (!user) {
+    return res.status(404).json({ Alert: "User not found!" });
+  }
+
+  const lessons = user.lesson;
+
+  if (!lessons) {
+    return res.status(404).json({ Alert: "No lessons found!" });
+  }
+
+  const startedCourses = [];
+
+  for (const lesson of lessons) {
+    const topic = await topicsModel.findOne({ sourceKey: lesson.source });
+
+    if (!topic) {
+      console.warn(`Source not found for lesson: ${lesson.source}`);
+      continue; // Skip to the next iteration if topic not found
+    }
+
+    const courseKey = topic.source; // Assuming 'source' property holds the course key
+
+    if (!startedCourses.includes(courseKey)) {
+      startedCourses.push(courseKey);
+    }
+  }
+
+  res.status(200).json({ startedCourses });
+});
 module.exports = router;
