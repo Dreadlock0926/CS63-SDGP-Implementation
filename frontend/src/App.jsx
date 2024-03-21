@@ -17,7 +17,7 @@ function App() {
   const [response, setResponse] = useState("");
   const [theTopic, setTheTopic] = useState("");
   const [falseTopics, setFalseTopics] = useState([]);
-  const [TheSource, setSource] = useState("");
+  const [source, setSource] = useState("");
   const [theProgressVal, setTheProgressVal] = useState(0);
   const [specificTopic, setSpecificTopic] = useState("");
   const [topicRelated, setTopicRelated] = useState([]);
@@ -34,7 +34,7 @@ function App() {
     setLogged,
     user,
     setUser,
-    TheSource,
+    source,
     setStatus,
     response,
     setResponse,
@@ -70,8 +70,8 @@ function App() {
               element={<LearnClicked />}
             ></Route>
             <Route
-              path="/learnclicked/:topic/:lesson"
-              element={<LearnClicked />}
+              path="/learning/:source/:topic/:lesson"
+              element={<LearningResource />}
             ></Route>
             <Route
               path="/topicalExam/:lesson"

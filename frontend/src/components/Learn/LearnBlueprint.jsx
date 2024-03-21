@@ -26,7 +26,7 @@ const LearnBlueprint = () => {
     setData,
 
     theProgressVal,
-    TheSource,
+    source,
     setSource,
     setTheProgressVal,
     falseTopics,
@@ -83,13 +83,13 @@ const LearnBlueprint = () => {
     }
   }
 
-  useEffect(() => {
-    console.log(
-      userData
-        ? `The user data -> ${JSON.stringify(userData)}`
-        : "No data bozo!"
-    );
-  }, [userData]);
+  // useEffect(() => {
+  //   console.log(
+  //     userData
+  //       ? `The user data -> ${JSON.stringify(userData)}`
+  //       : "No data bozo!"
+  //   );
+  // }, [userData]);
 
   async function IncrementProgress(theSource) {
     // try {
@@ -121,10 +121,6 @@ const LearnBlueprint = () => {
 
     fetchTopicData();
   }, [theTopic]);
-
-  useEffect(() => {
-    console.log(`\nThe topics -> ${JSON.stringify(topicTitles)}`);
-  }, [topicTitles]);
 
   return (
     <>
@@ -161,7 +157,7 @@ const LearnBlueprint = () => {
                         <TableCell>
                           {topicPercentage && topicPercentage[index] && (
                             <RouterLink
-                              to={`/learnclicked/${title}/${topicFirstLesson[title]}`}
+                              to={`/learning/${source}/${title}/${topicFirstLesson[title]}`}
                               onClick={() => {
                                 if (status !== "") {
                                   // Set status if completed
