@@ -122,6 +122,7 @@ const Forum = () => {
           Welcome back, {loggedInUser.username}! 🎉
         </Typography>
         <br />
+        <Link to="/forum/add-question">Add question to forum? 🤔</Link>
         <br />
         <form onSubmit={searchUp}>
           <input
@@ -161,7 +162,7 @@ const Forum = () => {
           <Typography variant="h5">No questions available</Typography>
         )}
         <Typography>{status}</Typography>
-        <Link to="/forum/add-question">Add question to forum? 🤔</Link>
+
       </div>
     </div>
   ) : (

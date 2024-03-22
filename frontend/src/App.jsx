@@ -152,14 +152,14 @@ function App() {
       <BrowserRouter>
         <Routes>
           <Route path="/" element={<Home />} />
-          <Route path="/progression" element={<Progressionmark />} />
+          {/* <Route path="/progression" element={<Progressionmark />} /> */}
           <Route path="/forum" element={<Forum />} />
           <Route path="/forum/add-question" element={<CreateForum />} />
           <Route path="/forum/search" element={<ForumSearch />} />
           <Route path="/dashboard" element={<DashboardPage />} />
           <Route path="/login" element={<Login />} />
           <Route path="/registration" element={<Register />} />
-          <Route path="/authenticate" element={<Authenticate />} />
+          {/* <Route path="/authenticate" element={<Authenticate />} /> */}
           <Route path="/past-papers" element={<PastPaperScope />} />
           <Route path="add-questions" element={<AddQuestionsPage />} />
           <Route path="/select-course" element={<SelectCourses />} />

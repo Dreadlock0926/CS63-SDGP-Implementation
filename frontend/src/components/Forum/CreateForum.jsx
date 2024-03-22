@@ -36,9 +36,9 @@ const CreateForum = () => {
       if (response.status === 201) {
         setSuccessMessage("Question added successfully!");
         setForum({ question: "", topic: "Pure Mathematics I" }); // Clear the form after successful submission
-        // setTimeout(() => {
-        //   navigator("/forum");
-        // }, 500);
+        setTimeout(() => {
+          navigator("/forum");
+        }, 1000);
       }
     } catch (err) {
       if (err.response && err.response.status === 409) {
