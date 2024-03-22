@@ -30,6 +30,7 @@ const CreateForum = () => {
           question: forum.question,
           description: forum.description,
           topic: forum.topic,
+          by: loggedInUser.username,
         }
       );
       if (response.status === 201) {

@@ -23,7 +23,7 @@ router.route("/").post(async (req, res) => {
 
 router.route("/addQuestion").post(async (req, res) => {
   try {
-    const { question, description, topic, by = "guest" } = req?.body;
+    const { question, description, topic, by } = req?.body;
 
     if (!question || !topic) {
       return res.status(400).json({ Alert: "NO Question/Topic!" });

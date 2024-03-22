@@ -1,5 +1,5 @@
 const mongoose = require("mongoose");
-const forumAnswer = mongoose.Schema(
+const forumAnswer = new mongoose.Schema(
   {
     text: {
       type: String,
@@ -15,7 +15,7 @@ const forumAnswer = mongoose.Schema(
   { timestamps: true }
 );
 
-const forumSchema = mongoose.Schema(
+const forumSchema = new mongoose.Schema(
   {
     question: {
       type: String,
