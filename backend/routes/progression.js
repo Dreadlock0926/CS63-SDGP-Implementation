@@ -101,6 +101,25 @@ router.route("/get/marks").post(async (req, res) => {
   }
 });
 
+router.route("/get/topicalexams").post(async (req,res)=>{
+  const {useRef} = req.body;
+  if(!useRef){
+    return res.status(400).json({ Alert: "No data 1 found!" });
+  }
+  
+  try{
+    const response = await examModel.find({ userRef: new mongoose.Types.ObjectId(useRef),examType: "Topical" });
+    if (!response || response.length === 0) { // Checking if the response array is empty
+        return res.status(400).json({ Alert: "No data 2 found!" });
+    } else {
+        return res.status(200).send(response);
+    }
+
+  }catch(err){
+    console.log(err);
+  }
+})
+
 
 router.route("/get/hours").post(async (req, res) => {
   const { _id } = req.body;
