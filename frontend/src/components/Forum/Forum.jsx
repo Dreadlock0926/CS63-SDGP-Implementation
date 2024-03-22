@@ -15,9 +15,8 @@ import {
   Typography,
 } from "@mui/material";
 import "./Forum.css";
-import All from "./All";
-import PureMath from "./PureMath";
-import Statistics from "./Statistics";
+
+import ForumQuestion from "./ForumQuestion";
 
 const Forum = () => {
   const {
@@ -45,129 +44,37 @@ const Forum = () => {
   const EndPoint = "http://localhost:8000/forum";
 
   useEffect(() => {
-    forumData();
+    let searchParams = "";
+
+    if (down === 1) {
+      searchParams = "Pure Mathematics I";
+    } else if (down === 2) {
+      searchParams = "Probability And Statistics I";
+    }
+
+    forumData(searchParams);
   }, [down]); // Added "down" to dependency array to trigger a re-fetch when topic selection changes
 
   useEffect(() => {
-    console.log(data);
+    if (data.length > 0) {
+      console.log(data);
+    }
   }, [data]);
 
-  const forumData = async () => {
+  const forumData = async (searchParams) => {
     try {
       setLoading(true);
-      const response = await Axios.get(EndPoint);
+
+      const response = await Axios.post(EndPoint, {
+        searchParams, // Include searchParams in the request body
+      });
+
       setData(response.data);
     } catch (error) {
       console.error("Error fetching forum data:", error);
       setStatus("Error fetching forum data");
     } finally {
       setLoading(false);
-    }
-  };
-
-  const increaseVotes = async (id) => {
-    try {
-      setLoading(true);
-      const response = await Axios.put(`${EndPoint}/upvotes/${id}`, {
-        userId: user.id,
-      });
-      // if (response.data.status === 200) {
-
-      // } else {
-      //   setStatus("Error while upvoting");
-      // }
-
-      setData((prevData) =>
-        prevData.map((item) =>
-          item._id === id ? { ...item, rating: item.rating + 1 } : item
-        )
-      );
-      setTimeout(() => {
-        navigator("/forum");
-      }, 2000);
-    } catch (error) {
-      console.error("Error while upvoting:", error);
-    } finally {
-      setLoading(false);
-    }
-  };
-
-  const nerdPointsIncrement = async (id) => {
-    try {
-      const response = await Axios.put(`${EndPoint}/nerds/${id}`, {
-        userID: "65e43aa4a2304a41b4d37e2c",
-        theTotalUpvotes,
-      });
-      if (response.data.status === 200) {
-        alert("Nerd points updated!");
-        console.log(response.data);
-      } else {
-        alert("Error while updating!");
-      }
-    } catch (err) {
-      console.error(err);
-    }
-  };
-
-  const downVote = async (id) => {
-    try {
-      setLoading(true);
-      const response = await Axios.put(`${EndPoint}/downvotes/${id}`, {
-        userId: user.id,
-      });
-      if (response.data.status === 200) {
-        setStatus("Down Voted");
-        setData((prev) =>
-          prev.map((x) => (x._id === id ? { rating: x.rating - 1 } : x))
-        );
-      } else {
-        setStatus("Error while downvoting");
-      }
-      setTimeout(() => {
-        navigator("/forum");
-      }, 2000);
-    } catch (error) {
-      console.error("Error while downvoting:", error);
-    } finally {
-      setLoading(false);
-    }
-  };
-
-  const AnsweringQuestions = async (id, answer) => {
-    try {
-      setLoading(true);
-      const response = await Axios.put(`${EndPoint}/${id}`, {
-        whoAnswered: user.username,
-        answer,
-      });
-      if (response.status === 200) {
-        setStatus("Answer Posted");
-        setData((prev) =>
-          prev.map((x) => {
-            if (x.answer === answer && x.whoAnswered === user.username) {
-              return { ...x, answer: { ...x.answer, answer: answer } };
-            }
-            return x;
-          })
-        );
-        forumData();
-      }
-    } catch (error) {
-      console.error("Error posting answer:", error);
-    } finally {
-      setLoading(false);
-    }
-  };
-
-  const DeleteComment = async (id) => {
-    try {
-      const response = await Axios.delete(`${EndPoint}/${id}`);
-      if (response.status === 200) {
-        setData((prev) => prev.filter((comment) => comment._id !== id));
-        forumData(); // Assuming this function refreshes the forum data after deleting the comment
-      }
-    } catch (error) {
-      console.error("Error deleting comment:", error);
     }
   };
 
@@ -235,76 +142,15 @@ const Forum = () => {
         <p>{status}</p>
         {loading ? (
           <Typography variant="h5">Loading...</Typography>
-        ) : down === 0 ? (
-          data && data.length ? (
-            data.map((x) => (
-              <All
-                key={x._id}
-                theKey={x._id}
-                x={x}
-                nerdPointsIncrement={nerdPointsIncrement}
-                increaseVotes={increaseVotes}
-                downVote={downVote}
-                DeleteComment={DeleteComment}
-                AnsweringQuestions={AnsweringQuestions}
-                answer={answer}
-                setAnswer={setAnswer}
-                toggle={toggle}
-                setToggle={setToggle}
-              />
-            ))
-          ) : (
-            "No questions have been posted yet"
-          )
-        ) : down === 1 ? (
-          data && data.length ? (
-            data.map((x) =>
-              x.topic === "Pure Mathematics I" ? (
-                <PureMath
-                  key={x._id}
-                  x={x}
-                  theKey={x._id}
-                  nerdPointsIncrement={nerdPointsIncrement}
-                  increaseVotes={increaseVotes}
-                  downVote={downVote}
-                  DeleteComment={DeleteComment}
-                  AnsweringQuestions={AnsweringQuestions}
-                  answers={answer}
-                  setAnswer={setAnswer}
-                  toggle={toggle}
-                  setToggle={setToggle}
-                />
-              ) : (
-                ""
-              )
-            )
-          ) : (
-            "No Pure Math Questions have been posted yet"
-          )
-        ) : down === 2 ? (
-          data && data.length ? (
-            data.map((x) =>
-              x.topic === "Probability And Statistics" ? (
-                <Statistics
-                  key={x._id}
-                  x={x}
-                  theKey={x._id}
-                  nerdPointsIncrement={nerdPointsIncrement}
-                  increaseVotes={increaseVotes}
-                  downVote={downVote}
-                  DeleteComment={DeleteComment}
-                  AnsweringQuestions={AnsweringQuestions}
-                  answer={answer}
-                  setAnswer={setAnswer}
-                  toggle={toggle}
-                  setToggle={setToggle}
-                />
-              ) : null
-            )
-          ) : (
-            "No statistics questions have been posted yet"
-          )
-        ) : null}
+        ) : data.length > 0 ? (
+          data.map((x, index) => (
+            <div key={index}>
+              <ForumQuestion questionData={x} theKey={index} />
+            </div>
+          ))
+        ) : (
+          <Typography variant="h5">No questions available</Typography>
+        )}
         <Typography>{status}</Typography>
         <Link to="/addforum">Add question to forum? 🤔</Link>
       </div>

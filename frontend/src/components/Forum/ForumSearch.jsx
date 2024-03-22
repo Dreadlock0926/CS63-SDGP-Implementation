@@ -4,7 +4,8 @@ import { UserContext } from "../../App";
 import { Card, Button } from "react-bootstrap"; // Import Bootstrap components
 import { Link } from "react-router-dom";
 import Axios from "axios";
-import All from "./All";
+
+import ForumQuestion from "./ForumQuestion";
 
 const ForumSearch = () => {
   const {
@@ -42,40 +43,6 @@ const ForumSearch = () => {
     }
   };
 
-  const increaseVotes = async (id) => {
-    if (upvoting === 0) {
-      try {
-        setLoading(true);
-        const response = await Axios.put(`${EndPoint}/upvotes/${id}`, {
-          userId: user.id,
-        });
-        if (response.data.status === 200) {
-          setStatus("Upvoted");
-          setData((prevData) =>
-            prevData.map((item) =>
-              item._id === id ? { ...item, rating: item.rating + 1 } : item
-            )
-          );
-        } else {
-          setStatus("Error while upvoting");
-        }
-        setTimeout(() => {
-          navigator("/forum");
-        }, 2000);
-      } catch (error) {
-        console.error("Error while upvoting:", error);
-      } finally {
-        setLoading(false);
-      }
-    } else {
-      alert("already upvoted!");
-    }
-  };
-
-  useEffect(() => {
-    console.log(JSON.stringify(searched));
-  }, [searched]); // Include searched in the dependency array
-
   return transfer === 1 ? (
     <div className="container">
       <Link to={"/forum"}>Back To Forum</Link>
@@ -99,25 +66,7 @@ const ForumSearch = () => {
         <div>
           {searched.map((x, index) => (
             <div key={x._id || index}>
-              {/* <Card className="mb-3">
-                <Card.Body>
-                  <Card.Title>{x.question}</Card.Title>
-                  <Card.Subtitle className="mb-2 text-muted">
-                    {x.topic}
-                  </Card.Subtitle>
-                  <Card.Text>{x.description}</Card.Text>
-                  <Card.Text>Rating: {x.rating}</Card.Text>
-                </Card.Body>
-              </Card> */}
-              <br />
-              <All
-                key={x._id}
-                theKey={x._id}
-                x={x}
-                toggle={toggle}
-                setToggle={setToggle}
-                increaseVotes={increaseVotes}
-              />
+              <ForumQuestion questionData={x} theKey={index} />
             </div>
           ))}
         </div>
@@ -126,7 +75,7 @@ const ForumSearch = () => {
       )}
     </div>
   ) : (
-    "Nothing searched!"
+    window.location.replace("/forum")
   );
 };
 

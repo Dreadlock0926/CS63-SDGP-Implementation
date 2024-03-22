@@ -3,68 +3,131 @@ const router = express.Router();
 const forumModel = require("../models/forum");
 const userModel = require("../models/user");
 
-router
-  .route("/")
-  .get(async (req, res) => {
-    const user = req?.session?.user;
-    const id = req.body.id;
+router.route("/").post(async (req, res) => {
+  const { searchParams } = req.body;
 
-    if (user) {
-      try {
-        const data = await forumModel.findById(id).sort({ rating: -1 });
-        res.status(200).json(data);
-      } catch (err) {
-        console.error(err);
-        res.status(500).json({ Alert: err });
-      }
+  try {
+    let forums;
+    if (searchParams && searchParams.trim() !== "") {
+      forums = await forumModel.find({ topic: searchParams });
     } else {
-      try {
-        const data = await forumModel.find().sort({ rating: -1 });
-        res.status(200).json(data);
-      } catch (err) {
-        console.error(err);
-        res.status(500).json({ Alert: err });
-      }
+      forums = await forumModel.find(); // Get all forums if no search params
     }
-  })
-  .post(async (req, res) => {
-    try {
-      const { question, description, topic, rating, by = "guest" } = req?.body;
 
-      if (!question || !topic) {
-        return res.status(400).json({ Alert: "NO Question/Topic!" });
-      }
+    res.status(200).json(forums);
+  } catch (err) {
+    console.error(err);
+    res.status(500).json({ message: "Error fetching forums" });
+  }
+});
 
-      const conflict = await forumModel.findOne({ question });
+router.route("/addQuestion").post(async (req, res) => {
+  try {
+    const { question, description, topic, by = "guest" } = req?.body;
 
-      if (conflict) {
-        return res
-          .status(409)
-          .json({ Alert: `${question} was Already posted before!` });
-      }
+    if (!question || !topic) {
+      return res.status(400).json({ Alert: "NO Question/Topic!" });
+    }
 
-      const created = await forumModel.create({
-        question,
-        description,
-        topic,
-        rating,
-        by,
-      });
+    const conflict = await forumModel.findOne({ question });
 
-      if (created) {
-        return res.status(201).json({ Alert: `${question} Added!` });
-      } else {
-        return res
-          .status(500)
-          .json({ Alert: "Failed to create the question." });
-      }
-    } catch (error) {
-      console.error(error);
+    if (conflict) {
       return res
-        .status(500)
-        .json({ Alert: "An error occurred while processing your request." });
+        .status(409)
+        .json({ Alert: `${question} was Already posted before!` });
     }
-  });
+
+    const created = await forumModel.create({
+      question,
+      description,
+      topic,
+      by,
+    });
+
+    if (created) {
+      return res.status(201).json({ Alert: `${question} Added!` });
+    } else {
+      return res.status(500).json({ Alert: "Failed to create the question." });
+    }
+  } catch (error) {
+    console.error(error);
+    return res
+      .status(500)
+      .json({ Alert: "An error occurred while processing your request." });
+  }
+});
+
+router.route("/addAnswerToQuestion").post(async (req, res) => {
+  const { questionId, answer, answeredBy = "guest" } = req.body;
+
+  if (!questionId || !answer) {
+    return res
+      .status(400)
+      .json({ Alert: "Question ID and Answer are required!" });
+  }
+
+  try {
+    const question = await forumModel.findById(questionId);
+
+    if (!question) {
+      return res.status(404).json({ Alert: "Question not found!" });
+    }
+
+    const answerObj = {
+      text: answer,
+      answeredBy: answeredBy,
+    };
+
+    console.log(answerObj);
+
+    question.answers.push(answerObj);
+    await question.save();
+
+    res.status(200).json({ Alert: "Answer added successfully!" });
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ Alert: "Internal Server Error" });
+  }
+});
+
+// .post(async (req, res) => {
+//   try {
+//     const { question, description, topic, rating, by = "guest" } = req?.body;
+
+//     if (!question || !topic) {
+//       return res.status(400).json({ Alert: "NO Question/Topic!" });
+//     }
+
+//     const conflict = await forumModel.findOne({ question });
+
+//     if (conflict) {
+//       return res
+//         .status(409)
+//         .json({ Alert: `${question} was Already posted before!` });
+//     }
+
+//     const created = await forumModel.create({
+//       question,
+//       description,
+//       topic,
+//       rating,
+//       by,
+//     });
+
+//     if (created) {
+//       return res.status(201).json({ Alert: `${question} Added!` });
+//     } else {
+//       return res
+//         .status(500)
+//         .json({ Alert: "Failed to create the question." });
+//     }
+//   } catch (error) {
+//     console.error(error);
+//     return res
+//       .status(500)
+//       .json({ Alert: "An error occurred while processing your request." });
+//   }
+// });
 
 router.route("/search").post(async (req, res) => {
   const { search } = req?.body;

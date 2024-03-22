@@ -4,43 +4,56 @@ import { Link } from "react-router-dom";
 import { useNavigate } from "react-router-dom";
 import Axios from "axios";
 
-
 const CreateForum = () => {
-  const [forum, setForum] = useState({ question: "", topic: "Pure Mathematics I", rating: 1 });
+  const [forum, setForum] = useState({
+    question: "",
+    topic: "Pure Mathematics I",
+  });
   const [errorMessage, setErrorMessage] = useState("");
   const [successMessage, setSuccessMessage] = useState("");
-  const navigator = useNavigate()
+  const navigator = useNavigate();
 
   const handleChange = (e) => {
     setForum({ ...forum, [e.target.name]: e.target.value });
   };
-
   async function createQuestions(e) {
     e.preventDefault();
     try {
-      const response = await Axios.post("http://localhost:8000/forum", forum);
+      const response = await Axios.post(
+        "http://localhost:8000/forum/addQuestion",
+        {
+          question: forum.question,
+          description: forum.description,
+          topic: forum.topic,
+        }
+      );
       if (response.status === 201) {
         setSuccessMessage("Question added successfully!");
-        setForum({ question: "", answer: "", topic: "Pure Mathematics I", rating: 1 }); // Clear the form after successful submission
-        setTimeout(()=>{
-          navigator("/forum")
-        },500)
+        setForum({ question: "", topic: "Pure Mathematics I" }); // Clear the form after successful submission
+        // setTimeout(() => {
+        //   navigator("/forum");
+        // }, 500);
       }
     } catch (err) {
       if (err.response && err.response.status === 409) {
         setErrorMessage("Question was already posted!");
       } else {
-        setErrorMessage("An error occurred while processing your request. Please try again later.");
+        setErrorMessage(
+          "An error occurred while processing your request. Please try again later."
+        );
       }
       console.error(err);
-    }finally{
-      setForum(forum.topic==="Pure Mathematics I")
+    } finally {
+      setForum({
+        question: "",
+        topic: "Pure Mathematics I",
+      });
     }
   }
 
-  useEffect(()=>{
+  useEffect(() => {
     console.log(forum.topic);
-  },[forum.topic])
+  }, [forum.topic]);
 
   const { logged } = useContext(UserContext);
 
@@ -96,33 +109,57 @@ const CreateForum = () => {
       marginBottom: "10px",
     },
   };
-  
 
   return (
     <div style={styles.container}>
-    {logged ? (
-      <>
-        <h1 style={styles.title}>Add Something to the forum!</h1>
-        <form style={styles.form} onSubmit={createQuestions}>
-          <input style={styles.input} onChange={handleChange} name="question" value={forum.question} placeholder="Enter Question..." required maxLength={20} />
-          <input style={styles.input} onChange={handleChange} name="description"  placeholder="Enter Description..." required />
-          <select style={{border:"2px solid purple"}} onChange={handleChange} name="topic" value={forum.topic}>
-            <option value="Pure Mathematics I">Pure Maths I</option>
-            <option value="Probability And Statistics">Statistics</option>
-          </select>
-          <br/>
-          <button style={styles.button} type="submit">Add Resource!</button>
-        </form>
-        {errorMessage && <p style={styles.errorMessage}>{errorMessage}</p>}
-        {successMessage && <p style={styles.successMessage}>{successMessage}</p>}
-        <Link style={styles.link} to="/forum">Check Forum!</Link>
-      </>
-    ) : (
-      <div>
-        <Link style={styles.link} to="login">Please Login to Continue!</Link>
-      </div>
-    )}
-  </div>
+      {logged ? (
+        <>
+          <h1 style={styles.title}>Add Something to the forum!</h1>
+          <form style={styles.form} onSubmit={createQuestions}>
+            <input
+              style={styles.input}
+              onChange={handleChange}
+              name="question"
+              value={forum.question}
+              placeholder="Enter Question..."
+              required
+            />
+            <input
+              style={styles.input}
+              onChange={handleChange}
+              name="description"
+              placeholder="Enter Description..."
+              required
+            />
+            <select
+              style={{ border: "2px solid purple" }}
+              onChange={handleChange}
+              name="topic"
+            >
+              <option value="Pure Mathematics I">Pure Maths I</option>
+              <option value="Probability And Statistics I">Statistics</option>
+            </select>
+            <br />
+            <button style={styles.button} type="submit">
+              Add Resource!
+            </button>
+          </form>
+          {errorMessage && <p style={styles.errorMessage}>{errorMessage}</p>}
+          {successMessage && (
+            <p style={styles.successMessage}>{successMessage}</p>
+          )}
+          <Link style={styles.link} to="/forum">
+            Check Forum!
+          </Link>
+        </>
+      ) : (
+        <div>
+          <Link style={styles.link} to="login">
+            Please Login to Continue!
+          </Link>
+        </div>
+      )}
+    </div>
   );
 };
 

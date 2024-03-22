@@ -1,4 +1,20 @@
 const mongoose = require("mongoose");
+const forumAnswer = mongoose.Schema(
+  {
+    text: {
+      type: String,
+    },
+    answeredBy: {
+      type: String,
+    },
+    noOfUpvotes: {
+      type: Number,
+      default: 0,
+    },
+  },
+  { timestamps: true }
+);
+
 const forumSchema = mongoose.Schema(
   {
     question: {
@@ -10,33 +26,15 @@ const forumSchema = mongoose.Schema(
       trim: true,
     },
     answers: {
-      type:Array,
+      type: [forumAnswer],
       default: [],
-      index: {
-        type: Object,
-        default: {},
-        text: {
-          type: String,
-        },
-        answeredBy: {
-          type: String,
-        },
-        noOfUpvotes: {
-          type: Number,
-          default: 0,
-        },
-      },
-    },
-    upvotedBy:{
-      type:[String],
-      default:[]
     },
 
     topic: {
       type: String,
-      default: "",
+      required: true,
     },
-    rating: { type: Number, default: 0, min: 0 },
+    rating: { type: Number, default: 0 },
     by: {
       type: String,
       ref: "users", //referencing to the users collection to make a connection!
