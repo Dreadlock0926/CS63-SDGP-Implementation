@@ -5,8 +5,10 @@ import { UserContext } from "../../App";
 import Axios from "axios";
 import "./FeedbackPage.css";
 import initializeProbabilities from "./initializeProbabilities";
+import { useNavigate } from "react-router-dom";
 
 const FeedbackPage = () => {
+    const navigator = useNavigate();
 
     const {
         loggedInUser,
@@ -43,6 +45,7 @@ const FeedbackPage = () => {
 
     //Module Probabilities
     const [moduleProbabilities, setModuleProbabilities] = useState({});
+    const [moduleProbabilitiesSet, setModuleProbabilitiesSet] = useState(false);
 
     //Calculate Probabilities
     const calculateProbabilities = async (moduleID) => {
@@ -74,7 +77,7 @@ const FeedbackPage = () => {
                 moduleID: moduleID
             })
             .then(function (response) {
-                console.log(response);
+                setModuleProbabilitiesSet(true);
             })
             .catch(function (error) {
                 console.log(error);
@@ -82,13 +85,15 @@ const FeedbackPage = () => {
         }
 
         if (probabilitiesSet) {
-            updateModuleProbability();
+            updateModuleProbability()
         }
 
     }, [moduleProbabilities])
 
     //Get questions based on probabilities
     const getQuestionsOnProbability = async (moduleID) => {
+        setModuleProbabilitiesSet(false);
+        setExamQuestions([]);
         setModuleID(moduleID);
 
         await Axios.post("http://localhost:8000/getQuestion/getAllQuestions", {
@@ -172,11 +177,18 @@ const FeedbackPage = () => {
     }
 
     useEffect(() => {
-        matchProbabilities(availableQuestions);
+        if (availableQuestions.length > 0) {
+            matchProbabilities(availableQuestions);
+        }
     }, [availableQuestions])
 
     useEffect(() => {
-        console.log(examQuestions)
+        console.log("exams out of this");
+        console.log(examQuestions);
+
+        if (examQuestions.length > 0) {
+
+        }
     }, [examQuestions])
 
     useEffect(() => {
@@ -246,6 +258,28 @@ const FeedbackPage = () => {
         console.log("The topic probabilities are: ")
         console.log(topicProbabilities)
     }, [topicProbabilities])
+
+    useEffect(() => {
+        if (moduleProbabilitiesSet) {
+            createExam();
+        }
+    }, [moduleProbabilitiesSet]);
+
+    const createExam = async () => {
+        await Axios.post("http://localhost:8000/exam/saveExam", {
+            examType: "Feedback",
+            examQuestions: examQuestions,
+            userRef: loggedInUser._id,
+            examModule: "Pure Mathematics I",
+            examTopic: "None"
+        })
+        .then(function(response) {
+            navigator(`/exam/${response.data[0].Alert}`);
+        })
+        .catch(function(error) {
+            console.log(error);
+        })
+    }
 
     return (
         <>

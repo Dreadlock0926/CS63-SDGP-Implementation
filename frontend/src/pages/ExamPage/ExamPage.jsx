@@ -5,7 +5,7 @@ import { useEffect, useState } from "react";
 import { ClipLoader } from 'react-spinners';
 import "//unpkg.com/mathlive";
 import ExamCountDown from "../TestPages/ExamCount-Down";
-import { useNavigate, Link, Navigate } from "react-router-dom";
+import { useNavigate, Link,  useParams, Navigate } from "react-router-dom";
 
 
 function InfoPanel({ examType, examSubject, numQuestions, setSubmitRun, submitRun }) {
@@ -38,7 +38,7 @@ function InfoPanel({ examType, examSubject, numQuestions, setSubmitRun, submitRu
 }
 
 function ExamPageContent({setIsLoadingInfo, setExamType, setExamSubject, setNumQuestions, setCorrectIndexes, correctIndex, setMark, 
-    setCorrectQuestions, setWrongQuestions, correctQuestions, wrongQuestions, submitButtonClicked, setUserWrittenAnswers, examRef, 
+    setCorrectQuestions, setWrongQuestions, correctQuestions, wrongQuestions, submitButtonClicked, setUserWrittenAnswers, examID, 
     userRef, setUserRef, submitRun, setTotalMark}) {
 
     function QuestionOnPage({question, mqNum}) {
@@ -134,7 +134,7 @@ function ExamPageContent({setIsLoadingInfo, setExamType, setExamSubject, setNumQ
 
         try {
             const response = await Axios.post('http://localhost:8000/exam/getExam', {
-                "examRef": examRef
+                "examRef": examID
             });
 
             setUserRef(response.data.userRef)
@@ -149,7 +149,7 @@ function ExamPageContent({setIsLoadingInfo, setExamType, setExamSubject, setNumQ
     }
 
     useEffect(()=>{
-        getQuestion(setQuestionsList, setExamType, setExamSubject);
+        getQuestion(setQuestionsList, setExamType, setExamSubject, examID);
     },[])
 
     useEffect(() => {
@@ -298,7 +298,8 @@ function ExamPageContent({setIsLoadingInfo, setExamType, setExamSubject, setNumQ
 
 function ExamPage() {
 
-    const [examRef, setExamRef] = useState("65f8cf43e608d6d5516090ea");
+    // const [examRef, setExamRef] = useState("65f8cf43e608d6d5516090ea");
+    const { examID } = useParams();
     const [userRef, setUserRef] = useState("");
 
     const [isLoadingInfo, setIsLoadingInfo] = useState(true);
@@ -337,7 +338,7 @@ function ExamPage() {
 
         try {
             const response = await Axios.post('http://localhost:8000/exam/updateExam', {
-                "examRef": examRef,
+                "examRef": examID,
                 "userRef": userRef,
                 "marks": mark,
                 "totalMark": totalMark,
@@ -376,7 +377,7 @@ function ExamPage() {
         
         if (submitButtonClicked) {
             postUserDetails().then(
-                navigator("/receipt", {state:{examRef:examRef}})
+                navigator("/receipt", {state:{examRef:examID}})
             )
         }
 
@@ -388,7 +389,7 @@ function ExamPage() {
         <div className="exams-container">
             {!isLoadingInfo && <InfoPanel examType={examType} examSubject={examSubject} numQuestions={numQuestions} setSubmitRun={setSubmitRun} />}
             <ExamPageContent 
-            examRef={examRef}
+            examID={examID}
             setIsLoadingInfo={setIsLoadingInfo} setExamType={setExamType} 
             setExamSubject={setExamSubject} setNumQuestions={setNumQuestions}
             setCorrectIndexes={setCorrectIndexes} correctIndex={correctIndex}

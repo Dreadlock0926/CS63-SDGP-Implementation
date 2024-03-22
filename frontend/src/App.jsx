@@ -138,7 +138,7 @@ function App() {
           <Route path="add-questions" element={<AddQuestionsPage />} />
           <Route path="/select-course" element={<SelectCourses />} />
           <Route path="/select-course/:theTopic" element={<SpecificCourse />} />
-          <Route path="exam" element={<ExamPage />} />
+          <Route path="exam/:examID" element={<ExamPage />} />
           <Route path="/scope" element={<Scope />}></Route>
           <Route path="receipt" element={<ExamReceipt />} />
           <Route path="/exam-history" element={<ExamHistory />}></Route>

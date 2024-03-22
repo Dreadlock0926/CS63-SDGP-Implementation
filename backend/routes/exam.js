@@ -34,7 +34,7 @@ router.route("/saveExam").post(async (req, res) => {
       }
 
       if (updatedUser) {
-        res.status(201).json([{ Alert: "Exam Saved!" }]);
+        res.status(201).json([{ Alert: validityExam._id }]);
       } else {
         // Handle error if user update fails
         console.error("Error updating user exam history");
