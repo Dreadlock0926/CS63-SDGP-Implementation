@@ -20,6 +20,7 @@ const courses = require("./routes/courses");
 const user = require("./routes/user");
 const getTopics = require("./routes/getTopics");
 const learningMaterial = require("./routes/learn");
+const examDashboard = require("./routes/examDashboard");
 const forum = require("./routes/forum");
 const morgan = require("morgan");
 
@@ -60,6 +61,7 @@ app.use("/register", register);
 app.use("/login", login);
 // app.use(authenticated); //uncomment during final authentication tests 🔓
 app.use("/exam", examResources);
+app.use("/examDashboard", examDashboard);
 app.use("/addQuestion", addQuestion);
 app.use("/course", courses);
 app.use("/gemini", gemini);
