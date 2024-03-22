@@ -170,7 +170,7 @@ const LearnBlueprint = () => {
     <h1>Loading...</h1>
   ) : (
     <>
-      {topicTitles && topicTitles.length && completedTopical.length > 0 && (
+      {topicTitles && topicTitles.length && (
         <Container
           style={{ display: "flex", fontFamily: "poppins" }}
           className="container"
@@ -234,6 +234,7 @@ const LearnBlueprint = () => {
                         </TableCell>
                         <TableCell>
                           {topicPercentage &&
+                            completedTopical.length > 0 &&
                             topicPercentage[index] &&
                             (topicPercentage[index].completedPercentage ===
                             100 ? (
