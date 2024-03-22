@@ -44,6 +44,7 @@ const LearnBlueprint = () => {
   const [topicTitles, setTopicTitles] = useState([]);
   const [topicPercentage, setTopicPercentage] = useState([]);
   const [topicFirstLesson, setTopicFirstLesson] = useState({});
+  const [completedTopical, setCompletedTopical] = useState([]);
   const [theSubTopic, setTheSubTopic] = useState("");
   const [status, setStatus] = useState("");
   const navigator = useNavigate();
@@ -87,6 +88,29 @@ const LearnBlueprint = () => {
     }
   }
 
+  const getCompletedTopicalExams = async () => {
+    let moduleNeeded = "";
+    if (topic === "p1") {
+      moduleNeeded = "Pure Mathematics I";
+    } else if (topic === "s1") {
+      moduleNeeded = "Probability & Statistics I";
+    }
+
+    try {
+      const response = await Axios.post(
+        `${BASE}/resources/getCompletedTopicalExams`,
+        {
+          userId: loggedInUser._id, //user.id
+          moduleNeeded: moduleNeeded,
+        }
+      );
+      console.log(response.data);
+      setCompletedTopical(response.data.completedExams);
+    } catch (error) {
+      console.error(error.message);
+    }
+  };
+
   useEffect(() => {
     setLoggedInUser(JSON.parse(sessionStorage.getItem("loggedUser")).data);
   }, []);
@@ -94,6 +118,9 @@ const LearnBlueprint = () => {
   useEffect(() => {
     if (Object.keys(loggedInUser).length > 0) {
       console.log(loggedInUser);
+
+      getCompletedTopicalExams();
+
       const fetchTopicData = async () => {
         if (topic === "p1") {
           await fetchData("p1");
@@ -107,6 +134,12 @@ const LearnBlueprint = () => {
       fetchTopicData();
     }
   }, [loggedInUser]);
+
+  useEffect(() => {
+    if (completedTopical.length > 0) {
+      console.log(`Completed Topical Exams: ${completedTopical}`);
+    }
+  }, [completedTopical]);
 
   // useEffect(() => {
   //   console.log(
@@ -137,7 +170,7 @@ const LearnBlueprint = () => {
     <h1>Loading...</h1>
   ) : (
     <>
-      {topicTitles && topicTitles.length && (
+      {topicTitles && topicTitles.length && completedTopical.length > 0 && (
         <Container
           style={{ display: "flex", fontFamily: "poppins" }}
           className="container"
@@ -204,18 +237,44 @@ const LearnBlueprint = () => {
                             topicPercentage[index] &&
                             (topicPercentage[index].completedPercentage ===
                             100 ? (
-                              <RouterLink
-                                component="button"
-                                variant="body2"
-                                to={
-                                  !topicPercentage[index].examCompleted &&
-                                  `/topicalExam/${title}`
-                                }
-                              >
-                                {topicPercentage[index].examCompleted
-                                  ? "Done"
-                                  : "Available"}
-                              </RouterLink>
+                              // <RouterLink
+                              //   component="button"
+                              //   variant="body2"
+                              //   to={
+                              //     !topicPercentage[index].examCompleted &&
+                              //     `/topicalExam/${title}`
+                              //   }
+                              // >
+                              //   {completedTopical.includes(topicTitles[index])
+                              //     ? "Done"
+                              //     : "Available"}
+                              // </RouterLink>
+
+                              completedTopical.includes(topicTitles[index]) ? (
+                                <RouterLink
+                                  variant="body2"
+                                  onClick={() => {
+                                    setStatus(`You have completed ${title}`);
+                                  }}
+                                  style={{
+                                    textDecoration: "none",
+                                    color: "inherit",
+                                  }}
+                                >
+                                  Done
+                                </RouterLink>
+                              ) : (
+                                <RouterLink
+                                  component="button"
+                                  variant="body2"
+                                  to={
+                                    !topicPercentage[index].examCompleted &&
+                                    `/topicalExam/${title}`
+                                  }
+                                >
+                                  Available
+                                </RouterLink>
+                              )
                             ) : (
                               <RouterLink
                                 variant="body2"
