@@ -2,7 +2,7 @@
 /* eslint-disable no-undef */
 import React, { useContext } from "react";
 import { useState } from "react";
-
+import "./Forum.css";
 import Axios from "axios";
 
 import {

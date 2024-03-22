@@ -105,7 +105,7 @@ const Forum = () => {
           <div className="forumHeader">
             <p className="forumTitle">👋 Hey there, {loggedInUser.username}! Welcome to our Forums!</p>
               <p style={{fontSize: "16px"}}>Would you kindly grace us with a question? The button below eagerly awaits your gentle touch, yearning for the opportunity to fulfill its purpose in this vast digital realm.</p>
-              <Link className="addQuestionBtn" to="/addforum">Add question</Link>
+              <Link className="addQuestionBtn" to="/forum/add-question">Add question</Link>
               <br />
               <br />
           </div>
