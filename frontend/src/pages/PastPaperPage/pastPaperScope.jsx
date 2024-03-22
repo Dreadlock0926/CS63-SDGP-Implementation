@@ -1,4 +1,3 @@
-import React from "react";
 import { useState, useReducer, useEffect, useContext } from "react";
 import Axios from "axios";
 import "./pastPaperScope.css";

@@ -3,6 +3,8 @@ import { useContext, useEffect, useState } from "react";
 import ExamHistory from "./ExamHistory";
 import { UserContext } from "../../App";
 import Axios from "axios";
+import { Link } from "react-router-dom";
+import PastPaperScope from "../../pages/PastPaperPage/pastPaperScope";
 
 const ExamDashboard = () => {
   const { loading, setLoading, BASE } = useContext(UserContext);
@@ -37,49 +39,86 @@ const ExamDashboard = () => {
   }, []);
 
   return loading ? (
-    "Loading..."
+    <h1 style={{ textAlign: "center", margin: "20px", padding: "10px" }}>
+      Loading...
+    </h1>
   ) : (
     <div style={{ margin: "20px", textAlign: "center" }}>
       <h1>Exam Dashboard</h1>
-      {/* <div className="container" style={{ margin: "40px" }}>
-        <ExamHistory />
-      </div> */}
-      <div className="container" style={{ margin: "20px" }}>
+  
+      <div style={{ margin: "20px" }}>
         {examDashboard.feedbackExams.length ||
         examDashboard.topicalExams.length ||
         examDashboard.pastPapersExams.length ? (
-          <div className="feedback" style={{ margin: "20px", padding: "20px" }}>
-            {examDashboard.feedbackExams.map((x) => (
-              <div key={x._id}>
-                <h1>{x.examType}</h1>
-                <p>Total Mark: {x.totalMark}</p>
-                <p>Mark: {x.mark}</p>
-                <button>{`Start ${x.examType} Exam!`}</button>
+          <>
+            <div
+              className="feedback"
+              style={{ margin: "20px", padding: "20px" }}
+            >
+              <h1>{`Feedback`}</h1>
+              {examDashboard.feedbackExams.map((x) => (
+                <div
+                  key={x._id}
+                  className="card"
+                  style={{ marginBottom: "20px" }}
+                >
+                  <p>{`${Math.round(
+                    (x.mark / x.totalMark) * 100
+                  )}% Completed`}</p>
+                  <Link
+                    to={`/exam-review/${x._id}`}
+                  >{`Start ${x.examType} Exam!`}</Link>
+                </div>
+              ))}
+            </div>
+            <div
+              className="topical"
+              style={{ margin: "20px", padding: "20px" }}
+            >
+              <h1>{`Topical Exams!`}</h1>
+              <div
+                className="card-container"
+                style={{ display: "flex", flexDirection: "row" }}
+              >
+                {examDashboard.topicalExams.map((x) => (
+                  <div
+                    key={x._id}
+                    className="card"
+                    style={{ marginRight: "20px" }}
+                  >
+                    <p>{`${Math.round(
+                      (x.mark / x.totalMark) * 100
+                    )}% Completed`}</p>
+                    <Link
+                      to={`/exam-review/${x._id}`}
+                    >{`Start ${x.examType} Exam!`}</Link>
+                  </div>
+                ))}
               </div>
-            ))}
-            <div className="topical">
-              <br />
-              {examDashboard.topicalExams.map((x) => (
-                <div key={x._id}>
-                  <h1>{x.examType}</h1>
-                  <p>Total Mark: {x.totalMark}</p>
-                  <p>Mark: {x.mark}</p>
-                  <button>{`Start ${x.examType} Exam!`}</button>
-                </div>
-              ))}
             </div>
-            <div className="pastpaperex">
-              <br />
+            <div
+              className="pastpaperex"
+              style={{ margin: "20px", padding: "20px" }}
+            >
+              <h1>{`Past Papers`}</h1>
               {examDashboard.pastPapersExams.map((x) => (
-                <div key={x._id}>
-                  <h1>{x.examType}</h1>
-                  <p>Total Mark: {x.totalMark}</p>
-                  <p>Mark: {x.mark}</p>
-                  <button>{`Start ${x.examType} Exam!`}</button>
+                <div
+                  key={x._id}
+                  className="card"
+                  style={{ marginBottom: "20px" }}
+                >
+                  <p>{`${Math.round(
+                    (x.mark / x.totalMark) * 100
+                  )}% Completed`}</p>
+                  <Link
+                    to={`/exam-review/${x._id}`}
+                  >{`Start ${x.examType} Exam!`}</Link>
                 </div>
               ))}
+  
             </div>
-          </div>
+            <PastPaperScope/>
+          </>
         ) : (
           <h1>No results found!</h1>
         )}
