@@ -395,7 +395,7 @@ function ExamPage() {
             postUserDetails().then(
                 updateProbabilityForTopical()
             ).then(
-                // navigator("/receipt", {state:{examRef:examID}})
+                navigator("/receipt", {state:{examRef:examID}})
             )
         }
 
@@ -412,8 +412,7 @@ function ExamPage() {
                 topic: examTopic
             })
             .then( function (response) {
-                console.log("The topic key is: ");
-                console.log(response.data);
+                updateProbabilityHelper(response.data.topicKey, response.data.sourceKey, probability)
             })
             .catch( function(error) {
                 console.log(error)
@@ -421,7 +420,21 @@ function ExamPage() {
         }
     };
 
+    const updateProbabilityHelper = async (topicKey, sourceKey, probability) => {
 
+        await Axios.post("http://localhost:8000/user/updateOneModuleProbability", {
+            userId: userRef,
+            topicKey: topicKey,
+            sourceKey: sourceKey,
+            probability: probability
+        })
+        .then( function (response) {
+            console.log(response.data);
+        })
+        .catch( function(error) {
+            console.log(error)
+        })
+    };
 
     return (
         <div className="exams-container">

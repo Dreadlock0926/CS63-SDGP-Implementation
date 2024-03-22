@@ -20,11 +20,11 @@ router.route("/save-exam-ref").post(async (req, res) => {
 });
 
 router.route("/updateOneModuleProbability").post(async (req, res) => {
-  const { userId, topicKey, sourceKey   } = req?.body;
+  const { userId, topicKey, sourceKey, probability   } = req?.body;
 
   const user = await userModel.findById(userId);
 
-  user.topicProbabilities[sourceKey][topicKey] = 0.4;
+  user.topicProbabilities[sourceKey][topicKey] = probability;
 
   const updatedUser = await userModel.findByIdAndUpdate(userId, {
     topicProbabilities: user.topicProbabilities
