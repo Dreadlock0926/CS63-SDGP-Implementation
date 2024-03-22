@@ -25,6 +25,7 @@ import Forum from "./components/Forum/Forum";
 import CreateForum from "./components/Forum/CreateForum";
 import ForumSearch from "./components/Forum/ForumSearch";
 import PastPaperScope from "./pages/PastPaperPage/pastPaperScope";
+import ExamDashboard from "./components/ExamDashboard/ExamDashboard";
 
 export const UserContext = createContext();
 
@@ -168,7 +169,8 @@ function App() {
           <Route path="receipt" element={<ExamReceipt />} />
           <Route path="/exam-history" element={<ExamHistory />}></Route>
           <Route path="/exam-review/:examID" element={<ExamReview />}></Route>
-          <Route path="/scope" element={<Scope />}></Route>{" "}
+          <Route path="/scope" element={<Scope />}></Route>
+          <Route path="/examdashboard" element={<ExamDashboard />} />
           <Route path="/resources" element={<Learn />} />
           <Route
             path="/learning/:source/:topic/:lesson"

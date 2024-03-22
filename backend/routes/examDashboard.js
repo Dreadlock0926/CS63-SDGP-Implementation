@@ -5,7 +5,7 @@ const examModel = require("../models/exam");
 const userModel = require("../models/user");
 
 router.route("/getExams").post(async (req, res) => {
-  const { userId = "65fd130bc243afb3760aa723" } = req.body;
+  const { userId } = req.body;
 
   try {
     const user = await userModel.findById(userId);

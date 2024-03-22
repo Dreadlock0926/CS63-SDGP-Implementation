@@ -13,7 +13,7 @@ const ExamHistory = () => {
     const response = await Axios.post(
       "http://localhost:8000/exam/getExamHistory",
       {
-        userId: loggedInUser._id,
+        userId: "65fd130bc243afb3760aa723",
       }
     );
     if (response.status === 200) {
