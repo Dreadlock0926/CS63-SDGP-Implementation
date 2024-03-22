@@ -1,4 +1,6 @@
-import React from "react";
+/* eslint-disable no-unused-vars */
+/* eslint-disable no-undef */
+import React, { useContext } from "react";
 import { useState } from "react";
 
 import Axios from "axios";
@@ -12,9 +14,11 @@ import {
   Select,
   Typography,
 } from "@mui/material";
+import { UserContext } from "../../App";
 
 const ForumQuestion = (questionDataParam, theKey) => {
   let questionData = questionDataParam.questionData;
+  const { BASE, status, setStatus, user} = useContext(UserContext);
 
   const [answer, setAnswer] = useState("");
   const [toggle, setToggle] = useState(false);
@@ -23,7 +27,7 @@ const ForumQuestion = (questionDataParam, theKey) => {
   const increaseVotes = async (id) => {
     try {
       setLoading(true);
-      const response = await Axios.put(`${EndPoint}/upvotes/${id}`, {
+      const response = await Axios.put(`${BASE}/forum/upvotes/${id}`, {
         userId: user.id,
       });
       // if (response.data.status === 200) {
@@ -31,6 +35,11 @@ const ForumQuestion = (questionDataParam, theKey) => {
       // } else {
       //   setStatus("Error while upvoting");
       // }
+
+
+      if(response.data.status===200){
+        console.log("Yess!")
+      }
 
       setData((prevData) =>
         prevData.map((item) =>
@@ -41,7 +50,11 @@ const ForumQuestion = (questionDataParam, theKey) => {
         navigator("/forum");
       }, 2000);
     } catch (error) {
+      if(error.status===400){
+        setStatus("Error!")
+      }
       console.error("Error while upvoting:", error);
+
     } finally {
       setLoading(false);
     }
@@ -49,7 +62,7 @@ const ForumQuestion = (questionDataParam, theKey) => {
 
   const nerdPointsIncrement = async (id) => {
     try {
-      const response = await Axios.put(`${EndPoint}/nerds/${id}`, {
+      const response = await Axios.put(`${BASE}/forum/nerds/${id}`, {
         userID: "65e43aa4a2304a41b4d37e2c",
         theTotalUpvotes,
       });
@@ -67,7 +80,7 @@ const ForumQuestion = (questionDataParam, theKey) => {
   const downVote = async (id) => {
     try {
       setLoading(true);
-      const response = await Axios.put(`${EndPoint}/downvotes/${id}`, {
+      const response = await Axios.put(`${BASE}/forum/downvotes/${id}`, {
         userId: user.id,
       });
       if (response.data.status === 200) {
@@ -91,13 +104,10 @@ const ForumQuestion = (questionDataParam, theKey) => {
   const AnsweringQuestions = async (id, answer) => {
     try {
       setLoading(true);
-      const response = await Axios.post(
-        `http://localhost:8000/forum/addAnswerToQuestion`,
-        {
-          questionId: id,
-          answer: answer,
-        }
-      );
+      const response = await Axios.post(`${BASE}/forum/addAnswerToQuestion`, {
+        questionId: id,
+        answer: answer,
+      });
       if (response.status === 200) {
         console.log("Answer posted successfully!");
         window.location.reload();
@@ -111,18 +121,37 @@ const ForumQuestion = (questionDataParam, theKey) => {
 
   const DeleteComment = async (id) => {
     try {
-      const response = await Axios.delete(`${EndPoint}/${id}`);
+      const response = await Axios.delete(`${BASE}/forum/${id}`);
       if (response.status === 200) {
         setData((prev) => prev.filter((comment) => comment._id !== id));
         forumData(); // Assuming this function refreshes the forum data after deleting the comment
       }
     } catch (error) {
+      if (error.response.status === 404) {
+        setStatus("Question Not found!");
+      }
+      console.error("Error deleting comment:", error);
+    }
+  };
+
+  const DeleteAnswer = async (id) => {
+    try {
+      const response = await Axios.delete(`${BASE}/forum/delans/${id}`);
+      if (response.status === 200) {
+        setData((prev) => prev.filter((comment) => comment._id !== id));
+        forumData(); // Assuming this function refreshes the forum data after deleting the comment
+      }
+    } catch (error) {
+      if (error.response.status === 404) {
+        setStatus("Not found!");
+      }
       console.error("Error deleting comment:", error);
     }
   };
 
   return (
     <div key={theKey} className="card" style={{ marginBottom: "20px" }}>
+      <Typography variant="h4">{status}</Typography>
       <Typography variant="h6">Topic: {questionData.topic}</Typography>
       <Typography variant="h4">{questionData.question}</Typography>
       <Typography variant="body1">{questionData.description}</Typography>
@@ -139,6 +168,9 @@ const ForumQuestion = (questionDataParam, theKey) => {
                 ? ` Number of votes: ${answer.noOfUpvotes}`
                 : "No upvotes!"}
             </Typography>
+            <Button onClick={() => DeleteAnswer(questionData._id)}>
+              Delete
+            </Button>
             <Button
               onClick={() => nerdPointsIncrement(questionData._id)}
               variant="contained"
@@ -161,7 +193,7 @@ const ForumQuestion = (questionDataParam, theKey) => {
       </Typography>
       <Button onClick={() => increaseVotes(questionData._id)}>Upvote</Button>
       <Button onClick={() => downVote(questionData._id)}>DownVote</Button>
-      {/* <Button onClick={() => DeleteComment(x._id)}>Delete</Button> */}
+      <Button onClick={() => DeleteComment(questionData._id)}>Delete</Button>
       <Button
         onClick={() => {
           setToggle(!toggle);

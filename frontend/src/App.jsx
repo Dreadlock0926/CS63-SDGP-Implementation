@@ -19,6 +19,7 @@ function App() {
   const [searched, setSearched] = useState([]);
   const [transfer, setTransfer] = useState(0);
   const [toggle, setToggle] = useState(false);
+  const BASE = ""
   let upvoting = 0;
   const userData = {
     loading: loading,
@@ -38,6 +39,7 @@ function App() {
     upvoting,
     toggle,
     setToggle,
+    BASE
   };
 
   return (
