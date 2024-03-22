@@ -14,10 +14,10 @@ const ExamDashboard = () => {
       const response = await Axios.post(`${BASE}/examDashboard/getExams`, {
         userId: "65fd130bc243afb3760aa723",
       });
-      if (response.data.status === 200) {
+      if (response.status === 200) {
         setExamDashboard(response.data);
       } 
-      console.log(response.data);
+      console.log(`The response is ${JSON.stringify(response.data)}`);
     } catch (err) {
       if (err.response && err.response.status === 400) {
         alert("Error!");
@@ -36,14 +36,13 @@ const ExamDashboard = () => {
     "Loading..."
   ) : (
     <div style={{ margin: "20px", textAlign: "center" }}>
-      <h1>ExamDashboard</h1>
-      <div className="container" style={{ margin: "40px" }}>
+      <h1>Exam Dashboard</h1>
+      {/* <div className="container" style={{ margin: "40px" }}>
         <ExamHistory />
-      </div>
-      <div className="fetched">
-        <p>{JSON.stringify(examDashboard)}</p>
+      </div> */}
+      <div className="container" style={{margin:"20px"}}>
         {(examDashboard.feedbackExams.length || examDashboard.topicalExams.length || examDashboard.pastPapersExams.length) ? (
-          <div className="feedback">
+          <div className="feedback" style={{margin:"20px",padding:"20px"}}>
             {examDashboard.feedbackExams.map((x) => (
               <div key={x._id}>
                 <h1>{x.examType}</h1>
