@@ -20,6 +20,7 @@ const courses = require("./routes/courses");
 const user = require("./routes/user");
 const getTopics = require("./routes/getTopics");
 const learningMaterial = require("./routes/learn");
+const forum = require("./routes/forum");
 const morgan = require("morgan");
 
 async function authenticated(req, res, next) {
@@ -66,9 +67,10 @@ app.use("/progression", progression);
 app.use("/addQuestion", addQuestion);
 app.use("/getQuestionsOnTopic", getQuestionsOnTopic);
 app.use("/getQuestion", getQuestion);
+app.use("/forum", forum);
 app.use("/getTopics", getTopics);
 app.use("/user", user);
-app.use("/resources",learningMaterial);
+app.use("/resources", learningMaterial);
 app.use("/getTopics", getTopics);
 
 app.use("*", (req, res) => {

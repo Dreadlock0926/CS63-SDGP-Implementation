@@ -36,35 +36,72 @@ function ExamReview() {
     });
 
     for (let i = 0; i < answerFields.length; i++) {
-      const p = document.createElement("p");
-      p.style.textAlign = "start";
-      p.style.fontSize = "1.15rem";
-      p.innerText = "Correct Answer:";
-      p.style.fontWeight = "bold";
+      const pCorrect = document.createElement("p");
+      pCorrect.style.textAlign = "start";
+      pCorrect.style.fontSize = "1.15rem";
+      pCorrect.innerText = "Correct Answer:";
+      pCorrect.style.fontWeight = "bold";
 
-      const mathfield = document.createElement("math-field");
-      mathfield.value = correctAnswers[i];
-      mathfield.style.border = "2px solid green";
-      mathfield.style.marginBlock = "25px";
-      mathfield.style.width = "100%";
-      mathfield.readOnly = "true";
+      const mathfieldCorrect = document.createElement("math-field");
+      mathfieldCorrect.value = correctAnswers[i];
+      mathfieldCorrect.style.border = "0px solid green";
+      mathfieldCorrect.style.marginBlock = "25px";
+      mathfieldCorrect.style.backgroundColor = "white";
+      mathfieldCorrect.style.color = "green";
+      mathfieldCorrect.style.width = "100%";
+      mathfieldCorrect.readOnly = "true";
 
-      const fieldContainer = document.createElement("div");
-      fieldContainer.style.width = "40%";
-      fieldContainer.appendChild(p);
-      fieldContainer.appendChild(mathfield);
+      const fieldContainerCorrect = document.createElement("div");
+      fieldContainerCorrect.style.width = "40%";
+      fieldContainerCorrect.style.backgroundColor = "white";
+      fieldContainerCorrect.style.color = "green";
+      fieldContainerCorrect.style.marginBlock = "20px";
+      fieldContainerCorrect.appendChild(pCorrect);
+      fieldContainerCorrect.appendChild(mathfieldCorrect);
+
+      const pUser = document.createElement("p");
+      pUser.style.textAlign = "start";
+      pUser.style.fontSize = "1.15rem";
+      pUser.innerText = "User Answer:";
+      pUser.style.fontWeight = "bold";
+
+      // const mathfieldUser = document.createElement("math-field");
+      // mathfieldUser.value = answerFields[i].value;
+      // mathfieldUser.style.border = "0px solid green";
+      // mathfieldUser.style.marginBlock = "25px";
+      // mathfieldUser.style.backgroundColor = "white";
+      // mathfieldUser.style.color = "green";
+      // mathfieldUser.style.width = "100%";
+      // mathfieldUser.readOnly = "true";
+
+      // const fieldContainerUser = document.createElement("div");
+      // fieldContainerUser.style.width = "40%";
+      // fieldContainerUser.style.backgroundColor = "white";
+      // fieldContainerUser.style.color = "green";
+      // fieldContainerUser.style.marginBlock = "20px";
+      // fieldContainerUser.appendChild(pUser);
+      // fieldContainerUser.appendChild(mathfieldUser);
 
       answerFields[i].parentNode.insertBefore(
-        fieldContainer,
+        fieldContainerCorrect,
         answerFields[i].nextSibling
+      );
+      answerFields[i].parentNode.insertBefore(
+        pUser,
+        answerFields[i]
       );
       answerFields[i].value = userAnswers[i];
       answerFields[i].readOnly = "true";
 
       if (userAnswers[i] === correctAnswers[i]) {
-        answerFields[i].style.border = "2px solid green";
+        answerFields[i].style.color = "green";
+        answerFields[i].style.border = "0px solid green";
       } else {
-        answerFields[i].style.border = "2px solid red";
+        if (answerFields[i].value === "") {
+          answerFields[i].value = "∅"
+        }
+        answerFields[i].style.color = "red";
+        answerFields[i].style.border = "0px solid red";
       }
     }
   };

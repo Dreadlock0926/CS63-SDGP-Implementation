@@ -1,48 +1,47 @@
 const mongoose = require("mongoose");
-const forumAnswerSchema = mongoose.Schema(
+const forumAnswer = mongoose.Schema(
   {
-    answer: {
+    text: {
       type: String,
-      required: true,
-      trim: true,
     },
-    by: {
-      type: mongoose.Schema.ObjectId,
-      ref: "users", //referencing to the users collection to make a connection!
-    },
-  },
-  { timestamps: true }
-);
-
-const forumQuestionSchema = mongoose.Schema(
-  {
-    question: {
+    answeredBy: {
       type: String,
-      required: true,
-      trim: true,
     },
-    answer: {
-      type: [forumAnswerSchema],
-      default: [],
-    },
-    topic: {
-      type: String,
-      default: "",
-    },
-    rating: {
+    noOfUpvotes: {
       type: Number,
       default: 0,
     },
+  },
+  { timestamps: true }
+);
+
+const forumSchema = mongoose.Schema(
+  {
+    question: {
+      type: String,
+      trim: true,
+    },
+    description: {
+      type: String,
+      trim: true,
+    },
+    answers: {
+      type: [forumAnswer],
+      default: [],
+    },
+
+    topic: {
+      type: String,
+      required: true,
+    },
+    rating: { type: Number, default: 0 },
     by: {
-      type: mongoose.Schema.ObjectId,
+      type: String,
       ref: "users", //referencing to the users collection to make a connection!
     },
   },
 
   { timestamps: true }
 );
-const forumQuestionModel = mongoose.model("forums", forumQuestionSchema);
-const forumAnswerModel = mongoose.model("forumsAnswers", forumAnswerSchema);
-
-module.exports = forumQuestionModel;
-module.exports = forumAnswerModel;
+const forumModel = mongoose.model("forums", forumSchema);
+module.exports = forumModel;
