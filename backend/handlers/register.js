@@ -1,10 +1,9 @@
-const express = require("express");
-const router = express.Router();
-const userModel = require("../models/user");
-const bcrypt = require("bcrypt");
-const { registerUser } = require("../handlers/register");
+// Instead of using 'export const', we use 'module.exports' for compatibility with CommonJS.
 
-router.route("/").post(async (req, res) => {
+
+import {expect, jest, test} from '@jest/globals';
+
+const registerUser = async (req, res) => {
   const { username, password } = req?.body;
   console.log(req?.body);
   if (!username || !password)
@@ -30,6 +29,7 @@ router.route("/").post(async (req, res) => {
   } else {
     return res.status(409).json({ Alert: ` ${username} Already Exists!` });
   }
-});
+};
 
-module.exports = router;
+// Export the registerUser function using module.exports
+module.exports = { registerUser };

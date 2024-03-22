@@ -87,3 +87,4 @@ async function connectDB() {
 }
 
 app.listen(port, connectDB(), console.log(`Servers up on port ${port}`));
+
