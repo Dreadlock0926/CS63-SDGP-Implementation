@@ -1,22 +1,13 @@
 /* eslint-disable react-hooks/exhaustive-deps */
 /* eslint-disable no-unused-vars */
 /* eslint-disable react/prop-types */
+import Axios from "axios";
+import "./Forum.css";
+import ForumQuestion from "./ForumQuestion";
 import { useContext, useEffect, useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
-import Axios from "axios";
 import { UserContext } from "../../App";
-import {
-  Button,
-  FormControl,
-  Input,
-  InputLabel,
-  MenuItem,
-  Select,
-  Typography,
-} from "@mui/material";
-import "./Forum.css";
-
-import ForumQuestion from "./ForumQuestion";
+import { ClipLoader } from 'react-spinners';
 
 const Forum = () => {
   const {
@@ -108,49 +99,53 @@ const Forum = () => {
   };
 
   return loggedInUser ? (
-    <div className="main">
-      <div
-        style={{ margin: "5%", border: "12px solid #ccc", padding: "20px" }}
-        className="container"
-      >
-        <Typography variant="h4" className="forumTitle">
-          Forum
-        </Typography>
-        <br />
-        <br />
-        <Typography variant="h4">
-          Welcome back, {loggedInUser.username}! 🎉
-        </Typography>
-        <br />
-        <br />
-        <form onSubmit={searchUp}>
-          <input
-            onChange={(e) => {
-              setSearch(e.target.value);
-            }}
-            placeholder="Search here..."
-            type="text"
-          ></input>
-          <button type="submit" disabled={loading}>
-            Search...
-          </button>
-        </form>
-        <FormControl style={{ marginBottom: "20px" }}>
-          <InputLabel>Select Topic</InputLabel>
-          <br />
-          <Select
-            className="theDrop"
-            value={down}
-            onChange={(e) => setDown(Number(e.target.value))}
-          >
-            <MenuItem value={0}>All</MenuItem>
-            <MenuItem value={1}>Pure Math</MenuItem>
-            <MenuItem value={2}>Statistics</MenuItem>
-          </Select>
-        </FormControl>
+    <div className="mainContainer">
+      <div className="forumContainer">
+        <div className="fHeaderContainer">
+          <div className="forumHeader">
+            <p className="forumTitle">👋 Hey there, {loggedInUser.username}! Welcome to our Forums!</p>
+              <p style={{fontSize: "16px"}}>Would you kindly grace us with a question? The button below eagerly awaits your gentle touch, yearning for the opportunity to fulfill its purpose in this vast digital realm.</p>
+              <Link className="addQuestionBtn" to="/addforum">Add question</Link>
+              <br />
+              <br />
+          </div>
+        </div>
+
+        <div className="searchContainer">
+              <p className="forumTitle">🔎 Search Filter</p>
+              <br />
+            <form onSubmit={searchUp}>
+              <input className="searchQuestion"
+                onChange={(e) => {
+                  setSearch(e.target.value);
+                  }}
+                  placeholder="Search your queries here..."
+                  type="text"/>
+            </form>
+            
+            <div style={{display: "flex"}}>
+              <p style={{fontSize: "18px"}}>Topic Filter:</p>
+              <form style={{marginLeft: "10px", marginTop: "10px"}}>
+                <select              
+                  className="dropdownContainer"
+                  value={down}
+                  onChange={(e) => setDown(Number(e.target.value))}>
+                  <option value={0}>All</option>
+                  <option value={1}>Pure Math</option>
+                  <option value={2}>Statistics</option>
+                </select>
+              </form>
+            </div>
+              <div className="searchBtnContainer">
+                <button className="searchBtn" type="submit" disabled={loading}>Search...</button>
+              </div>
+          </div>
+          <hr />
         <p>{status}</p>
         {loading ? (
-          <Typography variant="h5">Loading...</Typography>
+          <div className="forumLoad">
+            <ClipLoader size={80} color="#1fa3d5" loading={true} />
+          </div>
         ) : data.length > 0 ? (
           data.map((x, index) => (
             <div key={index}>
@@ -158,17 +153,16 @@ const Forum = () => {
             </div>
           ))
         ) : (
-          <Typography variant="h5">No questions available</Typography>
+          <p>No questions available</p>
         )}
-        <Typography>{status}</Typography>
-        <Link to="/forum/add-question">Add question to forum? 🤔</Link>
+        <p>{status}</p>
       </div>
     </div>
   ) : (
     <div>
-      <Typography variant="h1">
+      <p>
         Please <Link to="/login">login</Link> to continue to the forum
-      </Typography>
+      </p>
     </div>
   );
 };
