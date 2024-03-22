@@ -207,11 +207,6 @@ const Forum = () => {
                   }}
                   placeholder="Search your queries here..."
                   type="text"/>
-                  <div className="submitBtn">
-                    <button style={{padding: "8px"}} type="submit" disabled={loading}>
-                      <img style={{height: "48px"}} src="./images/search.png" />
-                    </button>
-                  </div>
             </form>
             
             <div style={{display: "flex"}}>
@@ -227,6 +222,9 @@ const Forum = () => {
                 </select>
               </form>
             </div>
+              <div className="searchBtnContainer">
+                <button className="searchBtn" type="submit" disabled={loading}>Search...</button>
+              </div>
           </div>
           <hr />
         <p>{status}</p>

@@ -98,8 +98,22 @@ hr {
   border-bottom: 1px solid rgba(255, 255, 255, 0.3);
 }
 
-.submitBtn {
-  margin-right: 56em;
+.searchBtnContainer {
+  margin-top: 16px;
+}
+
+.searchBtn {
+  border: 2px solid #666666;
+  border-radius: 10px;
+  transition: all 0.5s;
+  padding: 10px;
+}
+
+
+.searchBtn:hover {
+  border: 2px solid #4a9dec;
+  box-shadow: 0px 0px 0px 7px rgb(74, 157, 236, 20%);
+  background-color: white;
 }
 
 
