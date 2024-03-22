@@ -3,6 +3,7 @@ const router = express.Router();
 const learningModel = require("../models/learningResources");
 const { topicsModel } = require("../models/topics");
 const userModel = require("../models/user");
+const examModel = require("../models/exam");
 
 //needs to be put in a controller
 //logic here must be changed
@@ -114,6 +115,38 @@ router.route("/getLessonBodies").post(async (req, res) => {
   const response = { lessonBody, lessonProgressReturn };
 
   res.status(200).json(response);
+});
+
+router.route("/getCompletedTopicalExams").post(async (req, res) => {
+  const { userId, moduleNeeded } = req.body;
+
+  if (!userId) {
+    return res.status(400).json({ Alert: "User ID required!" });
+  }
+
+  const user = await userModel.findById(userId);
+
+  if (!user) {
+    return res.status(404).json({ Alert: "User not found!" });
+  }
+
+  const userTopicalExams = user.topicalExams;
+
+  if (!userTopicalExams) {
+    return res.status(404).json({ Alert: "No exams found!" });
+  }
+
+  let completedExams = [];
+
+  for (const exam of userTopicalExams) {
+    let topicalExam = await examModel.findOne(exam);
+
+    if (topicalExam.examModule == moduleNeeded) {
+      completedExams.push(topicalExam.examTopic);
+    }
+  }
+
+  res.status(200).json({ completedExams });
 });
 
 router.route("/topic").post(async (req, res) => {
