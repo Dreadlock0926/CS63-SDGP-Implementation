@@ -24,6 +24,7 @@ import TopicalExam from "./components/Learn/TopicalExam";
 import Forum from "./components/Forum/Forum";
 import CreateForum from "./components/Forum/CreateForum";
 import ForumSearch from "./components/Forum/ForumSearch";
+import PastPaperScope from "./pages/PastPaperPage/pastPaperScope";
 
 export const UserContext = createContext();
 
@@ -158,6 +159,7 @@ function App() {
           <Route path="/login" element={<Login />} />
           <Route path="/registration" element={<Register />} />
           <Route path="/authenticate" element={<Authenticate />} />
+          <Route path="/past-papers" element={<PastPaperScope />} />
           <Route path="add-questions" element={<AddQuestionsPage />} />
           <Route path="/select-course" element={<SelectCourses />} />
           <Route path="/select-course/:theTopic" element={<SpecificCourse />} />
@@ -172,7 +174,7 @@ function App() {
             path="/learning/:source/:topic/:lesson"
             element={<LearningResource />}
           ></Route>
-              <Route path="/topicalExam/:topic" element={<TopicalExam />}></Route>
+          <Route path="/topicalExam/:topic" element={<TopicalExam />}></Route>
           <Route path="/learnprint/:topic" element={<LearnBlueprint />}></Route>
           <Route path="/feedback" element={<FeedbackPage />}></Route>
           <Route path="*" element={<UnknownPage />} />
