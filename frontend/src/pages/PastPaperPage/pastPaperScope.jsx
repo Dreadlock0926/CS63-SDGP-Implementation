@@ -1,9 +1,24 @@
 import React from "react";
-import { useState, useReducer, useEffect } from "react";
+import { useState, useReducer, useEffect, useContext } from "react";
 import Axios from "axios";
 import "./pastPaperScope.css";
+import { UserContext } from "../../App";
+import { useNavigate } from "react-router-dom";
 
 const PastPaperScope = () => {
+
+  const navigator = useNavigate();
+
+    const {
+        loggedInUser,
+        setLoggedInUser
+    } = useContext(UserContext);
+
+    useEffect(() => {
+        console.log(JSON.parse(sessionStorage.getItem("loggedUser")).data);
+        setLoggedInUser(JSON.parse(sessionStorage.getItem("loggedUser")).data);
+      }, []);
+
   const initialState = {
     modules: {},
     selectedSeason: "s",
@@ -34,6 +49,7 @@ const PastPaperScope = () => {
   const [selectedModuleState, setSelectedModuleState] = useState("");
   const [modulesArr, setModulesArr] = useState([]);
   const [questions, setQuestions] = useState([]);
+  const [questionIDs, setQuestionIDs] = useState([]);
 
   const getModules = async () => {
     try {
@@ -83,6 +99,43 @@ const PastPaperScope = () => {
   useEffect(() => {
     getModules();
   }, []);
+
+  const createExam = async () => {
+    await Axios.post("http://localhost:8000/exam/saveExam", {
+        examType: "Past Paper",
+        examQuestions: questionIDs,
+        userRef: loggedInUser._id,
+        examModule: selectedModuleState,
+        examTopic: "None"
+    })
+    .then(function(response) {
+        navigator(`/exam/${response.data[0].Alert}`);
+    })
+    .catch(function(error) {
+        console.log(error);
+    })
+}
+
+  useEffect(() => {
+    
+    if (questions.length > 0) {
+      
+      let questionIDArray = [];
+
+      for (const i in questions) {
+        questionIDArray.push(questions[i].questionID);
+      }
+      
+      setQuestionIDs(questionIDArray);
+    }
+
+  }, [questions]);
+
+  useEffect(() => {
+    if (questionIDs.length > 0) {
+      createExam();
+    }
+  }, [questionIDs])
 
   const handleModuleChange = (event) => {
     for (let i = 0; i < state.modules.length; i++) {
@@ -179,13 +232,6 @@ const PastPaperScope = () => {
               {questions.map((question, i) => (
                 <li key={i}>
                   <p>{question.questionID}</p>
-                  <p>{question.questionTopic}</p>
-                  <p>{question.questionsGrid}</p>
-                  <p>{question.questionsFiguresGrid}</p>
-                  <p>{question.answersTypeGrid}</p>
-                  <p>{question.answersGrid}</p>
-                  <p>{question.marksGrid}</p>
-                  <p>{question.questionSource}</p>
                 </li>
               ))}
             </ul>

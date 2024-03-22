@@ -40,6 +40,7 @@ const userSchema = new mongoose.Schema(
     wrongQuestions: { type: Array },
     topicalExams: { type: Array },
     feedbackExams: { type: Array },
+    pastPaperExams: { type: Array},
     lesson: { type: [topicProgressSchema], default: [] },
     topicProbabilities: { type: Object, default: {} },
   },

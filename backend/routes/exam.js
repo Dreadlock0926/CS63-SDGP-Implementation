@@ -40,6 +40,10 @@ router.route("/saveExam").post(async (req, res) => {
         updatedUser = await userModel.findByIdAndUpdate(userRef, {
           $push: { topicalExams: validityExam._id }, // Push exam object Id
         });
+      } else if (examType.toLowerCase() === "past paper") {
+        updatedUser = await userModel.findByIdAndUpdate(userRef, {
+          $push: { pastPaperExams: validityExam._id }, // Push exam object Id
+        });
       }
 
       if (updatedUser) {
