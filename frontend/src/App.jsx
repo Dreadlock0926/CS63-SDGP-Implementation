@@ -20,6 +20,7 @@ import ExamReview from "./pages/ExamPage/ExamReview/ExamReview";
 import Learn from "./components/Learn/Learn";
 import LearnBlueprint from "./components/Learn/LearnBlueprint";
 import LearningResource from "./components/Learn/LearningResource";
+import TopicalExam from "./components/Learn/TopicalExam";
 
 export const UserContext = createContext();
 
@@ -149,6 +150,7 @@ function App() {
             path="/learning/:source/:topic/:lesson"
             element={<LearningResource />}
           ></Route>
+              <Route path="/topicalExam/:topic" element={<TopicalExam />}></Route>
           <Route path="/learnprint/:topic" element={<LearnBlueprint />}></Route>
           <Route path="/feedback" element={<FeedbackPage />}></Route>
           <Route path="*" element={<UnknownPage />} />

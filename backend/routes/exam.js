@@ -3,6 +3,15 @@ const router = express.Router();
 const examModel = require("../models/exam");
 const userModel = require("../models/user"); // Import the userModel
 
+router.post("/topicalcompleted").post(async (req,res)=>{
+  const {topic} = req?.body
+  
+  if (!topic) {
+    return res.status(400).json({ Alert: "Topic REQUIRED" });
+x
+  }
+})
+
 router.route("/saveExam").post(async (req, res) => {
   const { examType, examQuestions, userRef, examModule, examTopic } = req?.body;
 

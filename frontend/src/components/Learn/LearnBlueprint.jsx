@@ -2,7 +2,7 @@
 /* eslint-disable react-hooks/exhaustive-deps */
 import React, { useContext, useEffect, useState } from "react";
 import { UserContext } from "../../App";
-import { Link as RouterLink, useNavigate,useParams } from "react-router-dom";
+import { Link as RouterLink, useNavigate, useParams } from "react-router-dom";
 import {
   Container,
   Typography,
@@ -37,7 +37,7 @@ const LearnBlueprint = () => {
     setTopicRelated,
   } = useContext(UserContext);
 
-  const {topic} = useParams();
+  const { topic } = useParams();
 
   const [userData, setUserData] = useState([]);
   const [loading, setLoading] = useState(false);
@@ -95,9 +95,9 @@ const LearnBlueprint = () => {
     if (Object.keys(loggedInUser).length > 0) {
       console.log(loggedInUser);
       const fetchTopicData = async () => {
-        if (topic==="p1") {
+        if (topic === "p1") {
           await fetchData("p1");
-        } else if (topic==="s1") {
+        } else if (topic === "s1") {
           await fetchData("s1");
         } else {
           navigator("/resources");
@@ -207,9 +207,15 @@ const LearnBlueprint = () => {
                               <RouterLink
                                 component="button"
                                 variant="body2"
-                                to={`/topicalExam/${title}`}
+                                to={
+                                  topicPercentage[index].examCompleted
+                                    ? null
+                                    : `/topicalExam/${title}`
+                                }
                               >
-                                Yes
+                                {topicPercentage[index].examCompleted
+                                  ? "Done"
+                                  : "Available"}
                               </RouterLink>
                             ) : (
                               <RouterLink
@@ -220,7 +226,7 @@ const LearnBlueprint = () => {
                                   );
                                 }}
                               >
-                                No
+                                Unavailable
                               </RouterLink>
                             ))}
                         </TableCell>
