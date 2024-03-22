@@ -336,16 +336,30 @@ function ExamPage() {
     
     const postUserDetails = async () => {
 
-        try {
-            const response = await Axios.post('http://localhost:8000/exam/updateExam', {
-                "examRef": examID,
-                "userRef": userRef,
-                "marks": mark,
-                "totalMark": totalMark,
-                "correctQuestions": correctQuestions,
-                "wrongQuestions": wrongQuestions,
-                "userAnswers": userWrittenAnswers
-            });
+        try {     
+            if (examType === "Feedback") {
+               
+                const response = await Axios.post('http://localhost:8000/exam/updateExam', {
+                    "examRef": examID,
+                    "userRef": userRef,
+                    "marks": mark,
+                    "totalMark": totalMark,
+                    "correctQuestions": correctQuestions,
+                    "wrongQuestions": wrongQuestions,
+                    "userAnswers": userWrittenAnswers
+                });
+            } else {
+
+                const response = await Axios.post('http://localhost:8000/exam/updateExam', {
+                    "examRef": examID,
+                    "userRef": userRef,
+                    "marks": mark,
+                    "totalMark": totalMark,
+                    "correctQuestions": [],
+                    "wrongQuestions": [],
+                    "userAnswers": userWrittenAnswers
+                });
+            }
 
         } catch (err) {
             console.log(err);
