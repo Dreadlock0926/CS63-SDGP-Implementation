@@ -19,6 +19,24 @@ router.route("/save-exam-ref").post(async (req, res) => {
   }
 });
 
+router.route("/updateOneModuleProbability").post(async (req, res) => {
+  const { userId, topicKey, sourceKey   } = req?.body;
+
+  const user = await userModel.findById(userId);
+
+  user.topicProbabilities[sourceKey][topicKey] = 0.4;
+
+  const updatedUser = await userModel.findByIdAndUpdate(userId, {
+    topicProbabilities: user.topicProbabilities
+  })
+
+  if (!updatedUser) {
+    return res.status(400).json({Alert: "updatedUser doesnt match records"})
+  } else {
+    return res.status(200).json(updatedUser);
+  }
+});
+
 router.route("/updateModuleProbabilities").post(async (req, res) => {
   const { userId, topicProbabilities, source } = req?.body;
 
