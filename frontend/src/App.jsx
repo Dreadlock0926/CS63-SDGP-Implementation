@@ -20,6 +20,9 @@ import ExamReview from "./pages/ExamPage/ExamReview/ExamReview";
 import Learn from "./components/Learn/Learn";
 import LearnBlueprint from "./components/Learn/LearnBlueprint";
 import LearningResource from "./components/Learn/LearningResource";
+import Forum from "./components/Forum/Forum";
+import CreateForum from "./components/Forum/CreateForum";
+import ForumSearch from "./components/Forum/ForumSearch";
 
 export const UserContext = createContext();
 
@@ -46,16 +49,19 @@ function App() {
   const [isAuthenticated, setIsAuthenticated] = useState(false);
   const [theTopic, setTheTopic] = useState("");
   const [source, setSource] = useState("");
-  const [pureLessonCount,setPureLessonCount] = useState(0);
-  const [statLessonCount,setStatLessonCount] = useState(0);
-  const [userId,setUserId] = useState('');
-  const [totalAnswers,setTotalAnswers] = useState([]);
-  const [examHistory,setExamHistory] = useState([]);
+  const [pureLessonCount, setPureLessonCount] = useState(0);
+  const [statLessonCount, setStatLessonCount] = useState(0);
+  const [userId, setUserId] = useState("");
+  const [totalAnswers, setTotalAnswers] = useState([]);
+  const [examHistory, setExamHistory] = useState([]);
   const [statisticsMarks, setStatisticsMarks] = useState([]);
   const [mathematicsMarks, setMathematicsMarks] = useState([]);
-  const [totalMathsmarks,setTotalMathsmark] = useState([]);
-  const [totalStatMarks,setTotalStatMarks] = useState([]);
-  const [totalMarks,setTotalMarks] = useState([]);
+  const [totalMathsmarks, setTotalMathsmark] = useState([]);
+  const [totalStatMarks, setTotalStatMarks] = useState([]);
+  const [totalMarks, setTotalMarks] = useState([]);
+  const [search, setSearch] = useState("");
+  const [searched, setSearched] = useState([]);
+  const [transfer, setTransfer] = useState("");
 
   const BASE = "http://localhost:8000";
 
@@ -63,6 +69,12 @@ function App() {
 
   // Structuring the context value explicitly
   const contextValue = {
+    search,
+    setSearch,
+    searched,
+    setSearched,
+    transfer,
+    setTransfer,
     loggedInUser,
     setLoggedInUser,
     loading,
@@ -116,13 +128,20 @@ function App() {
     setTotalAnswers,
     pureLessonCount,
     setPureLessonCount,
-    statLessonCount,setStatLessonCount,
-    examHistory,setExamHistory,
-    statisticsMarks, setStatisticsMarks,
-    mathematicsMarks, setMathematicsMarks,
-    totalMathsmarks,setTotalMathsmark,
-    totalStatMarks,setTotalStatMarks,
-    totalMarks,setTotalMarks
+    statLessonCount,
+    setStatLessonCount,
+    examHistory,
+    setExamHistory,
+    statisticsMarks,
+    setStatisticsMarks,
+    mathematicsMarks,
+    setMathematicsMarks,
+    totalMathsmarks,
+    setTotalMathsmark,
+    totalStatMarks,
+    setTotalStatMarks,
+    totalMarks,
+    setTotalMarks,
   };
 
   return (
@@ -131,6 +150,9 @@ function App() {
         <Routes>
           <Route path="/" element={<Home />} />
           <Route path="/progression" element={<Progressionmark />} />
+          <Route path="/forum" element={<Forum />} />
+          <Route path="/forum/add-question" element={<CreateForum />} />
+          <Route path="/forum/search" element={<ForumSearch />} />
           <Route path="/dashboard" element={<DashboardPage />} />
           <Route path="/login" element={<Login />} />
           <Route path="/registration" element={<Register />} />

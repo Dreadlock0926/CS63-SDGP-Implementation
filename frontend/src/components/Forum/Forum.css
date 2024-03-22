@@ -1,0 +1,99 @@
+.main {
+  background-color: transparent;
+  background-image: url("baccc.gif");
+  background-repeat: repeat-y;
+  background-blend-mode: overlay;
+  background-size: contain;
+  background-position: center;
+  margin: 20px;
+  padding: 20px; /* Add padding for spacing */
+}
+
+.card {
+  background-color: #ffffff;
+  border-radius: 20px;
+  border: 2px solid black;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+  padding: 20px;
+  margin-bottom: 20px;
+}
+
+.forumTitle {
+  text-align: center;
+  background-color: #ffffff;
+  border-radius: 20px;
+  border: 4px solid black;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  padding: 40px;
+  margin-bottom: 20px; /* Add margin for spacing */
+}
+
+.container {
+  margin: 40px;
+  padding: 60px;
+  background-color: #ffffff;
+  border-radius: 20px;
+  box-shadow: 0 0 20px rgba(0, 0, 0, 0.1);
+}
+
+.theDrop {
+  width: 200px;
+  margin-bottom: 20px; /* Add margin for spacing */
+}
+
+/* Forum Buttons */
+.forumBtn {
+  text-decoration: none;
+  padding: 10px 20px;
+  margin: 10px;
+  border-radius: 5px;
+  color: black;
+  background-color: #007bff;
+  border: none;
+  cursor: pointer;
+  transition: background-color 0.3s, color 0.3s;
+}
+
+.forumBtn:hover {
+  background-color: #0056b3;
+}
+
+/* Headings */
+h1 {
+  font-size: 24px;
+  margin-bottom: 20px;
+}
+
+/* Forum Questions */
+.question {
+  margin-bottom: 30px;
+}
+
+/* Answer Form */
+.replyForm {
+  margin-top: 20px;
+  margin-bottom: 20px; /* Add margin for spacing */
+}
+
+input[type="text"] {
+  width: 100%;
+  padding: 12px;
+  border: 1px solid #ccc;
+  border-radius: 5px;
+  font-size: 16px;
+  margin-bottom: 15px;
+}
+
+button {
+  padding: 12px 24px;
+  background-color: #007bff;
+  color: #ffffff;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  transition: background-color 0.3s, color 0.3s;
+}
+
+button:hover {
+  background-color: #0056b3;
+}
