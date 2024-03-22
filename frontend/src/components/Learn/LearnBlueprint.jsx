@@ -147,7 +147,7 @@ const LearnBlueprint = () => {
           ) : (
             <>
               <Typography variant="h3">
-                {theTopic === "Pure"
+                {topic === "p1"
                   ? "Pure Mathematics I"
                   : "Probability And Statistics"}
               </Typography>
