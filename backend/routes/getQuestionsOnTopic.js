@@ -22,7 +22,7 @@ router.route("/").post(async (req, res) => {
 
   if (!questionData || questionData.length === 0) {
     res
-      .status(400)
+      .status(404)
       .json({ Alert: "The question data is not matching any records." });
   } else {
     res.status(200).json(questionData);
