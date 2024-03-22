@@ -44,12 +44,13 @@ const updateCourses = async (userId, courseRef, courseKey) => {
   // No need to parse JSON again
   const loggedInUser = JSON.parse(sessionStorage.getItem("loggedUser")).data;
 
-  await initializeProbabilities(loggedInUser).then((result) => {
+  await initializeProbabilities(courseKey).then((result) => {
     console.log(result);
 
     async function updateModuleProbability() {
       await Axios.post("http://localhost:8000/user/updateModuleProbabilities", {
-        username: loggedInUser.username,
+        userId: loggedInUser._id,
+        source: courseKey,
         topicProbabilities: result,
       })
         .then(function (response) {

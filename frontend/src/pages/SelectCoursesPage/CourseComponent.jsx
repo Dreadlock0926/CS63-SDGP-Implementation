@@ -9,11 +9,7 @@ const handleClick = async (courseRef, courseKey) => {
   let loggedInUser = JSON.parse(sessionStorage.getItem("loggedUser")).data;
 
   try {
-    await updateCourses(loggedInUser._id, courseRef, courseKey).then(
-      async (result) => {
-        console.log(result);
-      }
-    );
+    await updateCourses(loggedInUser._id, courseRef, courseKey);
   } catch (error) {
     console.error(error);
   }

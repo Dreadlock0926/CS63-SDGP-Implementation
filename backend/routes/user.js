@@ -20,24 +20,36 @@ router.route("/save-exam-ref").post(async (req, res) => {
 });
 
 router.route("/updateModuleProbabilities").post(async (req, res) => {
-  const { username, topicProbabilities } = req?.body;
+  const { userId, topicProbabilities, source } = req?.body;
 
-  console.log(username, topicProbabilities);
-
-  if (!username || !topicProbabilities) {
+  if (!userId || !topicProbabilities || !source) {
     return res
       .status(400)
       .json({ Alert: "Username or Topic Probabilities Missing!" });
   }
 
-  const validUser = await userModel.updateOne(
-    { username: username },
-    { $set: { topicProbabilities: topicProbabilities } }
-  );
+  const validUser = await userModel.findById(userId);
 
-  if (validUser) {
-    res.status(201).json([{ Alert: "Module Probabilities updated!" }]);
+  if (!validUser) {
+    return res.status(404).json({ Alert: "User not found!" });
   }
+
+  console.log(validUser.topicProbabilities);
+
+  // Create a new object by spreading the existing topicProbabilities
+  const updatedTopicProbabilities = {
+    ...validUser.topicProbabilities,
+    [source]: topicProbabilities,
+  };
+
+  // Update the topicProbabilities field with the new object
+  validUser.topicProbabilities = updatedTopicProbabilities;
+
+  console.log(validUser.topicProbabilities);
+
+  const savedUser = await validUser.save();
+
+  res.status(201).json(savedUser);
 });
 
 router.route("/setModuleProbabilities").post(async (req, res) => {

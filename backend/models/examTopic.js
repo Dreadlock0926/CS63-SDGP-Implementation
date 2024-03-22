@@ -7,7 +7,7 @@ const examTopicSchema = new mongoose.Schema({
   },
 
   topicProbabilities: {
-    type: Number,
+    type: Double,
     default: -1,
   },
 });

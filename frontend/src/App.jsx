@@ -15,7 +15,7 @@ import ExamPage from "./pages/ExamPage/ExamPage";
 import SelectCourses from "./pages/SelectCoursesPage/SelectCourses";
 import SpecificCourse from "./pages/SelectCoursesPage/SpecificCourse";
 import ExamReceipt from "./pages/ExamPage/ExamReceipt/ExamReceipt";
-import ExamHistory from "./pages/ExamPage/ExamHistoryPage/ExamHistory";
+import ExamHistory from "./components/ExamDashboard/ExamHistory";
 import ExamReview from "./pages/ExamPage/ExamReview/ExamReview";
 import Learn from "./components/Learn/Learn";
 import LearnBlueprint from "./components/Learn/LearnBlueprint";
