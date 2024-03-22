@@ -107,6 +107,7 @@ const LearningResource = () => {
     topicRelated && Object.keys(topicRelated).length > 0 && (
       <>
         <div style={{ display: "flex", fontFamily: "poppins" }}>
+          <Link to={`/learnprint/${topic}`}>Go Back!</Link>
           <div
             className="sidebar"
             style={{

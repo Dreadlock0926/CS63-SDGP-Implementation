@@ -2,7 +2,7 @@
 /* eslint-disable react-hooks/exhaustive-deps */
 import React, { useContext, useEffect, useState } from "react";
 import { UserContext } from "../../App";
-import { Link as RouterLink, useNavigate } from "react-router-dom";
+import { Link as RouterLink, useNavigate,useParams } from "react-router-dom";
 import {
   Container,
   Typography,
@@ -36,6 +36,8 @@ const LearnBlueprint = () => {
     setLessonTopic,
     setTopicRelated,
   } = useContext(UserContext);
+
+  const {topic} = useParams();
 
   const [userData, setUserData] = useState([]);
   const [loading, setLoading] = useState(false);
@@ -93,9 +95,9 @@ const LearnBlueprint = () => {
     if (Object.keys(loggedInUser).length > 0) {
       console.log(loggedInUser);
       const fetchTopicData = async () => {
-        if (theTopic === "Pure") {
+        if (topic==="p1") {
           await fetchData("p1");
-        } else if (theTopic === "Stat") {
+        } else if (topic==="s1") {
           await fetchData("s1");
         } else {
           navigator("/resources");

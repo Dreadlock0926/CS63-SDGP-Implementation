@@ -6,6 +6,7 @@ import { FetchMaterial } from "../Api/Api";
 import { Link } from "react-router-dom";
 import { Button } from "@mui/material";
 import NotLogged from "../NotLogged";
+import {ProgressBar} from "react-loader-spinner"
 import "./Learn.css";
 import Axios from "axios";
 
@@ -55,7 +56,8 @@ const Learn = () => {
     }
   }, [startedModule]);
 
-  return Object.keys(loggedInUser).length > 0 && !loading ? (
+  return Object.keys(loggedInUser).length > 0 &&  (
+    loading? <ProgressBar/> :
     <div className="learn-container">
       <header className="header">
         <h1>Learning Resources</h1>
@@ -63,16 +65,24 @@ const Learn = () => {
       <div className="subjects-container">
         {startedModule.length > 0 ? (
           startedModule.map((course, index) => (
+
             <Link
-              to={`/learnprint`}
+              to={
+                course === "Pure Mathematics I"
+                  ? `/learnprint/p1`
+                  : course === "Probability and Statistics I"
+                  ? `/learnprint/s1`
+                  : null
+              }
               key={index}
               className="subject-link"
               onClick={() => {
-                if (course === "Pure Mathematics I") {
-                  setTheTopic("Pure");
-                } else if (course === "Probability and Statistics I") {
-                  setTheTopic("Stat");
-                }
+                // if (course === "Pure Mathematics I") {
+                //   setTheTopic("Pure");
+                // } else if (course === "Probability and Statistics I") {
+                //   setTheTopic("Stat");
+                // }
+                console.log(course);
               }}
             >
               <h3>{course}</h3>
@@ -83,9 +93,7 @@ const Learn = () => {
         )}
       </div>
     </div>
-  ) : (
-    <NotLogged />
-  );
+  ) 
 };
 
 export default Learn;

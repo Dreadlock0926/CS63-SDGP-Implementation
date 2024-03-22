@@ -149,7 +149,7 @@ function App() {
             path="/learning/:source/:topic/:lesson"
             element={<LearningResource />}
           ></Route>
-          <Route path="/learnprint" element={<LearnBlueprint />}></Route>
+          <Route path="/learnprint/:topic" element={<LearnBlueprint />}></Route>
           <Route path="/feedback" element={<FeedbackPage />}></Route>
           <Route path="*" element={<UnknownPage />} />
         </Routes>
