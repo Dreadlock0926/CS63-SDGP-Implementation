@@ -146,6 +146,31 @@ router.route("/search").post(async (req, res) => {
   }
 });
 
+router.route("/delans/:id").delete(async (req, res) => {
+  const id = req?.params?.id;
+  const by = req.body.userID;
+  if (!id || !by) {
+    return res.status(400).json({ Alert: "No ID/Who Answered Provided!" });
+  }
+
+  const userExists = await userModel.findById(by);
+  if (userExists) {
+    try {
+      const exists = await forumModel.findById(id);
+
+      if (!exists) {
+        return res.status(404).json({ Alert: "Invalid ID" });
+      }
+
+      await exists.answers.deleteOne();
+      return res.status(200).json({ Alert: `Deleted ${id}` });
+    } catch (error) {
+      console.error("Error deleting document:", error);
+      return res.status(500).json({ Alert: "Internal Server Error" });
+    }
+  }
+});
+
 router
   .route("/:id")
   .put(async (req, res) => {

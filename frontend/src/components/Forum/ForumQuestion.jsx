@@ -18,7 +18,7 @@ import { UserContext } from "../../App";
 
 const ForumQuestion = (questionDataParam, theKey) => {
   let questionData = questionDataParam.questionData;
-  const { BASE, status, setStatus, user} = useContext(UserContext);
+  const { BASE, status, setStatus, user } = useContext(UserContext);
 
   const [answer, setAnswer] = useState("");
   const [toggle, setToggle] = useState(false);
@@ -36,9 +36,8 @@ const ForumQuestion = (questionDataParam, theKey) => {
       //   setStatus("Error while upvoting");
       // }
 
-
-      if(response.data.status===200){
-        console.log("Yess!")
+      if (response.data.status === 200) {
+        console.log("Yess!");
       }
 
       setData((prevData) =>
@@ -50,11 +49,10 @@ const ForumQuestion = (questionDataParam, theKey) => {
         navigator("/forum");
       }, 2000);
     } catch (error) {
-      if(error.status===400){
-        setStatus("Error!")
+      if (error.status === 400) {
+        setStatus("Error!");
       }
       console.error("Error while upvoting:", error);
-
     } finally {
       setLoading(false);
     }
@@ -136,14 +134,16 @@ const ForumQuestion = (questionDataParam, theKey) => {
 
   const DeleteAnswer = async (id) => {
     try {
-      const response = await Axios.delete(`${BASE}/forum/delans/${id}`);
+      const response = await Axios.delete(`${BASE}/forum/delans/${id}`, {
+        userID: user.id,
+      });
       if (response.status === 200) {
         setData((prev) => prev.filter((comment) => comment._id !== id));
         forumData(); // Assuming this function refreshes the forum data after deleting the comment
       }
     } catch (error) {
       if (error.response.status === 404) {
-        setStatus("Not found!");
+        setStatus("Comment Not found!");
       }
       console.error("Error deleting comment:", error);
     }
@@ -152,13 +152,13 @@ const ForumQuestion = (questionDataParam, theKey) => {
   return (
     <div key={theKey} className="card" style={{ marginBottom: "20px" }}>
       <Typography variant="h4">{status}</Typography>
-      <Typography variant="h6">Topic: {questionData.topic}</Typography>
       <Typography variant="h4">{questionData.question}</Typography>
       <Typography variant="body1">{questionData.description}</Typography>
       <Typography variant="h4">Responses:</Typography>
       {questionData.answers.length > 0 ? (
         questionData.answers.map((answer, index) => (
-          <div key={index} style={{ marginBottom: "10px" }}>
+          <div key={index} style={{ margin: "20px"}}>
+              <br/>
             <Typography variant="h6">{answer.text}</Typography>
             <Typography variant="body1">
               Posted By: {answer.answeredBy}
@@ -168,9 +168,11 @@ const ForumQuestion = (questionDataParam, theKey) => {
                 ? ` Number of votes: ${answer.noOfUpvotes}`
                 : "No upvotes!"}
             </Typography>
+            <br/>
             <Button onClick={() => DeleteAnswer(questionData._id)}>
               Delete
             </Button>
+            <br/>
             <Button
               onClick={() => nerdPointsIncrement(questionData._id)}
               variant="contained"
