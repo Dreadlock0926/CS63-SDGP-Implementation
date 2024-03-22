@@ -143,7 +143,7 @@ router.route("/updateExam").post(async (req, res) => {
     });
   }
 
-  if (!examData || !userData) {
+  if (!examData) {
     res.status(400).json({ Alert: "The exam data is not matching records." });
   } else {
     res.status(200).json(examData);

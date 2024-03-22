@@ -166,6 +166,49 @@ const LearnBlueprint = () => {
     // alert("Clicked!");
   }
 
+  const generateTopicalExam = async (topical) => {
+
+    await Axios.post("http://localhost:8000/getQuestionsOnTopic/getQuestionsForExam", {
+      topics: [topical]
+    })
+    .then(function(response) {
+      let questionIDs = [];
+      response.data.forEach(element => {
+        questionIDs.push(element.questionID)
+      });
+      if (questionIDs.length > 0) {
+        topicExamHelper(topical, questionIDs);
+      }
+    })
+    .catch(function(error) {
+      console.log(error);
+    })
+}
+
+const topicExamHelper = async (topical, questionIDs) => {
+  let moduleFull = "";
+
+  if (topic === "p1") {
+    moduleFull = "Pure Mathematics I";
+  } else {
+    moduleFull = "Probability & Statistics I"
+  }
+
+    await Axios.post("http://localhost:8000/exam/saveExam", {
+        examType: "Topical",
+        examQuestions: questionIDs,
+        userRef: loggedInUser._id,
+        examModule: moduleFull,
+        examTopic: topical
+    })
+    .then(function(response) {
+        navigator(`/exam/${response.data[0].Alert}`);
+    })
+    .catch(function(error) {
+        console.log(error);
+    })
+}
+
   return loading ? (
     <h1>Loading...</h1>
   ) : (
@@ -265,17 +308,19 @@ const LearnBlueprint = () => {
                                   Done
                                 </RouterLink>
                               ) : (
-                                <RouterLink
-                                  component="button"
-                                  variant="body2"
-                                  to={
-                                    !topicPercentage[index].examCompleted &&
-                                    `/topicalExam/${title}`
-                                  }
-                                >
-                                  Available
-                                </RouterLink>
-                              )
+                                // <RouterLink
+                                //   component="button"
+                                //   variant="body2"
+                                //   to={
+                                //     !topicPercentage[index].examCompleted &&
+                                //     `/topicalExam/${title}`
+                                //   }
+                                // >
+                                //   Available
+                                // </RouterLink>
+                                !topicPercentage[index].examCompleted &&
+                                <button onClick={() => generateTopicalExam(topicTitles[index])}>Available</button>
+                                )
                             ) : (
                               <RouterLink
                                 variant="body2"
