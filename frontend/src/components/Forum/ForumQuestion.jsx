@@ -7,12 +7,7 @@ import Axios from "axios";
 
 import {
   Button,
-  FormControl,
   Input,
-  InputLabel,
-  MenuItem,
-  Select,
-  Typography,
 } from "@mui/material";
 import { UserContext } from "../../App";
 
@@ -150,24 +145,25 @@ const ForumQuestion = (questionDataParam, theKey) => {
   };
 
   return (
-    <div key={theKey} className="card" style={{ marginBottom: "20px" }}>
-      <Typography variant="h4">{status}</Typography>
-      <Typography variant="h4">{questionData.question}</Typography>
-      <Typography variant="body1">{questionData.description}</Typography>
-      <Typography variant="h4">Responses:</Typography>
+    <div key={theKey} className="questionCard">
+      <p>{status}</p>
+      <p className="questionTitle">{questionData.question}</p>
+      <p className="questionDescription">{questionData.description}</p>
+      <p style={{paddingTop: "10px", fontSize: "16px"}}>Replies</p>
+      
       {questionData.answers.length > 0 ? (
         questionData.answers.map((answer, index) => (
-          <div key={index} style={{ margin: "20px"}}>
-              <br/>
-            <Typography variant="h6">{answer.text}</Typography>
-            <Typography variant="body1">
-              Posted By: {answer.answeredBy}
-            </Typography>
-            <Typography variant="body1">
+          <div key={index} style={{ margin: "16px"}}>
+            <div className="answerCard">
+              <p style={{fontSize: "20px", paddingBottom: "10px"}}>replied by <i>{answer.answeredBy}</i></p>
+              <hr/>
+              <p style={{fontSize: "16px"}}>{answer.text}</p>
+            </div>
+            <p>
               {answer.noOfUpvotes
                 ? ` Number of votes: ${answer.noOfUpvotes}`
                 : "No upvotes!"}
-            </Typography>
+            </p>
             <br/>
             <Button onClick={() => DeleteAnswer(questionData._id)}>
               Delete
@@ -175,24 +171,23 @@ const ForumQuestion = (questionDataParam, theKey) => {
             <br/>
             <Button
               onClick={() => nerdPointsIncrement(questionData._id)}
-              variant="contained"
               color="primary"
-            >
+              >
               Give Points!
             </Button>
           </div>
         ))
       ) : (
-        <Typography variant="h6">Be the first to Answer 🥳</Typography>
+        <p>Be the first to Answer 🥳</p>
       )}
-      <Typography variant="body2">
+      <p>
         {questionData.by ? `Posted by ${questionData.by}` : ""}
-      </Typography>
-      <Typography variant="body2">
+      </p>
+      <p>
         {questionData.rating
           ? `Upvoted by ${questionData.rating}`
           : "Rated by none"}
-      </Typography>
+      </p>
       <Button onClick={() => increaseVotes(questionData._id)}>Upvote</Button>
       <Button onClick={() => downVote(questionData._id)}>DownVote</Button>
       <Button onClick={() => DeleteComment(questionData._id)}>Delete</Button>

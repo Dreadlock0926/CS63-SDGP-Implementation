@@ -124,8 +124,8 @@ const Forum = () => {
             </form>
             
             <div style={{display: "flex"}}>
-              <p style={{fontSize: "18px"}}>Topic Filter:</p>
               <form style={{marginLeft: "10px", marginTop: "10px"}}>
+              <p style={{fontSize: "18px", marginTop: "8px", paddingRight: "10px"}}>Topic Filter:</p>
                 <select              
                   className="dropdownContainer"
                   value={down}

@@ -1,7 +1,6 @@
 /* eslint-disable no-unused-vars */
 import { useContext, useEffect } from "react";
 import { UserContext } from "../../App";
-import { Card, Button } from "react-bootstrap"; // Import Bootstrap components
 import { Link } from "react-router-dom";
 import Axios from "axios";
 
