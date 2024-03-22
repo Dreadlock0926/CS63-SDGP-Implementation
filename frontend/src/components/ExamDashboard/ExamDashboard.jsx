@@ -6,7 +6,11 @@ import Axios from "axios";
 
 const ExamDashboard = () => {
   const { loading, setLoading, BASE } = useContext(UserContext);
-  const [examDashboard, setExamDashboard] = useState({ feedbackExams: [], topicalExams: [], pastPapersExams: [] });
+  const [examDashboard, setExamDashboard] = useState({
+    feedbackExams: [],
+    topicalExams: [],
+    pastPapersExams: [],
+  });
 
   async function FetchExamData() {
     try {
@@ -16,7 +20,7 @@ const ExamDashboard = () => {
       });
       if (response.status === 200) {
         setExamDashboard(response.data);
-      } 
+      }
       console.log(`The response is ${JSON.stringify(response.data)}`);
     } catch (err) {
       if (err.response && err.response.status === 400) {
@@ -40,14 +44,17 @@ const ExamDashboard = () => {
       {/* <div className="container" style={{ margin: "40px" }}>
         <ExamHistory />
       </div> */}
-      <div className="container" style={{margin:"20px"}}>
-        {(examDashboard.feedbackExams.length || examDashboard.topicalExams.length || examDashboard.pastPapersExams.length) ? (
-          <div className="feedback" style={{margin:"20px",padding:"20px"}}>
+      <div className="container" style={{ margin: "20px" }}>
+        {examDashboard.feedbackExams.length ||
+        examDashboard.topicalExams.length ||
+        examDashboard.pastPapersExams.length ? (
+          <div className="feedback" style={{ margin: "20px", padding: "20px" }}>
             {examDashboard.feedbackExams.map((x) => (
               <div key={x._id}>
                 <h1>{x.examType}</h1>
                 <p>Total Mark: {x.totalMark}</p>
                 <p>Mark: {x.mark}</p>
+                <button>{`Start ${x.examType} Exam!`}</button>
               </div>
             ))}
             <div className="topical">
@@ -57,6 +64,7 @@ const ExamDashboard = () => {
                   <h1>{x.examType}</h1>
                   <p>Total Mark: {x.totalMark}</p>
                   <p>Mark: {x.mark}</p>
+                  <button>{`Start ${x.examType} Exam!`}</button>
                 </div>
               ))}
             </div>
@@ -67,6 +75,7 @@ const ExamDashboard = () => {
                   <h1>{x.examType}</h1>
                   <p>Total Mark: {x.totalMark}</p>
                   <p>Mark: {x.mark}</p>
+                  <button>{`Start ${x.examType} Exam!`}</button>
                 </div>
               ))}
             </div>
