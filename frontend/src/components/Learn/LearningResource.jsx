@@ -3,7 +3,6 @@
 import { useContext, useEffect, useState } from "react";
 import { UserContext } from "../../App";
 import Axios from "axios";
-import { useHover } from "@uidotdev/usehooks";
 import { Link, useParams, useNavigate } from "react-router-dom";
 
 const LearningResource = () => {
@@ -13,14 +12,21 @@ const LearningResource = () => {
   const [topicRelated, setTopicRelated] = useState({});
   const [section, setSection] = useState([]);
 
-  const { loading, setLoading, status, setStatus } = useContext(UserContext);
+  const {
+    loading,
+    setLoading,
+    status,
+    setStatus,
+    loggedInUser,
+    setLoggedInUser,
+  } = useContext(UserContext);
 
   const IncrementProgress = async () => {
     try {
       const outcome = await Axios.put(
         `http://localhost:8000/resources/progress/updates`,
         {
-          userId: "65f86f434b9403f9d70d8aa3", //user.id
+          userId: loggedInUser._id, //user.id
           topic: topic,
           source: source,
           lessonName: lesson,
@@ -60,28 +66,32 @@ const LearningResource = () => {
   };
 
   useEffect(() => {
-    // const loggedUser = sessionStorage.getItem("loggedUser");
-
-    const fetchData = async () => {
-      setLoading(true);
-      try {
-        const response = await Axios.post(
-          "http://localhost:8000/resources/getLessonBodies",
-          {
-            userId: "65f86f434b9403f9d70d8aa3",
-            lessonTitle: lesson,
-            topic: topic,
-          }
-        );
-        setSection(response.data.lessonBody);
-        1;
-        setTopicRelated(response.data.lessonProgressReturn.lessonProgress);
-      } catch (error) {
-        console.error(error.message);
-      }
-    };
-    fetchData();
+    setLoggedInUser(JSON.parse(sessionStorage.getItem("loggedUser")).data);
   }, []);
+
+  useEffect(() => {
+    if (Object.keys(loggedInUser).length > 0) {
+      const fetchData = async () => {
+        setLoading(true);
+        try {
+          const response = await Axios.post(
+            "http://localhost:8000/resources/getLessonBodies",
+            {
+              userId: loggedInUser._id,
+              lessonTitle: lesson,
+              topic: topic,
+            }
+          );
+          setSection(response.data.lessonBody);
+          1;
+          setTopicRelated(response.data.lessonProgressReturn.lessonProgress);
+        } catch (error) {
+          console.error(error.message);
+        }
+      };
+      fetchData();
+    }
+  }, [loggedInUser]);
 
   useEffect(() => {
     if (Object.keys(topicRelated).length > 0) {
