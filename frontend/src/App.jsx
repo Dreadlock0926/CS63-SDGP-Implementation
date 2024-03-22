@@ -22,6 +22,7 @@ import LearnBlueprint from "./components/Learn/LearnBlueprint";
 import LearningResource from "./components/Learn/LearningResource";
 import Forum from "./components/Forum/Forum";
 import CreateForum from "./components/Forum/CreateForum";
+import ForumSearch from "./components/Forum/ForumSearch";
 
 export const UserContext = createContext();
 
@@ -58,6 +59,9 @@ function App() {
   const [totalMathsmarks, setTotalMathsmark] = useState([]);
   const [totalStatMarks, setTotalStatMarks] = useState([]);
   const [totalMarks, setTotalMarks] = useState([]);
+  const [search, setSearch] = useState("");
+  const [searched, setSearched] = useState([]);
+  const [transfer, setTransfer] = useState("");
 
   const BASE = "http://localhost:8000";
 
@@ -65,6 +69,12 @@ function App() {
 
   // Structuring the context value explicitly
   const contextValue = {
+    search,
+    setSearch,
+    searched,
+    setSearched,
+    transfer,
+    setTransfer,
     loggedInUser,
     setLoggedInUser,
     loading,
@@ -142,6 +152,7 @@ function App() {
           <Route path="/progression" element={<Progressionmark />} />
           <Route path="/forum" element={<Forum />} />
           <Route path="/forum/add-question" element={<CreateForum />} />
+          <Route path="/forum/search" element={<ForumSearch />} />
           <Route path="/dashboard" element={<DashboardPage />} />
           <Route path="/login" element={<Login />} />
           <Route path="/registration" element={<Register />} />

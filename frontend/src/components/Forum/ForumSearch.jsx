@@ -26,6 +26,7 @@ const ForumSearch = () => {
     toggle,
     setToggle,
   } = useContext(UserContext);
+
   const EndPoint = "http://localhost:8000/forum";
 
   const searchUp = async (e) => {

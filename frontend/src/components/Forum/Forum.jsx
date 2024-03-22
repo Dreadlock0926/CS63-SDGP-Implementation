@@ -84,7 +84,6 @@ const Forum = () => {
 
   useEffect(() => {
     if (Object.keys(loggedInUser).length > 0) {
-      console.log("Logged in user:", loggedInUser);
       forumData();
     }
   }, [loggedInUser]);
@@ -96,11 +95,10 @@ const Forum = () => {
       // if (theData.data.status === 200) {
 
       // }
-      console.log(` ${theData.data}`);
       setSearched(theData.data);
       console.log(`Searched ${JSON.stringify(searched)}`);
       setTransfer(1);
-      navigator("/forumsearch");
+      navigator("/forum/search");
     } catch (err) {
       if (err.response.status === 404) {
         setStatus("No results found");
