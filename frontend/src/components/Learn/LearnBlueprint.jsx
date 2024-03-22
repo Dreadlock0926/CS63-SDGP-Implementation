@@ -208,9 +208,8 @@ const LearnBlueprint = () => {
                                 component="button"
                                 variant="body2"
                                 to={
-                                  topicPercentage[index].examCompleted
-                                    ? null
-                                    : `/topicalExam/${title}`
+                                  topicPercentage[index].examCompleted &&
+                                  `/topicalExam/${title}`
                                 }
                               >
                                 {topicPercentage[index].examCompleted
