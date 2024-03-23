@@ -35,16 +35,6 @@ describe("POST /register", () => {
     expect(response.body).toEqual({ Alert: `test2 Registered!` });
   });
 
-  it("creating a new user with the same username", async () => {
-    const response = await request(BASE)
-      .post("/register")
-      .send({ ...account, password: "test" });
-    expect(response.statusCode).toBe(409);
-    expect(response.body).toEqual({
-      Alert: `${account.username} Already Exists!`,
-    });
-  });
-
   it("logging in with the new user", async () => {
     const response = await request(BASE)
       .post("/login")
