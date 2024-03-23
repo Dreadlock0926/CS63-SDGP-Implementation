@@ -380,10 +380,11 @@ function DashboardPage() {
         const sessionData = sessionStorage.getItem("loggedUser");
         if (sessionData) {
           const sessionUser = JSON.parse(sessionData).data;
-          console.log(`sessionUser: ${sessionUser}`);
+          console.log(sessionUser.lesson.length);
 
           setVoxalpoints(sessionUser.voxelPoints);
           setHoursLearned(0); // Make sure to compute the correct value
+          setCompleteCourse(sessionUser.lesson.length)
 
           if (sessionUser.lesson && sessionUser.lesson.length > 0) {
             setPureMathLearnedProgress(sessionUser.lesson[0].topicLesson);
