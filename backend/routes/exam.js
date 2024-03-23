@@ -3,14 +3,14 @@ const router = express.Router();
 const examModel = require("../models/exam");
 const userModel = require("../models/user"); // Import the userModel
 
-router.post("/topicalcompleted").post(async (req,res)=>{
-  const {topic} = req?.body
-  
+router.post("/topicalcompleted").post(async (req, res) => {
+  const { topic } = req?.body;
+
   if (!topic) {
     return res.status(400).json({ Alert: "Topic REQUIRED" });
-x
+    x;
   }
-})
+});
 
 router.route("/saveExam").post(async (req, res) => {
   const { examType, examQuestions, userRef, examModule, examTopic } = req?.body;
@@ -163,9 +163,6 @@ router.route("/getExamHistory").post(async (req, res) => {
     if (!user) {
       return res.status(404).send("User not found");
     }
-
-    console.log(user.topicalExams);
-    console.log(user.feedbackExams);
 
     const exams = {
       topicalExams: user.topicalExams,

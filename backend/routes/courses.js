@@ -7,8 +7,6 @@ const { topicsModel } = require("../models/topics");
 router.post("/getModules", async (req, res) => {
   const { courses } = req.body;
 
-  console.log(courses);
-
   try {
     // Handle cases where courses is not an array
     if (!Array.isArray(courses)) {
