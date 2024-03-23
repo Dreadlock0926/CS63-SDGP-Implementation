@@ -87,6 +87,7 @@ const LearnBlueprint = () => {
       setLoading(false);
     }
   }
+  let availableDisabled = 0;
 
   const getCompletedTopicalExams = async () => {
     let moduleNeeded = "";
@@ -226,7 +227,6 @@ const LearnBlueprint = () => {
           style={{ display: "flex", fontFamily: "poppins" }}
           className="container"
         >
-   
           {loading ? (
             <Typography variant="h4">Loading...</Typography>
           ) : (
@@ -237,7 +237,7 @@ const LearnBlueprint = () => {
                   : "Probability And Statistics"}
               </Typography>
               <br />
-          
+
               <br />
               <Table style={{ width: "100%", textAlign: "center" }}>
                 <TableHead>
@@ -329,9 +329,15 @@ const LearnBlueprint = () => {
                                 // </RouterLink>
                                 !topicPercentage[index].examCompleted && (
                                   <button
-                                    onClick={() =>
-                                      generateTopicalExam(topicTitles[index])
-                                    }
+                                    onClick={() => {
+                                      if(availableDisabled!==1){
+                                        availableDisabled++;
+                                        generateTopicalExam(topicTitles[index]);
+                                      }
+                                   
+                                      // Disable the button after it's clicked
+                                    }}
+                                    disabled={availableDisabled === 1}
                                   >
                                     Available
                                   </button>
@@ -359,9 +365,8 @@ const LearnBlueprint = () => {
               </Table>
             </>
           )}
-              <Typography variant="body1">{status}</Typography>
+          <Typography variant="body1">{status}</Typography>
         </Container>
-        
       )}
     </>
   );
