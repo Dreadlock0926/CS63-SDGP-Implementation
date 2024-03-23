@@ -16,14 +16,14 @@ describe("POST /resources", () => {
     subtopic: "no",
   };
 
-  it("get learning resources", async () => {
+  it("should get learning resources", async () => {
     const response = await request(BASE).get("/resources");
     expect(response.statusCode).toBe(200);
     // Replace the next line with your expected response comparison
     expect(response.body).toBeDefined();
   });
 
-  it("fields not filled", async () => {
+  it("should return error when required fields are not filled", async () => {
     const response = await request(BASE).post("/resources").send(dummyData2);
     expect(response.statusCode).toBe(400);
     expect(response.body).toEqual({
@@ -31,7 +31,7 @@ describe("POST /resources", () => {
     });
   });
 
-  it("title conflicting", async () => {
+  it("should return error when title conflicts", async () => {
     const response = await request(BASE).post("/resources").send(dummyData);
     expect(response.statusCode).toBe(409);
     expect(response.body).toEqual({
@@ -39,7 +39,7 @@ describe("POST /resources", () => {
     });
   });
 
-  it("learning resource added", async () => {
+  it("should add learning resource", async () => {
     const response = await request(BASE).post("/resources").send(dummyData);
     expect(response.statusCode).toBe(201);
     expect(response.body).toEqual({
@@ -51,7 +51,7 @@ describe("POST /resources", () => {
 describe("POST /resources/topic/learned", () => {
   const theTopic = "Pure Mathematics I";
 
-  it("no results found", async () => {
+  it("should return 'No results found!' when no results are found", async () => {
     const response = await request(BASE)
       .post("/resources/topic/learned")
       .send({ topic: "oqkwrtokwr" });
@@ -61,7 +61,7 @@ describe("POST /resources/topic/learned", () => {
     });
   });
 
-  it("data rendered", async () => {
+  it("should render data when valid topic is provided", async () => {
     const response = await request(BASE)
       .post("/resources/topic/learned")
       .send({ topic: theTopic });
