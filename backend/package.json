@@ -19,7 +19,8 @@
     "start": "nodemon server.js",
     "test": "jest",
     "test:unit": "jest --testPathPattern=unit",
-    "test:integration": "jest --testPathPattern=integration"
+    "test:integration": "jest --testPathPattern=integration",
+    "test:learn":"jest --testPathPattern=learn"
   },
   "name": "backend",
   "version": "1.0.0",
