@@ -5,6 +5,7 @@ import { UserContext } from "../../App";
 import Axios from "axios";
 import { Link } from "react-router-dom";
 import PastPaperScope from "../../pages/PastPaperPage/pastPaperScope";
+import FeedbackPage from "../../pages/FeedbackPage/FeedbackPage";
 
 const ExamDashboard = () => {
   const { loading, setLoading, BASE } = useContext(UserContext);
@@ -125,6 +126,7 @@ const ExamDashboard = () => {
               ))}
             </div>
             <PastPaperScope />
+            <FeedbackPage/>
           </>
         ) : (
           <h1>No results found!</h1>
