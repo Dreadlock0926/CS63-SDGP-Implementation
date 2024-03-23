@@ -47,3 +47,15 @@ describe("POST /resources", () => {
     });
   });
 });
+
+
+describe('POST /resources/topic/learned', () => {
+  it('no results found', async () => {
+    const response = await request(BASE).post("/register/topic/learned").send(dummyData);
+    expect(response.statusCode).toBe(201);
+    expect(response.body).toEqual({
+      Alert: "Added Learning Resource to Learn",
+    });
+  });
+  
+});
