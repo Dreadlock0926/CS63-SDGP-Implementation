@@ -1,5 +1,4 @@
 const request = require("supertest");
-const learningModel = require("../../models/learning");
 const BASE = "http://localhost:8000";
 
 describe("POST /resources", () => {

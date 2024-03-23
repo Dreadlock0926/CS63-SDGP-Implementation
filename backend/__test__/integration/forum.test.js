@@ -1,5 +1,4 @@
 const request = require("supertest");
-const learningModel = require("../../models/learning");
 const BASE = "http://localhost:8000";
 const testID = "65fde2b2c656d10ff1ce4ee4";
 
@@ -64,19 +63,19 @@ describe("update id wise", () => {
 
 describe("delete id wise", () => {
     it("Required fields not filled", async () => {
-      const response = await request(BASE).delete(`/forum/${""}`);
+      const response = await request(BASE).put(`/forum/${""}`);
       expect(response.statusCode).toBe(400);
       expect(response.body).toEqual({ Alert: "No Answer or ID Provided!" });
     });
   
     it("Invalid ID", async () => {
-      const response = await request(BASE).delete(`/forum/${"qowktqoktwtkwt"}`);
+      const response = await request(BASE).put(`/forum/${"qowktqoktwtkwt"}`);
       expect(response.statusCode).toBe(404);
       expect(response.body).toEqual({ Alert: "No Answer or ID Provided!" });
     });
   
     it("Updated", async () => {
-      const response = await request(BASE).delete(`/forum/${testID}`);
+      const response = await request(BASE).put(`/forum/${testID}`);
       expect(response.statusCode).toBe(200);
       expect(response.body).toEqual({ Alert: "Internal Server Error" });
     });
