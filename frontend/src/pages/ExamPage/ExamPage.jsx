@@ -37,7 +37,7 @@ function InfoPanel({ examType, examSubject, numQuestions, setSubmitRun, submitRu
   );
 }
 
-function ExamPageContent({setIsLoadingInfo, setExamType, setExamSubject, setNumQuestions, setCorrectIndexes, correctIndex, setMark, 
+function ExamPageContent({setIsLoadingInfo, setExamType, setExamSubject, setExamTopic, setNumQuestions, setCorrectIndexes, correctIndex, setMark, 
     setCorrectQuestions, setWrongQuestions, correctQuestions, wrongQuestions, submitButtonClicked, setUserWrittenAnswers, examID, 
     userRef, setUserRef, submitRun, setTotalMark}) {
 
@@ -130,7 +130,7 @@ function ExamPageContent({setIsLoadingInfo, setExamType, setExamSubject, setNumQ
 
     }, [questionsList])
     
-    const getQuestion = async ( setQuestionsList, setExamType, setExamSubject ) => {
+    const getQuestion = async ( setQuestionsList, setExamType, setExamSubject, setExamTopic ) => {
 
         try {
             const response = await Axios.post('http://localhost:8000/exam/getExam', {
@@ -140,6 +140,7 @@ function ExamPageContent({setIsLoadingInfo, setExamType, setExamSubject, setNumQ
             setUserRef(response.data.userRef)
             setExamType(response.data.examType);
             setExamSubject(response.data.examModule);
+            setExamTopic(response.data.examTopic);
             setQuestionsList(response.data.examQuestions)
 
         } catch (err) {
@@ -149,7 +150,7 @@ function ExamPageContent({setIsLoadingInfo, setExamType, setExamSubject, setNumQ
     }
 
     useEffect(()=>{
-        getQuestion(setQuestionsList, setExamType, setExamSubject, examID);
+        getQuestion(setQuestionsList, setExamType, setExamSubject, setExamTopic, examID);
     },[])
 
     useEffect(() => {
@@ -305,6 +306,7 @@ function ExamPage() {
     const [isLoadingInfo, setIsLoadingInfo] = useState(true);
     const [examType, setExamType] = useState("");
     const [examSubject, setExamSubject] = useState("");
+    const [examTopic, setExamTopic] = useState("");
     const [numQuestions, setNumQuestions] = useState(0);
 
     const [correctIndex, setCorrectIndexes] = useState([]);
@@ -391,13 +393,48 @@ function ExamPage() {
         
         if (submitButtonClicked) {
             postUserDetails().then(
+                updateProbabilityForTopical()
+            ).then(
                 navigator("/receipt", {state:{examRef:examID}})
             )
         }
 
     }, [submitButtonClicked])
 
+    const updateProbabilityForTopical = async () => {
 
+        if (examType === "Topical") {
+
+            let probability = Math.round((wrongQuestions.length/(wrongQuestions.length + correctQuestions.length))*10)/10;
+
+            await Axios.post("http://localhost:8000/getTopics/getTopicKeyFromTopic", {
+                source: examSubject,
+                topic: examTopic
+            })
+            .then( function (response) {
+                updateProbabilityHelper(response.data.topicKey, response.data.sourceKey, probability)
+            })
+            .catch( function(error) {
+                console.log(error)
+            })
+        }
+    };
+
+    const updateProbabilityHelper = async (topicKey, sourceKey, probability) => {
+
+        await Axios.post("http://localhost:8000/user/updateOneModuleProbability", {
+            userId: userRef,
+            topicKey: topicKey,
+            sourceKey: sourceKey,
+            probability: probability
+        })
+        .then( function (response) {
+            console.log(response.data);
+        })
+        .catch( function(error) {
+            console.log(error)
+        })
+    };
 
     return (
         <div className="exams-container">
@@ -405,7 +442,7 @@ function ExamPage() {
             <ExamPageContent 
             examID={examID}
             setIsLoadingInfo={setIsLoadingInfo} setExamType={setExamType} 
-            setExamSubject={setExamSubject} setNumQuestions={setNumQuestions}
+            setExamSubject={setExamSubject} setExamTopic={setExamTopic} setNumQuestions={setNumQuestions}
             setCorrectIndexes={setCorrectIndexes} correctIndex={correctIndex}
             setCorrectQuestions={setCorrectQuestions} setWrongQuestions={setWrongQuestions} 
             correctQuestions={correctQuestions} wrongQuestions={wrongQuestions}

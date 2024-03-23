@@ -167,47 +167,55 @@ const LearnBlueprint = () => {
   }
 
   const generateTopicalExam = async (topical) => {
-
-    await Axios.post("http://localhost:8000/getQuestionsOnTopic/getQuestionsForExam", {
-      topics: [topical]
-    })
-    .then(function(response) {
-      let questionIDs = [];
-      response.data.forEach(element => {
-        questionIDs.push(element.questionID)
-      });
-      if (questionIDs.length > 0) {
-        topicExamHelper(topical, questionIDs);
+    await Axios.post(
+      "http://localhost:8000/getQuestionsOnTopic/getQuestionsForExam",
+      {
+        topics: [topical],
       }
-    })
-    .catch(function(error) {
-      console.log(error);
-    })
-}
+    )
+      .then(function (response) {
+        let questionIDs = [];
+        response.data.forEach((element) => {
+          questionIDs.push(element.questionID);
+        });
+        if (questionIDs.length > 0) {
+          topicExamHelper(topical, questionIDs);
+        }
+      })
+      .catch(function (error) {
+        console.log(error);
+      });
+  };
 
-const topicExamHelper = async (topical, questionIDs) => {
-  let moduleFull = "";
+  const topicExamHelper = async (topical, questionIDs) => {
+    let moduleFull = "";
 
-  if (topic === "p1") {
-    moduleFull = "Pure Mathematics I";
-  } else {
-    moduleFull = "Probability & Statistics I"
-  }
+    if (topic === "p1") {
+      moduleFull = "Pure Mathematics I";
+    } else {
+      moduleFull = "Probability & Statistics I";
+    }
 
     await Axios.post("http://localhost:8000/exam/saveExam", {
-        examType: "Topical",
-        examQuestions: questionIDs,
-        userRef: loggedInUser._id,
-        examModule: moduleFull,
-        examTopic: topical
+      examType: "Topical",
+      examQuestions: questionIDs,
+      userRef: loggedInUser._id,
+      examModule: moduleFull,
+      examTopic: topical,
     })
-    .then(function(response) {
+      .then(function (response) {
         navigator(`/exam/${response.data[0].Alert}`);
-    })
-    .catch(function(error) {
+      })
+      .catch(function (error) {
         console.log(error);
-    })
-}
+      });
+  };
+
+  useEffect(() => {
+    setInterval(() => {
+      setStatus("");
+    }, 3200);
+  }, [status]);
 
   return loading ? (
     <h1>Loading...</h1>
@@ -218,6 +226,7 @@ const topicExamHelper = async (topical, questionIDs) => {
           style={{ display: "flex", fontFamily: "poppins" }}
           className="container"
         >
+   
           {loading ? (
             <Typography variant="h4">Loading...</Typography>
           ) : (
@@ -228,7 +237,7 @@ const topicExamHelper = async (topical, questionIDs) => {
                   : "Probability And Statistics"}
               </Typography>
               <br />
-              <Typography variant="body1">{status}</Typography>
+          
               <br />
               <Table style={{ width: "100%", textAlign: "center" }}>
                 <TableHead>
@@ -318,9 +327,16 @@ const topicExamHelper = async (topical, questionIDs) => {
                                 // >
                                 //   Available
                                 // </RouterLink>
-                                !topicPercentage[index].examCompleted &&
-                                <button onClick={() => generateTopicalExam(topicTitles[index])}>Available</button>
+                                !topicPercentage[index].examCompleted && (
+                                  <button
+                                    onClick={() =>
+                                      generateTopicalExam(topicTitles[index])
+                                    }
+                                  >
+                                    Available
+                                  </button>
                                 )
+                              )
                             ) : (
                               <RouterLink
                                 variant="body2"
@@ -343,7 +359,9 @@ const topicExamHelper = async (topical, questionIDs) => {
               </Table>
             </>
           )}
+              <Typography variant="body1">{status}</Typography>
         </Container>
+        
       )}
     </>
   );
