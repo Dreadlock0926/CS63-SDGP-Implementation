@@ -5,18 +5,13 @@ import { UserContext } from "../../App";
 import { useNavigate } from "react-router-dom";
 
 const PastPaperScope = () => {
-
   const navigator = useNavigate();
 
-    const {
-        loggedInUser,
-        setLoggedInUser
-    } = useContext(UserContext);
+  const { loggedInUser, setLoggedInUser } = useContext(UserContext);
 
-    useEffect(() => {
-        console.log(JSON.parse(sessionStorage.getItem("loggedUser")).data);
-        setLoggedInUser(JSON.parse(sessionStorage.getItem("loggedUser")).data);
-      }, []);
+  useEffect(() => {
+    setLoggedInUser(JSON.parse(sessionStorage.getItem("loggedUser")).data);
+  }, []);
 
   const initialState = {
     modules: {},
@@ -101,40 +96,37 @@ const PastPaperScope = () => {
 
   const createExam = async () => {
     await Axios.post("http://localhost:8000/exam/saveExam", {
-        examType: "Past Paper",
-        examQuestions: questionIDs,
-        userRef: loggedInUser._id,
-        examModule: selectedModuleState,
-        examTopic: "None"
+      examType: "Past Paper",
+      examQuestions: questionIDs,
+      userRef: loggedInUser._id,
+      examModule: selectedModuleState,
+      examTopic: "None",
     })
-    .then(function(response) {
+      .then(function (response) {
         navigator(`/exam/${response.data[0].Alert}`);
-    })
-    .catch(function(error) {
+      })
+      .catch(function (error) {
         console.log(error);
-    })
-}
+      });
+  };
 
   useEffect(() => {
-    
     if (questions.length > 0) {
-      
       let questionIDArray = [];
 
       for (const i in questions) {
         questionIDArray.push(questions[i].questionID);
       }
-      
+
       setQuestionIDs(questionIDArray);
     }
-
   }, [questions]);
 
   useEffect(() => {
     if (questionIDs.length > 0) {
       createExam();
     }
-  }, [questionIDs])
+  }, [questionIDs]);
 
   const handleModuleChange = (event) => {
     for (let i = 0; i < state.modules.length; i++) {

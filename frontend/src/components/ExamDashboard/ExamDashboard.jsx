@@ -8,6 +8,9 @@ import PastPaperScope from "../../pages/PastPaperPage/pastPaperScope";
 
 const ExamDashboard = () => {
   const { loading, setLoading, BASE } = useContext(UserContext);
+
+  const [loggedInUser, setLoggedInUser] = useState({});
+
   const [examDashboard, setExamDashboard] = useState({
     feedbackExams: [],
     topicalExams: [],
@@ -18,12 +21,11 @@ const ExamDashboard = () => {
     try {
       setLoading(true);
       const response = await Axios.post(`${BASE}/examDashboard/getExams`, {
-        userId: "65fd130bc243afb3760aa723",
+        userId: loggedInUser._id,
       });
       if (response.status === 200) {
         setExamDashboard(response.data);
       }
-      console.log(`The response is ${JSON.stringify(response.data)}`);
     } catch (err) {
       if (err.response && err.response.status === 400) {
         alert("Error!");
@@ -35,8 +37,14 @@ const ExamDashboard = () => {
   }
 
   useEffect(() => {
-    FetchExamData();
+    setLoggedInUser(JSON.parse(sessionStorage.getItem("loggedUser")).data);
   }, []);
+
+  useEffect(() => {
+    if (Object.keys(loggedInUser).length) {
+      FetchExamData();
+    }
+  }, [loggedInUser]);
 
   return loading ? (
     <h1 style={{ textAlign: "center", margin: "20px", padding: "10px" }}>
@@ -45,7 +53,7 @@ const ExamDashboard = () => {
   ) : (
     <div style={{ margin: "20px", textAlign: "center" }}>
       <h1>Exam Dashboard</h1>
-  
+
       <div style={{ margin: "20px" }}>
         {examDashboard.feedbackExams.length ||
         examDashboard.topicalExams.length ||
@@ -115,9 +123,8 @@ const ExamDashboard = () => {
                   >{`Start ${x.examType} Exam!`}</Link>
                 </div>
               ))}
-  
             </div>
-            <PastPaperScope/>
+            <PastPaperScope />
           </>
         ) : (
           <h1>No results found!</h1>
