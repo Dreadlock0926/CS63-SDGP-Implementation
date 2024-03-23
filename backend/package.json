@@ -20,7 +20,8 @@
     "test": "jest",
     "test:unit": "jest --testPathPattern=unit",
     "test:integration": "jest --testPathPattern=integration",
-    "test:learn":"jest --testPathPattern=learn"
+    "test:learn":"jest --testPathPattern=learn",
+    "test:forum":"jest --testPathPattern=forum"
   },
   "name": "backend",
   "version": "1.0.0",

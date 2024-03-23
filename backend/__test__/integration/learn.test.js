@@ -18,7 +18,7 @@ describe("POST /resources", () => {
   };
 
   it("get learning resources", async () => {
-    const response = await request(BASE).get("/register");
+    const response = await request(BASE).get("/resources");
     expect(response.statusCode).toBe(200);
     expect(response.body).toEqual(response.data);
   });
@@ -32,15 +32,15 @@ describe("POST /resources", () => {
   });
 
   it("title conflicting", async () => {
-    const response = await request(BASE).post("/register").send(dummyData);
+    const response = await request(BASE).post("/resources").send(dummyData);
     expect(response.statusCode).toBe(409);
     expect(response.body).toEqual({
       Alert: "Title Already Exists!",
     });
   });
 
-  it("user registered", async () => {
-    const response = await request(BASE).post("/register").send(dummyData);
+  it("user resourcesed", async () => {
+    const response = await request(BASE).post("/resources").send(dummyData);
     expect(response.statusCode).toBe(201);
     expect(response.body).toEqual({
       Alert: "Added Learning Resource to Learn",
@@ -48,14 +48,25 @@ describe("POST /resources", () => {
   });
 });
 
+describe("POST /resources/topic/learned", () => {
+  theTopic = "Pure Mathematics I";
 
-describe('POST /resources/topic/learned', () => {
-  it('no results found', async () => {
-    const response = await request(BASE).post("/register/topic/learned").send(dummyData);
-    expect(response.statusCode).toBe(201);
+  it("no results found", async () => {
+    const response = await request(BASE)
+      .post("/resources/topic/learned")
+      .send("oqkwrtokwr");
+    expect(response.statusCode).toBe(404);
     expect(response.body).toEqual({
-      Alert: "Added Learning Resource to Learn",
+      Alert: "No results found!",
     });
   });
-  
+
+  it("data rendered", async () => {
+    const response = await request(BASE)
+      .post("/resources/topic/learned")
+      .send(theTopic);
+    expect(response.statusCode).toBe(200);
+    expect(response.body).toEqual(response);
+  });
 });
+
