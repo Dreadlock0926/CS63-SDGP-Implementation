@@ -38,5 +38,5 @@ const getAllQuestions = async (req, res) => {
 
 module.exports = {
   getQuestionId,
-  getAllQuestions
+  
 };
