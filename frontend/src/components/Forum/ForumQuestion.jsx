@@ -144,6 +144,13 @@ const ForumQuestion = (questionDataParam, theKey) => {
     }
   };
 
+  const replyUpVote = async (id) => {
+  };
+    
+
+  const replyDownVote = async (id) => {
+  };
+
   return (
     <div key={theKey} className="questionCard">
       <p>{status}</p>
@@ -159,45 +166,24 @@ const ForumQuestion = (questionDataParam, theKey) => {
               <hr/>
               <p style={{fontSize: "16px"}}>{answer.text}</p>
             </div>
-            <p>
-              {answer.noOfUpvotes
-                ? ` Number of votes: ${answer.noOfUpvotes}`
-                : "No upvotes!"}
-            </p>
             <br/>
-            <Button onClick={() => DeleteAnswer(questionData._id)}>
-              Delete
-            </Button>
-            <br/>
-            <Button
-              onClick={() => nerdPointsIncrement(questionData._id)}
-              color="primary"
-              >
-              Give Points!
-            </Button>
+            <div className="replyOptions">
+              <button className="postBtns" onClick={() => replyUpVote(questionData._id)}>Upvote</button>
+              <button className="postBtns" onClick={() => replyDownVote(questionData._id)}>Downvote</button>
+              <button className="postBtns" onClick={() => DeleteAnswer(questionData._id)}>Delete</button>
+            </div>
+              <p style={{fontSize: "12px", margin: "8px"}}>{answer.noOfUpvotes ? `Number of votes: ${answer.noOfUpvotes}` : "No upvotes!"}</p>
           </div>
         ))
       ) : (
-        <p>Be the first to Answer 🥳</p>
+        <p style={{margin: "10px"}}>Be the first one to answer!🥳</p>
       )}
-      <p>
-        {questionData.by ? `Posted by ${questionData.by}` : ""}
-      </p>
-      <p>
-        {questionData.rating
-          ? `Upvoted by ${questionData.rating}`
-          : "Rated by none"}
-      </p>
-      <Button onClick={() => increaseVotes(questionData._id)}>Upvote</Button>
-      <Button onClick={() => downVote(questionData._id)}>DownVote</Button>
-      <Button onClick={() => DeleteComment(questionData._id)}>Delete</Button>
-      <Button
-        onClick={() => {
-          setToggle(!toggle);
-        }}
-      >
-        {toggle ? "Close" : "Answer"}
-      </Button>
+      <hr/>
+      <br/>
+      <button className="postBtns" onClick={() => increaseVotes(questionData._id)}>Upvote</button>
+      <button className="postBtns" onClick={() => downVote(questionData._id)}>Downvote</button>
+      <button className="postBtns" onClick={() => DeleteComment(questionData._id)}>Delete</button>
+      <button className="postBtns" onClick={() => {setToggle(!toggle);}}> {toggle ? "Close" : "Answer"}</button>
       {toggle ? (
         <form
           className="replyForm"
@@ -206,16 +192,19 @@ const ForumQuestion = (questionDataParam, theKey) => {
             AnsweringQuestions(questionData._id, answer);
           }}
         >
-          <Input
+          <input className="replyInput"
             onChange={(e) => setAnswer(e.target.value)}
             placeholder="Answer..."
             type="text"
           />
-          <Button type="submit">Answer</Button>
+          <button className="postBtns" type="submit">Answer</button>
         </form>
       ) : (
         ""
       )}
+      <div className="postInfo">
+        <p style={{marginRight: "10px", fontSize: "12px"}}>posted by <i>{questionData.by ? `${questionData.by}` : ""}</i>  | {questionData.rating ? ` Upvotes ${questionData.rating}` : "No upvotes yet!"}</p>
+      </div>
     </div>
   );
 };

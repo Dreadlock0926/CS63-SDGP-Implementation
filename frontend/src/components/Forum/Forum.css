@@ -133,8 +133,50 @@ hr {
   border-radius: 12px;
 }
 
+.replyOptions {
+  display: flex;
+}
 
+.postBtns {
+  border: 2px solid #666666;
+  border-radius: 10px;
+  transition: all 0.5s;
+  padding: 10px;
+  margin-right: 10px;
+}
 
+.postBtns:hover {
+  border: 2px solid #4a9dec;
+  box-shadow: 0px 0px 0px 7px rgb(74, 157, 236, 20%);
+  background-color: white;
+  cursor: pointer;
+}
+
+.replyForm {
+  margin-top: 20px;
+  margin-bottom: 20px;
+}
+
+.postInfo {
+  display: flex;
+  margin: 10px;
+}
+
+.replyInput {
+  border: 2px solid #666666;
+  width: 60em;
+  height: 3em;
+  padding-left: 0.8em;
+  background-color: #F3F3F3;
+  border-radius: 10px;
+  transition: all 0.5s;
+}
+
+.replyInput:hover, .replyInput:focus, .replyInput:active {
+  border: 2px solid #4a9dec;
+  box-shadow: 0px 0px 0px 7px rgb(74, 157, 236, 20%);
+  background-color: white;
+}
 
 /* Forum Buttons */
 .forumBtn {
@@ -151,15 +193,4 @@ hr {
 
 .forumBtn:hover {
   background-color: #0056b3;
-}
-
-/* Forum Questions */
-.question {
-  margin-bottom: 30px;
-}
-
-/* Answer Form */
-.replyForm {
-  margin-top: 20px;
-  margin-bottom: 20px; /* Add margin for spacing */
 }
