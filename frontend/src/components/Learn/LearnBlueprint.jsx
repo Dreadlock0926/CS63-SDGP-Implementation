@@ -42,9 +42,12 @@ const LearnBlueprint = () => {
   const [userData, setUserData] = useState([]);
   const [loading, setLoading] = useState(false);
   const [topicTitles, setTopicTitles] = useState([]);
+
+  const [renderComplete, setRenderComplete] = useState(false);
   const [topicPercentage, setTopicPercentage] = useState([]);
   const [topicFirstLesson, setTopicFirstLesson] = useState({});
   const [completedTopical, setCompletedTopical] = useState([]);
+
   const [theSubTopic, setTheSubTopic] = useState("");
   const [status, setStatus] = useState("");
   const navigator = useNavigate();
@@ -83,8 +86,6 @@ const LearnBlueprint = () => {
       } else {
         setStatus("Error occurred while fetching resources.");
       }
-    } finally {
-      setLoading(false);
     }
   }
   let availableDisabled = 0;
@@ -94,7 +95,7 @@ const LearnBlueprint = () => {
     if (topic === "p1") {
       moduleNeeded = "Pure Mathematics I";
     } else if (topic === "s1") {
-      moduleNeeded = "Probability & Statistics I";
+      moduleNeeded = "Probability and Statistics I";
     }
 
     try {
@@ -118,8 +119,6 @@ const LearnBlueprint = () => {
 
   useEffect(() => {
     if (Object.keys(loggedInUser).length > 0) {
-      console.log(loggedInUser);
-
       getCompletedTopicalExams();
 
       const fetchTopicData = async () => {
@@ -138,7 +137,7 @@ const LearnBlueprint = () => {
 
   useEffect(() => {
     if (completedTopical.length > 0) {
-      console.log(`Completed Topical Exams: ${completedTopical}`);
+      setLoading(false);
     }
   }, [completedTopical]);
 
@@ -286,7 +285,7 @@ const LearnBlueprint = () => {
                         </TableCell>
                         <TableCell>
                           {topicPercentage &&
-                            completedTopical &&
+                            completedTopical.length >= 1 &&
                             topicPercentage[index] &&
                             (topicPercentage[index].completedPercentage ===
                             100 ? (
@@ -330,11 +329,11 @@ const LearnBlueprint = () => {
                                 !topicPercentage[index].examCompleted && (
                                   <button
                                     onClick={() => {
-                                      if(availableDisabled!==1){
+                                      if (availableDisabled !== 1) {
                                         availableDisabled++;
                                         generateTopicalExam(topicTitles[index]);
                                       }
-                                   
+
                                       // Disable the button after it's clicked
                                     }}
                                     disabled={availableDisabled === 1}

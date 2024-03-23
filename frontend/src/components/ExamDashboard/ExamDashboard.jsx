@@ -6,11 +6,15 @@ import Axios from "axios";
 import { Link } from "react-router-dom";
 import PastPaperScope from "../../pages/PastPaperPage/pastPaperScope";
 import FeedbackPage from "../../pages/FeedbackPage/FeedbackPage";
+import updateLoggedUser from "../../pages/SelectCoursesPage/updateLoggedUser";
 
 const ExamDashboard = () => {
-  const { loading, setLoading, BASE } = useContext(UserContext);
+  const { BASE } = useContext(UserContext);
+
+  const [loading, setLoading] = useState(true);
 
   const [loggedInUser, setLoggedInUser] = useState({});
+  const [userId, setUserId] = useState("");
 
   const [examDashboard, setExamDashboard] = useState({
     feedbackExams: [],
@@ -20,11 +24,11 @@ const ExamDashboard = () => {
 
   async function FetchExamData() {
     try {
-      setLoading(true);
       const response = await Axios.post(`${BASE}/examDashboard/getExams`, {
         userId: loggedInUser._id,
       });
       if (response.status === 200) {
+        console.log(response.data);
         setExamDashboard(response.data);
       }
     } catch (err) {
@@ -38,14 +42,26 @@ const ExamDashboard = () => {
   }
 
   useEffect(() => {
-    setLoggedInUser(JSON.parse(sessionStorage.getItem("loggedUser")).data);
+    setUserId(JSON.parse(sessionStorage.getItem("loggedUser")).data._id);
   }, []);
+
+  useEffect(() => {
+    if (userId) {
+      updateLoggedUser(userId).then(() => {
+        setLoggedInUser(JSON.parse(sessionStorage.getItem("loggedUser")).data);
+      });
+    }
+  }, [userId]);
 
   useEffect(() => {
     if (Object.keys(loggedInUser).length) {
       FetchExamData();
     }
   }, [loggedInUser]);
+
+  useEffect(() => {
+    console.log(examDashboard);
+  }, [examDashboard]);
 
   return loading ? (
     <h1 style={{ textAlign: "center", margin: "20px", padding: "10px" }}>
@@ -126,7 +142,10 @@ const ExamDashboard = () => {
               ))}
             </div>
             <PastPaperScope />
-            <FeedbackPage/>
+            <div>
+              <h1>Start Feedback Exam</h1>
+              <FeedbackPage />
+            </div>
           </>
         ) : (
           <h1>No results found!</h1>

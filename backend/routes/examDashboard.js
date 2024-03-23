@@ -3,39 +3,27 @@ const router = express.Router();
 
 const examModel = require("../models/exam");
 const userModel = require("../models/user");
+const { default: mongoose } = require("mongoose");
 
 router.route("/getExams").post(async (req, res) => {
   const { userId } = req.body;
 
   try {
-    const user = await userModel.findById(userId);
-
-    if (!user) {
-      return res.status(404).json({ message: "User not found" });
-    }
+    const examsByUser = await examModel.find({
+      userRef: new mongoose.Types.ObjectId(userId),
+    });
 
     let feedbackExams = [];
     let topicalExams = [];
     let pastPapersExams = [];
 
-    for (let examId of user.feedbackExams) {
-      const exam = await examModel.findById(examId);
-      if (exam) {
-        feedbackExams.push(exam);
-      }
-    }
-
-    for (let examId of user.topicalExams) {
-      const exam = await examModel.findById(examId);
-      if (exam) {
-        topicalExams.push(exam);
-      }
-    }
-
-    for (let examId of user.pastPaperExams) {
-      const exam = await examModel.findById(examId);
-      if (exam) {
-        pastPapersExams.push(exam);
+    for (exams of examsByUser) {
+      if (exams.examType == "Feedback") {
+        feedbackExams.push(exams);
+      } else if (exams.examType === "Topical") {
+        topicalExams.push(exams);
+      } else if (exams.examType === "Past Paper") {
+        pastPapersExams.push(exams);
       }
     }
 

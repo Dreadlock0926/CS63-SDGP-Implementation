@@ -4,6 +4,7 @@ const learningModel = require("../models/learningResources");
 const { topicsModel } = require("../models/topics");
 const userModel = require("../models/user");
 const examModel = require("../models/exam");
+const { default: mongoose } = require("mongoose");
 
 //needs to be put in a controller
 //logic here must be changed
@@ -124,25 +125,17 @@ router.route("/getCompletedTopicalExams").post(async (req, res) => {
     return res.status(400).json({ Alert: "User ID required!" });
   }
 
-  const user = await userModel.findById(userId);
+  let completedExams = ["empty"];
 
-  if (!user) {
-    return res.status(404).json({ Alert: "User not found!" });
-  }
+  const examsByUser = await examModel.find({
+    userRef: new mongoose.Types.ObjectId(userId),
+  });
 
-  const userTopicalExams = user.topicalExams;
-
-  if (!userTopicalExams) {
-    return res.status(404).json({ Alert: "No exams found!" });
-  }
-
-  let completedExams = [];
-
-  for (const exam of userTopicalExams) {
-    let topicalExam = await examModel.findOne(exam);
-
-    if (topicalExam.examModule == moduleNeeded) {
-      completedExams.push(topicalExam.examTopic);
+  for (const exam of examsByUser) {
+    if (exam.examType === "Topical") {
+      if (exam.examModule == moduleNeeded) {
+        completedExams.push(exam.examTopic);
+      }
     }
   }
 
