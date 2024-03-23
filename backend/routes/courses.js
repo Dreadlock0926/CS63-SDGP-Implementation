@@ -15,6 +15,10 @@ router.post("/getModules", async (req, res) => {
         .json({ message: "Invalid courses data. Must be an array." });
     }
 
+    if (courses.length === 0) {
+      return res.status(200).json({ userInProgress: [], userNotStarted: [] });
+    }
+
     // Efficiently filter topics using aggregation framework:
     const topics = await topicsModel.aggregate([
       {
@@ -101,7 +105,18 @@ router.post("/updateTopics", async (req, res) => {
 });
 
 router.post("/getProgress", async (req, res) => {
+  const mongoose = require("mongoose");
+  const isValidObjectId = mongoose.Types.ObjectId.isValid;
+
   const { sourceKey, userID } = req.body;
+
+  if (!sourceKey || !userID) {
+    return res.status(400).json({ message: "Missing required fields" });
+  }
+
+  if (!isValidObjectId(userID)) {
+    return res.status(400).json({ message: "Invalid user ID format!" });
+  }
 
   try {
     const user = await userModel.findById(userID);

@@ -1,4 +1,3 @@
-const express = require("express");
 const request = require("supertest");
 
 const BASE = "http://localhost:8000";
