@@ -70,7 +70,6 @@ const ExamDashboard = () => {
   ) : (
     <div style={{ margin: "20px", textAlign: "center" }}>
       <h1>Exam Dashboard</h1>
-
       <div style={{ margin: "20px" }}>
         {examDashboard.feedbackExams.length ||
         examDashboard.topicalExams.length ||
@@ -80,19 +79,20 @@ const ExamDashboard = () => {
               className="feedback"
               style={{ margin: "20px", padding: "20px" }}
             >
-              <h1>{`Feedback`}</h1>
+              <h1>Feedback</h1>
               {examDashboard.feedbackExams.map((x) => (
                 <div
                   key={x._id}
                   className="card"
                   style={{ marginBottom: "20px" }}
                 >
+                  <p>{x.examModule}</p>
                   <p>{`${Math.round(
                     (x.mark / x.totalMark) * 100
                   )}% Completed`}</p>
                   <Link
                     to={`/exam-review/${x._id}`}
-                  >{`Start ${x.examType} Exam!`}</Link>
+                  >{`Click to view more info!`}</Link>
                 </div>
               ))}
             </div>
@@ -111,12 +111,14 @@ const ExamDashboard = () => {
                     className="card"
                     style={{ marginRight: "20px" }}
                   >
+                    <p>{x.examModule}</p>
                     <p>{`${Math.round(
                       (x.mark / x.totalMark) * 100
                     )}% Completed`}</p>
-                    <Link
-                      to={`/exam-review/${x._id}`}
-                    >{`Start ${x.examType} Exam!`}</Link>
+                    <p>{`${x.examTopic}`}</p>
+                    <Link to={`/exam-review/${x._id}`}>
+                      Click to view more info!
+                    </Link>
                   </div>
                 ))}
               </div>
@@ -132,12 +134,13 @@ const ExamDashboard = () => {
                   className="card"
                   style={{ marginBottom: "20px" }}
                 >
+                  <p>{x.examModule}</p>
                   <p>{`${Math.round(
                     (x.mark / x.totalMark) * 100
                   )}% Completed`}</p>
                   <Link
                     to={`/exam-review/${x._id}`}
-                  >{`Start ${x.examType} Exam!`}</Link>
+                  >{`Click to view more info!`}</Link>
                 </div>
               ))}
             </div>

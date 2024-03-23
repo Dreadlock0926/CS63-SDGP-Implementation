@@ -8,7 +8,6 @@ router.post("/topicalcompleted").post(async (req,res)=>{
   
   if (!topic) {
     return res.status(400).json({ Alert: "Topic REQUIRED" });
-x
   }
 })
 
