@@ -59,6 +59,34 @@ router.route("/saveExam").post(async (req, res) => {
   }
 });
 
+router.route("/deleteExam").post(async (req, res) => {
+  const { userRef } = req?.body;
+
+  if (!userRef) {
+    return res.status(400).json({ Alert: "The user reference ID is missing." });
+  }
+
+  const user = await userModel.findById(userRef);
+
+  if (!user) {
+    return res.status(404).json({ Alert: "User not found." });
+  }
+
+  const testExamDel = user.feedbackExams[0];
+
+  const exam = await examModel.findByIdAndDelete(testExamDel);
+
+  if (!exam) {
+    return res.status(404).json({ Alert: "Exam not found." });
+  }
+
+  user.feedbackExams = [];
+
+  const response = await user.save();
+
+  res.status(200).json({ Alert: "Exam deleted successfully." }, response);
+});
+
 router.route("/getExam").post(async (req, res) => {
   const { examRef } = req?.body;
 
