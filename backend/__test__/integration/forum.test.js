@@ -10,7 +10,7 @@ describe("POST /forum", () => {
     const response = await request(BASE)
       .post("/forum")
       .send({ searchParams: search1 });
-    expect(response.statusCode).toBe(500);
+    expect(response.statusCode).toBe(400);
     expect(response.body).toEqual({
       message: "Error fetching forums",
     });
