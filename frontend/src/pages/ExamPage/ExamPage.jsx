@@ -71,6 +71,8 @@ function ExamPageContent({setIsLoadingInfo, setExamType, setExamSubject, setExam
     const [correctAnswers, setCorrectAnswers] = useState([]);
     const [questionsList, setQuestionsList] = useState([]);
     const [isLoading, setIsLoading] = useState(true);
+    const navigator = useNavigate();
+
 
     const [enablePopup, setEnablePopup] = useState(false);
 
@@ -136,6 +138,10 @@ function ExamPageContent({setIsLoadingInfo, setExamType, setExamSubject, setExam
             const response = await Axios.post('http://localhost:8000/exam/getExam', {
                 "examRef": examID
             });
+
+            if (response.data.userAnswers.length > 0) {
+                navigator("/receipt", {state:{examRef:examID}})
+            }
 
             setUserRef(response.data.userRef)
             setExamType(response.data.examType);

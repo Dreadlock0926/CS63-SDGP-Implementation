@@ -194,7 +194,7 @@ const LearnBlueprint = () => {
     if (topic === "p1") {
       moduleFull = "Pure Mathematics I";
     } else {
-      moduleFull = "Probability & Statistics I";
+      moduleFull = "Probability and Statistics I";
     }
 
     await Axios.post("http://localhost:8000/exam/saveExam", {
