@@ -1,9 +1,12 @@
 import Axios from "axios";
 import { useEffect, useState } from "react";
 import "./ExamReceipt.css";
-import { useLocation } from "react-router-dom";
+import { useLocation, useNavigate } from "react-router-dom";
 
 function ExamReceipt() {
+
+    const navigator = useNavigate();
+
 
     const [examID, setExamID] = useState("");
     const [mark, setMark] = useState("");
@@ -45,6 +48,16 @@ function ExamReceipt() {
         }
     }, [examID])
 
+    const returnToExam = () => {
+
+        navigator("/examdashboard");
+    }
+
+    const goToReview = () => {
+
+        navigator(`/exam-review/${examID}`);
+    }
+
     return (
         <div className="receipt-centerer">
             <div className="receipt-container">
@@ -58,8 +71,8 @@ function ExamReceipt() {
                             <div className="mark">{loadingInfo && mark}%</div>
                         </div>
                     <div className="receipt-buttons-container">
-                        <button>Check Results</button>
-                        <button>Return to Exam Page</button>
+                        <button onClick={goToReview}>Check Results</button>
+                        <button onClick={returnToExam}>Return to Exam Page</button>
                     </div>
                 </div>
             </div>
