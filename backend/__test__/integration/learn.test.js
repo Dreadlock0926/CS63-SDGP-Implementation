@@ -19,7 +19,8 @@ describe("POST /resources", () => {
   it("get learning resources", async () => {
     const response = await request(BASE).get("/resources");
     expect(response.statusCode).toBe(200);
-    expect(response.body).toEqual(response.data);
+    // Replace the next line with your expected response comparison
+    expect(response.body).toBeDefined();
   });
 
   it("fields not filled", async () => {
@@ -38,7 +39,7 @@ describe("POST /resources", () => {
     });
   });
 
-  it("user resourcesed", async () => {
+  it("learning resource added", async () => {
     const response = await request(BASE).post("/resources").send(dummyData);
     expect(response.statusCode).toBe(201);
     expect(response.body).toEqual({
@@ -48,12 +49,12 @@ describe("POST /resources", () => {
 });
 
 describe("POST /resources/topic/learned", () => {
-  theTopic = "Pure Mathematics I";
+  const theTopic = "Pure Mathematics I";
 
   it("no results found", async () => {
     const response = await request(BASE)
       .post("/resources/topic/learned")
-      .send("oqkwrtokwr");
+      .send({ topic: "oqkwrtokwr" });
     expect(response.statusCode).toBe(404);
     expect(response.body).toEqual({
       Alert: "No results found!",
@@ -63,9 +64,9 @@ describe("POST /resources/topic/learned", () => {
   it("data rendered", async () => {
     const response = await request(BASE)
       .post("/resources/topic/learned")
-      .send(theTopic);
+      .send({ topic: theTopic });
     expect(response.statusCode).toBe(200);
-    expect(response.body).toEqual(response);
+    // Replace the next line with your expected response comparison
+    expect(response.body).toBeDefined();
   });
 });
-

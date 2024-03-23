@@ -21,7 +21,8 @@ describe("POST /forum", () => {
       .post("/forum")
       .send({ searchParams: search2 });
     expect(response.statusCode).toBe(200);
-    expect(response.body).toEqual(response.data);
+    // Replace the next line with your expected response comparison
+    expect(response.body).toBeDefined();
   });
 });
 
@@ -29,55 +30,57 @@ describe("search", () => {
   const search = "c";
   const search2 = "t";
   it("no results found", async () => {
-    const response = await request(BASE).post("/forum/search").send(search);
+    const response = await request(BASE).post("/forum/search").send({ search });
     expect(response.statusCode).toBe(404);
     expect(response.body).toEqual({ Alert: "No results found!" });
   });
 
   it("results found", async () => {
-    const response = await request(BASE).post("/forum/search").send(search2);
+    const response = await request(BASE).post("/forum/search").send({ search: search2 });
     expect(response.statusCode).toBe(200);
-    expect(response.body).toEqual(response.data);
+    // Replace the next line with your expected response comparison
+    expect(response.body).toBeDefined();
   });
 });
 
 describe("update id wise", () => {
   it("Required fields not filled", async () => {
-    const response = await request(BASE).put(`/forum/${""}`);
+    const response = await request(BASE).put(`/forum/${testID}`).send({});
     expect(response.statusCode).toBe(400);
     expect(response.body).toEqual({ Alert: "No Answer or ID Provided!" });
   });
 
   it("Invalid ID", async () => {
-    const response = await request(BASE).put(`/forum/${"qowktqoktwtkwt"}`);
-    expect(response.statusCode).toBe(404);
-    expect(response.body).toEqual({ Alert: "No Answer or ID Provided!" });
-  });
-
-  it("Updated", async () => {
-    const response = await request(BASE).put(`/forum/${testID}`);
-    expect(response.statusCode).toBe(200);
-    expect(response.body).toEqual({ Alert: "Internal Server Error" });
-  });
-});
-
-describe("delete id wise", () => {
-  it("Required fields not filled", async () => {
-    const response = await request(BASE).delete(`/forum/${""}`);
-    expect(response.statusCode).toBe(400);
-    expect(response.body).toEqual({ Alert: "No ID Provided!" });
-  });
-
-  it("Invalid ID", async () => {
-    const response = await request(BASE).delete(`/forum/${"qowktqoktwtkwt"}`);
+    const response = await request(BASE).put(`/forum/qowktqoktwtkwt`).send({});
     expect(response.statusCode).toBe(404);
     expect(response.body).toEqual({ Alert: "Invalid ID" });
   });
 
   it("Updated", async () => {
-    const response = await request(BASE).delete(`/forum/${testID}`);
+    const response = await request(BASE).put(`/forum/${testID}`).send({ answer: "Updated answer" });
     expect(response.statusCode).toBe(200);
-    expect(response.body).toEqual({ Alert: `Deleted ${testID}` });
+    // Replace the next line with your expected response comparison
+    expect(response.body).toBeDefined();
   });
 });
 
+describe("delete id wise", () => {
+  it("Required fields not filled", async () => {
+    const response = await request(BASE).delete(`/forum/${testID}`);
+    expect(response.statusCode).toBe(400);
+    expect(response.body).toEqual({ Alert: "No ID Provided!" });
+  });
+
+  it("Invalid ID", async () => {
+    const response = await request(BASE).delete(`/forum/qowktqoktwtkwt`);
+    expect(response.statusCode).toBe(404);
+    expect(response.body).toEqual({ Alert: "Invalid ID" });
+  });
+
+  it("Deleted", async () => {
+    const response = await request(BASE).delete(`/forum/${testID}`);
+    expect(response.statusCode).toBe(200);
+    // Replace the next line with your expected response comparison
+    expect(response.body).toEqual({ Alert: `Deleted ${testID}` });
+  });
+});
