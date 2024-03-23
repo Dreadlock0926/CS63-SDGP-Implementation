@@ -34,8 +34,6 @@ router.route("/updateModuleProbabilities").post(async (req, res) => {
     return res.status(404).json({ Alert: "User not found!" });
   }
 
-  console.log(validUser.topicProbabilities);
-
   // Create a new object by spreading the existing topicProbabilities
   const updatedTopicProbabilities = {
     ...validUser.topicProbabilities,
@@ -45,8 +43,6 @@ router.route("/updateModuleProbabilities").post(async (req, res) => {
   // Update the topicProbabilities field with the new object
   validUser.topicProbabilities = updatedTopicProbabilities;
 
-  console.log(validUser.topicProbabilities);
-
   const savedUser = await validUser.save();
 
   res.status(201).json(savedUser);
@@ -54,8 +50,6 @@ router.route("/updateModuleProbabilities").post(async (req, res) => {
 
 router.route("/setModuleProbabilities").post(async (req, res) => {
   const { username, topicProbabilities, moduleID } = req?.body;
-
-  console.log(username, topicProbabilities);
 
   if (!username || !topicProbabilities || !moduleID) {
     return res
@@ -117,6 +111,32 @@ router.post("/intialiazeLessons", async (req, res) => {
   } catch (error) {
     console.error(error);
     res.status(500).send("Internal server error");
+  }
+});
+
+router.post("/deleteUser", async (req, res) => {
+  try {
+    const { username } = req.body;
+
+    if (!username) {
+      return res.status(400).json({ message: "Username is required!" });
+    }
+
+    try {
+      const deletedUser = await userModel.deleteOne({ username });
+
+      if (!deletedUser.deletedCount) {
+        return res.status(404).json({ message: "User not found!" });
+      }
+
+      res.status(200).json({ message: "User deleted successfully!" });
+    } catch (error) {
+      console.error(error);
+      res.status(500).json({ message: "Internal server error!" });
+    }
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ message: "Internal server error!" });
   }
 });
 

@@ -277,7 +277,7 @@ const topicExamHelper = async (topical, questionIDs) => {
                         </TableCell>
                         <TableCell>
                           {topicPercentage &&
-                            completedTopical.length > 0 &&
+                            completedTopical &&
                             topicPercentage[index] &&
                             (topicPercentage[index].completedPercentage ===
                             100 ? (

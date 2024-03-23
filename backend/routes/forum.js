@@ -78,8 +78,6 @@ router.route("/addAnswerToQuestion").post(async (req, res) => {
       answeredBy: answeredBy,
     };
 
-    console.log(answerObj);
-
     question.answers.push(answerObj);
     await question.save();
 
@@ -135,7 +133,6 @@ router.route("/search").post(async (req, res) => {
     const regex = new RegExp(search, "i"); // 'i' flag for case-insensitive search
     const matches = await forumModel.find({ question: regex });
 
-    console.log(matches);
     if (matches) {
       res.status(200).json(matches);
     } else {

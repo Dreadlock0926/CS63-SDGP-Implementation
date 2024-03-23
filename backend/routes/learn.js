@@ -94,8 +94,6 @@ router.route("/getLessonBodies").post(async (req, res) => {
     }
   }
 
-  console.log(lessonBody);
-
   const user = await userModel.findById(userId);
 
   if (!user) {
@@ -324,7 +322,6 @@ router.route("/fromtopics").post(async (req, res) => {
       topic = "Quadratics",
       source = "p1",
     } = req.body;
-    console.log(req.body);
 
     const userExists = await userModel.findById(userId);
     if (!userExists) {
@@ -334,8 +331,6 @@ router.route("/fromtopics").post(async (req, res) => {
     const topicExists = await topicsModel.findOne({ sourceKey: source });
 
     if (topicExists) {
-      console.log(`The topic length `);
-      console.log(topicExists?.topicLesson?.length);
       for (let i = 0; i < topicExists?.topicLesson?.length; i++) {
         if (topicExists.topicLesson[i].topic === topic) {
           return res.status(200).json(topicExists.topicLesson[i].lessons);
@@ -410,8 +405,6 @@ router
       //   });
       // }
 
-      console.log(req.body);
-
       const user = await userModel.findById(userId); // Find user by ID
       if (!user) {
         return res.status(404).json({ message: "User not found" });
@@ -434,7 +427,6 @@ router
                 if (lesson.lessonName === lessonName) {
                   // Check if lesson matches
                   lesson.completed = true;
-                  console.log("Lesson completed:", lesson);
                   // Update completed field
                   found = true;
                   break;
@@ -544,13 +536,11 @@ router.route("/search/:id").post(async (req, res) => {
   const id = req?.params?.id;
   const specificTopic = req?.body?.specificTopic;
 
-  console.log(id);
   if (!id) return res.status(400).json({ Alert: "No ID" });
 
   try {
     const exists = await learningModel.findOne({ topic: specificTopic });
 
-    console.log(exists);
     if (exists && exists.lessonPages.includes(id)) {
       const theSpecificTopic = exists;
       res.status(200).json(theSpecificTopic);

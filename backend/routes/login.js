@@ -14,6 +14,10 @@ router.route("/").post(async (req, res) => {
   if (!validityUser) {
     return res.status(404).json({ Alert: "Invalid Username" });
   } else {
+    if (validityUser.password !== password) {
+      return res.status(401).json({ Alert: "Unauthorized" });
+    }
+
     // const passwordMatch = bcrypt.compareSync(password, validityUser.password);
     // if (!passwordMatch) {
     //   return res.status(401).json({ Alert: "Unauthorized" });
@@ -21,7 +25,7 @@ router.route("/").post(async (req, res) => {
     req.session.user = { username, maxAge: 60000 };
     console.log(validityUser);
     return res.status(200).json({
-      Alert: `${username} logged in! `,
+      Alert: `${username} logged in!`,
       username: username,
       session: req?.session?.user,
       data: validityUser,

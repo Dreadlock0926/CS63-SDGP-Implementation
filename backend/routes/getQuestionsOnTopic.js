@@ -6,7 +6,6 @@ const questionModel = require("../models/question");
 
 router.route("/").post(async (req, res) => {
   const { scopeQuery, moduleScope } = req?.body;
-  console.log(scopeQuery, moduleScope);
 
   if (!scopeQuery || !moduleScope) {
     return res
@@ -31,8 +30,6 @@ router.route("/").post(async (req, res) => {
 
 router.route("/getQuestionsForExam").post(async (req, res) => {
   const { topics } = req?.body;
-
-  console.log("topics", topics);
 
   if (!topics || !Array.isArray(topics)) {
     return res
