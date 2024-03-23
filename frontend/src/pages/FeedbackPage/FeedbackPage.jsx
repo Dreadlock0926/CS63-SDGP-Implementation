@@ -226,7 +226,9 @@ const FeedbackPage = () => {
                     }
                 })
 
-                if (numCorrect !== 0 && numWrong !== 0) {
+                if (numCorrect === 0 && numWrong === 0) {
+                    
+                } else {
 
                     let probability = Math.round(numWrong/(numWrong+numCorrect) * 10)/10;
                     if (probability === 0) {
